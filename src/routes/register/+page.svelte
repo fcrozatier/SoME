@@ -358,8 +358,8 @@
 					Something went wrong. {form?.invalid
 						? 'Please correct the highlighted fields above'
 						: form?.network
-						? 'There was a network error. Please try again later'
-						: ''}
+							? 'There was a network error. Please try again later'
+							: ''}
 				</p>
 			{/if}
 			<p>

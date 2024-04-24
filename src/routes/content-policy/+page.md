@@ -168,7 +168,7 @@ should not be used to create any text, graphics, audio, or other media used in t
 submission for the Summer of Math Exposition; however, such models can be used in any other stage of the creative process. The output of AI models _can_ also be used if it’s in a way that falls under Fair Use.
 
 Note that there are no restrictions on using AI voice banks or other tools where every person willingly contributed to the training data.
-For this contest, we are making a distinction between *general* AI and *generative* AI -- those that use some form of large language model, stable diffusion, etc.
+For this contest, we are making a distinction between _general_ AI and _generative_ AI -- those that use some form of large language model, stable diffusion, etc.
 P
 This is a slightly nuanced issue, so we will provide our justification for this statement here, along with examples of appropriate usage.
 
