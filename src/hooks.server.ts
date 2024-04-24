@@ -21,7 +21,7 @@ export const handle = async function ({ event, resolve }) {
 	if (token) {
 		const validation = TokenSchema.safeParse(token);
 		if (!validation.success) {
-			event.cookies.delete('token');
+			event.cookies.delete('token', { path: '/' });
 			throw redirect(303, '/');
 		}
 
