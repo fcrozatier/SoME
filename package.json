@@ -1,6 +1,7 @@
 {
 	"name": "some",
 	"version": "0.0.1",
+	"description": "Summer of Math Exposition",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
