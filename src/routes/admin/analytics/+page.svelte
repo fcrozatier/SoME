@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { PageData } from './$types';
-	import { loadPyodide } from 'pyodide';
 	import { page } from '$app/stores';
 	import { registrationOpen } from '$lib/utils';
 	import { categories } from '$lib/config';
@@ -15,34 +14,9 @@
 	let computing = false;
 	let message = 'Computing... this can take a moment';
 
-	async function createGraph() {
-		computing = true;
-
-		message = 'Loading Pyodide, Numpy and utilities...';
-		const pyodide = await loadPyodide({
-			indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full'
-		});
-		await pyodide.loadPackage('numpy');
-		const utilities = import.meta.glob('/graph/utilities.py', { eager: true, as: 'raw' });
-		pyodide.runPython(utilities['/graph/utilities.py']);
-
-		message = 'Computing graph edges...';
-		const edges = [];
-		for (const category of categories) {
-			const N = data.analytics.get(category);
-			const cycles = Math.ceil(Math.log10(N) + 1);
-			const pairs = await pyodide.runPythonAsync(`expander_from_cycles(${cycles},${N})`);
-			edges.push({ category, edges: pairs.toJs() });
-		}
-
-		computing = false;
-		return edges;
-	}
-
-	let edges: Awaited<ReturnType<typeof createGraph>>;
+	let edges;
 	onMount(async () => {
 		if (!data.analytics.get('graph') && !registrationOpen()) {
-			edges = await createGraph();
 		}
 	});
 </script>
