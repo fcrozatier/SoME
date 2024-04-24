@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--light-gold: #fffaf4;
+}
+
+html,
+body {
+	background-color: var(--light-gold);
+	-webkit-font-smoothing: antialiased;
+}
+
+dialog {
+	@apply max-w-2xl rounded-xl p-12 pb-10 shadow-2xl;
+	max-height: 80vh;
+	visibility: hidden;
+}
+
+dialog:not([open]) {
+	@apply pointer-events-none;
+}
+
+dialog[open] {
+	--scale-from: 80%;
+	animation:
+		scale-up 50ms ease-out,
+		fade-in 100ms ease-out;
+	visibility: visible;
+}
+
+dialog::backdrop {
+	backdrop-filter: blur(3px);
+}
+
+details {
+	@apply py-4;
+	border-block: 1px solid theme(borderColor.DEFAULT);
+}
+details[open] > summary::after {
+	transform: rotate(-135deg);
+	top: 10px;
+}
+
+details + details {
+	border-top: none;
+}
+
+summary {
+	@apply relative cursor-pointer select-none list-none;
+	--outline-width: 0;
+}
+summary:hover::before {
+	background-color: theme(colors.gray.200);
+}
+
+summary:focus-visible::before {
+	background-color: theme(colors.gray.200);
+	outline: 1px solid theme(colors.gray.500);
+	outline-offset: 2px;
+}
+
+summary::before,
+summary::after {
+	--bg-size: 28px;
+	position: absolute;
+	content: '';
+}
+summary::before {
+	top: -2px;
+	right: 0;
+	border-radius: 50%;
+	background-color: theme(colors.gray.100);
+	width: var(--bg-size);
+	height: var(--bg-size);
+	transition: var(--outline-offset-transition);
+}
+summary::after {
+	--arrow-size: 8px;
+	top: 7px;
+	right: calc((var(--bg-size) - var(--arrow-size)) / 2);
+	transition: transform 100ms ease-out;
+	transform: rotate(45deg);
+	border-right: 2px solid theme(colors.gray.500);
+	border-bottom: 2px solid theme(colors.gray.500);
+	width: var(--arrow-size);
+	height: var(--arrow-size);
+}
+
+.btn-primary {
+	@apply text-white;
+}
+
+.scrollbar {
+	--track: var(--scrollbar-track, black);
+	--thumb: var(--scrollbar-thumb, white);
+
+	overflow: auto;
+	/* Firefox */
+	scrollbar-color: var(--thumb) var(--track);
+	scrollbar-width: thin;
+}
+/* Chrome, Edge, Safari */
+.scrollbar::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+.scrollbar::-webkit-scrollbar-track {
+	background: var(--track);
+}
+.scrollbar::-webkit-scrollbar-thumb {
+	background-color: var(--thumb);
+	border-radius: theme('borderRadius.md');
+	border: 2px solid var(--track);
+}
+
+.layout-prose {
+	@apply mx-auto max-w-prose px-8;
+}
+
+@keyframes scale-up {
+	from {
+		transform: scale(var(--scale-from, 0));
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: var(--fade-from, 0);
+	}
+}
