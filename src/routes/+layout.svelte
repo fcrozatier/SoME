@@ -5,14 +5,10 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import { page } from '$app/stores';
 	import { BETA_TEST, COMPETITION_FULL_NAME } from '$lib/config';
-	import { dev } from '$app/environment';
-	import { inject } from '@vercel/analytics';
 	import Banner from '$lib/components/Banner.svelte';
 	import Timer from '../lib/components/Timer.svelte';
 
 	export let data: LayoutData;
-
-	inject({ mode: dev ? 'development' : 'production' });
 </script>
 
 <div class="flex min-h-[100vh] flex-col">
