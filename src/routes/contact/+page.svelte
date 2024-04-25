@@ -9,8 +9,12 @@
 <article class="layout-prose">
 	<h2>Contact</h2>
 
-	<p>If you have any questions or suggestions, please contact us at:</p>
-	<address>
+	<p>
+		If you have any questions or suggestions, please contact us directly on <a
+			href="https://discord.gg/WZvZMVsXXR">Discord</a
+		>
+	</p>
+	<!-- <address>
 		<a href="mailto:3b1b.some@gmail.com"> 3b1b.some@gmail.com</a>
-	</address>
+	</address> -->
 </article>
