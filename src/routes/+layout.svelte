@@ -44,7 +44,7 @@
 
 	<footer class="mt-auto flex flex-wrap justify-center gap-20 p-4">
 		<a
-			href="https://github.com/fcrozatier/champagne"
+			href="https://github.com/fcrozatier/SoME"
 			class="inline-flex items-center gap-3 opacity-80 hover:opacity-100"
 			target="_blank"
 			><Icon name="github" width="1.5rem" />
