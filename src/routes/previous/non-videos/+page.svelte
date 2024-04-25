@@ -5,17 +5,7 @@
 
 <section class="pb-32">
 	<div class="py-10 mx-auto max-w-prose">
-		<h2 class="text-center">All non-video entries</h2>
-		<!-- <p class="mt-8 mb-12 font-light tracking-wider">
-			Discover the 5 winners of the last edition. <br />
-
-			The 20 honorable mentions as well as the full list of entries is available
-			<a
-				class="font-light"
-				style:color="var(--light-gold)"
-				href="https://www.3blue1brown.com/blog/some2">here</a
-			>
-		</p> -->
+		<h2 class="text-center">All SoME3 non-video entries</h2>
 	</div>
 	<div class="custom-grid px-4">
 		{#each nonVideos as entry}

@@ -45,12 +45,13 @@
 	<footer class="mt-auto flex flex-wrap justify-center gap-20 p-4">
 		<a
 			href="https://github.com/fcrozatier/champagne"
-			class="inline-flex items-center gap-3"
+			class="inline-flex items-center gap-3 opacity-80 hover:opacity-100"
 			target="_blank"
-			><Icon name="github" width="1.5rem" /> Champagne
+			><Icon name="github" width="1.5rem" />
 		</a>
 		<a href="/gdpr"> GDPR </a>
 		<a href="/content-policy"> Content Policy </a>
 		<a href="/contact"> Contact </a>
+		<a href="/previous"> Previous edition </a>
 	</footer>
 </div>
