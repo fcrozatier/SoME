@@ -17,8 +17,7 @@
 
 	<p>
 		We collect personal data (email) when you register as a creator or judge as well as data about
-		your entry (title, link, description etc.) when you register as a creator. We also collect
-		anonymized analytics to help us measure and improve the site performance.
+		your entry (title, link, description etc.) when you register as a creator.
 	</p>
 	<p>
 		Your personal data is only used in order to send and retrieve your vote link. Data about your
@@ -28,10 +27,9 @@
 		>
 	</p>
 	<p>
-		All data is stored on our database for the duration of the competition. Once the competition is
-		over we will delete your personal data.
+		All data is stored on our database for the duration of the competition, and we do not sell any
+		of your data nor use it for marketing campaigns.
 	</p>
-	<p>We do not sell any of your data nor use it for marketing campaigns.</p>
 	<p>
 		You can access, modify or delete any of your data by emailing us at <a
 			href="mailto:3b1b.some@gmail.com"
