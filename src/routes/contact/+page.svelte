@@ -10,9 +10,8 @@
 	<h2>Contact</h2>
 
 	<p>
-		If you have any questions or suggestions, please contact us directly on <a
-			href="https://discord.gg/WZvZMVsXXR">Discord</a
-		>
+		This is a community-driven event, if you have questions or suggestions feel free to reach out
+		directly on <a href="https://discord.gg/WZvZMVsXXR">Discord</a>
 	</p>
 	<!-- <address>
 		<a href="mailto:3b1b.some@gmail.com"> 3b1b.some@gmail.com</a>

@@ -13,27 +13,26 @@
 		PUBLIC_VOTE_START
 	} from '$env/static/public';
 	import Icon from '../lib/components/Icon.svelte';
-	import { winners, honorables } from '$lib/results';
+	import { winners } from '$lib/results';
 
 	const phases = [
 		{
 			title: 'Join the competition as a participant or judge',
 			description:
-				'Participants all work on their projects. Most of the activity during this phase happens on <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a>, where many people share partial progress, find collaborators, and ask questions.',
+				'Participants all work on their projects. You can join the <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a>, to share partial progress, find collaborators etc.',
 			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
 			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END]
 		},
 		{
 			title: 'Vote for the best contributions',
 			description:
-				"Peer review! Everyone, whether or not they've submitted an entry, can participate. You'll be successively shown two entries and asked to vote on which is best and to optionally provide feedback (it's actually a ton of fun). In many ways, this is the heart of the event, and in past years this phase has been what jump-started meaningful exposure for many entries.",
+				"Peer review! Everyone, whether or not they've submitted an entry, can participate. You'll be successively shown entries to review and optionally provide feedback (it's actually a ton of fun). In many ways, this is the heart of the event, and in past years this phase has been what jump-started meaningful exposure for many entries.",
 			isOpen: voteOpen(),
 			dates: [PUBLIC_VOTE_START, PUBLIC_VOTE_END]
 		},
 		{
 			title: 'Results and feedback',
-			description:
-				'A selection of judges drawn from the math communication community will select winners and honorable mentions from among other top 100 surfaced in the peer review. Winners will be featured in a 3blue1brown video, and awarded $1,000 each, along with the coveted golden pi creature.',
+			description: 'The top entries are revealed and the complete list of entries is published.',
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE]
 		}
@@ -75,7 +74,7 @@
 	</p>
 </section>
 
-<section class="layout-prose pb-32">
+<section class="layout-prose pb-4">
 	<h2 class="mb-6 text-4xl font-black">Timeline</h2>
 	<p>The competition has three phases:</p>
 	<ul class="-ml-7 list-outside">
@@ -136,58 +135,7 @@
 	{/if}
 </section>
 
-<section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
-	<div class="mx-auto max-w-prose">
-		<h2 class="my-0 text-5xl font-black" style:color="var(--light-gold)">
-			Last year's competition
-		</h2>
-		<p class="mt-8 font-light tracking-wider">
-			Discover the 5 winners of the last edition. <br />
-
-			The 20 honorable mentions as well as the full list of entries is available
-			<a
-				class="font-light"
-				style:color="var(--light-gold)"
-				href="https://www.3blue1brown.com/blog/some2">here</a
-			>
-		</p>
-	</div>
-	<div class="mx-4">
-		<div
-			class="scrollbar mx-auto flex max-w-5xl snap-x snap-proximity snap-always items-center gap-10 overflow-x-scroll pb-2"
-			style:--scrollbar-thumb="var(--light-gold)"
-		>
-			{#each winners as winner}
-				<div class="snap-center">
-					{#if winner.video}
-						<iframe
-							width="420"
-							class="aspect-video rounded-lg"
-							src={winner.link}
-							title="YouTube video player"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							allowfullscreen
-							loading="lazy"
-						/>
-					{:else}
-						<a href={winner.link} target="_blank" class="inline-block w-[420px]">
-							<img
-								src={winner.thumbnail}
-								alt="Winner thumbnail"
-								width="420"
-								class="aspect-video rounded-lg"
-								loading="lazy"
-							/>
-						</a>
-					{/if}
-				</div>
-			{/each}
-		</div>
-	</div>
-</section>
-
-<section id="rules" class="layout-prose pt-8">
+<section id="rules" class="layout-prose pb-32">
 	<h2 class="mb-16 text-4xl font-black">How it works</h2>
 
 	<details>
@@ -203,11 +151,7 @@
 		<p>
 			The topic could be at any level, whether that's basic math for young children or higher-level
 			math. If you're assuming a certain background level for the target audience, kindly mention it
-			below. It's hard because we don't want to discourage topics with a very niche target audience,
-			as those lessons can sometimes be the most valuable. However, if your lesson assumes
-			particular expertise, e.g. a comfort with algebraic geometry, keep in mind that our judges may
-			not fit into this category. So to actually win the contest, it's helpful if the topic is
-			accessible to someone with, say, a background in standard undergrad math topics.
+			below.
 		</p>
 	</details>
 	<details>
@@ -271,11 +215,6 @@
 			<li><a href="/content-policy#cc">Creative Commons guidelines</a></li>
 			<li><a href="/content-policy#ai">AI policy</a></li>
 		</ul>
-
-		<p>
-			Exception: We have a standing agreement with Desmos that you may use this software in the
-			competition.
-		</p>
 	</details>
 	<details>
 		<summary>
@@ -304,27 +243,64 @@
 				of an aha moment.
 			</li>
 		</ul>
-		<p>
-			A peer review process will help filter the better entries. Then the admins will manually
-			select the best entries.
-		</p>
-		<strong>
-			If your entry does not respect the rules or copyright notice you will not be eligible to
-			accept any prize money.
-		</strong>
-		<p>
-			For longer works, judges might not be able to consume the full video/post. Again, what's hard
-			about this is that sometimes great explainers are longer, such as a full lecture and we don't
-			want to discourage those. Just understand that to select winners, there is only so much time
-			available for review, so the substance of your work should be clearly visible with a 5-10
-			minute view.
-		</p>
+		<p>The peer review process will help filter the better entries.</p>
 	</details>
+</section>
+
+<section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
+	<div class="mx-auto max-w-prose">
+		<h2 class="my-0 text-5xl font-black" style:color="var(--light-gold)">
+			Last year's competition
+		</h2>
+		<p class="mt-8 font-light tracking-wider">
+			Discover the 5 winners of the last edition. <br />
+
+			The 20 honorable mentions as well as the full list of entries is available
+			<a
+				class="font-light"
+				style:color="var(--light-gold)"
+				href="https://www.3blue1brown.com/blog/some2">here</a
+			>
+		</p>
+	</div>
+	<div class="mx-4">
+		<div
+			class="scrollbar mx-auto flex max-w-5xl snap-x snap-proximity snap-always items-center gap-10 overflow-x-scroll pb-2"
+			style:--scrollbar-thumb="var(--light-gold)"
+		>
+			{#each winners as winner}
+				<div class="snap-center">
+					{#if winner.video}
+						<iframe
+							width="420"
+							class="aspect-video rounded-lg"
+							src={winner.link}
+							title="YouTube video player"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							allowfullscreen
+							loading="lazy"
+						/>
+					{:else}
+						<a href={winner.link} target="_blank" class="inline-block w-[420px]">
+							<img
+								src={winner.thumbnail}
+								alt="Winner thumbnail"
+								width="420"
+								class="aspect-video rounded-lg"
+								loading="lazy"
+							/>
+						</a>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
 </section>
 
 <section class="mt-10 pt-10">
 	<h2 class="text-center text-2xl font-light">
-		Prizes and operations for this contest have been generously funded by
+		Operations for this contest have been generously funded by
 	</h2>
 	<div class="flex justify-center">
 		<a href="https://www.janestreet.com/" target="_blank">

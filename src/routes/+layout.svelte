@@ -52,6 +52,6 @@
 		<a href="/gdpr"> GDPR </a>
 		<a href="/content-policy"> Content Policy </a>
 		<a href="/contact"> Contact </a>
-		<a href="/previous"> Previous edition </a>
+		<a href="/previous"> Previous Edition </a>
 	</footer>
 </div>
