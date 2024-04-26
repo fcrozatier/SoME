@@ -31,7 +31,6 @@
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
-		"lightningcss": "^1.24.1",
 		"mdsvex": "^0.11.0",
 		"postcss": "^8.4.38",
 		"prettier": "^3.1.1",
@@ -52,5 +51,8 @@
 		"mailgun.js": "^10.2.1",
 		"sharp": "^0.33.3",
 		"zod": "^3.23.4"
-	}
+	},
+	"browserslist": [
+		"cover 95% and last 10 versions and not dead"
+	]
 }
