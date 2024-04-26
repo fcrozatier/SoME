@@ -35,7 +35,7 @@
 	</nav>
 
 	<Banner test={BETA_TEST} />
-	<Timer show={true}></Timer>
+	<Timer show={false}></Timer>
 
 	<main class="prose mb-40 mt-8 max-w-full">
 		<h1 class="text-center">{COMPETITION_FULL_NAME}</h1>
