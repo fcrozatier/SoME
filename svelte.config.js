@@ -1,15 +1,14 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
-import rehypeTargetBlank from 'rehype-target-plugin';
+import targetBlank from 'svelte-target-blank';
 
 /**
  * @type {import('mdsvex').MdsvexOptions}
  */
 const mdsvexOptions = {
 	extensions: ['.md'],
-	layout: './src/lib/components/LayoutProse.svelte',
-	rehypePlugins: [rehypeTargetBlank]
+	layout: './src/lib/components/LayoutProse.svelte'
 };
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -17,7 +16,7 @@ const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
 	extensions: ['.svelte', '.svx', '.md'],
-	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
+	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), targetBlank({ mode: 'warn' })],
 
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
