@@ -256,11 +256,7 @@
 			Discover the 5 winners of the last edition. <br />
 
 			The 20 honorable mentions as well as the full list of entries is available
-			<a
-				class="font-light"
-				style:color="var(--light-gold)"
-				href="https://www.3blue1brown.com/blog/some2">here</a
-			>
+			<a class="font-light" style:color="var(--light-gold)" href="/previous">here</a>
 		</p>
 	</div>
 	<div class="mx-4">
