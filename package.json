@@ -13,7 +13,11 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"drizzle:studio": "drizzle-kit studio",
+		"drizzle:push": "drizzle-kit push:pg",
+		"drizzle:generate": "drizzle-kit generate:pg",
+		"drizzle:migrate": "node drizzle/migrate.js"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
