@@ -16,7 +16,7 @@
 		"test:unit": "vitest",
 		"drizzle:studio": "drizzle-kit studio",
 		"drizzle:push": "drizzle-kit push:pg",
-		"drizzle:generate": "drizzle-kit generate:pg",
+		"drizzle:generate": "drizzle-kit generate:pg --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:migrate": "node drizzle/migrate.js"
 	},
 	"devDependencies": {
