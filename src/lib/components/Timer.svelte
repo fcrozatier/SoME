@@ -30,6 +30,6 @@
 		<strong class="countdown font-mono text-xl">
 			{remaining}
 		</strong>
-		remaining to register as a creator <span class="text-xl">&rarr;</span>
+		remaining to submit an entry <span class="text-xl">&rarr;</span>
 	</a>
 {/if}

@@ -17,7 +17,7 @@
 
 	<p>
 		We collect personal data (email) when you register as a creator or judge as well as data about
-		your entry (title, link, description etc.) when you register as a creator.
+		your entry (title, link, description etc.) when you submit an entry.
 	</p>
 	<p>
 		Your personal data is only used in order to send and retrieve your vote link. Data about your
