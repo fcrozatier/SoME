@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import { categories, userTypes } from '../../config';
 import { pgTable, primaryKey, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
@@ -8,13 +9,22 @@ export const users = pgTable('users', {
 	type: text('type', { enum: userTypes }).notNull()
 });
 
+export const usersRelations = relations(users, ({ many }) => ({
+	usersToEntries: many(usersToEntries)
+}));
+
 export const entries = pgTable('entries', {
 	uid: uuid('uid').primaryKey(),
 	title: varchar('title', { length: 128 }).notNull(),
 	description: text('description'),
 	category: text('category', { enum: categories }).notNull(),
-	url: text('url').notNull()
+	url: text('url').unique().notNull(),
+	thumbnail: text('thumbnail')
 });
+
+export const entriesRelations = relations(entries, ({ many }) => ({
+	usersToEntries: many(usersToEntries)
+}));
 
 export const usersToEntries = pgTable(
 	'user_to_entry',
@@ -28,3 +38,14 @@ export const usersToEntries = pgTable(
 		};
 	}
 );
+
+export const usersToEntriesRelations = relations(usersToEntries, ({ one }) => ({
+	user: one(users, {
+		fields: [usersToEntries.userUid],
+		references: [users.uid]
+	}),
+	entry: one(entries, {
+		fields: [usersToEntries.entryUid],
+		references: [entries.uid]
+	})
+}));
