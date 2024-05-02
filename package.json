@@ -15,7 +15,7 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"drizzle:studio": "drizzle-kit studio",
-		"drizzle:push": "drizzle-kit push:pg",
+		"drizzle:push": "drizzle-kit push:pg --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:generate": "drizzle-kit generate:pg --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:migrate": "node drizzle/migrate.js"
 	},
