@@ -16,7 +16,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const entries = pgTable('entries', {
 	uid: uuid('uid').primaryKey(),
 	title: varchar('title', { length: 128 }).notNull(),
-	description: text('description'),
+	description: text('description').notNull(),
 	category: text('category', { enum: categories }).notNull(),
 	url: text('url').unique().notNull(),
 	thumbnail: text('thumbnail')
@@ -49,3 +49,5 @@ export const usersToEntriesRelations = relations(usersToEntries, ({ one }) => ({
 		references: [entries.uid]
 	})
 }));
+
+export type NewUser = typeof users.$inferInsert;
