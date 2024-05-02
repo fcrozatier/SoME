@@ -6,7 +6,7 @@ const SHARP_IMAGE_INPUT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image
 
 export const CategorySchema = z.enum(categories);
 
-const EmailSchema = z.string().email();
+const EmailSchema = z.string().email().max(128);
 
 export const EmailForm = z.object({
 	email: EmailSchema
@@ -73,13 +73,13 @@ const TitleSchema = z
 	.string()
 	.trim()
 	.min(1, { message: 'Title cannot be empty' })
-	.max(64, { message: 'Title too long' });
+	.max(128, { message: 'Title too long' });
 
 const DescriptionSchema = z
 	.string()
 	.trim()
 	.min(10, { message: 'Description too short' })
-	.max(500, { message: 'Description too long' });
+	.max(5000, { message: 'Description too long' });
 
 const ThumbnailSchema = z
 	.instanceof(File)
