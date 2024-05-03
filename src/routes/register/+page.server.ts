@@ -71,7 +71,7 @@ export const actions = {
 				if (!YOUTUBE_EMBEDDABLE.test(link)) {
 					if (!thumbnail) return fail(400, { thumbnailRequired: true });
 
-					thumbnailKey = Buffer.from(link).toString('base64') + '.webp';
+					thumbnailKey = crypto.randomUUID();
 				} else {
 					// Normalize youtube links
 					normalizedLink = normalizeYoutubeLink(link);
