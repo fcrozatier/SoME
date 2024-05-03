@@ -24,13 +24,15 @@ export const load = () => {
 
 export const actions = {
 	default: async ({ request }) => {
+		console.log('received form');
 		if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END)) {
 			return fail(422, { invalid: true });
 		}
 
 		const validation = await validateForm(request, RegistrationSchema);
-
+		console.log('form validation');
 		if (!validation.success) {
+			console.log('form invalid,', validation.error.flatten());
 			return fail(400, validation.error.flatten());
 		}
 
@@ -42,6 +44,7 @@ export const actions = {
 
 		// Email deliverability validation
 		if (!dev) {
+			console.log('email validation');
 			const emailValidation = await Promise.all(
 				[...users].map(async ({ email }) => await validateEmail(email))
 			);
@@ -127,6 +130,7 @@ export const actions = {
 					.insert(usersToEntries)
 					.values(authorsId.map((a) => ({ userUid: a.uid, entryUid: params.entryUid })));
 			} else {
+				console.log('insert judge');
 				await db.insert(usersTable).values({
 					uid: users[0].token,
 					email: users[0].email,
