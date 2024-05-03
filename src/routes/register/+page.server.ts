@@ -69,9 +69,8 @@ export const actions = {
 				let thumbnailKey = null;
 				let normalizedLink = link;
 				if (!YOUTUBE_EMBEDDABLE.test(link)) {
-					if (!thumbnail) {
-						return fail(400, { thumbnailRequired: true });
-					}
+					if (!thumbnail) return fail(400, { thumbnailRequired: true });
+
 					thumbnailKey = Buffer.from(link).toString('base64') + '.webp';
 				} else {
 					// Normalize youtube links
