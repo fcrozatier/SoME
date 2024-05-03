@@ -136,7 +136,7 @@
 </section>
 
 <section id="rules" class="layout-prose pb-32">
-	<h2 class="mb-16 text-4xl font-black">How it works</h2>
+	<h2 class="mb-16 text-4xl font-black">How does it work?</h2>
 
 	<details>
 		<summary>
