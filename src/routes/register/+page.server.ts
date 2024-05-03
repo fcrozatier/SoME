@@ -66,7 +66,7 @@ export const actions = {
 					return fail(422, { invalid: true });
 				}
 				const { thumbnail, link, ...restData } = validation.data;
-				let thumbnailKey;
+				let thumbnailKey = null;
 				let normalizedLink = link;
 				if (!YOUTUBE_EMBEDDABLE.test(link) && !thumbnail) {
 					if (!thumbnail) {
