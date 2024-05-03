@@ -68,7 +68,7 @@ export const actions = {
 				const { thumbnail, link, ...restData } = validation.data;
 				let thumbnailKey = null;
 				let normalizedLink = link;
-				if (!YOUTUBE_EMBEDDABLE.test(link) && !thumbnail) {
+				if (!YOUTUBE_EMBEDDABLE.test(link)) {
 					if (!thumbnail) {
 						return fail(400, { thumbnailRequired: true });
 					}
