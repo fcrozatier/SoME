@@ -63,17 +63,11 @@ export const actions = {
 				const { thumbnail, link, ...restData } = validation.data;
 				let thumbnailKey;
 				let normalizedLink = link;
-				if (!YOUTUBE_EMBEDDABLE.test(link)) {
+				if (!YOUTUBE_EMBEDDABLE.test(link) && !thumbnail) {
 					if (!thumbnail) {
 						return fail(400, { thumbnailRequired: true });
 					}
-					if (!dev) {
-						thumbnailKey = Buffer.from(link).toString('base64') + '.webp';
-						console.log('thumbnailKey:', thumbnailKey);
-						console.time('thumbnail');
-						await saveThumbnail(thumbnail, thumbnailKey);
-						console.timeEnd('thumbnail');
-					}
+					thumbnailKey = Buffer.from(link).toString('base64') + '.webp';
 				} else {
 					// Normalize youtube links
 					normalizedLink = normalizeYoutubeLink(link);
@@ -96,6 +90,14 @@ export const actions = {
 					thumbnail: params.thumbnailKey,
 					uid: params.entryUid
 				});
+
+				// Save thumbnail after the entry: we know it's not a duplicate
+				if (!dev && thumbnail && thumbnailKey) {
+					console.log('thumbnailKey:', thumbnailKey);
+					console.time('thumbnail');
+					await saveThumbnail(thumbnail, thumbnailKey);
+					console.timeEnd('thumbnail');
+				}
 
 				const values: NewUser[] = users.map((u) => {
 					return { email: u.email, type: 'creator', uid: u.token };
@@ -154,8 +156,12 @@ export const actions = {
 			) {
 				console.log(error.message);
 				if (error.constraint_name === 'users_email_unique') {
-					// TODO grab email
-					return fail(422, { emailExists: 'john@gmail.com' });
+					// Only the judges flow can arrive here as we do not block the creator flow on duplicates emails. Example detail
+					// Key (email)=(alice@gmail.com) already exists.
+					const match = error.detail?.match(/\(email\)=\((.*)\)/);
+					const email = match ? match[1] : '';
+
+					return fail(422, { emailExists: email });
 				} else if (error.constraint_name === 'entries_url_unique') {
 					return fail(422, { linkExists: true });
 				}
