@@ -36,7 +36,9 @@ export const actions = {
 			return fail(400, validation.error.flatten());
 		}
 
-		const users = [{ email: validation.data.email, token: crypto.randomUUID() }];
+		let users: { token: string; email: string }[] = [
+			{ email: validation.data.email, token: crypto.randomUUID() }
+		];
 		if (validation.data.userType === 'creator') {
 			const others = validation.data.others;
 			others.forEach((x) => users.push({ email: x, token: crypto.randomUUID() }));
@@ -115,9 +117,9 @@ export const actions = {
 					.returning({ uid: usersTable.uid });
 				console.log('insertedUsers:', insertedUsers);
 
-				// Grab all users real uids
-				const authorsId = await db
-					.select({ uid: usersTable.uid })
+				// Update all users token with the real uids
+				users = await db
+					.select({ token: usersTable.uid, email: usersTable.email })
 					.from(usersTable)
 					.where(
 						inArray(
@@ -128,7 +130,7 @@ export const actions = {
 
 				await db
 					.insert(usersToEntries)
-					.values(authorsId.map((a) => ({ userUid: a.uid, entryUid: params.entryUid })));
+					.values(users.map((a) => ({ userUid: a.token, entryUid: params.entryUid })));
 			} else {
 				console.log('insert judge');
 				await db.insert(usersTable).values({
