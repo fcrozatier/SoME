@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resultsAvailable, competitionStarted, voteOpen, phaseOpen } from '$lib/utils';
+	import { resultsAvailable, competitionStarted, voteOpen, phaseOpen, timeLeft } from '$lib/utils';
 	import Time from '$lib/components/Time.svelte';
 	import type { ActionData, PageData } from './$types';
 	import { clickOutside } from '$lib/actions';
@@ -14,6 +14,7 @@
 	} from '$env/static/public';
 	import Icon from '../lib/components/Icon.svelte';
 	import { winners } from '$lib/results';
+	import { onMount } from 'svelte';
 
 	const phases = [
 		{
@@ -59,6 +60,19 @@
 			form.success = undefined;
 		}
 	}
+
+	let remaining = timeLeft();
+
+	let interval: NodeJS.Timeout | undefined;
+	onMount(() => {
+		interval = setInterval(() => {
+			remaining = timeLeft();
+		}, 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -140,6 +154,24 @@
 
 	<details>
 		<summary>
+			<div class="text-xl font-medium">When is the registration deadline?</div>
+		</summary>
+		<p>
+			Creators or group of Creators can submit an entry until August 18th <a
+				href="https://en.wikipedia.org/wiki/Anywhere_on_Earth"
+				target="_blank">Anywhere on Earth</a
+			>. In your specific timezone (yes just yours) this deadline corresponds to <Time
+				datetime={PUBLIC_REGISTRATION_END}
+			/>.
+		</p>
+		<p>Which means you still have {remaining.formatted} left to submit an entry!</p>
+		<p>
+			If you want to participate as a judge you can register at any time, even after the vote has
+			open.
+		</p>
+	</details>
+	<details>
+		<summary>
 			<div class="text-xl font-medium">Is there a topic constraint?</div>
 		</summary>
 		<p>It has to be about math.</p>
@@ -174,19 +206,6 @@
 			work on something you sort of started once before, that's probably fine, but it can't be
 			something you already published before this contest. Optimally, you'd use this as a chance to
 			try something new you otherwise might not have.
-		</p>
-	</details>
-	<details>
-		<summary>
-			<div class="text-xl font-medium">When is the registration deadline?</div>
-		</summary>
-		<p>
-			Creators can register until
-			<Time datetime={PUBLIC_REGISTRATION_END} />.
-		</p>
-		<p>
-			If you want to participate as a judge you can register at any time, even after the vote has
-			open.
 		</p>
 	</details>
 	<details>
