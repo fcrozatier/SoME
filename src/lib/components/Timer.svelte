@@ -1,22 +1,15 @@
 <script lang="ts">
-	import { PUBLIC_REGISTRATION_END } from '$env/static/public';
+	import { timeLeft } from '$lib/utils';
 	import { onMount } from 'svelte';
 
 	export let show = false;
 
-	let ms = Date.parse(PUBLIC_REGISTRATION_END) - Date.now();
-	$: d = Math.floor(ms / (1000 * 60 * 60 * 24));
-	$: h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-	$: min = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-	$: sec = Math.floor((ms % (1000 * 60)) / 1000);
-
-	$: days = `${d > 0 ? d.toString() + ` day${d > 1 ? 's' : ''} ` : ''}`;
-	$: remaining = `${days}${h}h ${min}min ${sec}s`;
+	let remaining = timeLeft();
 
 	let interval: NodeJS.Timeout | undefined;
 	onMount(() => {
 		interval = setInterval(() => {
-			ms = Date.parse(PUBLIC_REGISTRATION_END) - Date.now();
+			remaining = timeLeft();
 		}, 1000);
 
 		return () => {
@@ -25,11 +18,15 @@
 	});
 </script>
 
-{#if show && ms > 0}
+{#if show}
 	<a href="/register" class="alert alert-error mx-auto max-w-prose sticky top-0 z-10">
-		<strong class="countdown font-mono text-xl">
-			{remaining}
-		</strong>
-		remaining to submit an entry <span class="text-xl">&rarr;</span>
+		{#if remaining.ms > 0}
+			<strong class="countdown font-mono text-xl">
+				{remaining.formatted}
+			</strong>
+			remaining to submit an entry <span class="text-xl">&rarr;</span>
+		{:else}
+			<p class="font-semibold">Registration closed for creators</p>
+		{/if}
 	</a>
 {/if}

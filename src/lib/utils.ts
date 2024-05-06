@@ -65,3 +65,17 @@ export function shuffleTuple<T>(tuple: T[]) {
 	}
 	return [b, a];
 }
+
+/**
+ * Remaining time to submit an entry
+ */
+export function timeLeft() {
+	const ms = Date.parse(PUBLIC_REGISTRATION_END) - Date.now();
+	const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+	const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	const min = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+	const sec = Math.floor((ms % (1000 * 60)) / 1000);
+
+	const days = `${d > 0 ? d.toString() + ` day${d > 1 ? 's' : ''} ` : ''}`;
+	return { ms, formatted: `${days}${h}h ${min}min ${sec}s` };
+}
