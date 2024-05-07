@@ -157,14 +157,20 @@
 			<div class="text-xl font-medium">When is the registration deadline?</div>
 		</summary>
 		<p>
-			Creators or group of Creators can submit an entry until August 18th <a
-				href="https://en.wikipedia.org/wiki/Anywhere_on_Earth"
-				target="_blank">Anywhere on Earth</a
-			>. In your specific timezone (yes just yours) this deadline corresponds to <Time
-				datetime={PUBLIC_REGISTRATION_END}
-			/>.
+			Creators or group of Creators can submit an entry until <span class=""
+				>August 18th at 11:59 PM (UTC-12)</span
+			>.
 		</p>
-		<p>Which means you still have {remaining.formatted} left to submit an entry!</p>
+		<p>
+			In your specific timezone (yes just yours) this deadline corresponds to <span
+				class="font-mono font-semibold badge badge-outline p-4"
+			>
+				<Time datetime={PUBLIC_REGISTRATION_END} />
+			</span>.
+		</p>
+		<p>
+			Which means you still have <span class="">{remaining.formatted}</span> left to submit an entry!
+		</p>
 		<p>
 			If you want to participate as a judge you can register at any time, even after the vote has
 			open.
