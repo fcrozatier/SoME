@@ -246,13 +246,13 @@
 			<div class="text-xl font-medium">How will winners be selected?</div>
 		</summary>
 		<p>
-			This year's competition is run by the community and as such there will not be a manual peer
-			review nor a prize money for winners as in the previous editions.
+			This year's competition is run by the community, and as such, there will not be manual peer
+			review nor prize money for winners as in previous editions.
 		</p>
 		<p>
-			However the voting process will help the better entries stand out and gain in visibility. The
-			winning entries of this edition will be the most popular entries according to the vote and
-			will be revealed at the end of the competition.
+			However the voting process will sift through the entries and give greater visibility to the
+			better ones. The winning entries of this edition will determined by the vote and will be
+			revealed at the end of the competition.
 		</p>
 		<p>Here's what we're looking for:</p>
 		<ul>
