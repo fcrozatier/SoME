@@ -89,7 +89,7 @@ const ThumbnailSchema = z
 	})
 	.optional();
 
-const CreatorSchema = z.object({
+export const CreatorSchema = z.object({
 	userType: z.literal('creator'),
 	email: EmailSchema,
 	others: z.string().transform((val, ctx) => {
