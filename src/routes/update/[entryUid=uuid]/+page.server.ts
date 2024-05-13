@@ -1,6 +1,6 @@
 import { error, fail } from '@sveltejs/kit';
 import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
-import { RegistrationSchema, validateForm } from '$lib/server/validation';
+import { CreatorSchema, validateForm } from '$lib/server/validation';
 import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
 import { dev } from '$app/environment';
 import { saveThumbnail } from '$lib/server/s3';
@@ -8,7 +8,6 @@ import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from '$env/static/public';
 import { db } from '$lib/server/db/client.js';
 import {
 	entries,
-	users,
 	users as usersTable,
 	usersToEntries,
 	type NewUser
@@ -24,9 +23,9 @@ export const load = async ({ params }) => {
 	console.log('entry:', entry);
 	const emails = (
 		await db
-			.select({ email: users.email })
-			.from(users)
-			.innerJoin(usersToEntries, eq(users.uid, usersToEntries.userUid))
+			.select({ email: usersTable.email })
+			.from(usersTable)
+			.innerJoin(usersToEntries, eq(usersTable.uid, usersToEntries.userUid))
 			.innerJoin(entries, eq(entries.uid, usersToEntries.entryUid))
 			.where(eq(entries.uid, entryUid))
 	).map((a) => a.email);
@@ -43,32 +42,38 @@ export const load = async ({ params }) => {
 };
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, params }) => {
+		const { entryUid } = params;
 		console.log('received form');
 		if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END)) {
 			return fail(422, { invalid: true });
 		}
 
-		const validation = await validateForm(request, RegistrationSchema);
+		const validation = await validateForm(request, CreatorSchema);
 		console.log('form validation');
 		if (!validation.success) {
 			console.log('form invalid,', validation.error.flatten());
 			return fail(400, validation.error.flatten());
 		}
 
-		let users: { token: string; email: string }[] = [
-			{ email: validation.data.email, token: crypto.randomUUID() }
-		];
-		if (validation.data.userType === 'creator') {
-			const others = validation.data.others;
-			others.forEach((x) => users.push({ email: x, token: crypto.randomUUID() }));
-		}
+		const emails = [validation.data.email, ...validation.data.others];
+
+		// 1 - Update creators
+		const oldUsers = await db
+			.select({ email: usersTable.email, uid: usersTable.uid })
+			.from(usersTable)
+			.innerJoin(usersToEntries, eq(usersTable.uid, usersToEntries.userUid))
+			.innerJoin(entries, eq(entries.uid, usersToEntries.entryUid))
+			.where(eq(entries.uid, entryUid));
+		console.log('old emails:', oldUsers);
+
+		const newCreators = emails.filter((x) => !oldUsers.map((u) => u.email).includes(x));
+		const formerCreators = oldUsers.filter((x) => !emails.includes(x.email));
 
 		// Email deliverability validation
 		if (!dev) {
-			console.log('email validation');
 			const emailValidation = await Promise.all(
-				[...users].map(async ({ email }) => await validateEmail(email))
+				[...newCreators].map(async (email) => await validateEmail(email))
 			);
 			if (emailValidation.some((x) => x === null)) {
 				return fail(400, { invalid: true });
@@ -78,6 +83,49 @@ export const actions = {
 				return fail(400, { undeliverable: undeliverable.address });
 			}
 		}
+
+		// Detach former creators from entry
+		await db.delete(usersToEntries).where(
+			inArray(
+				usersToEntries.userUid,
+				formerCreators.map((u) => u.uid)
+			)
+		);
+
+		const values: NewUser[] = newCreators.map((u) => {
+			return { email: u, type: 'creator', uid: crypto.randomUUID() };
+		});
+
+		// Maybe not all new creators of this entry are new users
+		const newUsers = await db
+			.insert(usersTable)
+			.values(values)
+			.onConflictDoNothing()
+			.returning({ email: usersTable.email, token: usersTable.uid });
+
+		if (!dev) {
+			try {
+				for (const user of newUsers) {
+					await addToMailingList(user.email, user.token);
+					await sendEmail(user.email, 'registration', { token: user.token });
+				}
+			} catch (e) {
+				console.error('Cannot send email', e);
+			}
+		}
+
+		// Grab all real uid of the new creators
+		const uids = (
+			await db
+				.select({ uid: usersTable.uid })
+				.from(usersTable)
+				.where(inArray(usersTable.email, newCreators))
+		).map((u) => u.uid);
+
+		// Attach the new creators to this entry
+		await db.insert(usersToEntries).values(uids.map((u) => ({ userUid: u, entryUid })));
+
+		// 2- Update entry
 
 		// Save data
 		try {

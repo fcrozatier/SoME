@@ -2,12 +2,7 @@
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
 	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
-	import {
-		COMPETITION_FULL_NAME,
-		COMPETITION_SHORT_NAME,
-		categories,
-		userTypes
-	} from '$lib/config';
+	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
 	import type { Snapshot } from '../$types';
 	import { tick } from 'svelte';
 	import Time from '$lib/components/Time.svelte';
