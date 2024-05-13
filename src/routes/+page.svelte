@@ -245,16 +245,25 @@
 		<summary>
 			<div class="text-xl font-medium">How will winners be selected?</div>
 		</summary>
+		<p>
+			This year's competition is run by the community and as such there will not be a manual peer
+			review nor a prize money for winners as in the previous editions.
+		</p>
+		<p>
+			However the voting process will help the better entries stand out and gain in visibility. The
+			winning entries of this edition will be the most popular entries according to the vote and
+			will be revealed at the end of the competition.
+		</p>
 		<p>Here's what we're looking for:</p>
 		<ul>
+			<li>
+				<b>Motivation:</b> It should be clear to the reader/viewer within the first 30 seconds why they
+				should care.
+			</li>
 			<li>
 				<b> Clarity: </b>
 				Jargon should be explained, the goals of the lesson should be understandable with minimal background,
 				and the submission should generally display empathy for people unfamiliar with the topic.
-			</li>
-			<li>
-				<b>Motivation:</b> It should be clear to the reader/viewer within the first 30 seconds why they
-				should care.
 			</li>
 			<li>
 				<b>Novelty:</b> It doesn't necessarily have to be an original idea or original topic, but it
@@ -268,7 +277,6 @@
 				of an aha moment.
 			</li>
 		</ul>
-		<p>The peer review process will help filter the better entries.</p>
 	</details>
 </section>
 
