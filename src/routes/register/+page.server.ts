@@ -103,11 +103,7 @@ export const actions = {
 				});
 
 				// Maybe not all users are inserted if they are in other groups
-				await db
-					.insert(usersTable)
-					.values(values)
-					.onConflictDoNothing()
-					.returning({ uid: usersTable.uid });
+				await db.insert(usersTable).values(values).onConflictDoNothing();
 
 				// Update all users token with the real uids
 				users = await db
