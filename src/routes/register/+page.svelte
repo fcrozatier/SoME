@@ -60,15 +60,16 @@
 
 <article class="layout-prose">
 	{#if form?.success}
-		<h2>Thank you! One more thing</h2>
+		<h2>Thank you! One more thing...</h2>
 		{#if otherContributors.length === 0}
 			<p>
 				A confirmation email has been sent to <em>{form.user.email}</em> with your link for the
 				voting phase. <strong>Do not delete this email.</strong>
 			</p>
 			<p>
-				Here is your personal link for the vote (do not share it). <br />
-				<strong>Please make sure to save it</strong> (eg. bookmark it)
+				Here is your personal link for the vote (do not share it), and <strong
+					>make sure to save it</strong
+				> (eg. bookmark it)
 			</p>
 			<p>
 				<a href="/vote/{form.user.token}">https://some.3b1b.co/vote/{form.user.token}</a>
@@ -77,6 +78,12 @@
 			<p>
 				Every member of the team will soon receive a confirmation email with their link for the
 				voting phase. <strong>Please do not delete this email.</strong>
+			</p>
+		{/if}
+		{#if userType === 'creator'}
+			<p>If needed you can update your entry at any time here:</p>
+			<p>
+				<a href="/update/{form.entryUid}">https://some.3b1b.co/update/{form.entryUid}</a>
 			</p>
 		{/if}
 		<p>See you in the voting phase!</p>

@@ -24,29 +24,26 @@ export const load = () => {
 
 export const actions = {
 	default: async ({ request }) => {
-		console.log('received form');
 		if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END)) {
 			return fail(422, { invalid: true });
 		}
 
 		const validation = await validateForm(request, RegistrationSchema);
-		console.log('form validation');
+
 		if (!validation.success) {
-			console.log('form invalid,', validation.error.flatten());
 			return fail(400, validation.error.flatten());
 		}
 
+		let entryUid = '';
 		let users: { token: string; email: string }[] = [
 			{ email: validation.data.email, token: crypto.randomUUID() }
 		];
 		if (validation.data.userType === 'creator') {
-			const others = validation.data.others;
-			others.forEach((x) => users.push({ email: x, token: crypto.randomUUID() }));
+			validation.data.others.forEach((x) => users.push({ email: x, token: crypto.randomUUID() }));
 		}
 
 		// Email deliverability validation
 		if (!dev) {
-			console.log('email validation');
 			const emailValidation = await Promise.all(
 				[...users].map(async ({ email }) => await validateEmail(email))
 			);
@@ -77,8 +74,9 @@ export const actions = {
 					normalizedLink = normalizeYoutubeLink(link);
 				}
 
+				entryUid = crypto.randomUUID();
+
 				const params = {
-					entryUid: crypto.randomUUID(),
 					users,
 					link: normalizedLink,
 					...restData,
@@ -92,29 +90,24 @@ export const actions = {
 					url: params.link,
 					description: validation.data.description,
 					thumbnail: params.thumbnailKey,
-					uid: params.entryUid
+					uid: entryUid
 				});
 
 				// Save thumbnail after the entry: we know it's not a duplicate
 				if (!dev && thumbnail && thumbnailKey) {
-					console.log('thumbnailKey:', thumbnailKey);
-					console.time('thumbnail');
 					await saveThumbnail(thumbnail, thumbnailKey);
-					console.timeEnd('thumbnail');
 				}
 
 				const values: NewUser[] = users.map((u) => {
 					return { email: u.email, type: 'creator', uid: u.token };
 				});
-				console.log('values:', values);
 
 				// Maybe not all users are inserted if they are in other groups
-				const insertedUsers = await db
+				await db
 					.insert(usersTable)
 					.values(values)
 					.onConflictDoNothing()
 					.returning({ uid: usersTable.uid });
-				console.log('insertedUsers:', insertedUsers);
 
 				// Update all users token with the real uids
 				users = await db
@@ -127,11 +120,8 @@ export const actions = {
 						)
 					);
 
-				await db
-					.insert(usersToEntries)
-					.values(users.map((a) => ({ userUid: a.token, entryUid: params.entryUid })));
+				await db.insert(usersToEntries).values(users.map((a) => ({ userUid: a.token, entryUid })));
 			} else {
-				console.log('insert judge');
 				await db.insert(usersTable).values({
 					uid: users[0].token,
 					email: users[0].email,
@@ -151,7 +141,8 @@ export const actions = {
 			}
 			return {
 				success: true,
-				user: users.length === 1 ? users[0] : { email: '', token: '' }
+				user: users.length === 1 ? users[0] : { email: '', token: '' },
+				entryUid
 			};
 		} catch (error) {
 			console.log('something went wrong', error);
