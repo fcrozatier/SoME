@@ -99,7 +99,7 @@ export const actions = {
 				}
 
 				const values: NewUser[] = users.map((u) => {
-					return { email: u.email, type: 'creator', uid: u.token };
+					return { email: u.email, uid: u.token };
 				});
 
 				// Maybe not all users are inserted if they are in other groups
@@ -120,8 +120,7 @@ export const actions = {
 			} else {
 				await db.insert(usersTable).values({
 					uid: users[0].token,
-					email: users[0].email,
-					type: 'judge'
+					email: users[0].email
 				});
 			}
 
