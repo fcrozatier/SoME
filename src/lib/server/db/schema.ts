@@ -1,12 +1,11 @@
 import { relations } from 'drizzle-orm';
-import { categories, userTypes } from '../../config';
+import { categories } from '../../config';
 import { pgTable, primaryKey, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
 	uid: uuid('uid').primaryKey(),
 	email: varchar('email', { length: 128 }).unique().notNull(),
-	createdAd: timestamp('created_at', { mode: 'string' }).defaultNow(),
-	type: text('type', { enum: userTypes }).notNull()
+	createdAd: timestamp('created_at', { mode: 'string' }).defaultNow()
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
