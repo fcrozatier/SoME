@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { resultsAvailable, competitionStarted, voteOpen, phaseOpen, timeLeft } from '$lib/utils';
+	import {
+		resultsAvailable,
+		competitionStarted,
+		voteOpen,
+		phaseOpen,
+		timeLeft,
+		registrationOpen
+	} from '$lib/utils';
 	import Time from '$lib/components/Time.svelte';
 	import type { ActionData, PageData } from './$types';
 	import { clickOutside } from '$lib/actions';
@@ -168,9 +175,11 @@
 				<Time datetime={PUBLIC_REGISTRATION_END} />
 			</span>.
 		</p>
-		<p>
-			Which means you still have <span class="">{remaining.formatted}</span> left to submit an entry!
-		</p>
+		{#if registrationOpen()}
+			<p>
+				Which means you still have <span>{remaining.formatted}</span> left to submit an entry!
+			</p>
+		{/if}
 		<p>
 			If you want to participate as a judge you can register at any time, even after the vote has
 			open.

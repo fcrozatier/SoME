@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { voteOpen } from '$lib/utils';
+	import { registrationOpen, voteOpen } from '$lib/utils';
 	import type { LayoutData } from './$types';
 	import Icon from '$lib/components/Icon.svelte';
 	import { page } from '$app/stores';
@@ -35,7 +35,9 @@
 	</nav>
 
 	<Banner test={BETA_TEST} />
-	<Timer show={false}></Timer>
+	{#if registrationOpen()}
+		<Timer></Timer>
+	{/if}
 
 	<main class="prose mb-40 mt-8 max-w-full">
 		<h1 class="text-center">{COMPETITION_FULL_NAME}</h1>
