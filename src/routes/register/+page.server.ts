@@ -62,13 +62,13 @@ export const actions = {
 				if (!registrationOpen()) {
 					return fail(422, { invalid: true });
 				}
-				const { thumbnail, link, ...restData } = validation.data;
+				const { thumbnail, link } = validation.data;
 				let thumbnailKey = null;
 				let normalizedLink = link;
 				if (!YOUTUBE_EMBEDDABLE.test(link)) {
 					if (!thumbnail) return fail(400, { thumbnailRequired: true });
 
-					thumbnailKey = crypto.randomUUID();
+					thumbnailKey = crypto.randomUUID() + '.webp';
 				} else {
 					// Normalize youtube links
 					normalizedLink = normalizeYoutubeLink(link);
@@ -76,20 +76,12 @@ export const actions = {
 
 				entryUid = crypto.randomUUID();
 
-				const params = {
-					users,
-					link: normalizedLink,
-					...restData,
-					group: users.length > 1,
-					thumbnailKey
-				};
-
 				await db.insert(entries).values({
 					category: validation.data.category,
 					title: validation.data.title,
-					url: params.link,
+					url: normalizedLink,
 					description: validation.data.description,
-					thumbnail: params.thumbnailKey,
+					thumbnail: thumbnailKey,
 					uid: entryUid
 				});
 
