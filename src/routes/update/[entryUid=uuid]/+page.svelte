@@ -2,11 +2,20 @@
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
 	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
+	import {
+		COMPETITION_FULL_NAME,
+		COMPETITION_SHORT_NAME,
+		categories,
+		userTypes
+	} from '$lib/config';
 	import type { Snapshot } from '../$types';
 	import { tick } from 'svelte';
 	import Time from '$lib/components/Time.svelte';
-	import { PUBLIC_REGISTRATION_END } from '$env/static/public';
+	import {
+		PUBLIC_REGISTRATION_END,
+		PUBLIC_S3_BUCKET,
+		PUBLIC_S3_ENDPOINT
+	} from '$env/static/public';
 
 	export let data;
 	export let form;
@@ -53,25 +62,8 @@
 
 <article class="layout-prose">
 	{#if form?.success}
-		<h2>Thank you! One more thing</h2>
-		{#if otherContributors.length === 0}
-			<p>
-				A confirmation email has been sent to <em>{form.user.email}</em> with your link for the
-				voting phase. <strong>Do not delete this email.</strong>
-			</p>
-			<p>
-				Here is your personal link for the vote (do not share it). <br />
-				<strong>Please make sure to save it</strong> (eg. bookmark it)
-			</p>
-			<p>
-				<a href="/vote/{form.user.token}">https://some.3b1b.co/vote/{form.user.token}</a>
-			</p>
-		{:else}
-			<p>
-				Every member of the team will soon receive a confirmation email with their link for the
-				voting phase. <strong>Please do not delete this email.</strong>
-			</p>
-		{/if}
+		<h2>Entry updated!</h2>
+
 		<p>See you in the voting phase!</p>
 	{:else}
 		<h2>Update your entry</h2>
@@ -82,6 +74,7 @@
 			enctype="multipart/form-data"
 			use:enhance={({ submitter, formData }) => {
 				formData.append('others', JSON.stringify(otherContributors));
+				formData.set('userType', 'creator');
 				submitter?.setAttribute('disabled', 'on');
 
 				return async ({ update }) => {
@@ -144,9 +137,7 @@
 				>
 			</p>
 
-			{#if form?.emailExists}
-				<span class="block text-error">email already registered: {form.emailExists}</span>
-			{:else if form?.undeliverable}
+			{#if form?.undeliverable}
 				<span class="block text-error"
 					>undeliverable email{otherContributors.length > 0 ? ': ' + form.undeliverable : ''}</span
 				>
@@ -229,6 +220,19 @@
 					<span class="block text-error">{form.fieldErrors.link.join(', ')} </span>
 				{:else if form?.linkExists}
 					<span class="block text-error">entry already registered</span>
+				{/if}
+			</div>
+
+			<div>
+				{#if !YOUTUBE_EMBEDDABLE.test(data.url)}
+					<p>Current thumbnail</p>
+					<img
+						class="my-0 max-w-full rounded-lg"
+						src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace('https://', '')}/${data.thumbnail}`}
+						alt="thumbnail"
+						width="480"
+						height="270"
+					/>
 				{/if}
 			</div>
 
