@@ -15,9 +15,9 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"drizzle:studio": "drizzle-kit studio",
-		"drizzle:push": "drizzle-kit push:pg --config=src/lib/server/db/drizzle.config.ts",
-		"drizzle:generate": "drizzle-kit generate:pg --config=src/lib/server/db/drizzle.config.ts",
-		"drizzle:migrate": "node drizzle/migrate.js"
+		"drizzle:push": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts",
+		"drizzle:generate": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
+		"drizzle:migrate": "drizzle-kit migrate --config=src/lib/server/db/drizzle.config.ts"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -32,7 +32,7 @@
 		"autoprefixer": "^10.4.19",
 		"cssnano": "^6.1.2",
 		"daisyui": "^3.5.1",
-		"drizzle-kit": "^0.20.17",
+		"drizzle-kit": "^0.21.0",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",

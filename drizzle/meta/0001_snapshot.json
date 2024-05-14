@@ -1,4 +1,6 @@
 {
+  "id": "3297bff5-c9af-499a-9da6-06fac04eae3c",
+  "prevId": "55c690db-4f87-4f04-8c6e-b0050e00b3ed",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -49,10 +51,10 @@
       "uniqueConstraints": {
         "entries_url_unique": {
           "name": "entries_url_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "url"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -78,12 +80,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
@@ -92,10 +88,10 @@
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -121,28 +117,28 @@
         "user_to_entry_user_uid_users_uid_fk": {
           "name": "user_to_entry_user_uid_users_uid_fk",
           "tableFrom": "user_to_entry",
+          "tableTo": "users",
           "columnsFrom": [
             "user_uid"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "uid"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "user_to_entry_entry_uid_entries_uid_fk": {
           "name": "user_to_entry_entry_uid_entries_uid_fk",
           "tableFrom": "user_to_entry",
+          "tableTo": "entries",
           "columnsFrom": [
             "entry_uid"
           ],
-          "tableTo": "entries",
           "columnsTo": [
             "uid"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -160,10 +156,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "55c690db-4f87-4f04-8c6e-b0050e00b3ed",
-  "prevId": "00000000-0000-0000-0000-000000000000"
+    "tables": {}
+  }
 }
