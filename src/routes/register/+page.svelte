@@ -72,7 +72,9 @@
 				> (eg. bookmark it)
 			</p>
 			<p>
-				<a href="/vote/{form.user.token}">https://some.3b1b.co/vote/{form.user.token}</a>
+				<a href="/vote/{form.user.token}" target="_blank"
+					>https://some.3b1b.co/vote/{form.user.token}</a
+				>
 			</p>
 		{:else}
 			<p>
@@ -83,7 +85,9 @@
 		{#if userType === 'creator'}
 			<p>If needed you can update your entry at any time here:</p>
 			<p>
-				<a href="/update/{form.entryUid}">https://some.3b1b.co/update/{form.entryUid}</a>
+				<a href="/update/{form.entryUid}" target="_blank"
+					>https://some.3b1b.co/update/{form.entryUid}</a
+				>
 			</p>
 		{/if}
 		<p>See you in the voting phase!</p>
