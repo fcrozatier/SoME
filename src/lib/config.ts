@@ -16,7 +16,11 @@ export const listFormatter = new Intl.ListFormat('en', { type: 'disjunction', st
 /**
  * Batch sending templates only
  */
-export const templateNames = ['token_reminder', 'end of peer review', 'top 100'] as const;
+export const templateNames = [
+	'token_reminder',
+	'end of peer review',
+	'top 100'
+] as const satisfies (keyof typeof emailTemplates)[];
 
 /**
  * The value is the template email subject
@@ -35,6 +39,7 @@ export const emailTemplates = {
 		variables: ['token']
 	},
 	registration: { subject: `${COMPETITION_FULL_NAME} registration`, variables: ['token'] },
+	update: { subject: `How to update your entry`, variables: ['token'] },
 	resend_token: { subject: `Your link for the ${COMPETITION_FULL_NAME}`, variables: ['token'] }
 } as const;
 

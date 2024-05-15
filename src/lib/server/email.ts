@@ -57,9 +57,7 @@ export async function sendEmail<T extends TemplateName>(
 		}
 	}
 
-	if (subject) {
-		await mg.messages.create(DOMAIN, data);
-	}
+	await mg.messages.create(DOMAIN, data);
 }
 
 export async function sendTemplate(template: TemplateName) {

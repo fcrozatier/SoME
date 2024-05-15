@@ -121,6 +121,10 @@ export const actions = {
 					for (const user of users) {
 						await addToMailingList(user.email, user.token);
 						await sendEmail(user.email, 'registration', { token: user.token });
+
+						if (validation.data.userType === 'creator') {
+							await sendEmail(user.email, 'update', { token: entryUid });
+						}
 					}
 				} catch (e) {
 					console.error('Cannot send email', e);
