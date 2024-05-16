@@ -208,7 +208,7 @@
 		</summary>
 		<p>
 			You can use any software you're familiar with, there's no constraint. You can even use no
-			software at all!
+			visualization software at all!
 		</p>
 		<p>
 			What matters most is to find your own style, as this will make you stand out during the vote.
