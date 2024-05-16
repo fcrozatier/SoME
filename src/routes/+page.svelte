@@ -190,7 +190,7 @@
 		<summary>
 			<div class="text-xl font-medium">Is there a topic constraint?</div>
 		</summary>
-		<p>It has to be about math.</p>
+		<p>It has to be about math or something related.</p>
 		<p>
 			Here we mean &laquo; math &raquo; very broadly, and more applied topics like physics or
 			computer science are abundantly welcome. It just has to be the case that a viewer/reader might
