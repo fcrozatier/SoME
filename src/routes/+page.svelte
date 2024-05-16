@@ -87,11 +87,12 @@
 </svelte:head>
 
 <section class="layout-prose pb-4">
-	<p class=" mb-16 text-center text-3xl font-light">Discover and create new math content.</p>
+	<!-- <p class=" mb-16 text-center text-3xl font-light">Discover and create new math content.</p> -->
+
+	<p class=" mb-16 text-center text-3xl font-light">SoMEπ community edition, summer 2024.</p>
 	<p>
 		The {COMPETITION_FULL_NAME} ({COMPETITION_SHORT_NAME}) is an annual competition to foster the
 		creation of excellent math content online. You can participate as either a creator or judge.
-		<a href="#rules">Learn more</a>
 	</p>
 </section>
 
@@ -199,6 +200,23 @@
 			The topic could be at any level, whether that's basic math for young children or higher-level
 			math. If you're assuming a certain background level for the target audience, kindly mention it
 			below.
+		</p>
+	</details>
+	<details>
+		<summary>
+			<div class="text-xl font-medium">What software should I use?</div>
+		</summary>
+		<p>
+			You can use any software you're familiar with, there's no constraint. You can even use no
+			software at all!
+		</p>
+		<p>
+			What matters most is to find your own style, as this will make you stand out during the vote.
+			And you'll have more fun making things your way.
+		</p>
+		<p>
+			So feel no pressure to copy anyone's style, we'll enjoy your entry even more if it's original,
+			so go have fun!
 		</p>
 	</details>
 	<details>
