@@ -9,7 +9,7 @@ export const load: LayoutServerLoad = async (event) => {
 	const { token } = event.params;
 
 	// Find user
-	const user = (await db.select().from(users).where(eq(users.uid, token)).limit(1))[0];
+	const user = (await db.select().from(users).where(eq(users.uid, token)))[0];
 
 	if (!user) {
 		throw error(
