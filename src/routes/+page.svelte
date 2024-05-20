@@ -27,7 +27,7 @@
 		{
 			title: 'Join the competition as a participant or judge',
 			description:
-				'Participants all work on their projects. You can join the <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a>, to share partial progress, find collaborators etc.',
+				'Participants all work on their projects. You can join the <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a> to share partial progress, find collaborators etc.',
 			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
 			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END]
 		},
