@@ -51,22 +51,6 @@ export function normalizeYoutubeLink(link: string) {
 }
 
 /**
- * Randomly shuffles a tuple
- * @param tuple
- */
-export function shuffleTuple<T>(tuple: T[]) {
-	if (!tuple || tuple.length !== 2) {
-		return tuple;
-	}
-
-	const [a, b] = tuple;
-	if (Math.random() < 0.5) {
-		return tuple;
-	}
-	return [b, a];
-}
-
-/**
  * Remaining time to submit an entry
  */
 export function timeLeft() {
