@@ -36,6 +36,7 @@ export function resultsAvailable() {
 }
 
 export const YOUTUBE_EMBEDDABLE = /youtube\.com\/watch\?.*v=([^&]*)|youtu\.be\/([^&]*)/;
+export const YOUTUBE_EMBED = /^https:\/\/youtube\.com\/embed/;
 
 /**
  * Normalizes youtube links to improve uniqueness
@@ -47,7 +48,7 @@ export function normalizeYoutubeLink(link: string) {
 
 	const id = m?.[1] || m?.[2];
 
-	return `https://youtube.com/watch?v=${id}`;
+	return `https://youtube.com/embed/${id}`;
 }
 
 /**
