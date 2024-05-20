@@ -67,7 +67,7 @@
 				voting phase. <strong>Do not delete this email.</strong>
 			</p>
 			<p>
-				Here is your personal link for the vote (do not share it), and <strong
+				Here is your personal link for the vote (do not share it), and please <strong
 					>make sure to save it</strong
 				> (eg. bookmark it)
 			</p>
