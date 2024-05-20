@@ -2,6 +2,7 @@
 	import { COMPETITION_SHORT_NAME } from '$lib/config';
 	import Icon from '$lib/components/Icon.svelte';
 	import { winners, honorables } from '$lib/results';
+	import Youtube from '$lib/components/Youtube.svelte';
 </script>
 
 <svelte:head>
@@ -29,16 +30,7 @@
 			<div class="flex flex-wrap items-start justify-center gap-6 lg:gap-8">
 				<div class="px-4">
 					{#if winner.video}
-						<iframe
-							width="420"
-							class="aspect-video rounded-lg max-w-full"
-							src={winner.link}
-							title="YouTube video player"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							allowfullscreen
-							loading="lazy"
-						/>
+						<Youtube src={winner.link}></Youtube>
 					{:else}
 						<a href={winner.link} target="_blank" class="w-[420px]">
 							<img

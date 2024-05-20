@@ -22,6 +22,7 @@
 	import Icon from '../lib/components/Icon.svelte';
 	import { winners } from '$lib/results';
 	import { onMount } from 'svelte';
+	import Youtube from '$lib/components/Youtube.svelte';
 
 	const phases = [
 		{
@@ -327,16 +328,7 @@
 			{#each winners as winner}
 				<div class="snap-center">
 					{#if winner.video}
-						<iframe
-							width="420"
-							class="aspect-video rounded-lg"
-							src={winner.link}
-							title="YouTube video player"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							allowfullscreen
-							loading="lazy"
-						/>
+						<Youtube src={winner.link}></Youtube>
 					{:else}
 						<a href={winner.link} target="_blank" class="inline-block w-[420px]">
 							<img
