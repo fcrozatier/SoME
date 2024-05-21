@@ -88,8 +88,7 @@
 			and the submission should generally display empathy for people unfamiliar with the topic.
 		</li>
 		<li>
-			<b>Motivation:</b> It should be clear to the reader/viewer within the first 30 seconds why they
-			should care.
+			<b>Motivation:</b> It should be clear by the end of the introduction why one should care.
 		</li>
 		<li>
 			<b>Novelty:</b> It doesn't necessarily have to be an original idea or original topic, but it should

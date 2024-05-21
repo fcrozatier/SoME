@@ -285,8 +285,7 @@
 		<p>Here's what we're looking for:</p>
 		<ul>
 			<li>
-				<b>Motivation:</b> It should be clear to the reader/viewer within the first 30 seconds why they
-				should care.
+				<b>Motivation:</b> It should be clear by the end of the introduction why one should care.
 			</li>
 			<li>
 				<b> Clarity: </b>
