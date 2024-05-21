@@ -3,10 +3,12 @@
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
 	import type { ActionData, PageData } from './$types';
-	import { PUBLIC_RATE_LIMIT, PUBLIC_S3_BUCKET } from '$env/static/public';
-	import { YOUTUBE_EMBEDDABLE } from '$lib/utils';
+	import { PUBLIC_S3_BUCKET } from '$env/static/public';
+	import { YOUTUBE_EMBED, YOUTUBE_EMBEDDABLE } from '$lib/utils';
 	import { PUBLIC_S3_ENDPOINT } from '$env/static/public';
 	import NewVote from '$lib/components/NewVote.svelte';
+	import Youtube from '$lib/components/Youtube.svelte';
+	import Slider from '$lib/components/Slider.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -19,17 +21,23 @@
 	function updateDescription(target: HTMLTextAreaElement, i: number) {
 		descriptions[i] = target.value.length;
 	}
+
+	let motivation: number;
+	let clarity: number;
+	let novelty: number;
+	let memorability: number;
+	let feedback = '';
 </script>
 
-<article>
+<article class="layout-prose">
 	{#if form?.id === 'FLAG' && form?.flagSuccess}
-		<div class="layout-prose">
+		<div>
 			<p class="text-success">Entry flagged. Thank you</p>
 
 			<NewVote {page} />
 		</div>
 	{:else if form?.id === 'VOTE' && form?.voteFail}
-		<div class="layout-prose">
+		<div>
 			<p class="text-error">
 				<span> Something went wrong. </span>
 
@@ -40,152 +48,141 @@
 			<NewVote {page} />
 		</div>
 	{:else if form?.id === 'VOTE' && form?.voteSuccess}
-		<div class="layout-prose">
+		<div>
 			<p class="text-success">Thank you !</p>
 
 			<NewVote {page} />
 		</div>
 	{:else if data.stopVote}
-		<div class="layout-prose">
+		<div>
 			<p class="text-success">Thank you for participating!</p>
 
 			<NewVote {page} displayCategories="others-only" />
 		</div>
 	{:else}
+		<div>
+			<h3>{data.entry.title}</h3>
+			<p>{data.entry.description}</p>
+			<div class="flex justify-center">
+				{#if data.entry.category === 'video' && YOUTUBE_EMBED.test(data.entry.url)}
+					<Youtube src={data.entry.url} width={560}></Youtube>
+				{/if}
+			</div>
+		</div>
 		<form
 			method="post"
 			action="?/vote"
+			class="space-y-4"
 			use:enhance={() => {
 				const buttons = document.querySelectorAll('button');
 				buttons.forEach((b) => b.setAttribute('disabled', 'on'));
-				return async ({ result }) => {
-					// Do not force a page update here to prevent assigning a new pair in case the user doesn't want to keep voting.
-					await applyAction(result);
+				return async ({ update }) => {
+					await update();
 					buttons.forEach((b) => b.removeAttribute('disabled'));
 				};
 			}}
 		>
-			<div class="grid w-full justify-items-center gap-20 px-16 lg:grid-cols-[47%_47%]">
-				{#each entries as entry, i (i)}
-					<div>
-						<h3 class="capitalize">{entry.title}</h3>
-						{#if YOUTUBE_EMBEDDABLE.test(entry.link)}
-							{@const youtubeLink = entry.link.match(YOUTUBE_EMBEDDABLE)?.[1]}
-							<iframe
-								class="mx-auto max-w-full rounded-lg"
-								width="560"
-								height="315"
-								src={`https://www.youtube.com/embed/${youtubeLink}`}
-								title="YouTube video player"
-								frameborder="0"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-								allowfullscreen
-							/>
-						{:else}
-							<a href={entry.link} target="_blank">
-								<img
-									class="mx-auto my-0 max-w-full rounded-lg"
-									src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace('https://', '')}/${
-										entry.thumbnail
-									}`}
-									alt="thumbnail"
-									width="560"
-									height="315"
-								/>
-							</a>
-						{/if}
-						<p>{entry.description}</p>
-						<p>Link: <a href={entry.link} target="_blank">{entry.link}</a></p>
-						<input type="hidden" name="entry-{i}" value={entry.number} />
-						<div class="form-control">
-							<label for="feedback-{i}" class="label">Your feedback for this entry:</label>
-							<textarea
-								id="feedback-{i}"
-								name="feedback-{i}"
-								class="textarea-bordered textarea w-full text-base"
-								placeholder={`(Motivation, Explanation, Originality, Length, Overall)`}
-								maxlength="2000"
-								on:input={(e) => updateDescription(e.currentTarget, i)}
-								rows="8"
-							/>
-							<div class="label">
-								<button
-									type="button"
-									class="btn-outline btn-error btn-xs btn"
-									on:click={() => {
-										flagEntry = entry;
-										flagDialog.showModal();
-									}}
-									>Report problem
-								</button>
-								<span class="label-text-alt self-start">{descriptions[i]}/2000</span>
-							</div>
-						</div>
-					</div>
-				{/each}
+			<div class="form-control gap-1">
+				<h4 class="mb-0">Motivation</h4>
+				<label for="some" class="label flex gap-2">
+					<span class="flex-1">
+						Is it clear by the end of the introduction why one should care for the topic?
+					</span>
+				</label>
+				<Slider
+					name="motivation"
+					labelLeft="No motivation"
+					labelRight="Stunning motivation"
+					bind:value={motivation}
+				></Slider>
 			</div>
-			<section class="layout-prose mt-8 w-full space-y-4">
-				<div class="form-control max-w-md">
-					<span class="mb-2 block">Which entry is the better one?</span>
-					{#each entries as entry, i}
-						<label for="choice-{i}" class="label cursor-pointer justify-start gap-2">
-							<input
-								id="choice-{i}"
-								class="radio"
-								type="radio"
-								name="choice"
-								value={entry.number}
-								required
-							/>
-							<span class="label-text"> {entry.title} </span>
-						</label>
-					{/each}
+			<div class="form-control gap-1">
+				<h4 class="mb-0 mt-2">Clarity</h4>
+				<label for="some" class="label flex gap-2">
+					<span class="flex-1">
+						Would the explanations make sense for the target audience? Jargon should be explained,
+						the goals of the lesson should be understandable with minimal background, and the
+						submission should generally display empathy for people unfamiliar with the topic</span
+					>
+				</label>
+				<Slider
+					name="clarity"
+					labelLeft="Vague and confusing"
+					labelRight="Clear and easy to follow"
+					bind:value={clarity}
+				></Slider>
+			</div>
+			<div class="form-control gap-1">
+				<h4 class="mb-0 mt-2">Novelty</h4>
+				<label for="some" class="label flex gap-2">
+					<span class="flex-1">
+						Is there something unique to this entry which would make it worth sharing? It could have
+						it's own unique style, or a new way of presenting a common topic, or it could be
+						surfacing an otherwise obscure idea which more people should know about.
+					</span>
+				</label>
+				<Slider
+					name="novelty"
+					labelLeft="Unremarkable"
+					labelRight="One of a kind"
+					bind:value={novelty}
+				></Slider>
+			</div>
+			<div class="form-control gap-1">
+				<h4 class="mb-0 mt-2">Memorability</h4>
+				<label for="some" class="label flex gap-2">
+					<span class="flex-1">
+						Is there a takeaway the audience would easily remember weeks later? Maybe it's an
+						impactful change in perspective, the beauty of an explanation, or the mind-blowingness
+						of an aha moment
+					</span>
+				</label>
+				<Slider
+					name="memorability"
+					labelLeft="No takeaway"
+					labelRight="Mind-blowing shift"
+					bind:value={memorability}
+				></Slider>
+			</div>
+
+			<div class="form-control">
+				<h4 class="mb-0 mt-2">Feedback</h4>
+				<label for="feedback" class="label flex gap-2">
+					<span class="flex-1">
+						Do you have general feedback for the author of this entry? If so, please remember to be
+						as constructive as possible in your comments:
+					</span>
+				</label>
+				<textarea
+					name="feedback"
+					id="feedback"
+					class="textarea-bordered textarea text-base"
+					cols="50"
+					rows="10"
+					maxlength="2000"
+					bind:value={feedback}
+				></textarea>
+				<div class="label justify-end">
+					<span class="label-text-alt">{feedback?.length}/2000</span>
 				</div>
-				<p>
-					<button type="submit" class="btn-primary btn-md btn">Vote for this entry</button>
+			</div>
+
+			<p>
+				<button class="btn btn-primary">Vote</button>
+			</p>
+			<!-- {#if form?.surveyFail}
+				<p class="text-error" bind:this={errorSummary}>
+					<span> Something went wrong. </span>
+					{#if form?.reason}
+						{form.reason}
+					{:else}
+						<span> Please try again later</span>
+					{/if}
 				</p>
-				{#if form?.id === 'VOTE' && form.rateLimitError}
-					<p class="text-error">
-						Please wait at least {PUBLIC_RATE_LIMIT} minutes between votes.
-					</p>
-				{/if}
-			</section>
+			{/if} -->
 		</form>
 
 		<section class="layout-prose">
-			<h3>Guidelines</h3>
-			<p>
-				Choose your preferred entry between the following two. It is ultimately up to you how you
-				make this decision, but you might consider the following principles:
-			</p>
-			<ul>
-				<li>
-					Clarity: Jargon should be explained, the goals of the lesson should be understandable with
-					minimal background, and the submission should generally display empathy for people
-					unfamiliar with the topic.
-				</li>
-				<li>
-					Motivation: It should be clear to the reader/viewer within the first 30 seconds why they
-					should care.
-				</li>
-				<li>
-					Novelty: It doesn't necessarily have to be an original idea or original topic, but it
-					should offer someone an experience they might otherwise not have by searching around
-					online. Some of the greatest value comes from covering common topics in better ways. Other
-					times there's value in surfacing otherwise obscure ideas which more people should know
-					about.
-				</li>
-				<li>
-					Memorability: Something should make the piece easy to remember even several months later.
-					Maybe it's the beauty of the presentation, the enthusiasm of the presenter, or the
-					mind-blowingness of an aha moment
-				</li>
-				<li>Length: is the time to read/watch appropriate for the underlying concept?</li>
-			</ul>
-			<p>
-				If possible, please provide feedback to each creator. Remember to be as constructive as
-				possible in your comments.
-			</p>
 			<p>
 				If an entry is inappropriate or does not follow the <a href="/#rules">rules</a> you can flag
 				it and we will review it manually.
