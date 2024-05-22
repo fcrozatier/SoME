@@ -92,7 +92,7 @@
 				<Slider
 					name="motivation"
 					labelLeft="No motivation"
-					labelRight="Stunning motivation"
+					labelRight="Exciting"
 					bind:value={motivation}
 				></Slider>
 			</div>
@@ -117,7 +117,7 @@
 				<label for="some" class="label flex gap-2">
 					<span class="flex-1">
 						Is there something unique to this entry which would make it worth sharing? It could have
-						it's own unique style, or a new way of presenting a common topic, or it could be
+						its own unique style, or a new way of presenting a common topic, or it could be
 						surfacing an otherwise obscure idea which more people should know about.
 					</span>
 				</label>
