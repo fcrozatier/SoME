@@ -14,6 +14,8 @@
 	export let form: ActionData;
 
 	let flagDialog: HTMLDialogElement;
+	let guidelines: HTMLDialogElement;
+
 	let flagEntry: EntryProperties | null = null;
 
 	const descriptions = [0, 0];
@@ -83,65 +85,23 @@
 			}}
 		>
 			<div class="form-control gap-1">
-				<h4 class="mb-0">Motivation</h4>
-				<label for="some" class="label flex gap-2">
-					<span class="flex-1">
-						Is it clear by the end of the introduction why one should care for the topic?
-					</span>
-				</label>
+				<h3 class="mb-0">Vote</h3>
+				<p class="mb-4">
+					How valuable is this entry to the space of online math exposition, compared to the typical
+					math {data.entry.category === 'video' ? 'video' : 'article'} you've seen?
+					<button
+						class="font-semibold hover:underline text-sm"
+						on:click={() => guidelines.showModal()}>(Guidelines*)</button
+					>
+				</p>
 				<Slider
 					name="motivation"
-					labelLeft="No motivation"
-					labelRight="Exciting"
+					labelTopLeft="Notably worse"
+					labelTopCenter="About the same"
+					labelTopRight="Outstanding"
+					labelBottomLeft="Not as good"
+					labelBottomRight="Better than most"
 					bind:value={motivation}
-				></Slider>
-			</div>
-			<div class="form-control gap-1">
-				<h4 class="mb-0 mt-2">Clarity</h4>
-				<label for="some" class="label flex gap-2">
-					<span class="flex-1">
-						Would the explanations make sense for the target audience? Jargon should be explained,
-						the goals of the lesson should be understandable with minimal background, and the
-						submission should generally display empathy for people unfamiliar with the topic</span
-					>
-				</label>
-				<Slider
-					name="clarity"
-					labelLeft="Vague and confusing"
-					labelRight="Clear and easy to follow"
-					bind:value={clarity}
-				></Slider>
-			</div>
-			<div class="form-control gap-1">
-				<h4 class="mb-0 mt-2">Novelty</h4>
-				<label for="some" class="label flex gap-2">
-					<span class="flex-1">
-						Is there something unique to this entry which would make it worth sharing? It could have
-						its own unique style, or a new way of presenting a common topic, or it could be
-						surfacing an otherwise obscure idea which more people should know about.
-					</span>
-				</label>
-				<Slider
-					name="novelty"
-					labelLeft="Unremarkable"
-					labelRight="One of a kind"
-					bind:value={novelty}
-				></Slider>
-			</div>
-			<div class="form-control gap-1">
-				<h4 class="mb-0 mt-2">Memorability</h4>
-				<label for="some" class="label flex gap-2">
-					<span class="flex-1">
-						Is there a takeaway the audience would easily remember weeks later? Maybe it's an
-						impactful change in perspective, the beauty of an explanation, or the mind-blowingness
-						of an aha moment
-					</span>
-				</label>
-				<Slider
-					name="memorability"
-					labelLeft="No takeaway"
-					labelRight="Mind-blowing shift"
-					bind:value={memorability}
 				></Slider>
 			</div>
 
@@ -190,6 +150,43 @@
 		</section>
 	{/if}
 </article>
+
+<dialog class="relative" bind:this={guidelines}>
+	<article use:clickOutside={() => guidelines.close()}>
+		<h2 id="guidlines" class="text-center mt-0 mb-8">Guidelines</h2>
+
+		<p>When scoring an entry you might consider the following principles:</p>
+
+		<h3>Motivation</h3>
+		<p>Is it clear by the end of the introduction why one should care for the topic?</p>
+
+		<h3>Clarity</h3>
+		<p>
+			Would the explanations make sense for the target audience? Jargon should be explained, the
+			goals of the lesson should be understandable with minimal background, and the submission
+			should generally display empathy for people unfamiliar with the topic
+		</p>
+
+		<h3>Novelty</h3>
+		<p>
+			Is there something unique to this entry which would make it worth sharing? It could have its
+			own unique style, or a new way of presenting a common topic, or it could be surfacing an
+			otherwise obscure idea which more people should know about.
+		</p>
+
+		<h3>Memorability</h3>
+		<p>
+			Is there a takeaway the audience would easily remember weeks later? Maybe it's an impactful
+			change in perspective, the beauty of an explanation, or the mind-blowingness of an aha moment
+		</p>
+
+		<p class="text-center mt-8 mb-2">
+			<button type="button" class="btn-outline btn" on:click={() => guidelines.close()}
+				>Close</button
+			>
+		</p>
+	</article>
+</dialog>
 
 <dialog class="mb-auto" bind:this={flagDialog}>
 	<form
