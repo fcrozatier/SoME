@@ -44,7 +44,7 @@
 		<slot />
 	</main>
 
-	<footer class="mt-auto flex flex-wrap justify-center gap-20 p-4">
+	<footer class="mt-auto flex flex-wrap justify-center gap-x-20 gap-y-10 p-4">
 		<a
 			href="https://github.com/fcrozatier/SoME"
 			class="inline-flex items-center gap-3 opacity-80 hover:opacity-100"
