@@ -96,11 +96,11 @@
 				</p>
 				<Slider
 					name="motivation"
-					labelTopLeft="Notably worse"
-					labelTopCenter="About the same"
-					labelTopRight="Outstanding"
-					labelBottomLeft="Not as good"
-					labelBottomRight="Better than most"
+					label1="Notably worse"
+					label5="About the same"
+					label9="Outstanding"
+					label3="Not as good"
+					label7="Better than most"
 					bind:value={motivation}
 				></Slider>
 			</div>
