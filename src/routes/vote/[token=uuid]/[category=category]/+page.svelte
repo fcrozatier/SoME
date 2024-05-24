@@ -18,16 +18,7 @@
 
 	let flagEntry: EntryProperties | null = null;
 
-	const descriptions = [0, 0];
-
-	function updateDescription(target: HTMLTextAreaElement, i: number) {
-		descriptions[i] = target.value.length;
-	}
-
-	let motivation: number;
-	let clarity: number;
-	let novelty: number;
-	let memorability: number;
+	let score = 5;
 	let feedback = '';
 </script>
 
@@ -63,11 +54,11 @@
 		</div>
 	{:else}
 		<div>
-			<h3>{data.entry.title}</h3>
-			<p>{data.entry.description}</p>
+			<h3>{data.title}</h3>
+			<p>{data.description}</p>
 			<div class="flex justify-center">
-				{#if data.entry.category === 'video' && YOUTUBE_EMBED.test(data.entry.url)}
-					<Youtube src={data.entry.url} width={560}></Youtube>
+				{#if data.category === 'video' && YOUTUBE_EMBED.test(data.url)}
+					<Youtube src={data.url} width={560}></Youtube>
 				{/if}
 			</div>
 		</div>
@@ -84,24 +75,25 @@
 				};
 			}}
 		>
+			<input type="hidden" value={data.uid} name="entry" />
 			<div class="form-control gap-1">
 				<h3 class="mb-0">Vote</h3>
 				<p class="mb-4">
 					How valuable is this entry to the space of online math exposition, compared to the typical
-					math {data.entry.category === 'video' ? 'video' : 'article'} you've seen?
+					math {data.category === 'video' ? 'video' : 'article'} you've seen?
 					<button
 						class="font-semibold hover:underline text-sm"
 						on:click={() => guidelines.showModal()}>(Guidelines*)</button
 					>
 				</p>
 				<Slider
-					name="motivation"
+					name="score"
 					label1="Notably worse"
 					label5="About the same"
 					label9="Outstanding"
 					label3="Not as good"
 					label7="Better than most"
-					bind:value={motivation}
+					bind:value={score}
 				></Slider>
 			</div>
 
