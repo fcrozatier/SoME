@@ -129,11 +129,9 @@ export const FeedbackSchema = z
 	.optional();
 
 export const VoteSchema = z.object({
-	'entry-0': z.coerce.number().int(),
-	'entry-1': z.coerce.number().int(),
-	'feedback-0': FeedbackSchema,
-	'feedback-1': FeedbackSchema,
-	choice: z.coerce.number().int()
+	score: z.coerce.number().gte(1).lte(9),
+	feedback: FeedbackSchema,
+	entry: z.string()
 });
 
 export const SwapSchema = z.object({
