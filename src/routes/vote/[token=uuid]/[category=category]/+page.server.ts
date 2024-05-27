@@ -23,17 +23,21 @@ export const load: PageServerLoad = async (event) => {
 			.limit(1)
 	)[0];
 
-	const { cipherText, tag } = encrypt(entry.uid);
+	if (entry) {
+		const { cipherText, tag } = encrypt(entry.uid);
 
-	return {
-		title: entry.title,
-		description: entry.description,
-		category: entry.category,
-		url: entry.url,
-		thumbnail: entry.thumbnail,
-		uid: cipherText,
-		tag
-	};
+		return {
+			title: entry.title,
+			description: entry.description,
+			category: entry.category,
+			url: entry.url,
+			thumbnail: entry.thumbnail,
+			uid: cipherText,
+			tag
+		};
+	}
+
+	return { stopVote: true };
 };
 
 let id: 'FLAG' | 'VOTE';
@@ -58,12 +62,9 @@ export const actions: Actions = {
 			return fail(400, { id, voteFail: true });
 		}
 
-		const uid = decrypt(validation.data.uid, validation.data.tag);
-		const entry = (
-			await db.select({ uid: entries.uid }).from(entries).where(eq(entries.uid, uid))
-		)[0];
+		try {
+			const uid = decrypt(validation.data.uid, validation.data.tag);
 
-		if (entry) {
 			await db
 				.insert(votes)
 				.values({
@@ -78,7 +79,8 @@ export const actions: Actions = {
 				});
 
 			return { id, voteSuccess: true };
+		} catch (error) {
+			return fail(400, { id, voteFail: true });
 		}
-		return { id, voteFail: true };
 	}
 };
