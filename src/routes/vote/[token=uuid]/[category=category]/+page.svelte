@@ -29,17 +29,6 @@
 
 			<NewVote {page} />
 		</div>
-	{:else if form?.id === 'VOTE' && form?.voteFail}
-		<div>
-			<p class="text-error">
-				<span> Something went wrong. </span>
-
-				{#if form?.id === 'VOTE' && form?.voteFail && form?.reason}
-					<span>{form?.reason}</span>
-				{/if}
-			</p>
-			<NewVote {page} />
-		</div>
 	{:else if form?.id === 'VOTE' && form?.voteSuccess}
 		<div>
 			<p class="text-success">Thank you !</p>
@@ -75,7 +64,8 @@
 				};
 			}}
 		>
-			<input type="hidden" value={data.uid} name="entry" />
+			<input type="hidden" value={data.uid} name="uid" />
+			<input type="hidden" value={data.tag} name="tag" />
 			<div class="form-control gap-1">
 				<h3 class="mb-0">Vote</h3>
 				<p class="mb-4">
@@ -111,27 +101,23 @@
 					class="textarea-bordered textarea text-base"
 					cols="50"
 					rows="10"
-					maxlength="2000"
+					maxlength="5000"
 					bind:value={feedback}
 				></textarea>
 				<div class="label justify-end">
-					<span class="label-text-alt">{feedback?.length}/2000</span>
+					<span class="label-text-alt">{feedback?.length}/5000</span>
 				</div>
 			</div>
 
 			<p>
 				<button class="btn btn-primary">Vote</button>
 			</p>
-			<!-- {#if form?.surveyFail}
-				<p class="text-error" bind:this={errorSummary}>
+			{#if form?.voteFail}
+				<p class="text-error">
 					<span> Something went wrong. </span>
-					{#if form?.reason}
-						{form.reason}
-					{:else}
-						<span> Please try again later</span>
-					{/if}
+					<span> Please try again later</span>
 				</p>
-			{/if} -->
+			{/if}
 		</form>
 
 		<section class="layout-prose">

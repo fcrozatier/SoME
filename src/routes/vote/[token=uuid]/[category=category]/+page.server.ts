@@ -6,6 +6,7 @@ import { db } from '$lib/server/db/client';
 import { entries, votes } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { Category } from '$lib/config';
+import { decrypt, encrypt } from '$lib/server/encryption';
 
 export const load: PageServerLoad = async (event) => {
 	const { token, category } = event.params;
@@ -21,7 +22,8 @@ export const load: PageServerLoad = async (event) => {
 			.where(and(eq(entries.category, category as Category), eq(entries.active, true)))
 			.limit(1)
 	)[0];
-	console.log('entry:', entry);
+
+	const { cipherText, tag } = encrypt(entry.uid);
 
 	return {
 		title: entry.title,
@@ -29,7 +31,8 @@ export const load: PageServerLoad = async (event) => {
 		category: entry.category,
 		url: entry.url,
 		thumbnail: entry.thumbnail,
-		uid: entry.uid
+		uid: cipherText,
+		tag
 	};
 };
 
@@ -48,36 +51,34 @@ export const actions: Actions = {
 	vote: async ({ request, params }) => {
 		id = 'VOTE';
 		const { token } = params;
-
 		const validation = await validateForm(request, VoteSchema);
 
 		if (!validation.success) {
 			console.log(validation.error.flatten());
 			return fail(400, { id, voteFail: true });
 		}
-		console.log('validation data', validation.data.score);
+
+		const uid = decrypt(validation.data.uid, validation.data.tag);
 		const entry = (
-			await db
-				.select({ uid: entries.uid })
-				.from(entries)
-				.where(eq(entries.uid, validation.data.entry))
+			await db.select({ uid: entries.uid }).from(entries).where(eq(entries.uid, uid))
 		)[0];
 
 		if (entry) {
 			await db
 				.insert(votes)
 				.values({
-					entryUid: entry.uid,
+					entryUid: uid,
 					userUid: token,
 					score: validation.data.score,
 					feedback: validation.data.feedback
 				})
 				.onConflictDoUpdate({
 					target: [votes.userUid, votes.entryUid],
-					set: { score: validation.data.score, feedback: validation.data.feedback }
+					set: { score: `${validation.data.score}`, feedback: validation.data.feedback }
 				});
 
 			return { id, voteSuccess: true };
 		}
+		return { id, voteFail: true };
 	}
 };
