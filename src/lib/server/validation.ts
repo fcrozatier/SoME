@@ -120,7 +120,7 @@ export const FeedbackSchema = z
 	.trim()
 	.refine(
 		(feedback) => {
-			return feedback.length - (feedback.match(/\r\n/g) ?? []).length <= 2000;
+			return feedback.length - (feedback.match(/\r\n/g) ?? []).length <= 5000;
 		},
 		{
 			message: 'Feedback too long'
@@ -131,7 +131,8 @@ export const FeedbackSchema = z
 export const VoteSchema = z.object({
 	score: z.coerce.number().gte(1).lte(9),
 	feedback: FeedbackSchema,
-	entry: z.string()
+	uid: z.string(),
+	tag: z.string()
 });
 
 export const SwapSchema = z.object({
