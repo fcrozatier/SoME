@@ -43,9 +43,12 @@
 	async function showModal() {
 		return new Promise((resolve) => {
 			confirmDialog.showModal();
-			confirmDialog.addEventListener('close', function (this: HTMLDialogElement) {
+			confirmDialog.addEventListener('close', close);
+
+			function close(this: HTMLDialogElement) {
+				confirmDialog.removeEventListener('close', close);
 				resolve(this.returnValue);
-			});
+			}
 		});
 	}
 
