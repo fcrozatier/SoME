@@ -45,9 +45,9 @@
 			confirmDialog.showModal();
 			confirmDialog.addEventListener('close', close);
 
-			function close(this: HTMLDialogElement) {
+			function close() {
 				confirmDialog.removeEventListener('close', close);
-				resolve(this.returnValue);
+				resolve(confirmDialog.returnValue);
 			}
 		});
 	}
