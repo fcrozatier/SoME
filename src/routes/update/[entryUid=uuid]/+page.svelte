@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
-	import { YOUTUBE_EMBEDDABLE } from '$lib/utils';
+	import { YOUTUBE_EMBEDDABLE, normalizeYoutubeLink, voteOpen } from '$lib/utils';
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
 	import type { Snapshot } from '../$types';
 	import { tick } from 'svelte';
@@ -38,6 +38,17 @@
 	let description = data.description;
 	let link = data.url;
 
+	let confirmDialog: HTMLDialogElement;
+
+	async function showModal() {
+		return new Promise((resolve) => {
+			confirmDialog.showModal();
+			confirmDialog.addEventListener('close', function (this: HTMLDialogElement) {
+				resolve(this.returnValue);
+			});
+		});
+	}
+
 	async function addContributor() {
 		otherContributors = [...otherContributors, ''];
 		await tick();
@@ -55,6 +66,7 @@
 		<h2>Entry updated!</h2>
 
 		<p>See you in the voting phase!</p>
+		<p><a href="/">Home</a></p>
 	{:else}
 		<h2>Update your entry</h2>
 
@@ -62,11 +74,18 @@
 		<form
 			method="post"
 			enctype="multipart/form-data"
-			use:enhance={({ submitter, formData }) => {
+			use:enhance={async ({ submitter, formData, cancel }) => {
 				formData.append('others', JSON.stringify(otherContributors));
 				formData.set('userType', 'creator');
 				submitter?.setAttribute('disabled', 'on');
 
+				if (voteOpen() && data.url !== normalizeYoutubeLink(link)) {
+					const result = await showModal();
+					if (result === 'cancel') {
+						submitter?.removeAttribute('disabled');
+						cancel();
+					}
+				}
 				return async ({ update }) => {
 					await update();
 					submitter?.removeAttribute('disabled');
@@ -299,6 +318,26 @@
 		</form>
 	{/if}
 </article>
+
+<dialog class="mb-auto" bind:this={confirmDialog} role="alertdialog">
+	<form method="dialog">
+		<h2 class="mt-0">All votes will be lost, continue?</h2>
+		<p class="text-gray-700">
+			Modifying the link of an entry when the vote is open will delete all previous votes on this
+			entry.
+		</p>
+
+		<h4>Old link</h4>
+		<p><a href={data.url}>{data.url}</a></p>
+		<h4>New link</h4>
+		<p><a href={link}>{link}</a></p>
+
+		<p class="mb-0 mt-8 flex items-center gap-2">
+			<button type="submit" value="cancel" class="btn-outline btn">Cancel</button>
+			<button type="submit" value="ok" class="btn-outline btn-error btn">Confirm</button>
+		</p>
+	</form>
+</dialog>
 
 <style>
 	label {

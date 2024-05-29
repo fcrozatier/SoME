@@ -10,6 +10,7 @@ import {
 	entries,
 	users as usersTable,
 	usersToEntries,
+	votes,
 	type NewUser
 } from '$lib/server/db/schema.js';
 import postgres from 'postgres';
@@ -135,9 +136,9 @@ export const actions = {
 
 			// 2- Update entry
 
-			const { oldThumbnail } = (
+			const { oldThumbnail, oldUrl } = (
 				await db
-					.select({ oldThumbnail: entries.thumbnail })
+					.select({ oldThumbnail: entries.thumbnail, oldUrl: entries.url })
 					.from(entries)
 					.where(eq(entries.uid, entryUid))
 					.limit(1)
@@ -169,6 +170,10 @@ export const actions = {
 			// Save thumbnail after the entry: we know it's not a duplicate
 			if (thumbnail && thumbnailKey) {
 				await saveThumbnail(thumbnail, thumbnailKey);
+			}
+			// Remove all votes in case the link was changed
+			if (oldUrl !== normalizedLink) {
+				await db.delete(votes).where(eq(votes.entryUid, entryUid));
 			}
 
 			return {
