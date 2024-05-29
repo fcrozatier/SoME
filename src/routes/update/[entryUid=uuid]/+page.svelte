@@ -331,9 +331,9 @@
 		</p>
 
 		<h4>Old link</h4>
-		<p><a href={data.url}>{data.url}</a></p>
+		<p><a href={data.url} target="_blank">{data.url}</a></p>
 		<h4>New link</h4>
-		<p><a href={link}>{link}</a></p>
+		<p><a href={link} target="_blank">{link}</a></p>
 
 		<p class="mb-0 mt-8 flex items-center gap-2">
 			<button type="submit" value="cancel" class="btn-outline btn">Cancel</button>
