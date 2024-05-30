@@ -143,7 +143,7 @@
 						class={`label ${
 							disabled ? 'cursor-not-allowed' : 'cursor-pointer'
 						} justify-start gap-2`}
-						title={disabled ? 'Deadline passed' : userType}
+						title={disabled ? 'The deadline has expired' : userType}
 					>
 						<input
 							id="user-type-{i}"
