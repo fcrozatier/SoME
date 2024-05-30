@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
-	import { YOUTUBE_EMBEDDABLE, normalizeYoutubeLink, voteOpen } from '$lib/utils';
+	import { YOUTUBE_EMBEDDABLE, normalizeYoutubeLink, voteOpen, registrationOpen } from '$lib/utils';
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
 	import type { Snapshot } from '../$types';
 	import { tick } from 'svelte';
@@ -82,7 +82,7 @@
 				formData.set('userType', 'creator');
 				submitter?.setAttribute('disabled', 'on');
 
-				if (voteOpen() && data.url !== normalizeYoutubeLink(link)) {
+				if (registrationOpen() && voteOpen() && data.url !== normalizeYoutubeLink(link)) {
 					const result = await showModal();
 					if (result === 'cancel') {
 						submitter?.removeAttribute('disabled');
@@ -227,6 +227,7 @@
 					placeholder="https://"
 					class="input-bordered input w-full"
 					bind:value={link}
+					disabled={!registrationOpen()}
 				/>
 				{#if form?.fieldErrors?.link}
 					<span class="block text-error">{form.fieldErrors.link.join(', ')} </span>
@@ -305,11 +306,7 @@
 
 			{#if form?.fieldErrors || $page.status !== 200}
 				<p class="block text-error">
-					Something went wrong. {form?.invalid
-						? 'Please correct the highlighted fields above'
-						: form?.network
-							? 'There was a network error. Please try again later'
-							: ''}
+					Something went wrong. {form?.message || ''}
 				</p>
 			{/if}
 			<p>

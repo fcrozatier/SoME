@@ -1,5 +1,5 @@
 import { error, fail } from '@sveltejs/kit';
-import { normalizeYoutubeLink, phaseOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
+import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
 import { CreatorSchema, validateForm } from '$lib/server/validation';
 import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
 import { dev } from '$app/environment';
@@ -48,7 +48,7 @@ export const actions = {
 			const { entryUid } = params;
 			console.log('received form');
 			if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END)) {
-				return fail(422, { invalid: true });
+				return fail(422, { message: 'The competition is closed' });
 			}
 
 			const validation = await validateForm(request, CreatorSchema);
@@ -78,11 +78,13 @@ export const actions = {
 					[...newCreators].map(async (email) => await validateEmail(email))
 				);
 				if (emailValidation.some((x) => x === null)) {
-					return fail(400, { invalid: true });
+					return fail(400, { message: 'There is something wrong with the emails' });
 				}
 				const undeliverable = emailValidation.find((x) => x?.result !== 'deliverable');
 				if (undeliverable) {
-					return fail(400, { undeliverable: undeliverable.address });
+					return fail(400, {
+						undeliverable: undeliverable.address
+					});
 				}
 			}
 
@@ -156,6 +158,13 @@ export const actions = {
 				normalizedLink = normalizeYoutubeLink(link);
 			}
 
+			if (oldUrl !== normalizedLink) {
+				if (!registrationOpen())
+					return fail(422, { message: "You can't update the link once the vote is open" });
+				// Remove all votes in case the link was changed
+				await db.delete(votes).where(eq(votes.entryUid, entryUid));
+			}
+
 			await db
 				.update(entries)
 				.set({
@@ -170,10 +179,6 @@ export const actions = {
 			// Save thumbnail after the entry: we know it's not a duplicate
 			if (thumbnail && thumbnailKey) {
 				await saveThumbnail(thumbnail, thumbnailKey);
-			}
-			// Remove all votes in case the link was changed
-			if (oldUrl !== normalizedLink) {
-				await db.delete(votes).where(eq(votes.entryUid, entryUid));
 			}
 
 			return {
@@ -191,7 +196,7 @@ export const actions = {
 				}
 			}
 			console.log(error);
-			return fail(500, { network: true });
+			return fail(500, { message: 'Network error' });
 		}
 	}
 };
