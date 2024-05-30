@@ -9,6 +9,7 @@
 	import NewVote from '$lib/components/NewVote.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
 	import Slider from '$lib/components/Slider.svelte';
+	import Thumbnail from '$lib/components/Thumbnail.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -48,6 +49,10 @@
 			<div class="flex justify-center">
 				{#if data.category === 'video' && YOUTUBE_EMBED.test(data.url)}
 					<Youtube src={data.url} width={560}></Youtube>
+				{:else if data.thumbnail && !YOUTUBE_EMBED.test(data.url)}
+					<a href={data.url} target="_blank">
+						<Thumbnail uid={data.thumbnail} width={560}></Thumbnail>
+					</a>
 				{/if}
 			</div>
 		</div>
