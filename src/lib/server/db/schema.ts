@@ -1,5 +1,4 @@
 import { relations } from 'drizzle-orm';
-import { categories } from '../../config';
 import {
 	boolean,
 	decimal,
@@ -11,6 +10,7 @@ import {
 	uuid,
 	varchar
 } from 'drizzle-orm/pg-core';
+import { categories } from '../../config';
 
 export const users = pgTable('users', {
 	uid: uuid('uid').primaryKey(),
@@ -89,3 +89,4 @@ export const votesRelations = relations(votes, ({ one }) => ({
 }));
 
 export type NewUser = typeof users.$inferInsert;
+export type SelectEntry = typeof entries.$inferSelect;
