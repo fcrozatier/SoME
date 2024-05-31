@@ -204,7 +204,8 @@
 			class="input-bordered input w-full"
 			required
 		/>
-		<input type="hidden" name="link" value={data.url} />
+		<input type="hidden" value={data.uid} name="uid" />
+		<input type="hidden" value={data.tag} name="tag" />
 		<p class="mb-0 mt-8 flex items-center gap-2">
 			<button type="button" class="btn-outline btn" on:click={() => flagDialog.close()}
 				>Cancel</button
