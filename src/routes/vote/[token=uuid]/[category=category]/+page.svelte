@@ -2,22 +2,18 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
-	import type { ActionData, PageData } from './$types';
-	import { PUBLIC_S3_BUCKET } from '$env/static/public';
-	import { YOUTUBE_EMBED, YOUTUBE_EMBEDDABLE } from '$lib/utils';
-	import { PUBLIC_S3_ENDPOINT } from '$env/static/public';
 	import NewVote from '$lib/components/NewVote.svelte';
-	import Youtube from '$lib/components/Youtube.svelte';
 	import Slider from '$lib/components/Slider.svelte';
 	import Thumbnail from '$lib/components/Thumbnail.svelte';
+	import Youtube from '$lib/components/Youtube.svelte';
+	import { YOUTUBE_EMBED } from '$lib/utils';
+	import type { ActionData, PageData } from './$types';
 
 	export let data: PageData;
 	export let form: ActionData;
 
 	let flagDialog: HTMLDialogElement;
 	let guidelines: HTMLDialogElement;
-
-	let flagEntry: EntryProperties | null = null;
 
 	let score = 5;
 	let feedback = '';
@@ -44,7 +40,7 @@
 		</div>
 	{:else}
 		<div>
-			<h3>{data.title}</h3>
+			<h3 class="capitalize">{data.title}</h3>
 			<p>{data.description}</p>
 			<div class="flex justify-center">
 				{#if data.category === 'video' && YOUTUBE_EMBED.test(data.url)}
@@ -114,8 +110,13 @@
 				</div>
 			</div>
 
-			<p>
+			<p class="flex justify-between flex-row-reverse">
 				<button class="btn btn-primary">Vote</button>
+				<button
+					type="button"
+					class="btn btn-outline btn-error"
+					on:click={() => flagDialog.showModal()}>Flag</button
+				>
 			</p>
 			{#if form?.voteFail}
 				<p class="text-error">
@@ -125,12 +126,10 @@
 			{/if}
 		</form>
 
-		<section class="layout-prose">
-			<p>
-				If an entry is inappropriate or does not follow the <a href="/#rules">rules</a> you can flag
-				it and we will review it manually.
-			</p>
-		</section>
+		<p>
+			If an entry is inappropriate or does not follow the <a href="/#rules">rules</a> you can flag it
+			and we will review it manually.
+		</p>
 	{/if}
 </article>
 
@@ -187,17 +186,15 @@
 			};
 		}}
 	>
-		<h2 class="mt-0">Is there something wrong?</h2>
+		<h2 class="mt-0">What's wrong with this entry?</h2>
 		<p class="text-gray-700">You can report an entry if:</p>
 		<ul>
 			<li>it is inappropriate / suspicious</li>
-
 			<li>it does not respect the rules</li>
-
 			<li>you cannot proceed (wrong platform etc.)</li>
 		</ul>
 		<p>In any case please provide a reason. The entry will be reviewed by admins.</p>
-		<span class="capitalize">{flagEntry?.title}</span>
+		<span class="capitalize font-semibold">{data.title}</span>
 		<label for="reason" class="label">Reason</label>
 		<input
 			id="reason"
@@ -207,8 +204,8 @@
 			class="input-bordered input w-full"
 			required
 		/>
-		<input type="hidden" name="link" value={flagEntry?.link} />
-		<p class="mb-0 flex items-center gap-2">
+		<input type="hidden" name="link" value={data.url} />
+		<p class="mb-0 mt-8 flex items-center gap-2">
 			<button type="button" class="btn-outline btn" on:click={() => flagDialog.close()}
 				>Cancel</button
 			>
