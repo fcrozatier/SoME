@@ -1,12 +1,12 @@
-import { voteOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
-import { fail, redirect } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
-import { FlagSchema, validateForm, VoteSchema } from '$lib/server/validation';
 import { db } from '$lib/server/db/client';
-import { entries, votes } from '$lib/server/db/schema';
-import { and, eq } from 'drizzle-orm';
-import type { Category } from '$lib/config';
+import { usersToEntries, votes, type SelectEntry } from '$lib/server/db/schema';
 import { decrypt, encrypt } from '$lib/server/encryption';
+import { FlagSchema, validateForm, VoteSchema } from '$lib/server/validation';
+import { voteOpen } from '$lib/utils';
+import { fail, redirect } from '@sveltejs/kit';
+import { sql } from 'drizzle-orm';
+import type postgres from 'postgres';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const { token, category } = event.params;
@@ -15,13 +15,18 @@ export const load: PageServerLoad = async (event) => {
 		throw redirect(302, `/vote/${token}`);
 	}
 
-	const entry = (
-		await db
-			.select()
-			.from(entries)
-			.where(and(eq(entries.category, category as Category), eq(entries.active, true)))
-			.limit(1)
-	)[0];
+	const result: postgres.RowList<SelectEntry[]> = await db.execute(sql`
+		select * from entries
+		where category=${category}
+		and active='true'
+		and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
+		and uid not in (select entry_uid from votes where votes.user_uid=${token})
+		limit 1;
+		`);
+
+	if (!result) return { stopVote: true };
+
+	const [entry] = result;
 
 	if (entry) {
 		const { cipherText, tag } = encrypt(entry.uid);
@@ -36,8 +41,6 @@ export const load: PageServerLoad = async (event) => {
 			tag
 		};
 	}
-
-	return { stopVote: true };
 };
 
 let id: 'FLAG' | 'VOTE';
