@@ -88,5 +88,25 @@ export const votesRelations = relations(votes, ({ one }) => ({
 	entry: one(entries, { fields: [votes.entryUid], references: [entries.uid] })
 }));
 
+export const flags = pgTable(
+	'flags',
+	{
+		userUid: uuid('user_uid')
+			.references(() => users.uid, { onDelete: 'cascade' })
+			.notNull(),
+		entryUid: uuid('entry_uid')
+			.references(() => entries.uid, { onDelete: 'cascade' })
+			.notNull(),
+		reason: text('reason').notNull(),
+		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
+	},
+	({ userUid, entryUid }) => {
+		return {
+			pk: primaryKey({ columns: [userUid, entryUid] }),
+			entryIdx: index().on(entryUid)
+		};
+	}
+);
+
 export type NewUser = typeof users.$inferInsert;
 export type SelectEntry = typeof entries.$inferSelect;
