@@ -1,4 +1,6 @@
 {
+  "id": "793abee0-d41e-44e5-9d70-8e307b9310b6",
+  "prevId": "8dce51ef-bd24-45d5-914f-9fe0888b6f94",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -63,12 +65,98 @@
       "uniqueConstraints": {
         "entries_url_unique": {
           "name": "entries_url_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "url"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
+    },
+    "public.flags": {
+      "name": "flags",
+      "schema": "",
+      "columns": {
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_uid": {
+          "name": "entry_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "flags_entry_uid_index": {
+          "name": "flags_entry_uid_index",
+          "columns": [
+            {
+              "expression": "entry_uid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "flags_user_uid_users_uid_fk": {
+          "name": "flags_user_uid_users_uid_fk",
+          "tableFrom": "flags",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "flags_entry_uid_entries_uid_fk": {
+          "name": "flags_entry_uid_entries_uid_fk",
+          "tableFrom": "flags",
+          "tableTo": "entries",
+          "columnsFrom": [
+            "entry_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "flags_user_uid_entry_uid_pk": {
+          "name": "flags_user_uid_entry_uid_pk",
+          "columns": [
+            "user_uid",
+            "entry_uid"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
     },
     "public.users": {
       "name": "users",
@@ -100,10 +188,10 @@
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -129,28 +217,28 @@
         "user_to_entry_user_uid_users_uid_fk": {
           "name": "user_to_entry_user_uid_users_uid_fk",
           "tableFrom": "user_to_entry",
+          "tableTo": "users",
           "columnsFrom": [
             "user_uid"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "uid"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "user_to_entry_entry_uid_entries_uid_fk": {
           "name": "user_to_entry_entry_uid_entries_uid_fk",
           "tableFrom": "user_to_entry",
+          "tableTo": "entries",
           "columnsFrom": [
             "entry_uid"
           ],
-          "tableTo": "entries",
           "columnsTo": [
             "uid"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -191,17 +279,18 @@
           "name": "user_uid",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "entry_uid": {
           "name": "entry_uid",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {
         "entry_idx": {
+          "name": "entry_idx",
           "columns": [
             {
               "expression": "entry_uid",
@@ -210,38 +299,38 @@
               "nulls": "last"
             }
           ],
-          "name": "entry_idx",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "votes_user_uid_users_uid_fk": {
           "name": "votes_user_uid_users_uid_fk",
           "tableFrom": "votes",
+          "tableTo": "users",
           "columnsFrom": [
             "user_uid"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "uid"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "votes_entry_uid_entries_uid_fk": {
           "name": "votes_entry_uid_entries_uid_fk",
           "tableFrom": "votes",
+          "tableTo": "entries",
           "columnsFrom": [
             "entry_uid"
           ],
-          "tableTo": "entries",
           "columnsTo": [
             "uid"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -259,10 +348,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "8dce51ef-bd24-45d5-914f-9fe0888b6f94",
-  "prevId": "3297bff5-c9af-499a-9da6-06fac04eae3c"
+    "tables": {}
+  }
 }
