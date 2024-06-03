@@ -1,8 +1,8 @@
 import { categories, templateNames } from '$lib/config';
 import { z } from 'zod';
-import { MAX_IMG_SIZE } from './config';
 
 const SHARP_IMAGE_INPUT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
 export const CategorySchema = z.enum(categories);
 
@@ -135,18 +135,18 @@ export const VoteSchema = z.object({
 	tag: z.string()
 });
 
-export const SwapSchema = z.object({
-	email: EmailSchema,
-	category: CategorySchema,
-	title: TitleSchema,
-	description: DescriptionSchema,
-	link: UrlSchema,
-	oldLink: UrlSchema,
-	thumbnail: z
-		.instanceof(File)
-		.refine((file) => file.size === 0)
-		.or(ThumbnailSchema)
-});
+// export const SwapSchema = z.object({
+// 	email: EmailSchema,
+// 	category: CategorySchema,
+// 	title: TitleSchema,
+// 	description: DescriptionSchema,
+// 	link: UrlSchema,
+// 	oldLink: UrlSchema,
+// 	thumbnail: z
+// 		.instanceof(File)
+// 		.refine((file) => file.size === 0)
+// 		.or(ThumbnailSchema)
+// });
 
 export const FlagSchema = z.object({
 	reason: z.string().min(1).max(100, { message: 'Reason too long' }),
@@ -154,12 +154,12 @@ export const FlagSchema = z.object({
 	tag: z.string()
 });
 
-export const EdgesSchema = z.array(
-	z.object({
-		category: CategorySchema,
-		edges: z.array(z.array(z.number()))
-	})
-);
+// export const EdgesSchema = z.array(
+// 	z.object({
+// 		category: CategorySchema,
+// 		edges: z.array(z.array(z.number()))
+// 	})
+// );
 
 export const EmailTemplateSchema = z.object({
 	template_name: z.enum(templateNames)
