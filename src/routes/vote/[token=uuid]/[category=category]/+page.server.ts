@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db/client';
-import { usersToEntries, votes, type SelectEntry } from '$lib/server/db/schema';
+import { flags, usersToEntries, votes, type SelectEntry } from '$lib/server/db/schema';
 import { decrypt, encrypt } from '$lib/server/encryption';
 import { FlagSchema, validateForm, VoteSchema } from '$lib/server/validation';
 import { voteOpen } from '$lib/utils';
@@ -21,6 +21,7 @@ export const load: PageServerLoad = async (event) => {
 		and active='true'
 		and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
 		and uid not in (select entry_uid from votes where votes.user_uid=${token})
+		and uid not in (select entry_uid from flags where flags.user_uid=${token})
 		limit 1;
 		`);
 
@@ -41,17 +42,38 @@ export const load: PageServerLoad = async (event) => {
 			tag
 		};
 	}
+
+	return { stopVote: true };
 };
 
 let id: 'FLAG' | 'VOTE';
 
 export const actions: Actions = {
-	flag: async ({ request, locals }) => {
+	flag: async ({ request, params }) => {
 		id = 'FLAG';
+		const { token } = params;
 
 		const validation = await validateForm(request, FlagSchema);
 		if (!validation.success) {
 			console.log(validation.error.flatten());
+			return fail(400, { id, flagFail: true });
+		}
+
+		try {
+			const uid = decrypt(validation.data.uid, validation.data.tag);
+
+			await db
+				.insert(flags)
+				.values({
+					entryUid: uid,
+					userUid: token,
+					reason: validation.data.reason
+				})
+				.onConflictDoNothing();
+
+			return { id, flagSuccess: true };
+		} catch (error) {
+			console.log('error:', error);
 			return fail(400, { id, flagFail: true });
 		}
 	},
@@ -83,6 +105,7 @@ export const actions: Actions = {
 
 			return { id, voteSuccess: true };
 		} catch (error) {
+			console.log('error:', error);
 			return fail(400, { id, voteFail: true });
 		}
 	}
