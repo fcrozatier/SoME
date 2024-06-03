@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { categories, templateNames } from '$lib/config';
+import { z } from 'zod';
 import { MAX_IMG_SIZE } from './config';
 
 const SHARP_IMAGE_INPUT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
@@ -150,7 +150,8 @@ export const SwapSchema = z.object({
 
 export const FlagSchema = z.object({
 	reason: z.string().min(1).max(100, { message: 'Reason too long' }),
-	link: UrlSchema
+	uid: z.string(),
+	tag: z.string()
 });
 
 export const EdgesSchema = z.array(
