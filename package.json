@@ -31,7 +31,7 @@
 		"autoprefixer": "^10.4.19",
 		"cssnano": "^7.0.0",
 		"daisyui": "^3.5.1",
-		"drizzle-kit": "^0.21.0",
+		"drizzle-kit": "^0.22.0",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
@@ -51,7 +51,7 @@
 	"type": "module",
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.556.0",
-		"drizzle-orm": "^0.30.9",
+		"drizzle-orm": "^0.31.0",
 		"form-data": "^4.0.0",
 		"mailgun.js": "^10.2.1",
 		"postgres": "^3.4.4",
