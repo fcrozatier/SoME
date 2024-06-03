@@ -83,10 +83,10 @@ export const votes = pgTable(
 	}
 );
 
-export const votesRelations = relations(votes, ({ one }) => ({
-	user: one(users, { fields: [votes.userUid], references: [users.uid] }),
-	entry: one(entries, { fields: [votes.entryUid], references: [entries.uid] })
-}));
+// export const votesRelations = relations(votes, ({ one }) => ({
+// 	user: one(users, { fields: [votes.userUid], references: [users.uid] }),
+// 	entry: one(entries, { fields: [votes.entryUid], references: [entries.uid] })
+// }));
 
 export const flags = pgTable(
 	'flags',
