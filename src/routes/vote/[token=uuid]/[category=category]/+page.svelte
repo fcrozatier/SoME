@@ -14,6 +14,8 @@
 
 	let flagDialog: HTMLDialogElement;
 	let guidelines: HTMLDialogElement;
+	let splitButton: HTMLButtonElement;
+	let splitButtonOpen = false;
 
 	let score = 5;
 	let feedback = '';
@@ -109,15 +111,38 @@
 					<span class="label-text-alt">{feedback?.length}/5000</span>
 				</div>
 			</div>
-
-			<p class="flex justify-between flex-row-reverse">
+			<div class="flex gap-4 flex-row-reverse">
 				<button class="btn btn-primary">Vote</button>
+				<div class="relative mr-auto inline-flex flex-row-reverse">
+					<button
+						class="btn btn-outline rounded-l-none border-l-0 text-lg shrink-0"
+						type="button"
+						aria-expanded={splitButtonOpen}
+						aria-haspopup="true"
+						title="Open for more skip actions"
+						bind:this={splitButton}
+						on:click={() => {
+							if (!splitButtonOpen) splitButtonOpen = true;
+						}}>&vellip;</button
+					>
+					{#if splitButtonOpen}
+						<button
+							type="button"
+							use:clickOutside={() => {
+								if (splitButtonOpen) splitButtonOpen = false;
+							}}
+							class="btn btn-primary text-xs bg-black absolute left-0 px-2 top-[105%]"
+							>Don't show again</button
+						>
+					{/if}
+					<button type="button" class="btn btn-outline rounded-e-none">Skip</button>
+				</div>
 				<button
 					type="button"
 					class="btn btn-outline btn-error"
 					on:click={() => flagDialog.showModal()}>Flag</button
 				>
-			</p>
+			</div>
 			{#if form?.voteFail}
 				<p class="text-error">
 					<span> Something went wrong. </span>
@@ -126,9 +151,10 @@
 			{/if}
 		</form>
 
-		<p>
+		<p class="pt-8">
 			If an entry is inappropriate or does not follow the <a href="/#rules">rules</a> you can flag it
-			and we will review it manually.
+			and we will review it manually. You can also skip an entry in case you can't rank it (maybe you
+			do not have the prerequisites)
 		</p>
 	{/if}
 </article>
