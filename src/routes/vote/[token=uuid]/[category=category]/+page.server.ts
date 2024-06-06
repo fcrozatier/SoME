@@ -16,13 +16,16 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	const result: postgres.RowList<SelectEntry[]> = await db.execute(sql`
-			select * from entries
+			select uid, title, description, category, url, thumbnail, count(*) from entries
+			join votes on entries.uid=votes.entry_uid
 			where category=${category}
 			and active='true'
-			and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
 			and uid not in (select entry_uid from votes where votes.user_uid=${token})
-			and uid not in (select entry_uid from flags where flags.user_uid=${token})
 			and uid not in (select entry_uid from skips where skips.user_uid=${token})
+			and uid not in (select entry_uid from flags where flags.user_uid=${token})
+			and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
+			group by entries.uid
+			order by count
 			limit 1;
 		`);
 
