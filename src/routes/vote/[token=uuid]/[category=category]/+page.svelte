@@ -34,6 +34,17 @@
 
 			<NewVote {page} />
 		</div>
+	{:else if form?.skipSuccess}
+		<div>
+			<p class="text-success">
+				Entry skipped!
+				{#if form?.id === 'HARD_SKIP'}
+					<span> You will not see this entry again </span>
+				{/if}
+			</p>
+
+			<NewVote {page} />
+		</div>
 	{:else if data.stopVote}
 		<div>
 			<p class="text-success">Thank you for participating!</p>
@@ -127,15 +138,15 @@
 					>
 					{#if splitButtonOpen}
 						<button
-							type="button"
 							use:clickOutside={() => {
 								if (splitButtonOpen) splitButtonOpen = false;
 							}}
+							formaction="?/hard_skip"
 							class="btn btn-primary text-xs bg-black absolute left-0 px-2 top-[105%]"
 							>Don't show again</button
 						>
 					{/if}
-					<button type="button" class="btn btn-outline rounded-e-none">Skip</button>
+					<button formaction="?/skip" class="btn btn-outline rounded-e-none">Skip</button>
 				</div>
 				<button
 					type="button"
@@ -143,7 +154,7 @@
 					on:click={() => flagDialog.showModal()}>Flag</button
 				>
 			</div>
-			{#if form?.voteFail}
+			{#if form?.voteFail || form?.skipFail}
 				<p class="text-error">
 					<span> Something went wrong. </span>
 					<span> Please try again later</span>

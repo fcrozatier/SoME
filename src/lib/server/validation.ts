@@ -135,6 +135,11 @@ export const VoteSchema = z.object({
 	tag: z.string()
 });
 
+export const SkipSchema = z.object({
+	uid: z.string(),
+	tag: z.string()
+});
+
 // export const SwapSchema = z.object({
 // 	email: EmailSchema,
 // 	category: CategorySchema,

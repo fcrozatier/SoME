@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db/client';
-import { flags, usersToEntries, votes, type SelectEntry } from '$lib/server/db/schema';
+import { flags, skips, usersToEntries, votes, type SelectEntry } from '$lib/server/db/schema';
 import { decrypt, encrypt } from '$lib/server/encryption';
-import { FlagSchema, validateForm, VoteSchema } from '$lib/server/validation';
+import { FlagSchema, SkipSchema, validateForm, VoteSchema } from '$lib/server/validation';
 import { voteOpen } from '$lib/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
@@ -16,13 +16,14 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	const result: postgres.RowList<SelectEntry[]> = await db.execute(sql`
-		select * from entries
-		where category=${category}
-		and active='true'
-		and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
-		and uid not in (select entry_uid from votes where votes.user_uid=${token})
-		and uid not in (select entry_uid from flags where flags.user_uid=${token})
-		limit 1;
+			select * from entries
+			where category=${category}
+			and active='true'
+			and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
+			and uid not in (select entry_uid from votes where votes.user_uid=${token})
+			and uid not in (select entry_uid from flags where flags.user_uid=${token})
+			and uid not in (select entry_uid from skips where skips.user_uid=${token})
+			limit 1;
 		`);
 
 	if (!result) return { stopVote: true };
@@ -46,7 +47,7 @@ export const load: PageServerLoad = async (event) => {
 	return { stopVote: true };
 };
 
-let id: 'FLAG' | 'VOTE';
+let id: 'FLAG' | 'VOTE' | 'SKIP' | 'HARD_SKIP';
 
 export const actions: Actions = {
 	flag: async ({ request, params }) => {
@@ -108,5 +109,37 @@ export const actions: Actions = {
 			console.log('error:', error);
 			return fail(400, { id, voteFail: true });
 		}
+	},
+	hard_skip: async ({ request, params }) => {
+		id = 'HARD_SKIP';
+		const { token } = params;
+		const validation = await validateForm(request, SkipSchema);
+
+		if (!validation.success) {
+			console.log(validation.error.flatten());
+			return fail(400, { id, skipFail: true });
+		}
+
+		try {
+			const uid = decrypt(validation.data.uid, validation.data.tag);
+
+			await db
+				.insert(skips)
+				.values({
+					entryUid: uid,
+					userUid: token
+				})
+				.onConflictDoNothing();
+
+			return { id, skipSuccess: true };
+		} catch (error) {
+			console.log('error:', error);
+			return fail(400, { id, skipFail: true });
+		}
+	},
+	skip: async () => {
+		id = 'SKIP';
+
+		return { id, skipSuccess: true };
 	}
 };
