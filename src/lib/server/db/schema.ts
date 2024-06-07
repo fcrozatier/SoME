@@ -127,5 +127,24 @@ export const skips = pgTable(
 	}
 );
 
+export const cache = pgTable(
+	'cache',
+	{
+		userUid: uuid('user_uid')
+			.primaryKey()
+			.references(() => users.uid, { onDelete: 'cascade' })
+			.notNull(),
+		entryUid: uuid('entry_uid')
+			.references(() => entries.uid, { onDelete: 'cascade' })
+			.notNull(),
+		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
+	},
+	({ entryUid }) => {
+		return {
+			entryIdx: index().on(entryUid)
+		};
+	}
+);
+
 export type NewUser = typeof users.$inferInsert;
 export type SelectEntry = typeof entries.$inferSelect;
