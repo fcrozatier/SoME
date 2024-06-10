@@ -131,16 +131,17 @@ export const cache = pgTable(
 	'cache',
 	{
 		userUid: uuid('user_uid')
-			.primaryKey()
 			.references(() => users.uid, { onDelete: 'cascade' })
 			.notNull(),
+		category: text('category', { enum: categories }).notNull(),
 		entryUid: uuid('entry_uid')
 			.references(() => entries.uid, { onDelete: 'cascade' })
 			.notNull(),
 		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
 	},
-	({ entryUid }) => {
+	({ userUid, category, entryUid }) => {
 		return {
+			pk: primaryKey({ columns: [userUid, category] }),
 			entryIdx: index().on(entryUid)
 		};
 	}
