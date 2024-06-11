@@ -27,8 +27,8 @@ export const load: PageServerLoad = async (event) => {
 			with cached as (
 				select entry_uid
 				from cache join entries on cache.entry_uid=entries.uid
-				where user_uid=${token}
-				and category=${category}
+				where cache.user_uid=${token}
+				and cache.category=${category}
 				and active='true'
 			),
 
@@ -44,23 +44,23 @@ export const load: PageServerLoad = async (event) => {
 
 			select uid, title, description, entries.category, url, thumbnail, total.count
 			from entries
-			join total
+			left join total
 			on entries.uid=total.entry_uid
 
 			where
 				case when (select count(*) > 0 from cached)
 				then
-					entries.uid=cached.entry_uid
+					uid in (select entry_uid from cached)
 				else
-					category=${category}
+					entries.category=${category}
 					and active='true'
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
 					and uid not in (select entry_uid from flags where flags.user_uid=${token})
 					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
-				end
+			  end
 
-			order by total.count
+			order by total.count nulls first
 			limit 1;
 		`);
 
