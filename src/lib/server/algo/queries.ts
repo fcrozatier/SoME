@@ -29,16 +29,16 @@ export function query1(token: string, category: string) {
 
 				where
 					case when (select count(*) > 0 from cached)
-				then
-					uid in (select entry_uid from cached)
-				else
-					entries.category=${category}
-					and active='true'
-					and uid not in (select entry_uid from votes where votes.user_uid=${token})
-					and uid not in (select entry_uid from skips where skips.user_uid=${token})
-					and uid not in (select entry_uid from flags where flags.user_uid=${token})
-					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
-				end
+					then
+						uid in (select entry_uid from cached)
+					else
+						entries.category=${category}
+						and active='true'
+						and uid not in (select entry_uid from votes where votes.user_uid=${token})
+						and uid not in (select entry_uid from skips where skips.user_uid=${token})
+						and uid not in (select entry_uid from flags where flags.user_uid=${token})
+						and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
+					end
 
 				order by total.count nulls first
 			),
