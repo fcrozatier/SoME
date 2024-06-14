@@ -1,4 +1,3 @@
-import { relations } from 'drizzle-orm';
 import {
 	boolean,
 	decimal,
@@ -18,11 +17,6 @@ export const users = pgTable('users', {
 	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-	usersToEntries: many(usersToEntries),
-	votes: many(votes)
-}));
-
 export const entries = pgTable('entries', {
 	uid: uuid('uid').primaryKey(),
 	title: varchar('title', { length: 128 }).notNull(),
@@ -33,10 +27,6 @@ export const entries = pgTable('entries', {
 	active: boolean('active').default(true),
 	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
 });
-
-export const entriesRelations = relations(entries, ({ many }) => ({
-	usersToEntries: many(usersToEntries)
-}));
 
 export const usersToEntries = pgTable(
 	'user_to_entry',
@@ -50,17 +40,6 @@ export const usersToEntries = pgTable(
 		};
 	}
 );
-
-export const usersToEntriesRelations = relations(usersToEntries, ({ one }) => ({
-	user: one(users, {
-		fields: [usersToEntries.userUid],
-		references: [users.uid]
-	}),
-	entry: one(entries, {
-		fields: [usersToEntries.entryUid],
-		references: [entries.uid]
-	})
-}));
 
 export const votes = pgTable(
 	'votes',
@@ -82,11 +61,6 @@ export const votes = pgTable(
 		};
 	}
 );
-
-// export const votesRelations = relations(votes, ({ one }) => ({
-// 	user: one(users, { fields: [votes.userUid], references: [users.uid] }),
-// 	entry: one(entries, { fields: [votes.entryUid], references: [entries.uid] })
-// }));
 
 export const flags = pgTable(
 	'flags',
