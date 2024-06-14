@@ -3,7 +3,7 @@
 with cached as (
   select entry_uid
   from cache join entries on cache.entry_uid=entries.uid
-  where cache.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc'
+  where cache.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267'
   and cache.category='video'
 ),
 
@@ -30,10 +30,10 @@ selection as (
     else
       entries.category='video'
       and active='true'
-      and uid not in (select entry_uid from votes where votes.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')
-      and uid not in (select entry_uid from skips where skips.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')
-      and uid not in (select entry_uid from flags where flags.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')
-      and uid not in (select entry_uid from user_to_entry where user_to_entry.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')
+      and uid not in (select entry_uid from votes where votes.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267')
+      and uid not in (select entry_uid from skips where skips.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267')
+      and uid not in (select entry_uid from flags where flags.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267')
+      and uid not in (select entry_uid from user_to_entry where user_to_entry.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267')
     end
 
 order by score nulls first
@@ -49,7 +49,7 @@ cutoff as (
 
 partial as (
   select uid, sum(max-score) over (
-    order by score rows between unbounded preceding and current row) sum from selection, maximum, cutoff
+    order by score rows between unbounded preceding and current row) sum from selection, maximum
 )
 
 select * from (selection join partial on selection.uid=partial.uid), cutoff
