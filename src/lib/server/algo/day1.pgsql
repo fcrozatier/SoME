@@ -5,7 +5,6 @@ with cached as (
   from cache join entries on cache.entry_uid=entries.uid
   where cache.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc'
   and cache.category='video'
-  and active='true'
 ),
 
 total as (
@@ -19,7 +18,7 @@ total as (
 ),
 
 selection as (
-select uid, title, entries.category, coalesce(total.count, 0) as score
+  select uid, title, entries.category, coalesce(total.count, 0) as score
   from entries
   left join total
   on entries.uid=total.entry_uid

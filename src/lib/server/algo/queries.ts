@@ -8,7 +8,6 @@ export function query1(token: string, category: string) {
 				from cache join entries on cache.entry_uid=entries.uid
 				where cache.user_uid=${token}
 				and cache.category=${category}
-				and active='true'
 			),
 
 			total as (
