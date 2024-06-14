@@ -8,9 +8,9 @@ import { voteOpen } from '$lib/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import type postgres from 'postgres';
-import type { Actions, PageServerLoad } from './$types';
+import type { Actions } from './$types';
 
-export const load: PageServerLoad = async (event) => {
+export const load = async (event) => {
 	const { token, category } = event.params;
 
 	if (!voteOpen()) {
@@ -89,7 +89,7 @@ export const actions: Actions = {
 	},
 	vote: async ({ request, params }) => {
 		id = 'VOTE';
-		const { token } = params;
+		const { token, category } = params;
 		const validation = await validateForm(request, VoteSchema);
 
 		if (!validation.success) {
@@ -112,6 +112,10 @@ export const actions: Actions = {
 					target: [votes.userUid, votes.entryUid],
 					set: { score: `${validation.data.score}`, feedback: validation.data.feedback }
 				});
+
+			await db
+				.delete(cache)
+				.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 
 			return { id, voteSuccess: true };
 		} catch (error) {
