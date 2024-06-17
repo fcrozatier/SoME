@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
 	import NewVote from '$lib/components/NewVote.svelte';
@@ -19,6 +20,19 @@
 
 	let score = 5;
 	let feedback = '';
+
+	let cooldown = 600;
+	let interval: ReturnType<typeof setInterval>;
+
+	afterNavigate(() => {
+		interval = setInterval(() => {
+			if (cooldown > 0) {
+				cooldown -= 1;
+			} else {
+				clearInterval(interval);
+			}
+		}, 100);
+	});
 </script>
 
 <article class="layout-prose">
@@ -69,7 +83,10 @@
 			method="post"
 			action="?/vote"
 			class="space-y-4"
-			use:enhance={() => {
+			use:enhance={({ cancel }) => {
+				if (cooldown > 0) {
+					return cancel();
+				}
 				const buttons = document.querySelectorAll('button');
 				buttons.forEach((b) => b.setAttribute('disabled', 'on'));
 				return async ({ update }) => {
@@ -122,8 +139,18 @@
 					<span class="label-text-alt">{feedback?.length}/5000</span>
 				</div>
 			</div>
-			<div class="flex gap-4 flex-row-reverse">
-				<button class="btn btn-primary">Vote</button>
+			<div class="flex gap-4 items-center flex-row-reverse">
+				<button class="btn btn-primary inline-flex gap-4" disabled={cooldown > 0}
+					>Vote
+					{#if cooldown > 0}
+						<div
+							class="radial-progress text-sm"
+							style={`--value:${(100 * cooldown) / 600}; --size:2.1rem; --thickness: 1.5px;`}
+						>
+							{Math.floor(cooldown / 10)}
+						</div>
+					{/if}
+				</button>
 				<div class="relative mr-auto inline-flex flex-row-reverse">
 					<button
 						class="btn btn-outline rounded-l-none border-l-0 text-lg shrink-0"
