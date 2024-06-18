@@ -62,7 +62,7 @@
 				min="1"
 				max="9"
 				step=".01"
-				class="range range-sm"
+				class="range"
 				bind:value
 				class:range-error={value <= 3}
 				class:range-success={value >= 7}
