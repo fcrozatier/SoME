@@ -21,7 +21,7 @@
 	let score = 5;
 	let feedback = '';
 
-	let cooldown = 600;
+	let cooldown = 590;
 	let interval: ReturnType<typeof setInterval>;
 
 	afterNavigate(() => {
