@@ -1,12 +1,12 @@
 <script lang="ts">
-	import '../app.css';
-	import { registrationOpen, voteOpen } from '$lib/utils';
-	import type { LayoutData } from './$types';
-	import Icon from '$lib/components/Icon.svelte';
 	import { page } from '$app/stores';
-	import { BETA_TEST, COMPETITION_FULL_NAME } from '$lib/config';
 	import Banner from '$lib/components/Banner.svelte';
+	import Icon from '$lib/components/Icon.svelte';
+	import { BETA_TEST, COMPETITION_FULL_NAME } from '$lib/config';
+	import { registrationOpen, voteOpen } from '$lib/utils';
+	import '../app.css';
 	import Timer from '../lib/components/Timer.svelte';
+	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
 </script>

@@ -1,17 +1,5 @@
 <script lang="ts">
-	import {
-		resultsAvailable,
-		competitionStarted,
-		voteOpen,
-		phaseOpen,
-		timeLeft,
-		registrationOpen
-	} from '$lib/utils';
-	import Time from '$lib/components/Time.svelte';
-	import type { ActionData, PageData } from './$types';
-	import { clickOutside } from '$lib/actions';
 	import { enhance } from '$app/forms';
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
 	import {
 		PUBLIC_REGISTRATION_END,
 		PUBLIC_REGISTRATION_START,
@@ -19,10 +7,22 @@
 		PUBLIC_VOTE_END,
 		PUBLIC_VOTE_START
 	} from '$env/static/public';
-	import Icon from '../lib/components/Icon.svelte';
-	import { winners } from '$lib/results';
-	import { onMount } from 'svelte';
+	import { clickOutside } from '$lib/actions';
+	import Icon from '$lib/components/Icon.svelte';
+	import Time from '$lib/components/Time.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
+	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
+	import { winners } from '$lib/results';
+	import {
+		competitionStarted,
+		phaseOpen,
+		registrationOpen,
+		resultsAvailable,
+		timeLeft,
+		voteOpen
+	} from '$lib/utils';
+	import { onMount } from 'svelte';
+	import type { ActionData, PageData } from './$types';
 
 	const phases = [
 		{
