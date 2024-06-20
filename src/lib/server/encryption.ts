@@ -1,7 +1,8 @@
 import { SECRET_KEY } from '$env/static/private';
-import { randomBytes, createCipheriv, createDecipheriv } from 'crypto';
+import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 
 const iv = randomBytes(12).toString('base64');
+console.log('initialization vector', iv);
 
 export const encrypt = (plaintext: string) => {
 	const cipher = createCipheriv(
