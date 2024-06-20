@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
 	import NewVote from '$lib/components/NewVote.svelte';
@@ -9,13 +9,13 @@
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { YOUTUBE_EMBED } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
+	import { formAction } from './config';
 
 	export let data: PageData;
 	export let form: ActionData;
 
 	let flagDialog: HTMLDialogElement;
 	let guidelines: HTMLDialogElement;
-	let splitButton: HTMLButtonElement;
 	let splitButtonOpen = false;
 
 	let score = 5;
@@ -25,6 +25,10 @@
 	let interval: ReturnType<typeof setInterval>;
 
 	afterNavigate(() => {
+		splitButtonOpen = false;
+		score = 5;
+		feedback = '';
+		cooldown = 590;
 		interval = setInterval(() => {
 			if (cooldown > 0) {
 				cooldown -= 1;
@@ -48,7 +52,7 @@
 
 			<NewVote {page} />
 		</div>
-	{:else if form?.skipSuccess}
+		<!-- {:else if form?.skipSuccess}
 		<div>
 			<p class="text-success">
 				Entry skipped!
@@ -58,7 +62,7 @@
 			</p>
 
 			<NewVote {page} />
-		</div>
+		</div> -->
 	{:else if data.stopVote}
 		<div>
 			<p class="text-success">Thank you for participating!</p>
@@ -83,14 +87,26 @@
 			method="post"
 			action="?/vote"
 			class="space-y-4"
-			use:enhance={({ cancel }) => {
-				if (cooldown > 0) {
+			use:enhance={({ cancel, action }) => {
+				if (
+					cooldown > 0 &&
+					!(action.search === formAction('skip') || action.search === formAction('hard_skip'))
+				) {
 					return cancel();
 				}
 				const buttons = document.querySelectorAll('button');
 				buttons.forEach((b) => b.setAttribute('disabled', 'on'));
-				return async ({ update }) => {
-					await update();
+
+				return async ({ update, action }) => {
+					if (action.search === formAction('skip') || action.search === formAction('hard_skip')) {
+						clearInterval(interval);
+						await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
+							noScroll: false,
+							invalidateAll: true
+						});
+					} else {
+						await update({ invalidateAll: true });
+					}
 					buttons.forEach((b) => b.removeAttribute('disabled'));
 				};
 			}}
@@ -158,7 +174,6 @@
 						aria-expanded={splitButtonOpen}
 						aria-haspopup="true"
 						title="Open for more skip actions"
-						bind:this={splitButton}
 						on:click={() => {
 							if (!splitButtonOpen) splitButtonOpen = true;
 						}}>&vellip;</button
@@ -168,12 +183,17 @@
 							use:clickOutside={() => {
 								if (splitButtonOpen) splitButtonOpen = false;
 							}}
-							formaction="?/hard_skip"
+							type="submit"
+							formaction={formAction('hard_skip')}
 							class="btn btn-primary text-xs bg-black absolute left-0 px-2 top-[105%]"
 							>Don't show again</button
 						>
 					{/if}
-					<button formaction="?/skip" class="btn btn-outline rounded-e-none">Skip</button>
+					<button
+						type="submit"
+						formaction={formAction('skip')}
+						class="btn btn-outline rounded-e-none">Skip</button
+					>
 				</div>
 				<button
 					type="button"

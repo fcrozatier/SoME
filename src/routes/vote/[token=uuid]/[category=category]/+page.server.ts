@@ -9,6 +9,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import type postgres from 'postgres';
 import type { Actions } from './$types';
+import { action } from './config';
 
 export const load = async (event) => {
 	const { token, category } = event.params;
@@ -123,7 +124,7 @@ export const actions: Actions = {
 			return fail(400, { id, voteFail: true });
 		}
 	},
-	hard_skip: async ({ request, params }) => {
+	[action.hard_skip]: async ({ request, params }) => {
 		id = 'HARD_SKIP';
 		const { token, category } = params;
 		const validation = await validateForm(request, SkipSchema);
@@ -154,7 +155,7 @@ export const actions: Actions = {
 			return fail(400, { id, skipFail: true });
 		}
 	},
-	skip: async ({ params }) => {
+	[action.skip]: async ({ params }) => {
 		id = 'SKIP';
 		const { token, category } = params;
 
