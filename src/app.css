@@ -12,6 +12,18 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
+/* Remove all animations, transitions and smooth scroll for people who prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
 dialog {
 	@apply max-w-2xl rounded-xl p-12 pb-10 shadow-2xl;
 	max-height: 80vh;
