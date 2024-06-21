@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
+	import { enhance } from '$app/forms';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
 	import NewVote from '$lib/components/NewVote.svelte';
 	import Slider from '$lib/components/Slider.svelte';
 	import Thumbnail from '$lib/components/Thumbnail.svelte';
+	import { newToast } from '$lib/components/Toasts.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { YOUTUBE_EMBED } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
@@ -40,29 +41,12 @@
 </script>
 
 <article class="layout-prose">
-	{#if form?.id === 'FLAG' && form?.flagSuccess}
-		<div>
-			<p class="text-success">Entry flagged. Thank you</p>
-
-			<NewVote {page} />
-		</div>
-	{:else if form?.id === 'VOTE' && form?.voteSuccess}
+	{#if form?.id === 'VOTE' && form?.voteSuccess}
 		<div>
 			<p class="text-success">Thank you !</p>
 
 			<NewVote {page} />
 		</div>
-		<!-- {:else if form?.skipSuccess}
-		<div>
-			<p class="text-success">
-				Entry skipped!
-				{#if form?.id === 'HARD_SKIP'}
-					<span> You will not see this entry again </span>
-				{/if}
-			</p>
-
-			<NewVote {page} />
-		</div> -->
 	{:else if data.stopVote}
 		<div>
 			<p class="text-success">Thank you for participating!</p>
@@ -71,7 +55,7 @@
 		</div>
 	{:else}
 		<div>
-			<h3 class="capitalize">{data.title}</h3>
+			<h3>{data.title}</h3>
 			<p>{data.description}</p>
 			<div class="flex justify-center">
 				{#if data.category === 'video' && YOUTUBE_EMBED.test(data.url)}
@@ -92,14 +76,17 @@
 					cooldown > 0 &&
 					!(action.search === formAction('skip') || action.search === formAction('hard_skip'))
 				) {
+					newToast({ type: 'info', content: 'Please do not rush the review process' });
 					return cancel();
 				}
 				const buttons = document.querySelectorAll('button');
 				buttons.forEach((b) => b.setAttribute('disabled', 'on'));
 
 				return async ({ update, action }) => {
+					buttons.forEach((b) => b.removeAttribute('disabled'));
 					if (action.search === formAction('skip') || action.search === formAction('hard_skip')) {
 						clearInterval(interval);
+						newToast({ type: 'info', content: 'Entry skipped' });
 						await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
 							noScroll: false,
 							invalidateAll: true
@@ -107,7 +94,6 @@
 					} else {
 						await update({ invalidateAll: true });
 					}
-					buttons.forEach((b) => b.removeAttribute('disabled'));
 				};
 			}}
 		>
@@ -156,7 +142,7 @@
 				</div>
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse">
-				<button class="btn btn-primary inline-flex gap-4" disabled={cooldown > 0}
+				<button class="btn btn-primary inline-flex gap-4"
 					>Vote
 					{#if cooldown > 0}
 						<div
@@ -259,14 +245,19 @@
 		method="post"
 		action="?/flag"
 		use:clickOutside={() => flagDialog.close()}
-		use:enhance={() => {
+		use:enhance={({ formElement }) => {
 			const buttons = document.querySelectorAll('button');
 			buttons.forEach((b) => b.setAttribute('disabled', 'on'));
-			return async ({ result }) => {
-				// Do not force a page update here to prevent assigning a new pair in case the user doesn't want to keep voting.
-				await applyAction(result);
+			return async () => {
 				buttons.forEach((b) => b.removeAttribute('disabled'));
+				formElement.reset();
 				flagDialog.close();
+				clearInterval(interval);
+				newToast({ type: 'info', content: 'Entry flagged' });
+				await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
+					noScroll: false,
+					invalidateAll: true
+				});
 			};
 		}}
 	>
