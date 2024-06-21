@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import Banner from '$lib/components/Banner.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import Toasts from '$lib/components/Toasts.svelte';
 	import { BETA_TEST, COMPETITION_FULL_NAME } from '$lib/config';
 	import { registrationOpen, voteOpen } from '$lib/utils';
 	import '../app.css';
@@ -11,7 +12,10 @@
 	export let data: LayoutData;
 </script>
 
-<div class="flex min-h-[100vh] flex-col">
+<Toasts />
+
+<!-- Isolation: isolate from toasts to avoid stacking issues  -->
+<div class="flex isolate min-h-[100vh] flex-col">
 	<nav class="navbar gap-8 p-4">
 		<a class="inline-flex items-center gap-4" href="/">
 			<Icon class="rounded-full" name="logo" width="3.5em" />
