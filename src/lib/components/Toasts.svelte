@@ -67,9 +67,9 @@
 		<!-- output is announced to screen readers with implicit role status -->
 		<output
 			class="toast"
-			class:bg-green-dark={toast.type === 'success'}
+			class:bg-green-600={toast.type === 'success'}
 			class:bg-gray-900={toast.type === 'info'}
-			class:bg-red-dark={toast.type === 'error'}
+			class:bg-red-600={toast.type === 'error'}
 			in:receive={{ key: toast.id, duration: 300, easing: quintOut }}
 			out:send={{ key: toast.id, duration: 200 }}
 			animate:flip={{ duration: 200, easing: quintOut }}
