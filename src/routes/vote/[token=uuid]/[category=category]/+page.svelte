@@ -85,8 +85,12 @@
 				return async ({ update, action }) => {
 					buttons.forEach((b) => b.removeAttribute('disabled'));
 					if (action.search === formAction('skip') || action.search === formAction('hard_skip')) {
+						const message = `Entry skipped${
+							action.search === formAction('hard_skip') ? " (you won't see it again)" : ''
+						}`;
+
 						clearInterval(interval);
-						newToast({ type: 'info', content: 'Entry skipped' });
+						newToast({ type: 'info', content: message });
 						await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
 							noScroll: false,
 							invalidateAll: true
