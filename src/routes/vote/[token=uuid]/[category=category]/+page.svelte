@@ -96,7 +96,18 @@
 							invalidateAll: true
 						});
 					} else {
-						await update({ invalidateAll: true });
+						const r = Math.random();
+
+						if (r < 0.2) {
+							await update({ invalidateAll: true });
+						} else {
+							clearInterval(interval);
+							newToast({ type: 'success', content: 'Thank you! 🎉 🥳' });
+							await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
+								noScroll: false,
+								invalidateAll: true
+							});
+						}
 					}
 				};
 			}}
