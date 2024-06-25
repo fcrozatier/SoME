@@ -18,7 +18,9 @@ export const load = async (event) => {
 		throw redirect(302, `/vote/${token}`);
 	}
 
-	const result: postgres.RowList<SelectEntry[]> = await db.execute(query1(token, category));
+	const result: postgres.RowList<(SelectEntry & { total_votes: number })[]> = await db.execute(
+		query1(token, category),
+	);
 
 	if (!result) return { stopVote: true };
 
@@ -32,11 +34,11 @@ export const load = async (event) => {
 			.values({
 				category: entry.category,
 				entryUid: entry.uid,
-				userUid: token
+				userUid: token,
 			})
 			.onConflictDoUpdate({
 				target: [cache.userUid, cache.category],
-				set: { entryUid: entry.uid }
+				set: { entryUid: entry.uid },
 			});
 
 		return {
@@ -46,7 +48,8 @@ export const load = async (event) => {
 			url: entry.url,
 			thumbnail: entry.thumbnail,
 			uid: cipherText,
-			tag
+			total_votes: entry.total_votes,
+			tag,
 		};
 	}
 
@@ -74,7 +77,7 @@ export const actions: Actions = {
 				.values({
 					entryUid: uid,
 					userUid: token,
-					reason: validation.data.reason
+					reason: validation.data.reason,
 				})
 				.onConflictDoNothing();
 
@@ -107,11 +110,11 @@ export const actions: Actions = {
 					entryUid: uid,
 					userUid: token,
 					score: validation.data.score,
-					feedback: validation.data.feedback
+					feedback: validation.data.feedback,
 				})
 				.onConflictDoUpdate({
 					target: [votes.userUid, votes.entryUid],
-					set: { score: `${validation.data.score}`, feedback: validation.data.feedback }
+					set: { score: `${validation.data.score}`, feedback: validation.data.feedback },
 				});
 
 			await db
@@ -141,7 +144,7 @@ export const actions: Actions = {
 				.insert(skips)
 				.values({
 					entryUid: uid,
-					userUid: token
+					userUid: token,
 				})
 				.onConflictDoNothing();
 
@@ -164,5 +167,5 @@ export const actions: Actions = {
 			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 
 		return { id, skipSuccess: true };
-	}
+	},
 };

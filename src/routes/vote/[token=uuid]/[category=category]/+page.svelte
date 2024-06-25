@@ -17,6 +17,7 @@
 
 	let flagDialog: HTMLDialogElement;
 	let guidelines: HTMLDialogElement;
+	let actionScreen: HTMLDialogElement;
 	let splitButtonOpen = false;
 
 	let score = 5;
@@ -37,17 +38,21 @@
 				clearInterval(interval);
 			}
 		}, 100);
+
+		if (
+			!data.stopVote &&
+			!$page.url.searchParams.get('screen') &&
+			data.total_votes &&
+			data.total_votes > 0 &&
+			data.total_votes % 5 === 0
+		) {
+			actionScreen.showModal();
+		}
 	});
 </script>
 
 <article class="layout-prose">
-	{#if form?.id === 'VOTE' && form?.voteSuccess}
-		<div>
-			<p class="text-success">Thank you !</p>
-
-			<NewVote {page} />
-		</div>
-	{:else if data.stopVote}
+	{#if data.stopVote}
 		<div>
 			<p class="text-success">Thank you for participating!</p>
 
@@ -82,33 +87,23 @@
 				const buttons = document.querySelectorAll('button');
 				buttons.forEach((b) => b.setAttribute('disabled', 'on'));
 
-				return async ({ update, action }) => {
+				return async ({ action }) => {
 					buttons.forEach((b) => b.removeAttribute('disabled'));
 					if (action.search === formAction('skip') || action.search === formAction('hard_skip')) {
 						const message = `Entry skipped${
 							action.search === formAction('hard_skip') ? " (you won't see it again)" : ''
 						}`;
 
-						clearInterval(interval);
 						newToast({ type: 'info', content: message });
-						await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
-							noScroll: false,
-							invalidateAll: true
-						});
 					} else {
-						const r = Math.random();
-
-						if (r < 0.2) {
-							await update({ invalidateAll: true });
-						} else {
-							clearInterval(interval);
-							newToast({ type: 'success', content: 'Thank you! 🎉 🥳' });
-							await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
-								noScroll: false,
-								invalidateAll: true
-							});
-						}
+						newToast({ type: 'success', content: 'Thank you! 🎉 🥳' });
 					}
+
+					clearInterval(interval);
+					await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
+						noScroll: false,
+						invalidateAll: true,
+					});
 				};
 			}}
 		>
@@ -271,7 +266,7 @@
 				newToast({ type: 'info', content: 'Entry flagged' });
 				await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
 					noScroll: false,
-					invalidateAll: true
+					invalidateAll: true,
 				});
 			};
 		}}
@@ -305,5 +300,14 @@
 				<p class="text-error">Something went wrong.</p>
 			{/if}
 		</p>
+	</form>
+</dialog>
+
+<dialog class="mb-auto" bind:this={actionScreen}>
+	<form class="max-w-screen-sm" method="dialog">
+		<h2 class="mt-0">You've made {data.total_votes} votes!</h2>
+		<p class="text-success">Thank you.</p>
+		<p class="">You can continue voting, change category or take a break at any time</p>
+		<NewVote {page} />
 	</form>
 </dialog>
