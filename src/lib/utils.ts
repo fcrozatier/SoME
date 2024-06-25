@@ -3,7 +3,7 @@ import {
 	PUBLIC_REGISTRATION_START,
 	PUBLIC_RESULTS_AVAILABLE,
 	PUBLIC_VOTE_END,
-	PUBLIC_VOTE_START
+	PUBLIC_VOTE_START,
 } from '$env/static/public';
 
 export function competitionStarted() {

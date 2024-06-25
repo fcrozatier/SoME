@@ -311,5 +311,5 @@ export const postgresErrorCode = {
 	// Class XX — Internal Error
 	internal_error: 'XX000',
 	data_corrupted: 'XX001',
-	index_corrupted: 'XX002'
+	index_corrupted: 'XX002',
 };

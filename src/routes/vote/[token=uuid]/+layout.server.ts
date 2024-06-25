@@ -14,14 +14,14 @@ export const load: LayoutServerLoad = async (event) => {
 	if (!user) {
 		throw error(
 			401,
-			'Invalid token: you can use the link you received by email when registering to vote'
+			'Invalid token: you can use the link you received by email when registering to vote',
 		);
 	}
 
 	if (token !== event.cookies.get('token')) {
 		event.cookies.set('token', token, {
 			path: '/',
-			maxAge: MAX_AGE
+			maxAge: MAX_AGE,
 		});
 	}
 };

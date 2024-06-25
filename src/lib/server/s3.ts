@@ -7,9 +7,9 @@ const client = new S3Client({
 	region: S3_REGION,
 	credentials: {
 		accessKeyId: S3_KEY,
-		secretAccessKey: S3_SECRET
+		secretAccessKey: S3_SECRET,
 	},
-	endpoint: PUBLIC_S3_ENDPOINT
+	endpoint: PUBLIC_S3_ENDPOINT,
 });
 
 /**
@@ -24,7 +24,7 @@ export async function saveThumbnail(thumbnail: File, key: string) {
 	const output = await sharp(input)
 		.resize({
 			width: 640,
-			height: 360
+			height: 360,
 		})
 		.toFormat('webp')
 		.toBuffer();
@@ -33,7 +33,7 @@ export async function saveThumbnail(thumbnail: File, key: string) {
 		Bucket: PUBLIC_S3_BUCKET,
 		Key: key,
 		Body: output,
-		ACL: 'public-read'
+		ACL: 'public-read',
 	});
 
 	await client.send(command);
@@ -47,7 +47,7 @@ export async function saveThumbnail(thumbnail: File, key: string) {
 export async function deleteThumbnail(key: string) {
 	const command = new DeleteObjectCommand({
 		Bucket: PUBLIC_S3_BUCKET,
-		Key: key
+		Key: key,
 	});
 
 	await client.send(command);

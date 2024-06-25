@@ -7,14 +7,14 @@ import {
 	text,
 	timestamp,
 	uuid,
-	varchar
+	varchar,
 } from 'drizzle-orm/pg-core';
 import { categories } from '../../config';
 
 export const users = pgTable('users', {
 	uid: uuid('uid').primaryKey(),
 	email: varchar('email', { length: 128 }).unique().notNull(),
-	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
+	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 });
 
 export const entries = pgTable('entries', {
@@ -25,20 +25,20 @@ export const entries = pgTable('entries', {
 	url: text('url').unique().notNull(),
 	thumbnail: text('thumbnail'),
 	active: boolean('active').default(true),
-	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
+	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 });
 
 export const usersToEntries = pgTable(
 	'user_to_entry',
 	{
 		userUid: uuid('user_uid').references(() => users.uid, { onDelete: 'cascade' }),
-		entryUid: uuid('entry_uid').references(() => entries.uid, { onDelete: 'cascade' })
+		entryUid: uuid('entry_uid').references(() => entries.uid, { onDelete: 'cascade' }),
 	},
 	({ userUid, entryUid }) => {
 		return {
-			pk: primaryKey({ columns: [userUid, entryUid] })
+			pk: primaryKey({ columns: [userUid, entryUid] }),
 		};
-	}
+	},
 );
 
 export const votes = pgTable(
@@ -52,14 +52,14 @@ export const votes = pgTable(
 			.notNull(),
 		entryUid: uuid('entry_uid')
 			.references(() => entries.uid, { onDelete: 'cascade' })
-			.notNull()
+			.notNull(),
 	},
 	({ userUid, entryUid }) => {
 		return {
 			pk: primaryKey({ columns: [userUid, entryUid] }),
-			entryIdx: index('entry_idx').on(entryUid)
+			entryIdx: index('entry_idx').on(entryUid),
 		};
-	}
+	},
 );
 
 export const flags = pgTable(
@@ -72,14 +72,14 @@ export const flags = pgTable(
 			.references(() => entries.uid, { onDelete: 'cascade' })
 			.notNull(),
 		reason: text('reason').notNull(),
-		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
+		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 	},
 	({ userUid, entryUid }) => {
 		return {
 			pk: primaryKey({ columns: [userUid, entryUid] }),
-			entryIdx: index().on(entryUid)
+			entryIdx: index().on(entryUid),
 		};
-	}
+	},
 );
 
 export const skips = pgTable(
@@ -91,14 +91,14 @@ export const skips = pgTable(
 		entryUid: uuid('entry_uid')
 			.references(() => entries.uid, { onDelete: 'cascade' })
 			.notNull(),
-		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
+		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 	},
 	({ userUid, entryUid }) => {
 		return {
 			pk: primaryKey({ columns: [userUid, entryUid] }),
-			entryIdx: index().on(entryUid)
+			entryIdx: index().on(entryUid),
 		};
-	}
+	},
 );
 
 export const cache = pgTable(
@@ -111,14 +111,14 @@ export const cache = pgTable(
 		entryUid: uuid('entry_uid')
 			.references(() => entries.uid, { onDelete: 'cascade' })
 			.notNull(),
-		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow()
+		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 	},
 	({ userUid, category, entryUid }) => {
 		return {
 			pk: primaryKey({ columns: [userUid, category] }),
-			entryIdx: index().on(entryUid)
+			entryIdx: index().on(entryUid),
 		};
-	}
+	},
 );
 
 export type NewUser = typeof users.$inferInsert;

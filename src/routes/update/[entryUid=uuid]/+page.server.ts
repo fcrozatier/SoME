@@ -11,7 +11,7 @@ import {
 	users as usersTable,
 	usersToEntries,
 	votes,
-	type NewUser
+	type NewUser,
 } from '$lib/server/db/schema.js';
 import postgres from 'postgres';
 import { postgresErrorCode } from '$lib/server/db/errors.js';
@@ -35,7 +35,7 @@ export const load = async ({ params }) => {
 	if (!entry) {
 		throw error(
 			401,
-			'Invalid token: you can use the link you received by email to update your entry'
+			'Invalid token: you can use the link you received by email to update your entry',
 		);
 	}
 
@@ -75,7 +75,7 @@ export const actions = {
 			// Email deliverability validation
 			if (!dev) {
 				const emailValidation = await Promise.all(
-					[...newCreators].map(async (email) => await validateEmail(email))
+					[...newCreators].map(async (email) => await validateEmail(email)),
 				);
 				if (emailValidation.some((x) => x === null)) {
 					return fail(400, { message: 'There is something wrong with the emails' });
@@ -83,7 +83,7 @@ export const actions = {
 				const undeliverable = emailValidation.find((x) => x?.result !== 'deliverable');
 				if (undeliverable) {
 					return fail(400, {
-						undeliverable: undeliverable.address
+						undeliverable: undeliverable.address,
 					});
 				}
 			}
@@ -94,10 +94,10 @@ export const actions = {
 					and(
 						inArray(
 							usersToEntries.userUid,
-							formerCreators.map((u) => u.uid)
+							formerCreators.map((u) => u.uid),
 						),
-						eq(usersToEntries.entryUid, entryUid)
-					)
+						eq(usersToEntries.entryUid, entryUid),
+					),
 				);
 			}
 
@@ -172,7 +172,7 @@ export const actions = {
 					description: validation.data.description,
 					title: validation.data.title,
 					url: normalizedLink,
-					thumbnail: thumbnailKey
+					thumbnail: thumbnailKey,
 				})
 				.where(eq(entries.uid, entryUid));
 
@@ -182,7 +182,7 @@ export const actions = {
 			}
 
 			return {
-				success: true
+				success: true,
 			};
 		} catch (error) {
 			console.log('something went wrong', error);
@@ -198,5 +198,5 @@ export const actions = {
 			console.log(error);
 			return fail(500, { message: 'Network error' });
 		}
-	}
+	},
 };

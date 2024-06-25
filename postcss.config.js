@@ -6,5 +6,5 @@ const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
 
 export default {
-	plugins: [tailwind(), !dev && autoprefixer(), !dev && cssnano()]
+	plugins: [tailwind(), !dev && autoprefixer(), !dev && cssnano()],
 };

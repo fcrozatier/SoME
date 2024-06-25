@@ -19,7 +19,7 @@ export const listFormatter = new Intl.ListFormat('en', { type: 'disjunction', st
 export const templateNames = [
 	'token_reminder',
 	'end of peer review',
-	'top 100'
+	'top 100',
 ] as const satisfies (keyof typeof emailTemplates)[];
 
 /**
@@ -28,19 +28,19 @@ export const templateNames = [
 export const emailTemplates = {
 	'end of peer review': {
 		subject: `The ${COMPETITION_FULL_NAME} Peer Review is now over!`,
-		variables: ['token']
+		variables: ['token'],
 	},
 	'top 100': {
 		subject: `Summer of Math Exposition top 100 notification`,
-		variables: ['token']
+		variables: ['token'],
 	},
 	token_reminder: {
 		subject: `${COMPETITION_FULL_NAME} vote is starting soon`,
-		variables: ['token']
+		variables: ['token'],
 	},
 	registration: { subject: `${COMPETITION_FULL_NAME} registration`, variables: ['token'] },
 	update: { subject: `How to update your entry`, variables: ['token'] },
-	resend_token: { subject: `Your link for the ${COMPETITION_FULL_NAME}`, variables: ['token'] }
+	resend_token: { subject: `Your link for the ${COMPETITION_FULL_NAME}`, variables: ['token'] },
 } as const;
 
 export type TemplateName = keyof typeof emailTemplates;

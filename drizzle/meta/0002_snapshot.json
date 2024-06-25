@@ -1,268 +1,242 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "tables": {
-    "public.entries": {
-      "name": "entries",
-      "schema": "",
-      "columns": {
-        "uid": {
-          "name": "uid",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "category": {
-          "name": "category",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "url": {
-          "name": "url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "thumbnail": {
-          "name": "thumbnail",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "active": {
-          "name": "active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "entries_url_unique": {
-          "name": "entries_url_unique",
-          "columns": [
-            "url"
-          ],
-          "nullsNotDistinct": false
-        }
-      }
-    },
-    "public.users": {
-      "name": "users",
-      "schema": "",
-      "columns": {
-        "uid": {
-          "name": "uid",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "users_email_unique": {
-          "name": "users_email_unique",
-          "columns": [
-            "email"
-          ],
-          "nullsNotDistinct": false
-        }
-      }
-    },
-    "public.user_to_entry": {
-      "name": "user_to_entry",
-      "schema": "",
-      "columns": {
-        "user_uid": {
-          "name": "user_uid",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "entry_uid": {
-          "name": "entry_uid",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_to_entry_user_uid_users_uid_fk": {
-          "name": "user_to_entry_user_uid_users_uid_fk",
-          "tableFrom": "user_to_entry",
-          "columnsFrom": [
-            "user_uid"
-          ],
-          "tableTo": "users",
-          "columnsTo": [
-            "uid"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
-        },
-        "user_to_entry_entry_uid_entries_uid_fk": {
-          "name": "user_to_entry_entry_uid_entries_uid_fk",
-          "tableFrom": "user_to_entry",
-          "columnsFrom": [
-            "entry_uid"
-          ],
-          "tableTo": "entries",
-          "columnsTo": [
-            "uid"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
-        }
-      },
-      "compositePrimaryKeys": {
-        "user_to_entry_user_uid_entry_uid_pk": {
-          "name": "user_to_entry_user_uid_entry_uid_pk",
-          "columns": [
-            "user_uid",
-            "entry_uid"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "public.votes": {
-      "name": "votes",
-      "schema": "",
-      "columns": {
-        "score": {
-          "name": "score",
-          "type": "numeric(4, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "feedback": {
-          "name": "feedback",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "user_uid": {
-          "name": "user_uid",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "entry_uid": {
-          "name": "entry_uid",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "entry_idx": {
-          "columns": [
-            {
-              "expression": "entry_uid",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "name": "entry_idx",
-          "isUnique": false,
-          "method": "btree",
-          "concurrently": false
-        }
-      },
-      "foreignKeys": {
-        "votes_user_uid_users_uid_fk": {
-          "name": "votes_user_uid_users_uid_fk",
-          "tableFrom": "votes",
-          "columnsFrom": [
-            "user_uid"
-          ],
-          "tableTo": "users",
-          "columnsTo": [
-            "uid"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
-        },
-        "votes_entry_uid_entries_uid_fk": {
-          "name": "votes_entry_uid_entries_uid_fk",
-          "tableFrom": "votes",
-          "columnsFrom": [
-            "entry_uid"
-          ],
-          "tableTo": "entries",
-          "columnsTo": [
-            "uid"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
-        }
-      },
-      "compositePrimaryKeys": {
-        "votes_user_uid_entry_uid_pk": {
-          "name": "votes_user_uid_entry_uid_pk",
-          "columns": [
-            "user_uid",
-            "entry_uid"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
-    }
-  },
-  "enums": {},
-  "schemas": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "8dce51ef-bd24-45d5-914f-9fe0888b6f94",
-  "prevId": "3297bff5-c9af-499a-9da6-06fac04eae3c"
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"public.entries": {
+			"name": "entries",
+			"schema": "",
+			"columns": {
+				"uid": {
+					"name": "uid",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"title": {
+					"name": "title",
+					"type": "varchar(128)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"description": {
+					"name": "description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"category": {
+					"name": "category",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"url": {
+					"name": "url",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"thumbnail": {
+					"name": "thumbnail",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"active": {
+					"name": "active",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": false,
+					"default": true
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"entries_url_unique": {
+					"name": "entries_url_unique",
+					"columns": ["url"],
+					"nullsNotDistinct": false
+				}
+			}
+		},
+		"public.users": {
+			"name": "users",
+			"schema": "",
+			"columns": {
+				"uid": {
+					"name": "uid",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"email": {
+					"name": "email",
+					"type": "varchar(128)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"users_email_unique": {
+					"name": "users_email_unique",
+					"columns": ["email"],
+					"nullsNotDistinct": false
+				}
+			}
+		},
+		"public.user_to_entry": {
+			"name": "user_to_entry",
+			"schema": "",
+			"columns": {
+				"user_uid": {
+					"name": "user_uid",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"entry_uid": {
+					"name": "entry_uid",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"user_to_entry_user_uid_users_uid_fk": {
+					"name": "user_to_entry_user_uid_users_uid_fk",
+					"tableFrom": "user_to_entry",
+					"columnsFrom": ["user_uid"],
+					"tableTo": "users",
+					"columnsTo": ["uid"],
+					"onUpdate": "no action",
+					"onDelete": "cascade"
+				},
+				"user_to_entry_entry_uid_entries_uid_fk": {
+					"name": "user_to_entry_entry_uid_entries_uid_fk",
+					"tableFrom": "user_to_entry",
+					"columnsFrom": ["entry_uid"],
+					"tableTo": "entries",
+					"columnsTo": ["uid"],
+					"onUpdate": "no action",
+					"onDelete": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {
+				"user_to_entry_user_uid_entry_uid_pk": {
+					"name": "user_to_entry_user_uid_entry_uid_pk",
+					"columns": ["user_uid", "entry_uid"]
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"public.votes": {
+			"name": "votes",
+			"schema": "",
+			"columns": {
+				"score": {
+					"name": "score",
+					"type": "numeric(4, 2)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"feedback": {
+					"name": "feedback",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				},
+				"user_uid": {
+					"name": "user_uid",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"entry_uid": {
+					"name": "entry_uid",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {
+				"entry_idx": {
+					"columns": [
+						{
+							"expression": "entry_uid",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"name": "entry_idx",
+					"isUnique": false,
+					"method": "btree",
+					"concurrently": false
+				}
+			},
+			"foreignKeys": {
+				"votes_user_uid_users_uid_fk": {
+					"name": "votes_user_uid_users_uid_fk",
+					"tableFrom": "votes",
+					"columnsFrom": ["user_uid"],
+					"tableTo": "users",
+					"columnsTo": ["uid"],
+					"onUpdate": "no action",
+					"onDelete": "cascade"
+				},
+				"votes_entry_uid_entries_uid_fk": {
+					"name": "votes_entry_uid_entries_uid_fk",
+					"tableFrom": "votes",
+					"columnsFrom": ["entry_uid"],
+					"tableTo": "entries",
+					"columnsTo": ["uid"],
+					"onUpdate": "no action",
+					"onDelete": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {
+				"votes_user_uid_entry_uid_pk": {
+					"name": "votes_user_uid_entry_uid_pk",
+					"columns": ["user_uid", "entry_uid"]
+				}
+			},
+			"uniqueConstraints": {}
+		}
+	},
+	"enums": {},
+	"schemas": {},
+	"_meta": {
+		"schemas": {},
+		"tables": {},
+		"columns": {}
+	},
+	"id": "8dce51ef-bd24-45d5-914f-9fe0888b6f94",
+	"prevId": "3297bff5-c9af-499a-9da6-06fac04eae3c"
 }

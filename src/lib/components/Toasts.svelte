@@ -30,7 +30,7 @@
 		toasts.update((state) => {
 			return [
 				...state,
-				{ ...config, id, duration: config.duration ?? 3000, type: config.type ?? 'info' }
+				{ ...config, id, duration: config.duration ?? 3000, type: config.type ?? 'info' },
 			];
 		});
 	}
@@ -50,9 +50,9 @@
 			return {
 				duration,
 				easing: quintOut,
-				css: (t) => `transform: ${transform} scale(min(${0.7 + t},1)); opacity: ${t}`
+				css: (t) => `transform: ${transform} scale(min(${0.7 + t},1)); opacity: ${t}`,
 			};
-		}
+		},
 	});
 
 	function willRemove(toast: Toast) {

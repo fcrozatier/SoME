@@ -958,5 +958,5 @@ export const profanity = [
 	'yellow showers',
 	'yiffy',
 	'zoophilia',
-	'🖕'
+	'🖕',
 ];

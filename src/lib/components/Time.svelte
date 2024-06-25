@@ -11,8 +11,8 @@
 			month: 'long',
 			day: 'numeric',
 			hour: time ? 'numeric' : undefined,
-			minute: time ? 'numeric' : undefined
-		}
+			minute: time ? 'numeric' : undefined,
+		},
 	);
 </script>
 

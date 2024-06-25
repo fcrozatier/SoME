@@ -9,7 +9,7 @@ export const CategorySchema = z.enum(categories);
 const EmailSchema = z.string().email().max(128);
 
 export const EmailForm = z.object({
-	email: EmailSchema
+	email: EmailSchema,
 });
 
 export const TokenSchema = z.string().uuid();
@@ -26,18 +26,18 @@ export const FlagForm = z.object({
 				.array(
 					z.object({
 						link: UrlSchema,
-						email: EmailSchema
-					})
+						email: EmailSchema,
+					}),
 				)
 				.parse(JSON.parse(val));
 		} catch {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom
+				code: z.ZodIssueCode.custom,
 			});
 
 			return z.NEVER;
 		}
-	})
+	}),
 });
 
 export const FeedbackForm = z.object({
@@ -46,27 +46,27 @@ export const FeedbackForm = z.object({
 			return z.array(TokenSchema).parse(JSON.parse(val));
 		} catch {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom
+				code: z.ZodIssueCode.custom,
 			});
 
 			return z.NEVER;
 		}
-	})
+	}),
 });
 export const PasswordForm = z.object({
-	password: z.string()
+	password: z.string(),
 });
 
 const CheckboxSchema = z.literal('on', {
 	errorMap: () => {
 		return { message: 'Must be checked' };
-	}
+	},
 });
 
 const JudgeSchema = z.object({
 	userType: z.literal('judge'),
 	email: EmailSchema,
-	rules: CheckboxSchema
+	rules: CheckboxSchema,
 });
 
 const TitleSchema = z
@@ -85,7 +85,7 @@ const ThumbnailSchema = z
 	.instanceof(File)
 	.refine((file) => file.size < MAX_IMG_SIZE, { message: 'Image too big: 1MB max' })
 	.refine((file) => SHARP_IMAGE_INPUT_TYPES.includes(file.type), {
-		message: 'Must be a jpeg, png, webp or gif image'
+		message: 'Must be a jpeg, png, webp or gif image',
 	})
 	.optional();
 
@@ -98,7 +98,7 @@ export const CreatorSchema = z.object({
 		} catch {
 			ctx.addIssue({
 				code: z.ZodIssueCode.custom,
-				message: 'Invalid email'
+				message: 'Invalid email',
 			});
 
 			return z.NEVER;
@@ -110,7 +110,7 @@ export const CreatorSchema = z.object({
 	link: UrlSchema,
 	thumbnail: ThumbnailSchema,
 	rules: CheckboxSchema,
-	copyright: CheckboxSchema
+	copyright: CheckboxSchema,
 });
 
 export const RegistrationSchema = z.discriminatedUnion('userType', [JudgeSchema, CreatorSchema]);
@@ -123,8 +123,8 @@ export const FeedbackSchema = z
 			return feedback.length - (feedback.match(/\r\n/g) ?? []).length <= 5000;
 		},
 		{
-			message: 'Feedback too long'
-		}
+			message: 'Feedback too long',
+		},
 	)
 	.optional();
 
@@ -132,12 +132,12 @@ export const VoteSchema = z.object({
 	score: z.coerce.number().gte(1).lte(9),
 	feedback: FeedbackSchema,
 	uid: z.string(),
-	tag: z.string()
+	tag: z.string(),
 });
 
 export const SkipSchema = z.object({
 	uid: z.string(),
-	tag: z.string()
+	tag: z.string(),
 });
 
 // export const SwapSchema = z.object({
@@ -156,7 +156,7 @@ export const SkipSchema = z.object({
 export const FlagSchema = z.object({
 	reason: z.string().min(1).max(100, { message: 'Reason too long' }),
 	uid: z.string(),
-	tag: z.string()
+	tag: z.string(),
 });
 
 // export const EdgesSchema = z.array(
@@ -167,7 +167,7 @@ export const FlagSchema = z.object({
 // );
 
 export const EmailTemplateSchema = z.object({
-	template_name: z.enum(templateNames)
+	template_name: z.enum(templateNames),
 });
 
 /**
@@ -178,7 +178,7 @@ export const EmailTemplateSchema = z.object({
  */
 export async function validateForm<T extends Record<string, unknown>, S>(
 	request: Request,
-	schema: S extends z.ZodType ? z.ZodType<T> : any
+	schema: S extends z.ZodType ? z.ZodType<T> : any,
 ) {
 	const formData = await request.formData();
 	const form = Object.fromEntries(formData);

@@ -10,7 +10,7 @@ export function clickOutside(node: Element, callback: (node?: Element) => void) 
 	return {
 		destroy() {
 			document.removeEventListener('click', handleClick, true);
-		}
+		},
 	};
 }
 
@@ -18,7 +18,7 @@ export function toggleSelectAll(node: HTMLElement) {
 	const handleClick = () => {
 		const allSelected = document.getElementById('all');
 		const inputs = document.querySelectorAll<HTMLInputElement>(
-			'input[type="checkbox"]:not([id="all"])'
+			'input[type="checkbox"]:not([id="all"])',
 		);
 
 		if (allSelected && (allSelected as HTMLInputElement).checked) {
@@ -41,6 +41,6 @@ export function toggleSelectAll(node: HTMLElement) {
 	return {
 		destroy() {
 			node.removeEventListener('click', handleClick, true);
-		}
+		},
 	};
 }

@@ -18,7 +18,7 @@
 				category,
 				title,
 				description,
-				link
+				link,
 			};
 		},
 		restore: (v) => {
@@ -28,7 +28,7 @@
 			title = v.title;
 			description = v.description;
 			link = v.link;
-		}
+		},
 	};
 
 	let email = data.emails[0];

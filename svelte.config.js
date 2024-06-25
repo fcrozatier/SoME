@@ -8,7 +8,7 @@ import targetBlank from 'svelte-target-blank';
  */
 const mdsvexOptions = {
 	extensions: ['.md'],
-	layout: './src/lib/components/LayoutProse.svelte'
+	layout: './src/lib/components/LayoutProse.svelte',
 };
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -17,12 +17,12 @@ const config = {
 	preprocess: [
 		vitePreprocess(),
 		mdsvex(mdsvexOptions),
-		targetBlank({ mode: 'warn', silentList: '/**/*.md' })
+		targetBlank({ mode: 'warn', silentList: '/**/*.md' }),
 	],
 
 	kit: {
-		adapter: adapter()
-	}
+		adapter: adapter(),
+	},
 };
 
 export default config;

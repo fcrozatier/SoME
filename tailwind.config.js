@@ -5,9 +5,9 @@ module.exports = {
 	theme: {
 		extend: {
 			DEFAULT: {
-				css: {}
-			}
-		}
+				css: {},
+			},
+		},
 	},
 	plugins: [require('@tailwindcss/typography'), require('daisyui')],
 	daisyui: {
@@ -23,9 +23,9 @@ module.exports = {
 					success: '#36d399',
 					warning: '#fbbd23',
 					error: '#f87272',
-					'base-content': 'black'
-				}
-			}
-		]
-	}
+					'base-content': 'black',
+				},
+			},
+		],
+	},
 };

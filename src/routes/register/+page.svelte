@@ -6,7 +6,7 @@
 		COMPETITION_FULL_NAME,
 		COMPETITION_SHORT_NAME,
 		categories,
-		userTypes
+		userTypes,
 	} from '$lib/config';
 	import type { Snapshot } from './$types';
 	import { tick } from 'svelte';
@@ -24,7 +24,7 @@
 				category,
 				title,
 				description,
-				link
+				link,
 			};
 		},
 		restore: (v) => {
@@ -35,7 +35,7 @@
 			title = v.title;
 			description = v.description;
 			link = v.link;
-		}
+		},
 	};
 
 	let userType: (typeof userTypes)[number];

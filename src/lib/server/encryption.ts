@@ -5,7 +5,7 @@ export const encrypt = (plaintext: string) => {
 	const cipher = createCipheriv(
 		'aes-256-gcm',
 		Buffer.from(SECRET_KEY, 'base64'),
-		Buffer.from(IV, 'base64')
+		Buffer.from(IV, 'base64'),
 	);
 
 	let cipherText = cipher.update(plaintext, 'utf-8', 'base64');
@@ -19,7 +19,7 @@ export const decrypt = (cipherText: string, tag: string) => {
 	const decipher = createDecipheriv(
 		'aes-256-gcm',
 		Buffer.from(SECRET_KEY, 'base64'),
-		Buffer.from(IV, 'base64')
+		Buffer.from(IV, 'base64'),
 	);
 	decipher.setAuthTag(Buffer.from(tag, 'base64'));
 

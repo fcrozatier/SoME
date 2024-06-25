@@ -44,5 +44,5 @@ export const actions: Actions = {
 		// } finally {
 		// 	await session.close();
 		// }
-	}
+	},
 };

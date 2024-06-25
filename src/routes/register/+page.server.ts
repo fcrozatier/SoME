@@ -10,7 +10,7 @@ import {
 	entries,
 	users as usersTable,
 	usersToEntries,
-	type NewUser
+	type NewUser,
 } from '$lib/server/db/schema.js';
 import postgres from 'postgres';
 import { postgresErrorCode } from '$lib/server/db/errors.js';
@@ -36,7 +36,7 @@ export const actions = {
 
 		let entryUid = '';
 		let users: { token: string; email: string }[] = [
-			{ email: validation.data.email, token: crypto.randomUUID() }
+			{ email: validation.data.email, token: crypto.randomUUID() },
 		];
 		if (validation.data.userType === 'creator') {
 			validation.data.others.forEach((x) => users.push({ email: x, token: crypto.randomUUID() }));
@@ -45,7 +45,7 @@ export const actions = {
 		// Email deliverability validation
 		if (!dev) {
 			const emailValidation = await Promise.all(
-				[...users].map(async ({ email }) => await validateEmail(email))
+				[...users].map(async ({ email }) => await validateEmail(email)),
 			);
 			if (emailValidation.some((x) => x === null)) {
 				return fail(400, { invalid: true });
@@ -82,7 +82,7 @@ export const actions = {
 					url: normalizedLink,
 					description: validation.data.description,
 					thumbnail: thumbnailKey,
-					uid: entryUid
+					uid: entryUid,
 				});
 
 				// Save thumbnail after the entry: we know it's not a duplicate
@@ -104,15 +104,15 @@ export const actions = {
 					.where(
 						inArray(
 							usersTable.email,
-							values.map((v) => v.email)
-						)
+							values.map((v) => v.email),
+						),
 					);
 
 				await db.insert(usersToEntries).values(users.map((a) => ({ userUid: a.token, entryUid })));
 			} else {
 				await db.insert(usersTable).values({
 					uid: users[0].token,
-					email: users[0].email
+					email: users[0].email,
 				});
 			}
 
@@ -133,7 +133,7 @@ export const actions = {
 			return {
 				success: true,
 				user: users.length === 1 ? users[0] : { email: '', token: '' },
-				entryUid
+				entryUid,
 			};
 		} catch (error) {
 			console.log('something went wrong', error);
@@ -156,5 +156,5 @@ export const actions = {
 			console.log(error);
 			return fail(500, { network: true });
 		}
-	}
+	},
 };

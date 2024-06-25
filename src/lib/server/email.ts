@@ -33,14 +33,14 @@ export async function addToMailingList(email: string, token: string) {
 		address: email,
 		subscribed: 'yes',
 		vars: JSON.stringify({ token }),
-		upsert: 'yes' // update recipient if already subscribed
+		upsert: 'yes', // update recipient if already subscribed
 	});
 }
 
 export async function sendEmail<T extends TemplateName>(
 	to: string,
 	template: T,
-	variables?: Record<(typeof emailTemplates)[T]['variables'][number], string>
+	variables?: Record<(typeof emailTemplates)[T]['variables'][number], string>,
 ) {
 	const { subject } = emailTemplates[template];
 
@@ -48,7 +48,7 @@ export async function sendEmail<T extends TemplateName>(
 		from,
 		to,
 		subject,
-		template
+		template,
 	} satisfies MailgunMessageData;
 
 	if (variables) {
@@ -65,6 +65,6 @@ export async function sendTemplate(template: TemplateName) {
 		from,
 		to: `top_100@${DOMAIN}`,
 		subject: emailTemplates[template].subject,
-		template
+		template,
 	});
 }

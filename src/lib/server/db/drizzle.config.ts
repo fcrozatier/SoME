@@ -5,12 +5,12 @@ export default {
 	out: 'drizzle',
 	dialect: 'postgresql',
 	dbCredentials: {
-		url: process.env.DATABASE_URL
+		url: process.env.DATABASE_URL,
 	},
 	migrations: {
 		table: 'migrations',
-		schema: 'public'
+		schema: 'public',
 	},
 	verbose: true,
-	strict: true
+	strict: true,
 } satisfies Config;
