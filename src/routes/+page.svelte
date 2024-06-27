@@ -88,7 +88,7 @@
 </svelte:head>
 
 <section class="layout-prose pb-4">
-	<!-- <p class=" mb-16 text-center text-3xl font-light">Discover and create new math content.</p> -->
+	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->
 
 	<p class=" mb-16 text-center text-3xl font-light">SoMEπ community edition, summer 2024.</p>
 	<p>
