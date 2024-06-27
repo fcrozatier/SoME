@@ -367,12 +367,11 @@
 		use:clickOutside={closeDialog}
 		use:enhance={({ submitter }) => {
 			submitter?.setAttribute('disabled', 'on');
-			return async ({ update, result, formElement }) => {
-				await update();
+			return async ({ update, result }) => {
 				submitter?.removeAttribute('disabled');
+				await update({ invalidateAll: false });
 				if (result.type === 'success') {
 					newToast({ type: 'success', content: 'Email sent!' });
-					formElement.reset();
 					personalLinkDialog.close();
 				}
 			};
