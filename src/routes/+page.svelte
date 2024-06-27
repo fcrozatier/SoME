@@ -28,14 +28,14 @@
 		{
 			title: 'Join the competition as a participant or judge',
 			description:
-				'Participants all work on their projects. You can join the <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a> to share partial progress, find collaborators etc.',
+				'Participants all work on their projects. The <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a> server allows creators to share partial progress, find collaborators etc.',
 			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
 			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END],
 		},
 		{
 			title: 'Vote for the best contributions',
 			description:
-				"Peer review! Everyone, whether or not they've submitted an entry, can participate. You'll be successively shown entries to review and optionally provide feedback (it's actually a ton of fun). In many ways, this is the heart of the event, and in past years this phase has been what jump-started meaningful exposure for many entries.",
+				"Peer review! You'll be successively shown entries to review and optionally provide feedback. This is the heart of the event and in past years this phase has been what jump-started meaningful exposure for many entries.",
 			isOpen: voteOpen(),
 			dates: [PUBLIC_VOTE_START, PUBLIC_VOTE_END],
 		},
