@@ -10,6 +10,7 @@
 	import { clickOutside } from '$lib/actions';
 	import Icon from '$lib/components/Icon.svelte';
 	import Time from '$lib/components/Time.svelte';
+	import { newToast } from '$lib/components/Toasts.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
 	import { winners } from '$lib/results';
@@ -307,6 +308,7 @@
 	</details>
 </section>
 
+<!-- Last year -->
 <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
 	<div class="mx-auto max-w-prose">
 		<h2 class="my-0 text-5xl font-black" style:color="var(--light-gold)">
@@ -345,6 +347,7 @@
 	</div>
 </section>
 
+<!-- Sponsor -->
 <section class="mt-10 pt-10">
 	<h2 class="text-center text-2xl font-light">
 		Operations for this contest have been generously funded by
@@ -364,9 +367,14 @@
 		use:clickOutside={closeDialog}
 		use:enhance={({ submitter }) => {
 			submitter?.setAttribute('disabled', 'on');
-			return async ({ update }) => {
+			return async ({ update, result, formElement }) => {
 				await update();
 				submitter?.removeAttribute('disabled');
+				if (result.type === 'success') {
+					newToast({ type: 'success', content: 'Email sent!' });
+					formElement.reset();
+					personalLinkDialog.close();
+				}
 			};
 		}}
 	>
@@ -391,8 +399,6 @@
 		</p>
 		{#if form?.error || form?.emailInvalid}
 			<span class="text-error">Something went wrong.</span>
-		{:else if form?.success}
-			<span class="text-success">Email sent!</span>
 		{/if}
 	</form>
 </dialog>
