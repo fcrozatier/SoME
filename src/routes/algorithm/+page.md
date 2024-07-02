@@ -68,16 +68,16 @@ The best voting systems among the ones we benchmarked are this iterated PageRank
 
 This voting system involves scoring entries individually (rather than using pairwise ranking), and the best entries are the ones with the highest median score.
 
-This approach has many interesting [properties](https://www.pnas.org/doi/pdf/10.1073/pnas.0702634104) particularly due to its reliance on the median. It is not sensitive to extremes votes from absolute fans or spammers, accurately reflects the majority opinion, and is more robust to increased noise compared to PageRank. For instance, if an entry receives a few scores of 0 and 10 but most people rate it a 7, the median score of 7 will be selected.
+This approach has many interesting [properties](https://www.pnas.org/doi/pdf/10.1073/pnas.0702634104) particularly due to its reliance on the median. It is not sensitive to extreme votes from absolute fans or spammers, accurately reflects the majority opinion, and is more robust to increased noise compared to PageRank. For instance, if an entry receives a few scores of 0 and 10 but most people rate it a 7, the median score of 7 will be selected.
 
 On the other hand, pairwise ranking suffers from several flaws:
 - Comparing unrelated entries can be difficult, leading to ties or comparisons that are impossible due to different audiences, topics or prerequisites. This can result in implementation issues, such as disconnected graphs, as well as decision fatigue for voters.
 - With N entries we have N(N-1)/2 possible comparisons, which dilutes information on the edges and makes these arrows less reliable when using pairwise ranking versus individual ranking with the same number of votes.
-- From a user experience perspective, pairwise ranking requires watching two videos before voting, which can be time-consuming (especially if videos are up to 30 minutes long). This may lead to decisions influenced by the more vivid memory of the most recent entry viewed,introducing biais.
+- From a user experience perspective, pairwise ranking requires watching two videos before voting, which can be time-consuming (especially if videos are up to 30 minutes long). This may lead to decisions influenced by the more vivid memory of the most recent entry viewed, introducing biais.
 
 For these reasons, we chose Majority Judgement. Our implementation uses a continuous scale, avoiding some edge cases and ties found in the traditional version.
 
-Also the scoring question we use is: "How valuable is this entry to the space of online math exposition, compared to the typical math video / article you've seen?" Judges use five labels ranging from "notably worse" to "better than most", anchored in center by "about the same".
+Also the scoring question we use is: "How valuable is this entry to the space of online math exposition, compared to the typical math video / article you've seen?" Judges use five labels ranging from "notably worse" to "better than most", anchored in the center by "about the same".
 
 This question explicitly leverages the judge's experience, and can be viewed of as a pairwise comparison with the judge's abstract representation of the field, which is our natural way of judging. Another way to look at it is asking for a like or a dislike, but with much more nuance. This perspective feels very familiar.
 
