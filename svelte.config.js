@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
+import rehypeTargetBlank from 'rehype-target-plugin';
 import targetBlank from 'svelte-target-blank';
 
 /**
@@ -9,6 +10,7 @@ import targetBlank from 'svelte-target-blank';
 const mdsvexOptions = {
 	extensions: ['.md'],
 	layout: './src/lib/components/LayoutProse.svelte',
+	rehypePlugins: [rehypeTargetBlank],
 };
 
 /** @type {import('@sveltejs/kit').Config} */
