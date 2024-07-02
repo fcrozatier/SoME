@@ -21,6 +21,7 @@
 			<Icon class="rounded-full" name="logo" width="3.5em" />
 			<span>Home</span></a
 		>
+		<a href="/algorithm"> Algorithm </a>
 		{#if voteOpen() && data.token}
 			<a href="/vote">Vote</a>
 		{/if}
@@ -28,7 +29,14 @@
 			<a href="/admin">Admin</a>
 		{/if}
 
-		<span class="navbar-end ml-auto mr-4 flex gap-2">
+		<span class="navbar-end ml-auto mr-4 flex gap-3">
+			<a
+				title="GitHub"
+				href="https://github.com/fcrozatier/SoME"
+				class="fill-gray-800 hover:opacity-100"
+				target="_blank"
+				><Icon name="github" width="1.8rem" />
+			</a>
 			<a title="Substack" href="https://3blue1brown.substack.com" target="_blank">
 				<Icon class="fill-gray-800 px-2 hover:fill-[#f35300]" name="substack" width="2.5rem" />
 			</a>
@@ -49,12 +57,6 @@
 	</main>
 
 	<footer class="mt-auto flex flex-wrap justify-center gap-x-20 gap-y-10 p-4">
-		<a
-			href="https://github.com/fcrozatier/SoME"
-			class="inline-flex items-center gap-3 opacity-80 hover:opacity-100"
-			target="_blank"
-			><Icon name="github" width="1.5rem" />
-		</a>
 		<a href="/gdpr"> GDPR </a>
 		<a href="/content-policy"> Content Policy </a>
 		<a href="/contact"> Contact </a>
