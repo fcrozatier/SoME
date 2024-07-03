@@ -50,7 +50,7 @@ This is an "idealized" scenario where almost everyone agrees and votes according
 
 One conclusion of the benchmark was that the Crowd BT algorithm didn't perform so well.
 
-One interpretation of this result is be that [the algorithm](https://pages.stern.nyu.edu/~xchen3/images/crowd_pairwise.pdf) was designed for crowdsourcing tasks and tries to optimize the results by estimating the reliability of judges. This makes sense in a crowdsourcing context where each judge contributes hundreds of votes (eg. categorizing pictures of cats vs dogs), but not in our massive competition context, where each judge makes only about a dozen votes. Here, information is too sparse to infer judges' reliability.
+One interpretation of this result is that [the algorithm](https://pages.stern.nyu.edu/~xchen3/images/crowd_pairwise.pdf) was designed for crowdsourcing tasks and tries to optimize the results by estimating the reliability of judges. This makes sense in a crowdsourcing context where each judge contributes hundreds of votes (eg. categorizing pictures of cats vs dogs), but not in our massive competition context, where each judge makes only about a dozen votes. Here, information is too sparse to infer judges' reliability.
 
 Another conclusion from the benchmark is that the PageRank is very sensitive to noise.
 This is understandable, as the algorithm flows points through the graph, causing noise to flow as well, which can amplify its impact. This also explains Google's aversion to link farms: because it works and impacts the ranking!
@@ -72,23 +72,28 @@ This approach has many interesting [properties](https://www.pnas.org/doi/pdf/10.
 
 On the other hand, pairwise ranking suffers from several flaws:
 - Comparing unrelated entries can be difficult, leading to ties or comparisons that are impossible due to different audiences, topics or prerequisites. This can result in implementation issues, such as disconnected graphs, as well as decision fatigue for voters.
-- With N entries we have N(N-1)/2 possible comparisons, which dilutes information on the edges and makes these arrows less reliable when using pairwise ranking versus individual ranking with the same number of votes.
+- With <math><mi>N</mi></math> entries we have <math>
+  <mrow><mi>N</mi><mo form="prefix" stretchy="false">(</mo><mi>N</mi>
+    <mo>−</mo>
+    <mn>1</mn><mo form="postfix" stretchy="false">)</mo><mi>/</mi><mn>2</mn>
+  </mrow>
+</math> possible comparisons, which dilutes information on the edges and makes these arrows less reliable when using pairwise ranking versus individual ranking with the same number of votes.
 - From a user experience perspective, pairwise ranking requires watching two videos before voting, which can be time-consuming (especially if videos are up to 30 minutes long). This may lead to decisions influenced by the more vivid memory of the most recent entry viewed, introducing biais.
 
 For these reasons, we chose Majority Judgement. Our implementation uses a continuous scale, avoiding some edge cases and ties found in the traditional version.
 
-Also the scoring question we use is: "How valuable is this entry to the space of online math exposition, compared to the typical math video / article you've seen?" Judges use five labels ranging from "notably worse" to "better than most", anchored in the center by "about the same".
+Also the scoring question we use is: "How valuable is this entry to the space of online math exposition, compared to the typical math video you've seen?" Judges use five labels ranging from "notably worse" to "better than most", anchored in the center by "about the same".
 
-This question explicitly leverages the judge's experience, and can be viewed of as a pairwise comparison with the judge's abstract representation of the field, which is our natural way of judging. Another way to look at it is asking for a like or a dislike, but with much more nuance. This perspective feels very familiar.
+This question explicitly leverages the judge's experience, and can be viewed of as a pairwise comparison with the judge's abstract representation of the field, which aligns with our natural way of judging. Another way to look at it is asking for a like or a dislike, but with much more nuance than a simple binary choice. These perspectives make the process feel familiar and intuitive.
 
 Additionally, judges can skip entries they feel unqualified to evaluate.
 
-Overall, this system provides a better experience for judges. They only need to watch one entry before making a vote and assign a single score based on a natural question, reducing decision fatigue.
+Overall, this system provides a better experience for judges. They only need to watch one entry before casting their vote and assign a single score based on a natural question, reducing decision fatigue. Additionally, the score aggregation method described here is the most accurate and robust among those we benchmarked.
 
 
 ### Optimizing for Quality
 
-The goal of the competition is to help people discover excellent science content. While optimizing for fairness like we did in the past is a noble idea, it ultimately overemphasizes entries with no chances of winning by giving everyone the same amount of attention, and worsens the voting experience.
+One of the goals of the competition is to help people discover excellent science content. While optimizing for fairness like we did in the past is a noble idea, it ultimately overemphasizes entries with no chances of winning by giving everyone the same amount of attention, and worsens the voting experience.
 
 To enhance the voting experience, we decided to filter out entries that have no realistic chance of winning after certain thresholds are met.
 
@@ -98,6 +103,6 @@ This optimization occurs in three passes:
 
 2. **Trend Confirmation.** As trends emerge, entries are assigned randomly with a weighted probability based on their median score to confirm their quality. By the end of this pass we filter the bottom quartile again.
 
-3. **Maximizing Utility.** At this stage, we have a rough idea of the good entries and want to guide information to where it's more needed. We apply a visibility boost based on the standard deviation of the score distribution for each entry to see if more consensus can be achieved for entries with large score spread. This visibility boost diminishes as the number of votes on an entry grows, preventing the continued promotion of polarizing entries. For example, if by the time we apply the boost a given entry has 20 votes, the probability for a voter to see this entry will be weighted by the formula: current score + (20 sigma / number of votes on the entry)
+3. **Maximizing Utility.** At this stage, we have a rough idea of the good entries and want to guide information to where it's more needed. We apply a visibility boost based on the standard deviation <math><mi>σ</mi></math> of the score distribution for each entry to see if more consensus can be achieved for entries with large score spread. This visibility boost diminishes as the number of votes on an entry grows, preventing the continued promotion of polarizing entries. For example, if by the time we apply the boost a given entry has 20 votes, the probability for a voter to see this entry will be weighted by the formula: <math><mrow><mtext>current score </mtext><mo> + </mo></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mn>20 </mn><mi> σ </mi><mi> / </mi><mtext> current number of votes on the entry</mtext><mo form="postfix" stretchy="false">)</mo></mrow></math>
 
 These optimizations improve both the voter experience and the final ranking, ensuring a more enjoyable and effective competition for everyone.
