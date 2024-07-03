@@ -7,6 +7,7 @@
 	import { registrationOpen, voteOpen } from '$lib/utils';
 	import '../app.css';
 	import Timer from '../lib/components/Timer.svelte';
+	import '../math.css';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
@@ -56,7 +57,7 @@
 		<slot />
 	</main>
 
-	<footer class="mt-auto flex flex-wrap justify-center gap-x-20 gap-y-10 p-4">
+	<footer class="mt-auto flex flex-wrap justify-center wh gap-x-20 gap-y-10 p-4">
 		<a href="/gdpr"> GDPR </a>
 		<a href="/content-policy"> Content Policy </a>
 		<a href="/contact"> Contact </a>
