@@ -109,7 +109,7 @@ export const actions: Actions = {
 				.values({
 					entryUid: uid,
 					userUid: token,
-					score: validation.data.score,
+					score: validation.data.score.toString(),
 					feedback: validation.data.feedback,
 				})
 				.onConflictDoUpdate({
