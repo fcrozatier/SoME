@@ -17,6 +17,16 @@ export const users = pgTable('users', {
 	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 });
 
+export const surveys = pgTable('surveys', {
+	userUid: uuid('user_uid')
+		.references(() => users.uid, { onDelete: 'cascade' })
+		.primaryKey(),
+	some: decimal('some', { precision: 4, scale: 2 }).notNull(),
+	site: decimal('site', { precision: 4, scale: 2 }).notNull(),
+	feedback: text('feedback'),
+	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
+});
+
 export const entries = pgTable('entries', {
 	uid: uuid('uid').primaryKey(),
 	title: varchar('title', { length: 128 }).notNull(),
