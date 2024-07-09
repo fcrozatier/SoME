@@ -143,7 +143,11 @@
 								</button>
 							{/if}
 						{:else if i === 2}
-							<a class="btn-primary btn" href="/feedback/{data.token}">See feedbacks</a>
+							<!-- TODO -->
+							<a class="btn-primary btn mr-4" href="">See results</a>
+							{#if data.token}
+								<a class="btn-primary btn" href="/feedback/{data.token}">See feedbacks</a>
+							{/if}
 						{/if}
 					</p>
 				{/if}
