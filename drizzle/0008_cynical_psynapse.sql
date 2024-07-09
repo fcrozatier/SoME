@@ -1,0 +1,1 @@
+ALTER TABLE "votes" ALTER COLUMN "feedback" DROP NOT NULL;

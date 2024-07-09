@@ -55,7 +55,7 @@ export const votes = pgTable(
 	'votes',
 	{
 		score: decimal('score', { precision: 4, scale: 2 }).notNull(),
-		feedback: text('feedback').notNull(),
+		feedback: text('feedback'),
 		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 		userUid: uuid('user_uid')
 			.references(() => users.uid, { onDelete: 'cascade' })
