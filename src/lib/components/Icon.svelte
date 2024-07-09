@@ -50,7 +50,6 @@
 		: [displayIcon.box, displayIcon.box];
 </script>
 
-<!-- eslint-disable svelte/no-at-html-tags -->
 <svg class={$$props.class} {width} {height} viewBox="0 0 {boxWidth} {boxHeight}"
 	>{@html displayIcon.svg}</svg
 >
