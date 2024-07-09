@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { PUBLIC_RESULTS_AVAILABLE } from '$env/static/public';
+	import { newToast } from '$lib/components/Toasts.svelte';
 	import { COMPETITION_SHORT_NAME } from '$lib/config';
 	import type { ActionData, PageData } from './$types';
 
@@ -13,9 +14,9 @@
 
 	let errorSummary: HTMLDivElement | undefined;
 
-	// $: if (form?.surveyFail) {
-	// 	errorSummary?.scrollIntoView();
-	// }
+	$: if (form?.surveyFail) {
+		errorSummary?.scrollIntoView();
+	}
 </script>
 
 <svelte:head>
@@ -23,20 +24,11 @@
 </svelte:head>
 
 <article class="layout-prose">
-	<!-- {#if Date.parse(PUBLIC_RESULTS_AVAILABLE) > Date.now()}
-		<header class="text-green-600">
-			<p>
-				Hey! Good job on finding this route, it's not officially open but you can already check your
-				feedback (at your own risk)
-			</p>
-		</header>
-	{/if} -->
-
-	<!-- {#if !data.surveyTaken && !form?.surveySuccess}
+	{#if !data.surveyTaken && !form?.surveySuccess}
+		<h2>Survey</h2>
 		<p>
-			We recognize that the winners have not been announced, but while we are waiting on Grant,
-			James, and their panel of esteemed guest judges to finish judging, please consider filling out
-			the following form:
+			We recognize that the results have not been announced yet, but in the meantime please consider
+			filling out the following form:
 		</p>
 
 		<form
@@ -44,9 +36,12 @@
 			class="space-y-4"
 			use:enhance={({ submitter }) => {
 				submitter?.setAttribute('disabled', 'on');
-				return async ({ update }) => {
-					await update();
+				return async ({ update, result }) => {
+					if (result.type === 'success') {
+						newToast({ type: 'success', content: 'Thank you for taking the survey! 🎉 🥳' });
+					}
 					submitter?.removeAttribute('disabled');
+					await update();
 				};
 			}}
 		>
@@ -125,11 +120,11 @@
 					class="textarea-bordered textarea text-base"
 					cols="50"
 					rows="10"
-					maxlength="2000"
+					maxlength="5000"
 					bind:value={feedback}
 				></textarea>
 				<div class="label justify-end">
-					<span class="label-text-alt">{feedback.length}/2000</span>
+					<span class="label-text-alt">{feedback.length}/5000</span>
 				</div>
 			</div>
 
@@ -147,19 +142,21 @@
 				</p>
 			{/if}
 		</form>
-	{:else if form?.surveySuccess}
-		<p class="text-green-600">Thank you for taking the survey!</p>
-	{/if} -->
+	{/if}
 	<h2>Feedbacks</h2>
 	<p>Here is the feedback you received from people who reviewed your work.</p>
 	{#each Object.entries(data.groups) as [title, group]}
 		<h3>{title}</h3>
 		{#if group}
-			<p>Score: {group[0].score}</p>
+			<p class="font-semibold">Overall score: {group[0].score}</p>
 			{#if group.filter((f) => f.feedback !== '').length > 0}
 				<p class="font-semibold">Comments</p>
+				<hr />
 				{#each group as { feedback }}
-					<p class="whitespace-pre-wrap">{feedback}</p>
+					{#if feedback !== ''}
+						<p class="whitespace-pre-wrap">{feedback}</p>
+						<hr />
+					{/if}
 				{/each}
 			{:else}
 				<p>No feedback received on this entry</p>
