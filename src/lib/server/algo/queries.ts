@@ -196,7 +196,7 @@ export function query3(token: string, category: string) {
 		`;
 }
 
-export function feedbacks(token: string) {
+export function queryFeedbacks(token: string) {
 	return sql`
 		with created as (
 			select entry_uid, title
@@ -206,19 +206,19 @@ export function feedbacks(token: string) {
 		),
 
 		scores as (
-			select entry_uid, percentile_cont(0.5) within group (order by score) as score
+			select entry_uid, percentile_cont(0.5) within group (order by score) as median
 			from votes
 			where entry_uid in (select entry_uid from created)
 			group by entry_uid
 		),
 
 		feedbacks as (
-			select votes.entry_uid, feedback
+			select votes.entry_uid, feedback, score
 			from votes
 			where entry_uid in (select entry_uid from created)
 		)
 
-		select created.entry_uid, title, score, feedback from (scores join feedbacks on scores.entry_uid=feedbacks.entry_uid)
+		select created.entry_uid, title, score, median, feedback from (scores join feedbacks on scores.entry_uid=feedbacks.entry_uid)
 		join created on scores.entry_uid=created.entry_uid;
 	`;
 }
