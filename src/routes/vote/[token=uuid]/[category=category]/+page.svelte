@@ -226,7 +226,7 @@
 		<p>
 			Would the explanations make sense for the target audience? Jargon should be explained, the
 			goals of the lesson should be understandable with minimal background, and the submission
-			should generally display empathy for people unfamiliar with the topic
+			should generally display empathy for people unfamiliar with the topic.
 		</p>
 
 		<h3>Novelty</h3>
@@ -239,7 +239,7 @@
 		<h3>Memorability</h3>
 		<p>
 			Is there a takeaway the audience would easily remember weeks later? Maybe it's an impactful
-			change in perspective, the beauty of an explanation, or the mind-blowingness of an aha moment
+			change in perspective, the beauty of an explanation, or the mind-blowingness of an aha moment.
 		</p>
 
 		<p class="text-center mt-8 mb-2">
