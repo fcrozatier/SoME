@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { clickOutside } from '$lib/actions';
 	import Banner from '$lib/components/Banner.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Toasts from '$lib/components/Toasts.svelte';
 	import { BETA_TEST, COMPETITION_FULL_NAME } from '$lib/config';
+	import Menu from '$lib/icons/menu.svg';
 	import { registrationOpen, voteOpen } from '$lib/utils';
 	import '../app.css';
 	import Timer from '../lib/components/Timer.svelte';
@@ -11,6 +13,8 @@
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
+
+	let sideNav: HTMLDialogElement;
 </script>
 
 <Toasts />
@@ -22,15 +26,20 @@
 			<Icon class="rounded-full" name="logo" width="3.5em" />
 			<span>Home</span></a
 		>
-		<a href="/algorithm"> Algorithm </a>
-		{#if voteOpen() && data.token}
-			<a href="/vote">Vote</a>
-		{/if}
-		{#if $page.data.isAdmin}
-			<a href="/admin">Admin</a>
-		{/if}
+		<button class="ml-auto mr-4 sm:hidden" on:click={() => sideNav.showModal()}
+			><img src={Menu} alt="Menu" /></button
+		>
+		<span class="navbar-start gap-8 hidden sm:flex">
+			<a href="/algorithm"> Algorithm </a>
+			{#if voteOpen() && data.token}
+				<a href="/vote">Vote</a>
+			{/if}
+			{#if $page.data.isAdmin}
+				<a href="/admin">Admin</a>
+			{/if}
+		</span>
 
-		<span class="navbar-end ml-auto mr-4 flex gap-3">
+		<span class="navbar-end ml-auto mr-4 gap-3 hidden sm:flex">
 			<a
 				title="GitHub"
 				href="https://github.com/fcrozatier/SoME"
@@ -46,6 +55,41 @@
 			</a>
 		</span>
 	</nav>
+	<dialog class="m-0 left-full -translate-x-full" bind:this={sideNav}>
+		<aside class="" use:clickOutside={() => sideNav.close()}>
+			<h2 class="font-semibold">Menu</h2>
+			<ul class="flex-col flex gap-4 mt-4">
+				<li>
+					<a href="/algorithm"> Algorithm </a>
+				</li>
+				<li>
+					{#if voteOpen() && data.token}
+						<a href="/vote">Vote</a>
+					{/if}
+				</li>
+				<li>
+					{#if $page.data.isAdmin}
+						<a href="/admin">Admin</a>
+					{/if}
+				</li>
+				<li class="flex items-center justify-between gap-4">
+					<a
+						title="GitHub"
+						href="https://github.com/fcrozatier/SoME"
+						class="fill-gray-800 hover:opacity-100"
+						target="_blank"
+						><Icon name="github" width="1.8rem" />
+					</a>
+					<a title="Substack" href="https://3blue1brown.substack.com" target="_blank">
+						<Icon class="fill-gray-800 px-2 hover:fill-[#f35300]" name="substack" width="2.5rem" />
+					</a>
+					<a title="Discord" href="https://discord.gg/WZvZMVsXXR" target="_blank">
+						<Icon class="fill-gray-800 px-2 hover:fill-[#5865f2]" name="discord" width="2.5rem" />
+					</a>
+				</li>
+			</ul>
+		</aside>
+	</dialog>
 
 	<Banner test={BETA_TEST} />
 	{#if registrationOpen()}
