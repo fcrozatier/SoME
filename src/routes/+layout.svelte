@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
 	import Banner from '$lib/components/Banner.svelte';
@@ -15,6 +16,10 @@
 	export let data: LayoutData;
 
 	let sideNav: HTMLDialogElement;
+
+	beforeNavigate(() => {
+		sideNav.close();
+	});
 </script>
 
 <Toasts />
