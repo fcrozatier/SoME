@@ -93,9 +93,6 @@
 		justify-content: center;
 		justify-items: center;
 		gap: theme('spacing.2');
-
-		/* Avoids grabbing click events as toasts are non-interactive */
-		pointer-events: none;
 	}
 
 	.toast {
