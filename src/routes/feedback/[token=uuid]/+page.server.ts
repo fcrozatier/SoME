@@ -1,4 +1,4 @@
-import { feedbacks as queryFeedbacks } from '$lib/server/algo/queries';
+import { queryFeedbacks } from '$lib/server/algo/queries';
 import { db } from '$lib/server/db/client';
 import { surveys } from '$lib/server/db/schema.js';
 import { FeedbackSchema, validateForm } from '$lib/server/validation';
@@ -11,7 +11,7 @@ export const load = async (event) => {
 	const { token } = event.params;
 
 	const feedbacks: postgres.RowList<
-		{ entry_uid: string; title: string; score: number; feedback: string }[]
+		{ entry_uid: string; title: string; score: number; median: number; feedback: string }[]
 	> = await db.execute(queryFeedbacks(token));
 
 	const groups = Object.groupBy(feedbacks, (item) => item.title);
