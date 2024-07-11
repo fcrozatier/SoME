@@ -60,12 +60,12 @@
 			<h2 class="font-semibold">Menu</h2>
 			<ul class="flex-col flex gap-4 mt-4">
 				<li>
-					<a href="/algorithm"> Algorithm </a>
-				</li>
-				<li>
 					{#if voteOpen() && data.token}
 						<a href="/vote">Vote</a>
 					{/if}
+				</li>
+				<li>
+					<a href="/algorithm"> Algorithm </a>
 				</li>
 				<li>
 					{#if $page.data.isAdmin}
