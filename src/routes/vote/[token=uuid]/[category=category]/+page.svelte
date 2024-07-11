@@ -134,8 +134,8 @@
 				<h4 class="mb-0 mt-2">Feedback</h4>
 				<label for="feedback" class="label flex gap-2">
 					<span class="flex-1">
-						Do you have general feedback for the author of this entry? If so, please remember to be
-						as constructive as possible in your comments:
+						Do you have general feedback for the author of this entry? If so, please be as
+						constructive as possible in your comments:
 					</span>
 				</label>
 				<textarea
