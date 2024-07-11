@@ -35,10 +35,11 @@
 			><img src={Menu} alt="Menu" /></button
 		>
 		<span class="navbar-start gap-8 hidden sm:flex">
-			<a href="/algorithm"> Algorithm </a>
 			{#if voteOpen() && data.token}
 				<a href="/vote">Vote</a>
+				<a href="/feedback">Feedback</a>
 			{/if}
+			<a href="/algorithm"> Algorithm </a>
 			{#if $page.data.isAdmin}
 				<a href="/admin">Admin</a>
 			{/if}
@@ -67,6 +68,7 @@
 				<li>
 					{#if voteOpen() && data.token}
 						<a href="/vote">Vote</a>
+						<a href="/feedback">Feedback</a>
 					{/if}
 				</li>
 				<li>
