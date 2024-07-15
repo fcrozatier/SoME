@@ -1,0 +1,584 @@
+{
+  "id": "96a990b4-feb6-4cb6-9ebe-1c64627fbdde",
+  "prevId": "1116c209-0659-4883-b50e-c88deee599cd",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.cache": {
+      "name": "cache",
+      "schema": "",
+      "columns": {
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_uid": {
+          "name": "entry_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "cache_entry_uid_index": {
+          "name": "cache_entry_uid_index",
+          "columns": [
+            {
+              "expression": "entry_uid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "cache_user_uid_users_uid_fk": {
+          "name": "cache_user_uid_users_uid_fk",
+          "tableFrom": "cache",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "cache_entry_uid_entries_uid_fk": {
+          "name": "cache_entry_uid_entries_uid_fk",
+          "tableFrom": "cache",
+          "tableTo": "entries",
+          "columnsFrom": [
+            "entry_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "cache_user_uid_category_pk": {
+          "name": "cache_user_uid_category_pk",
+          "columns": [
+            "user_uid",
+            "category"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.entries": {
+      "name": "entries",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thumbnail": {
+          "name": "thumbnail",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "entries_url_unique": {
+          "name": "entries_url_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "url"
+          ]
+        }
+      }
+    },
+    "public.flags": {
+      "name": "flags",
+      "schema": "",
+      "columns": {
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_uid": {
+          "name": "entry_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "flags_entry_uid_index": {
+          "name": "flags_entry_uid_index",
+          "columns": [
+            {
+              "expression": "entry_uid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "flags_user_uid_users_uid_fk": {
+          "name": "flags_user_uid_users_uid_fk",
+          "tableFrom": "flags",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "flags_entry_uid_entries_uid_fk": {
+          "name": "flags_entry_uid_entries_uid_fk",
+          "tableFrom": "flags",
+          "tableTo": "entries",
+          "columnsFrom": [
+            "entry_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "flags_user_uid_entry_uid_pk": {
+          "name": "flags_user_uid_entry_uid_pk",
+          "columns": [
+            "user_uid",
+            "entry_uid"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.skips": {
+      "name": "skips",
+      "schema": "",
+      "columns": {
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_uid": {
+          "name": "entry_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "skips_entry_uid_index": {
+          "name": "skips_entry_uid_index",
+          "columns": [
+            {
+              "expression": "entry_uid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "skips_user_uid_users_uid_fk": {
+          "name": "skips_user_uid_users_uid_fk",
+          "tableFrom": "skips",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "skips_entry_uid_entries_uid_fk": {
+          "name": "skips_entry_uid_entries_uid_fk",
+          "tableFrom": "skips",
+          "tableTo": "entries",
+          "columnsFrom": [
+            "entry_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "skips_user_uid_entry_uid_pk": {
+          "name": "skips_user_uid_entry_uid_pk",
+          "columns": [
+            "user_uid",
+            "entry_uid"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.surveys": {
+      "name": "surveys",
+      "schema": "",
+      "columns": {
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "some": {
+          "name": "some",
+          "type": "numeric(4, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site": {
+          "name": "site",
+          "type": "numeric(4, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feedback": {
+          "name": "feedback",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "surveys_user_uid_users_uid_fk": {
+          "name": "surveys_user_uid_users_uid_fk",
+          "tableFrom": "surveys",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "is_admin": {
+          "name": "is_admin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
+    },
+    "public.user_to_entry": {
+      "name": "user_to_entry",
+      "schema": "",
+      "columns": {
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "entry_uid": {
+          "name": "entry_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_to_entry_user_uid_users_uid_fk": {
+          "name": "user_to_entry_user_uid_users_uid_fk",
+          "tableFrom": "user_to_entry",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "user_to_entry_entry_uid_entries_uid_fk": {
+          "name": "user_to_entry_entry_uid_entries_uid_fk",
+          "tableFrom": "user_to_entry",
+          "tableTo": "entries",
+          "columnsFrom": [
+            "entry_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_to_entry_user_uid_entry_uid_pk": {
+          "name": "user_to_entry_user_uid_entry_uid_pk",
+          "columns": [
+            "user_uid",
+            "entry_uid"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.votes": {
+      "name": "votes",
+      "schema": "",
+      "columns": {
+        "score": {
+          "name": "score",
+          "type": "numeric(4, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feedback": {
+          "name": "feedback",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "user_uid": {
+          "name": "user_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_uid": {
+          "name": "entry_uid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "entry_idx": {
+          "name": "entry_idx",
+          "columns": [
+            {
+              "expression": "entry_uid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "votes_user_uid_users_uid_fk": {
+          "name": "votes_user_uid_users_uid_fk",
+          "tableFrom": "votes",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "votes_entry_uid_entries_uid_fk": {
+          "name": "votes_entry_uid_entries_uid_fk",
+          "tableFrom": "votes",
+          "tableTo": "entries",
+          "columnsFrom": [
+            "entry_uid"
+          ],
+          "columnsTo": [
+            "uid"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "votes_user_uid_entry_uid_pk": {
+          "name": "votes_user_uid_entry_uid_pk",
+          "columns": [
+            "user_uid",
+            "entry_uid"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

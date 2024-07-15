@@ -15,6 +15,7 @@ export const users = pgTable('users', {
 	uid: uuid('uid').primaryKey(),
 	email: varchar('email', { length: 128 }).unique().notNull(),
 	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
+	isAdmin: boolean('is_admin').default(false),
 });
 
 export const surveys = pgTable('surveys', {
