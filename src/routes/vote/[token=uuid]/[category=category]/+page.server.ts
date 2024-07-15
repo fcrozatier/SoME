@@ -1,3 +1,4 @@
+import { OPENAI_API_KEY, OPENAI_PROJECT } from '$env/static/private';
 import type { Category } from '$lib/config';
 import { query1 } from '$lib/server/algo/queries';
 import { db } from '$lib/server/db/client';
@@ -7,9 +8,15 @@ import { FlagSchema, SkipSchema, validateForm, VoteSchema } from '$lib/server/va
 import { voteOpen } from '$lib/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
+import { OpenAI } from 'openai';
 import type postgres from 'postgres';
 import type { Actions } from './$types';
 import { action } from './config';
+
+const openai = new OpenAI({
+	apiKey: OPENAI_API_KEY,
+	project: OPENAI_PROJECT,
+});
 
 export const load = async (event) => {
 	const { token, category } = event.params;
@@ -99,6 +106,26 @@ export const actions: Actions = {
 		if (!validation.success) {
 			console.log(validation.error.flatten());
 			return fail(400, { id, voteFail: true });
+		}
+
+		if (validation.data.feedback) {
+			const completion = await openai.chat.completions.create({
+				model: 'gpt-4',
+				temperature: 0.2,
+				messages: [
+					{
+						role: 'system',
+						content: 'You help classify comments. You only answer by OK or REVIEW',
+					},
+					{
+						role: 'user',
+						content: `Would you say [OK] this is a constructive comment or [REVIEW] this comment should be manually reviewed? Answer by OK or REVIEW.\n
+						"${validation.data.feedback}"`,
+					},
+				],
+			});
+
+			console.log(completion.choices[0].message.content?.toUpperCase()?.includes('REVIEW'));
 		}
 
 		try {
