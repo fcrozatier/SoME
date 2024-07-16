@@ -3,9 +3,11 @@ import { JWTPayloadSchema, TokenSchema } from '$lib/server/validation';
 import { redirect, type Handle } from '@sveltejs/kit';
 import jsonwebtoken from 'jsonwebtoken';
 
+// I'm a teapot
+const tea = /\.(php|env|xml)$/;
+
 export const handle = async function ({ event, resolve }) {
-	// I'm a teapot
-	if (/\.(php|env|xml)$/.test(event.request.url)) {
+	if (tea.test(event.request.url)) {
 		return new Response(null, { status: 418 });
 	}
 
