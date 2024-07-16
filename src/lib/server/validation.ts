@@ -53,8 +53,14 @@ export const FeedbackForm = z.object({
 		}
 	}),
 });
+
 export const PasswordForm = z.object({
+	email: z.string(),
 	password: z.string(),
+});
+
+export const JWTPayloadSchema = z.object({
+	isAdmin: z.boolean(),
 });
 
 const CheckboxSchema = z.literal('on', {

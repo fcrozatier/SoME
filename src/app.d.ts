@@ -2,6 +2,7 @@ declare namespace App {
 	// interface Error {}
 	interface Locals {
 		token?: string;
+		isAdmin?: boolean;
 	}
 	// interface PageData {}
 	// interface Platform {}

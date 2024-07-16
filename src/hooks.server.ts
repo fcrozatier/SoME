@@ -1,19 +1,25 @@
+import { JWT_SECRET } from '$env/static/private';
+import { JWTPayloadSchema, TokenSchema } from '$lib/server/validation';
 import { redirect, type Handle } from '@sveltejs/kit';
-import { TokenSchema } from '$lib/server/validation';
-// import { ADMIN_PASSWORD } from '$env/static/private';
+import jsonwebtoken from 'jsonwebtoken';
 
 export const handle = async function ({ event, resolve }) {
 	const token = event.cookies.get('token');
+	const jwt = event.cookies.get('jwt');
 
 	if (event.request.url.includes('admin')) {
-		const adminPassword = event.cookies.get('password');
-		if (adminPassword) {
-			// const isAdmin = await compare(ADMIN_PASSWORD, adminPassword);
-			// if (!isAdmin) {
-			// 	throw redirect(303, '/login');
-			// }
+		if (jwt) {
+			try {
+				const payload = jsonwebtoken.verify(jwt, JWT_SECRET, { algorithms: ['HS256'] });
+				const { data, success } = JWTPayloadSchema.safeParse(payload);
+
+				event.locals.isAdmin = success && data.isAdmin;
+			} catch (error) {
+				event.cookies.delete('jwt', { path: '/' });
+				event.locals.isAdmin = false;
+			}
 		} else {
-			throw redirect(303, '/login');
+			event.locals.isAdmin = false;
 		}
 	}
 
