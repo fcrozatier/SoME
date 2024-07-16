@@ -4,6 +4,11 @@ import { redirect, type Handle } from '@sveltejs/kit';
 import jsonwebtoken from 'jsonwebtoken';
 
 export const handle = async function ({ event, resolve }) {
+	// I'm a teapot
+	if (/\.(php|env|xml)$/.test(event.request.url)) {
+		return new Response(null, { status: 418 });
+	}
+
 	const token = event.cookies.get('token');
 	const jwt = event.cookies.get('jwt');
 
