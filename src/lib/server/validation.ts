@@ -146,31 +146,11 @@ export const SkipSchema = z.object({
 	tag: z.string(),
 });
 
-// export const SwapSchema = z.object({
-// 	email: EmailSchema,
-// 	category: CategorySchema,
-// 	title: TitleSchema,
-// 	description: DescriptionSchema,
-// 	link: UrlSchema,
-// 	oldLink: UrlSchema,
-// 	thumbnail: z
-// 		.instanceof(File)
-// 		.refine((file) => file.size === 0)
-// 		.or(ThumbnailSchema)
-// });
-
 export const FlagSchema = z.object({
 	reason: z.string().min(1).max(100, { message: 'Reason too long' }),
 	uid: z.string(),
 	tag: z.string(),
 });
-
-// export const EdgesSchema = z.array(
-// 	z.object({
-// 		category: CategorySchema,
-// 		edges: z.array(z.array(z.number()))
-// 	})
-// );
 
 export const EmailTemplateSchema = z.object({
 	template_name: z.enum(templateNames),
