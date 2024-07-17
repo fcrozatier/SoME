@@ -1,22 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { toggleSelectAll } from '$lib/actions';
-	import type { PageData } from './$types';
 
-	export let data: PageData;
-	$: flagged = data.flagged as {
-		link: string;
-		title: string;
-		reason: string;
-		email: string;
-		creators: string[];
-	}[];
+	export let data;
 
-	let selected: { email: string; link: string }[] = [];
+	let selected: string[] = [];
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl overflow-x-auto">
-	<h2>Reported entries to review</h2>
+	<h2>Reported entries</h2>
 
 	<form
 		method="post"
@@ -39,32 +31,22 @@
 					>
 					<th>Entry</th>
 					<th>Reason</th>
-					<th class="mr-10">Creators</th>
-					<th>Reported by</th>
 				</tr>
 			</thead>
 			<tbody>
-				{#each flagged as entry}
-					<tr class="px-6">
+				{#each data.flagged as entry}
+					<tr class="px-6 py-2">
 						<td class="flex items-center"
 							><input
 								type="checkbox"
 								class="checkbox"
 								name="selected"
-								value={{ link: entry.link, email: entry.email }}
+								value={entry.uid}
 								bind:group={selected}
 							/></td
 						>
-						<td><a class="capitalize" href={entry.link} target="_blank">{entry.title}</a></td>
+						<td><a class="capitalize" href={entry.url} target="_blank">{entry.title}</a></td>
 						<td><span class="">{entry.reason}</span></td>
-						<td
-							><div class="grid justify-items-end">
-								{#each entry.creators as creator}
-									<span>{creator}</span>
-								{/each}
-							</div></td
-						>
-						<td><span class="">{entry.email}</span></td>
 					</tr>
 				{:else}
 					<p>No entries to review</p>
@@ -72,14 +54,19 @@
 			</tbody>
 		</table>
 		<div>
-			<button type="submit" formaction="?/ignore" class="btn" disabled={!selected.length}
-				>Ignore</button
-			>
-			<button type="submit" formaction="?/remove" class="btn-error btn" disabled={!selected.length}
-				>Flag</button
-			>
+			<div class="flex gap-4">
+				<button type="submit" formaction="?/ignore" class="btn" disabled={!selected.length}
+					>Ignore</button
+				>
+				<button
+					type="submit"
+					formaction="?/deactivate"
+					class="btn-error btn"
+					disabled={!selected.length}>Deactivate</button
+				>
+			</div>
 			<p class="text-sm">
-				(Flagging is not destructive: a flagged creator will still have access to his feedbacks)
+				Deactivation is not destructive: the creator(s) will still have access to the feedbacks
 			</p>
 		</div>
 	</form>
@@ -88,9 +75,9 @@
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: auto 15rem 1fr auto auto;
+		grid-template-columns: auto 1fr 1fr;
 		gap: 1rem;
-		align-items: center;
+		align-items: start;
 	}
 
 	tr:nth-child(even) {
