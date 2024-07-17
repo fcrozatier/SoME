@@ -134,3 +134,4 @@ export const cache = pgTable(
 
 export type NewUser = typeof users.$inferInsert;
 export type SelectEntry = typeof entries.$inferSelect;
+export type SelectFlag = typeof flags.$inferSelect;
