@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { toggleSelectAll } from '$lib/actions';
+	import { newToast } from '$lib/components/Toasts.svelte';
 
 	export let data;
 
@@ -17,9 +18,17 @@
 			buttons.forEach((b) => b.setAttribute('disabled', 'on'));
 			formData.append('selection', JSON.stringify(selected));
 
-			return async ({ update }) => {
-				await update();
+			return async ({ update, result, action }) => {
 				buttons.forEach((b) => b.removeAttribute('disabled'));
+				if (result.type === 'success') {
+					const content =
+						(selected.length === 1 ? 'Entry' : 'Entries') +
+						' ' +
+						(action.search === '?/ignore' ? 'ignored' : 'deactivated');
+
+					newToast({ type: 'info', content });
+				}
+				await update();
 			};
 		}}
 	>
@@ -66,7 +75,8 @@
 				>
 			</div>
 			<p class="text-sm">
-				Deactivation is not destructive: the creator(s) will still have access to the feedbacks
+				Deactivation is not destructive: the creator(s) will still have access to the feedbacks, but
+				the entry will not receive any new votes
 			</p>
 		</div>
 	</form>
