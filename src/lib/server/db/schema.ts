@@ -18,16 +18,6 @@ export const users = pgTable('users', {
 	isAdmin: boolean('is_admin').default(false),
 });
 
-export const surveys = pgTable('surveys', {
-	userUid: uuid('user_uid')
-		.references(() => users.uid, { onDelete: 'cascade' })
-		.primaryKey(),
-	some: decimal('some', { precision: 4, scale: 2 }).notNull(),
-	site: decimal('site', { precision: 4, scale: 2 }).notNull(),
-	feedback: text('feedback'),
-	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
-});
-
 export const entries = pgTable('entries', {
 	uid: uuid('uid').primaryKey(),
 	title: varchar('title', { length: 128 }).notNull(),
@@ -131,6 +121,16 @@ export const cache = pgTable(
 		};
 	},
 );
+
+export const surveys = pgTable('surveys', {
+	userUid: uuid('user_uid')
+		.references(() => users.uid, { onDelete: 'cascade' })
+		.primaryKey(),
+	some: decimal('some', { precision: 4, scale: 2 }).notNull(),
+	site: decimal('site', { precision: 4, scale: 2 }).notNull(),
+	feedback: text('feedback'),
+	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
+});
 
 export type NewUser = typeof users.$inferInsert;
 export type SelectEntry = typeof entries.$inferSelect;
