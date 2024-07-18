@@ -71,6 +71,13 @@
       "when": 1721033489128,
       "tag": "0009_nasty_texas_twister",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1721288067029,
+      "tag": "0010_cold_starhawk",
+      "breakpoints": true
     }
   ]
 }
