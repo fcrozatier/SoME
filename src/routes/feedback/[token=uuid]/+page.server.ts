@@ -11,7 +11,14 @@ export const load = async (event) => {
 	const { token } = event.params;
 
 	const feedbacks: postgres.RowList<
-		{ entry_uid: string; title: string; score: number; median: number; feedback: string }[]
+		{
+			entry_uid: string;
+			title: string;
+			score: number;
+			median: number;
+			feedback: string;
+			maybe_rude: boolean;
+		}[]
 	> = await db.execute(queryFeedbacks(token));
 
 	const groups = Object.groupBy(feedbacks, (item) => item.title);

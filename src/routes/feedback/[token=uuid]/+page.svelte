@@ -174,7 +174,7 @@
 			<p>No feedback received on this entry yet</p>
 		{:else}
 			{@const median = round(group?.[0].median, 1)}
-			{@const comments = group.filter((f) => f.feedback !== '')}
+			{@const comments = group.filter((f) => f.feedback !== '' && !f.maybe_rude)}
 			<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
 				<div
 					class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
@@ -200,7 +200,7 @@
 									newToast({
 										type: 'info',
 										content:
-											'This is your median score. <a class="underline underline-offset-2 inline cursor-pointer" href="/algorithm">Learn more</a>',
+											'Your median score. <a class="underline underline-offset-2 inline cursor-pointer" href="/algorithm">Learn more</a>',
 										duration: 5000,
 									})}
 								class="font-semibold">score*</button
