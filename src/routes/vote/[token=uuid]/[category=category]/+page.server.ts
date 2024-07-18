@@ -1,4 +1,4 @@
-import { OPENAI_API_KEY, OPENAI_PROJECT } from '$env/static/private';
+import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from '$env/static/private';
 import type { Category } from '$lib/config';
 import { query1 } from '$lib/server/algo/queries';
 import { db } from '$lib/server/db/client';
@@ -108,6 +108,8 @@ export const actions: Actions = {
 			return fail(400, { id, voteFail: true });
 		}
 
+		let maybeRude = false;
+
 		if (validation.data.feedback) {
 			const completion = await openai.chat.completions.create({
 				model: 'gpt-4',
@@ -115,17 +117,16 @@ export const actions: Actions = {
 				messages: [
 					{
 						role: 'system',
-						content: 'You help classify comments. You only answer by OK or REVIEW',
+						content: MODERATION_PROMPT,
 					},
 					{
 						role: 'user',
-						content: `Would you say [OK] this is a constructive comment or [REVIEW] this comment should be manually reviewed? Answer by OK or REVIEW.\n
-						"${validation.data.feedback}"`,
+						content: validation.data.feedback,
 					},
 				],
 			});
 
-			console.log(completion.choices[0].message.content?.toUpperCase()?.includes('REVIEW'));
+			maybeRude = completion.choices[0].message.content?.toUpperCase()?.includes('REVIEW') ?? false;
 		}
 
 		try {
@@ -138,6 +139,7 @@ export const actions: Actions = {
 					userUid: token,
 					score: validation.data.score.toString(),
 					feedback: validation.data.feedback,
+					maybeRude,
 				})
 				.onConflictDoUpdate({
 					target: [votes.userUid, votes.entryUid],
