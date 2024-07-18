@@ -78,6 +78,13 @@
       "when": 1721288067029,
       "tag": "0010_cold_starhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1721289757501,
+      "tag": "0011_dusty_sunspot",
+      "breakpoints": true
     }
   ]
 }
