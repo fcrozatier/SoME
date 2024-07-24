@@ -1,81 +1,58 @@
+import { db } from '$lib/server/db/client';
+import { type SelectEntry } from '$lib/server/db/schema';
 import { FeedbackForm, validateForm } from '$lib/server/validation';
 import { fail } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { sql } from 'drizzle-orm';
 
-export const load: PageServerLoad = async () => {
-	try {
-		// Get feedbacks
-		const res = await session.executeRead((tx) => {
-			return tx.run<{ f: Feedback }>(
-				`
-				MATCH (f:Feedback)
-				WHERE f.validated IS NULL
-				AND f.explicit = true
-				RETURN f LIMIT 25
-      `,
-			);
-		});
+export const load = async () => {
+	const feedbacks: (Pick<SelectEntry, 'uid' | 'title' | 'url'> & {
+		feedback: string;
+		user_uid: string;
+	})[] = await db.execute(sql`
+			select user_uid, uid, feedback, title, url
+			from entries join votes
+			on uid=entry_uid
+			where entries.active='true'
+			and votes.reviewed='false'
+			and votes.maybe_rude='true'
+			order by uid
+			limit all
+			offset 0;
+		`);
 
-		const feedbacks = [];
-		for (const row of res.records) {
-			const entry = row.get('f');
-			// feedbacks.push(toNativeTypes(entry.properties));
-		}
-
-		return {
-			feedbacks,
-		};
-	} catch (error) {
-		return { success: false };
-	}
+	return { feedbacks };
 };
 
-export const actions: Actions = {
-	ignore: async ({ request }) => {
+export const actions = {
+	keep: async ({ request }) => {
 		const validation = await validateForm(request, FeedbackForm);
+
 		if (!validation.success) {
 			return fail(400, { error: true });
 		}
 
-		const session = driver.session();
-
 		try {
-			await session.executeWrite((tx) => {
-				return tx.run(
-					`
-					UNWIND $selection as token
-					MATCH (f:Feedback)
-					WHERE f.token = token
-					SET f.validated = True
-      `,
-					{ selection: validation.data.selection },
-				);
-			});
+			await db.execute(sql`
+					update votes set maybe_rude='false', reviewed='true' where (user_uid, entry_uid) in ${validation.data.selection}
+				`);
+
 			return { success: true };
 		} catch (error) {
 			return fail(400, { error: true });
-		} finally {
-			await session.close();
 		}
 	},
 	remove: async ({ request }) => {
 		const validation = await validateForm(request, FeedbackForm);
+
 		if (!validation.success) {
 			return fail(400, { error: true });
 		}
 
 		try {
-			await session.executeWrite((tx) => {
-				return tx.run(
-					`
-					UNWIND $selection as token
-					MATCH (f:Feedback)
-					WHERE f.token = token
-					DETACH DELETE f
-      `,
-					{ selection: validation.data.selection },
-				);
-			});
+			await db.execute(sql`
+					update votes set maybe_rude='true', reviewed='true' where (user_uid, entry_uid) in ${validation.data.selection}
+				`);
+
 			return { success: true };
 		} catch (error) {
 			return fail(400, { error: true });
