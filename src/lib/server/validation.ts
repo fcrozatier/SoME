@@ -22,7 +22,7 @@ const UrlSchema = z
 export const FlagForm = z.object({
 	selection: z.string().transform((val, ctx) => {
 		try {
-			return z.array(z.string().uuid()).parse(JSON.parse(val));
+			return z.array(TokenSchema).parse(JSON.parse(val));
 		} catch {
 			ctx.addIssue({
 				code: z.ZodIssueCode.custom,
@@ -36,7 +36,7 @@ export const FlagForm = z.object({
 export const FeedbackForm = z.object({
 	selection: z.string().transform((val, ctx) => {
 		try {
-			return z.array(TokenSchema).parse(JSON.parse(val));
+			return z.array(z.string()).parse(JSON.parse(val));
 		} catch {
 			ctx.addIssue({
 				code: z.ZodIssueCode.custom,
