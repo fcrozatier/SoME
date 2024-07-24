@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import type { FeedbackProperties } from '$lib/server/neo4j';
 	import { toggleSelectAll } from '$lib/actions';
-	import type { PageData } from './$types';
 
-	export let data: PageData;
-	$: feedbacks = data.feedbacks as FeedbackProperties[];
+	export let data;
 
 	let selected: { email: string; link: string }[] = [];
 </script>
@@ -37,7 +34,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each feedbacks as feedback}
+				{#each data.feedbacks as feedback}
 					<tr class="px-6">
 						<td class="flex items-center"
 							><input

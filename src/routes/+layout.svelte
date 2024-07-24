@@ -11,9 +11,8 @@
 	import '../app.css';
 	import Timer from '../lib/components/Timer.svelte';
 	import '../math.css';
-	import type { LayoutData } from './$types';
 
-	export let data: LayoutData;
+	export let data;
 
 	let sideNav: HTMLDialogElement;
 

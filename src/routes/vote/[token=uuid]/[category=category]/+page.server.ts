@@ -10,7 +10,6 @@ import { fail, redirect } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { OpenAI } from 'openai';
 import type postgres from 'postgres';
-import type { Actions } from './$types';
 import { action } from './config';
 
 const openai = new OpenAI({
@@ -65,7 +64,7 @@ export const load = async (event) => {
 
 let id: 'FLAG' | 'VOTE' | 'SKIP' | 'HARD_SKIP';
 
-export const actions: Actions = {
+export const actions = {
 	flag: async ({ request, params }) => {
 		id = 'FLAG';
 		const { token, category } = params;

@@ -9,11 +9,10 @@
 	import { newToast } from '$lib/components/Toasts.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { YOUTUBE_EMBED } from '$lib/utils';
-	import type { ActionData, PageData } from './$types';
 	import { formAction } from './config';
 
-	export let data: PageData;
-	export let form: ActionData;
+	export let data;
+	export let form;
 
 	let flagDialog: HTMLDialogElement;
 	let guidelines: HTMLDialogElement;

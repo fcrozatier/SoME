@@ -1,10 +1,9 @@
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
 import { ADMIN_PASSWORD } from '$env/static/private';
 import { MAX_AGE } from '$lib/server/config';
 import { PasswordForm, validateForm } from '$lib/server/validation';
+import { fail, redirect } from '@sveltejs/kit';
 
-export const actions: Actions = {
+export const actions = {
 	login: async ({ request, cookies }) => {
 		const validation = await validateForm(request, PasswordForm);
 

@@ -3,7 +3,6 @@
 	import { newToast } from '$lib/components/Toasts.svelte';
 	import { COMPETITION_SHORT_NAME } from '$lib/config';
 	import { round } from '@fcrozatier/ts-helpers';
-	import type { ActionData, PageData } from './$types';
 
 	import * as Plot from '@observablehq/plot';
 
@@ -26,8 +25,8 @@
 		);
 	}
 
-	export let data: PageData;
-	export let form: ActionData;
+	export let data;
+	export let form;
 
 	let someValue = 5;
 	let siteValue = 5;

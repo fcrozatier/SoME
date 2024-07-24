@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { categories } from '$lib/config';
-	import type { ActionData } from './$types';
 
-	export let form: ActionData;
+	export let form;
 
 	let computing = false;
 </script>

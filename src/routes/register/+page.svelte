@@ -1,21 +1,20 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
-	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
+	import { page } from '$app/stores';
+	import { PUBLIC_REGISTRATION_END } from '$env/static/public';
+	import Time from '$lib/components/Time.svelte';
 	import {
 		COMPETITION_FULL_NAME,
 		COMPETITION_SHORT_NAME,
 		categories,
 		userTypes,
 	} from '$lib/config';
-	import type { Snapshot } from './$types';
+	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
 	import { tick } from 'svelte';
-	import Time from '$lib/components/Time.svelte';
-	import { PUBLIC_REGISTRATION_END } from '$env/static/public';
 
 	export let form;
 
-	export const snapshot: Snapshot = {
+	export const snapshot = {
 		capture: () => {
 			return {
 				userType,

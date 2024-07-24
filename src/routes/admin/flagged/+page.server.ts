@@ -3,9 +3,8 @@ import { type SelectEntry, type SelectFlag } from '$lib/server/db/schema';
 import { FlagForm, validateForm } from '$lib/server/validation';
 import { fail, type Actions } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
-import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
+export const load = async () => {
 	const flagged: (Pick<SelectEntry, 'uid' | 'title' | 'url'> & Pick<SelectFlag, 'reason'>)[] =
 		await db.execute(sql`
 			select uid, title, url, reason

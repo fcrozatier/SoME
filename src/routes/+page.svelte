@@ -23,7 +23,6 @@
 		voteOpen,
 	} from '$lib/utils';
 	import { onMount } from 'svelte';
-	import type { ActionData, PageData } from './$types';
 
 	const phases = [
 		{
@@ -55,8 +54,8 @@
 		minute: 'numeric',
 	} as const;
 
-	export let data: PageData;
-	export let form: ActionData;
+	export let data;
+	export let form;
 
 	let personalLinkDialog: HTMLDialogElement;
 	let email: string;

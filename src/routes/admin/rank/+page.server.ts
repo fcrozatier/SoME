@@ -1,15 +1,14 @@
 import { CategorySchema } from '$lib/server/validation';
 import { error, fail } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent }) => {
+export const load = async ({ parent }) => {
 	const { isAdmin } = await parent();
 	if (!isAdmin) {
 		throw error(401, 'Not authorized');
 	}
 };
 
-export const actions: Actions = {
+export const actions = {
 	rank: async ({ request }) => {
 		const formData = await request.formData();
 		const category = formData.get('category');

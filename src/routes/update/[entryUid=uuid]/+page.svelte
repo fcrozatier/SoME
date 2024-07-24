@@ -1,16 +1,15 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
-	import { YOUTUBE_EMBEDDABLE, normalizeYoutubeLink, voteOpen, registrationOpen } from '$lib/utils';
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
-	import type { Snapshot } from '../$types';
-	import { tick } from 'svelte';
+	import { page } from '$app/stores';
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from '$env/static/public';
+	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
+	import { YOUTUBE_EMBEDDABLE, normalizeYoutubeLink, registrationOpen, voteOpen } from '$lib/utils';
+	import { tick } from 'svelte';
 
 	export let data;
 	export let form;
 
-	export const snapshot: Snapshot = {
+	export const snapshot = {
 		capture: () => {
 			return {
 				email,
