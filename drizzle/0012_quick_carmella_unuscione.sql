@@ -1,0 +1,1 @@
+ALTER TABLE "votes" ADD COLUMN "reviewed" boolean DEFAULT false;
