@@ -137,3 +137,4 @@ export const surveys = pgTable('surveys', {
 export type NewUser = typeof users.$inferInsert;
 export type SelectEntry = typeof entries.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;
+export type SelectVote = typeof votes.$inferSelect;
