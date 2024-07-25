@@ -22,9 +22,11 @@ export const actions = {
 
 		if (!uid) return fail(400);
 
-		const entry: Pick<SelectEntry, 'title' | 'url' | 'description' | 'category' | 'thumbnail'>[] =
-			await db.execute(sql`
-			select title, url, description, category, thumbnail
+		const entry: Pick<
+			SelectEntry,
+			'uid' | 'title' | 'url' | 'description' | 'category' | 'thumbnail'
+		>[] = await db.execute(sql`
+			select uid, title, url, description, category, thumbnail
 			from entries where uid=${uid}
 			`);
 

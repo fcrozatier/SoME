@@ -20,16 +20,21 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.entries as entry}
+			{#each data.entries as entry (entry.uid)}
 				<tr class="px-6 py-2">
 					<td class="capitalize">{entry.title}</td>
-					<td class="inline-flex gap-4">
+					<td class="inline-flex gap-2">
 						<form
 							method="POST"
 							use:enhance={() => {
-								return async ({ result }) => {
-									applyAction(result);
-									if (result.type === 'success') {
+								const buttons = document.querySelectorAll('button');
+								buttons.forEach((b) => b.setAttribute('disabled', 'on'));
+
+								return async ({ result, action }) => {
+									await applyAction(result);
+									buttons.forEach((b) => b.removeAttribute('disabled'));
+
+									if (result.type === 'success' && action.search.includes('display')) {
 										displayDialog.show();
 									}
 								};
@@ -37,8 +42,8 @@
 						>
 							<input type="hidden" name="uid" value={entry.uid} />
 							<button formaction="?/display" class="btn btn-primary btn-sm">Display</button>
-							<button formaction="?/update" class="btn btn-sm">Update</button>
 						</form>
+						<a class="btn btn-sm" href={`/update/${entry.uid}`}>Update</a>
 					</td>
 				</tr>
 			{:else}
@@ -52,12 +57,12 @@
 	<article class="" use:clickOutside={() => displayDialog.close()}>
 		{#if form?.entry}
 			<Display data={form.entry}></Display>
-		{:else}
-			<p>Nothing to display</p>
+
+			<p class="flex gap-2">
+				<button class="btn btn-outline" on:click={() => displayDialog.close()}>Close</button>
+				<a class="btn btn-outline" href={`/update/${form.entry.uid}`}>Update</a>
+			</p>
 		{/if}
-		<p>
-			<button class="btn btn-outline" on:click={() => displayDialog.close()}>Close</button>
-		</p>
 	</article>
 </dialog>
 
