@@ -3,12 +3,10 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
+	import Display from '$lib/components/Display.svelte';
 	import NewVote from '$lib/components/NewVote.svelte';
 	import Slider from '$lib/components/Slider.svelte';
-	import Thumbnail from '$lib/components/Thumbnail.svelte';
 	import { newToast } from '$lib/components/Toasts.svelte';
-	import Youtube from '$lib/components/Youtube.svelte';
-	import { YOUTUBE_EMBED } from '$lib/utils';
 	import { formAction } from './config';
 
 	export let data;
@@ -58,19 +56,7 @@
 			<NewVote {page} displayCategories="others-only" />
 		</div>
 	{:else}
-		<div>
-			<h3>{data.title}</h3>
-			<p>{data.description}</p>
-			<div class="flex justify-center">
-				{#if data.category === 'video' && YOUTUBE_EMBED.test(data.url)}
-					<Youtube src={data.url} width={560}></Youtube>
-				{:else if data.thumbnail && !YOUTUBE_EMBED.test(data.url)}
-					<a href={data.url} target="_blank">
-						<Thumbnail uid={data.thumbnail} width={560}></Thumbnail>
-					</a>
-				{/if}
-			</div>
-		</div>
+		<Display {data}></Display>
 		<form
 			method="post"
 			action="?/vote"
