@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db/client';
-import { entries, type SelectEntry } from '$lib/server/db/schema';
+import { type SelectEntry } from '$lib/server/db/schema';
 import { fail } from '@sveltejs/kit';
-import { eq, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 
 export const load = async () => {
 	const entries: Pick<SelectEntry, 'uid' | 'title'>[] = await db.execute(sql`
