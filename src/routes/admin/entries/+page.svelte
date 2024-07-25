@@ -1,0 +1,74 @@
+<script lang="ts">
+	import { applyAction, enhance } from '$app/forms';
+	import { clickOutside } from '$lib/actions';
+	import Display from '$lib/components/Display.svelte';
+
+	export let data;
+	export let form;
+
+	let displayDialog: HTMLDialogElement;
+</script>
+
+<article class="mx-auto w-4/5 max-w-5xl">
+	<h2>Entries to review</h2>
+
+	<table class="w-full">
+		<thead>
+			<tr class="px-6">
+				<th>Entry</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each data.entries as entry}
+				<tr class="px-6 py-2">
+					<td class="capitalize">{entry.title}</td>
+					<td class="inline-flex gap-4">
+						<form
+							method="POST"
+							use:enhance={() => {
+								return async ({ result }) => {
+									applyAction(result);
+									if (result.type === 'success') {
+										displayDialog.show();
+									}
+								};
+							}}
+						>
+							<input type="hidden" name="uid" value={entry.uid} />
+							<button formaction="?/display" class="btn btn-primary btn-sm">Display</button>
+							<button formaction="?/update" class="btn btn-sm">Update</button>
+						</form>
+					</td>
+				</tr>
+			{:else}
+				<p class="px-6">No entries to review</p>
+			{/each}
+		</tbody>
+	</table>
+</article>
+
+<dialog class="fixed inset-0 pt-0 m-auto" bind:this={displayDialog}>
+	<article class="" use:clickOutside={() => displayDialog.close()}>
+		{#if form?.entry}
+			<Display data={form.entry}></Display>
+		{:else}
+			<p>Nothing to display</p>
+		{/if}
+		<p>
+			<button class="btn btn-outline" on:click={() => displayDialog.close()}>Close</button>
+		</p>
+	</article>
+</dialog>
+
+<style>
+	tr {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 1rem;
+		align-items: start;
+	}
+	tr:nth-child(even) {
+		background-color: rgb(242, 242, 242);
+	}
+</style>
