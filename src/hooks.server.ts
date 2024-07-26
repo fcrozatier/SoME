@@ -4,7 +4,7 @@ import { redirect, type Handle } from '@sveltejs/kit';
 import jsonwebtoken from 'jsonwebtoken';
 
 // I'm a teapot
-const tea = /(\.php$|\.env$|\.xml$|wordpress|wp-admin)/;
+const tea = /(\.php$|\.env$|\.xml$|\.git|wordpress|wp-admin)/;
 
 export const handle = async function ({ event, resolve }) {
 	if (tea.test(event.request.url)) {
