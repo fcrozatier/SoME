@@ -9,6 +9,7 @@ import jsonwebtoken from 'jsonwebtoken';
 
 export const actions = {
 	login: async ({ request, cookies }) => {
+		console.log('admin login attempt');
 		const validation = await validateForm(request, PasswordForm);
 
 		if (!validation.success) {
