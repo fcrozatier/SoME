@@ -61,7 +61,7 @@
 </script>
 
 <svelte:head>
-	<title>Join &middot; {COMPETITION_SHORT_NAME}</title>
+	<title>Update &middot; {COMPETITION_SHORT_NAME}</title>
 </svelte:head>
 
 <article class="layout-prose">
