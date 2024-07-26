@@ -41,7 +41,7 @@ export const YOUTUBE_EMBEDDABLE =
 export const YOUTUBE_EMBED = /^https:\/\/youtube\.com\/embed/;
 
 /**
- * Normalizes youtube links to improve uniqueness
+ * Normalizes youtube links to improve uniqueness and make sure the embed link is correct
  * @param link a Youtube embeddable link
  * @returns the normalized link in the form youtube.com/watch?v=...
  */
