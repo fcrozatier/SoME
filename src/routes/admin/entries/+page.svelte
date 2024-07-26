@@ -53,7 +53,7 @@
 	</table>
 </article>
 
-<dialog class="fixed inset-0 pt-0 m-auto" bind:this={displayDialog}>
+<dialog class="fixed inset-0 pt-0 m-auto overflow-auto" bind:this={displayDialog}>
 	<article class="" use:clickOutside={() => displayDialog.close()}>
 		{#if form?.entry}
 			<Display data={form.entry}></Display>
