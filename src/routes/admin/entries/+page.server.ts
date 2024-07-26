@@ -8,7 +8,7 @@ export const load = async () => {
 			select uid, title
 			from entries
 			where entries.active='true'
-			order by uid
+			order by created_at
 			limit all
 			offset 0;
 		`);
