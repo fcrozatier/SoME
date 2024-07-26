@@ -36,7 +36,7 @@ export function resultsAvailable() {
 }
 
 export const YOUTUBE_EMBEDDABLE =
-	/youtube\.com\/watch\?.*v=([^?]+)|youtu\.be\/([^?]+)|youtube\.com\/embed\/([^?]+)/;
+	/youtube\.com\/watch\?.*v=([^&]+)|youtu\.be\/([^?]+)|youtube\.com\/embed\/([^?]+)/;
 
 export const YOUTUBE_EMBED = /^https:\/\/youtube\.com\/embed/;
 
