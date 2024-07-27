@@ -22,9 +22,9 @@ The first two editions of the competition used a variant of the [Bradley Terry m
 
 The reasons for this choice were two-fold. Firstly, there was an off-the-shelf implementation that allowed for quick setup. Secondly, this system, called [Gavel](https://anishathalye.com/gavel-an-expo-judging-system/), was already used in hackathons and seemed like a good fit.
 
-The idea is simple: you're presented with two entries, and a vote consists of choosing the better one. This is call pairwise ranking.
+The idea is simple: you're presented with two entries, and a vote consists of choosing the better one. This is called pairwise ranking.
 
-While this was a good starting point, the interface was hard to customize, the algorithm was slow, and most importantly the benchmark revealed that it wasn't as accurate as desired.
+While this was a good starting point, the interface was hard to customize, the algorithm was slow, and most importantly, the benchmark revealed that it wasn't as accurate as desired.
 
 #### Expander graph with PageRank
 
@@ -46,7 +46,7 @@ While developing this custom massive voting system I created a [benchmark](https
 
 The benchmark's concept is simple: simulate a vote with characteristics similar to those expected in the competition, with around 500 entries and 15,000 votes. We start by creating a random ranking representing be the "true" ranking of the entries. Then, we perform the vote according to different voting systems in an idealized scenario: if entry A has better rank than B (in the "true" ranking) then voters choose A 99% of the time.
 
-This is an "idealized" scenario where almost everyone agrees and votes according to the "true" ranking. We then expect the inferred ranking from the voting system to closely match the true ranking. We measure this by comparing how well the top 10% of the true ranking and inferred ranking overlap.
+This is an "idealized" scenario where almost everyone agrees and votes according to the "true" ranking. In this scenario we expect the inferred ranking from the voting system to closely match the true ranking. To measure this we compare how well the top 10% of the true ranking and inferred ranking overlap.
 
 One conclusion of the benchmark was that the Crowd BT algorithm didn't perform so well.
 
@@ -55,7 +55,7 @@ One interpretation of this result is that [the algorithm](https://pages.stern.ny
 Another conclusion from the benchmark is that the PageRank is very sensitive to noise.
 This is understandable, as the algorithm flows points through the graph, causing noise to flow as well, which can amplify its impact. This also explains Google's aversion to link farms: because it works and impacts the ranking!
 
-Interestingly, the iterated version of the PageRank is much more robust. In this version, every N votes a PageRank is performed, and for the next cycle of N votes, the pairs of entries to compare are the adjacent ones in the previous PageRank.
+Interestingly, the iterated version of the PageRank is much more robust. In this version, every N votes a PageRank is performed, and for the next cycle of N votes, the pairs of entries to compare are the adjacent ones in the previous PageRank output.
 
 The best voting systems among the ones we benchmarked are this iterated PageRank and the Majority Judgement with about 90% of accuracy on the top 10%.
 
