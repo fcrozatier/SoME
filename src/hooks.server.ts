@@ -1,7 +1,13 @@
 import { JWT_SECRET } from '$env/static/private';
+import { client } from '$lib/server/db/client';
 import { JWTPayloadSchema, TokenSchema } from '$lib/server/validation';
 import { redirect, type Handle } from '@sveltejs/kit';
 import jsonwebtoken from 'jsonwebtoken';
+
+process.on('sveltekit:shutdown', (reason) => {
+	console.log('\nclosing db connections, reason', reason);
+	client.end();
+});
 
 // I'm a teapot
 const tea = /(\.php$|\.env$|\.xml$|\.git|wordpress|wp-admin)/;
