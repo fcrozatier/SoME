@@ -382,7 +382,7 @@
 	>
 		<h2 class="mt-0">Personal link</h2>
 		<p>You will receive an email with your personal link.</p>
-		<label for="email" class="label inline-flex gap-4"
+		<label for="email" class="label flex align-baseline content-between"
 			>Email <small class="font-light text-gray-700">(the one you registered with)</small></label
 		>
 		<input
@@ -390,12 +390,12 @@
 			type="email"
 			name="email"
 			placeholder="john@gmail.com"
-			class="input-bordered input w-full max-w-xs"
+			class="input-bordered input w-full"
 			bind:value={email}
 			required
 		/>
 
-		<p class="flex gap-4">
+		<p class="flex gap-4 mt-8">
 			<button type="button" class="btn-outline btn" on:click={closeDialog}>Close</button>
 			<button type="submit" class="btn-primary btn">Send email</button>
 		</p>
