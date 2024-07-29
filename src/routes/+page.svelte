@@ -116,7 +116,7 @@
 							From <Time datetime={phase.dates[0]} options={dateFormat} /> to
 							<Time datetime={phase.dates[1]} options={dateFormat} />
 						{:else}
-							Before <Time datetime={phase.dates[0]} options={dateFormat} />
+							<Time datetime={phase.dates[0]} options={dateFormat} />
 						{/if}</span
 					>
 				</div>
@@ -283,7 +283,7 @@
 		</p>
 		<p>
 			However the voting process will sift through the entries and give greater visibility to the
-			better ones. The winning entries of this edition will determined by the vote and will be
+			better ones. The winning entries of this edition will be determined by the vote and will be
 			revealed at the end of the competition.
 		</p>
 		<p>Here's what we're looking for:</p>
