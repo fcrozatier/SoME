@@ -1,11 +1,7 @@
-import { error, fail } from '@sveltejs/kit';
-import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
-import { CreatorSchema, validateForm } from '$lib/server/validation';
-import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
 import { dev } from '$app/environment';
-import { saveThumbnail } from '$lib/server/s3';
 import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from '$env/static/public';
 import { db } from '$lib/server/db/client.js';
+import { postgresErrorCode } from '$lib/server/db/errors.js';
 import {
 	entries,
 	users as usersTable,
@@ -13,9 +9,13 @@ import {
 	votes,
 	type NewUser,
 } from '$lib/server/db/schema.js';
-import postgres from 'postgres';
-import { postgresErrorCode } from '$lib/server/db/errors.js';
+import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
+import { saveThumbnail } from '$lib/server/s3';
+import { CreatorSchema, validateForm } from '$lib/server/validation';
+import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
+import { error, fail } from '@sveltejs/kit';
 import { and, eq, inArray } from 'drizzle-orm';
+import postgres from 'postgres';
 
 export const load = async ({ params }) => {
 	const entryUid = params.entryUid;
@@ -52,7 +52,7 @@ export const actions = {
 			}
 
 			const validation = await validateForm(request, CreatorSchema);
-			console.log('form validation');
+
 			if (!validation.success) {
 				console.log('form invalid,', validation.error.flatten());
 				return fail(400, validation.error.flatten());
