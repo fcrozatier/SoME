@@ -98,9 +98,7 @@
 	</dialog>
 
 	<Banner test={BETA_TEST} />
-	{#if registrationOpen()}
-		<Timer></Timer>
-	{/if}
+	<Timer display={registrationOpen()}></Timer>
 
 	<main class="prose mb-40 mt-8 max-w-full">
 		<h1 class="text-center">{COMPETITION_FULL_NAME}</h1>
