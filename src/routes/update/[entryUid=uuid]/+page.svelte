@@ -4,7 +4,7 @@
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from '$env/static/public';
 	import { newToast } from '$lib/components/Toasts.svelte';
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
-	import { YOUTUBE_EMBEDDABLE, normalizeYoutubeLink, registrationOpen, voteOpen } from '$lib/utils';
+	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
 	import { tick } from 'svelte';
 
 	export let data;
