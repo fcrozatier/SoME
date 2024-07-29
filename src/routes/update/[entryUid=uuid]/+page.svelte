@@ -38,20 +38,6 @@
 	let description = data.description;
 	let link = data.url;
 
-	let confirmDialog: HTMLDialogElement;
-
-	async function showModal() {
-		return new Promise((resolve) => {
-			confirmDialog.showModal();
-			confirmDialog.addEventListener('close', close);
-
-			function close() {
-				confirmDialog.removeEventListener('close', close);
-				resolve(confirmDialog.returnValue);
-			}
-		});
-	}
-
 	async function addContributor() {
 		otherContributors = [...otherContributors, ''];
 		await tick();
@@ -71,18 +57,11 @@
 	<form
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={async ({ submitter, formData, cancel }) => {
+		use:enhance={async ({ submitter, formData }) => {
 			formData.append('others', JSON.stringify(otherContributors));
 			formData.set('userType', 'creator');
 			submitter?.setAttribute('disabled', 'on');
 
-			if (registrationOpen() && voteOpen() && data.url !== normalizeYoutubeLink(link)) {
-				const result = await showModal();
-				if (result === 'cancel') {
-					submitter?.removeAttribute('disabled');
-					cancel();
-				}
-			}
 			return async ({ update, result }) => {
 				if (result.type === 'success') {
 					newToast({ content: 'Entry updated!', type: 'success' });
@@ -217,6 +196,9 @@
 			<label for="link" class="label">
 				<span class="label-text"> Link </span>
 			</label>
+			{#if !registrationOpen()}
+				<input type="hidden" name="link" value={link} />
+			{/if}
 			<input
 				id="link"
 				type="url"
@@ -314,26 +296,6 @@
 		</p>
 	</form>
 </article>
-
-<dialog class="mb-auto" bind:this={confirmDialog} role="alertdialog">
-	<form method="dialog">
-		<h2 class="mt-0">All votes will be lost, continue?</h2>
-		<p class="text-gray-700">
-			Modifying the link of an entry when the vote is open will delete all previous votes on this
-			entry.
-		</p>
-
-		<h4>Old link</h4>
-		<p><a href={data.url} target="_blank">{data.url}</a></p>
-		<h4>New link</h4>
-		<p><a href={link} target="_blank">{link}</a></p>
-
-		<p class="mb-0 mt-8 flex items-center gap-2">
-			<button type="submit" value="cancel" class="btn-outline btn">Cancel</button>
-			<button type="submit" value="ok" class="btn-outline btn-error btn">Confirm</button>
-		</p>
-	</form>
-</dialog>
 
 <style>
 	label {
