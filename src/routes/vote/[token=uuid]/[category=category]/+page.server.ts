@@ -125,7 +125,7 @@ export const actions = {
 				],
 			});
 
-			maybeRude = completion.choices[0].message.content?.toUpperCase()?.includes('REVIEW') ?? false;
+			maybeRude = completion.choices[0].message.content?.match(/OK|REVIEW/g)?.at(-1) === 'REVIEW';
 		}
 
 		try {
