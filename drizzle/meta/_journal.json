@@ -92,6 +92,13 @@
       "when": 1721812483268,
       "tag": "0012_quick_carmella_unuscione",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1722324458199,
+      "tag": "0013_abnormal_inhumans",
+      "breakpoints": true
     }
   ]
 }

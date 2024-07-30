@@ -2,6 +2,7 @@ import {
 	boolean,
 	decimal,
 	index,
+	integer,
 	pgTable,
 	primaryKey,
 	text,
@@ -26,6 +27,7 @@ export const entries = pgTable('entries', {
 	url: text('url').unique().notNull(),
 	thumbnail: text('thumbnail'),
 	active: boolean('active').default(true),
+	rank: integer('rank'),
 	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 });
 
