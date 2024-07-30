@@ -14,7 +14,7 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"drizzle:studio": "drizzle-kit studio --config=src/lib/server/db/drizzle.config.ts",
-		"drizzle:push": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts",
+		"drizzle:drop": "drizzle-kit drop --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:generate": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:migrate": "drizzle-kit migrate --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:up": "drizzle-kit up --config=src/lib/server/db/drizzle.config.ts"
