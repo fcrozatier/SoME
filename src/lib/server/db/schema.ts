@@ -28,6 +28,7 @@ export const entries = pgTable('entries', {
 	thumbnail: text('thumbnail'),
 	active: boolean('active').default(true),
 	rank: integer('rank'),
+	final_score: decimal('final_score'),
 	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 });
 
