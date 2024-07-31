@@ -25,8 +25,6 @@
 
 	afterNavigate(() => {
 		splitButtonOpen = false;
-		score = 5;
-		feedback = '';
 		cooldown = 590;
 		interval = setInterval(() => {
 			if (cooldown > 0) {
@@ -46,6 +44,19 @@
 			actionScreen.showModal();
 		}
 	});
+
+	export const snapshot = {
+		capture: () => {
+			return {
+				score,
+				feedback,
+			};
+		},
+		restore: (v) => {
+			score = v.score;
+			feedback = v.feedback;
+		},
+	};
 </script>
 
 <article class="layout-prose">
@@ -85,6 +96,10 @@
 					}
 
 					clearInterval(interval);
+					feedback = '';
+					score = 5;
+
+					// Like update but scrolls to top
 					await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
 						noScroll: false,
 						invalidateAll: true,
