@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { clickOutside } from '$lib/actions';
+	import { clickOutside, current } from '$lib/actions';
 	import Banner from '$lib/components/Banner.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Toasts from '$lib/components/Toasts.svelte';
@@ -28,19 +28,36 @@
 	<nav class="navbar gap-8 p-4">
 		<a class="inline-flex items-center gap-4" href="/">
 			<Icon class="rounded-full" name="logo" width="3.5em" />
-			<span>Home</span></a
-		>
+		</a>
 		<button class="ml-auto mr-4 sm:hidden" on:click={() => sideNav.showModal()}
 			><img src={Menu} alt="Menu" /></button
 		>
 		<span class="navbar-start gap-8 hidden sm:flex">
 			{#if voteOpen() && data.token}
-				<a href="/vote">Vote</a>
-				<a href="/feedback">Feedback</a>
+				<a
+					href="/vote"
+					class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+					use:current={'vote'}>Vote</a
+				>
+				<a
+					href="/feedback"
+					class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+					use:current={'feedback'}>Feedback</a
+				>
 			{/if}
-			<a href="/algorithm"> Algorithm </a>
+			<a
+				href="/algorithm"
+				class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+				use:current={'algorithm'}
+			>
+				Algorithm
+			</a>
 			{#if $page.data.isAdmin}
-				<a href="/admin">Admin</a>
+				<a
+					href="/admin"
+					class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+					use:current={'admin'}>Admin</a
+				>
 			{/if}
 		</span>
 
