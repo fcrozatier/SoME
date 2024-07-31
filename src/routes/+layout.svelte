@@ -81,20 +81,22 @@
 		<aside class="" use:clickOutside={() => sideNav.close()}>
 			<h2 class="font-semibold">Menu</h2>
 			<ul class="flex-col flex gap-4 mt-4">
-				<li>
-					{#if voteOpen() && data.token}
+				{#if voteOpen() && data.token}
+					<li>
 						<a href="/vote">Vote</a>
+					</li>
+					<li>
 						<a href="/feedback">Feedback</a>
-					{/if}
-				</li>
+					</li>
+				{/if}
 				<li>
 					<a href="/algorithm"> Algorithm </a>
 				</li>
-				<li>
-					{#if $page.data.isAdmin}
+				{#if $page.data.isAdmin}
+					<li>
 						<a href="/admin">Admin</a>
-					{/if}
-				</li>
+					</li>
+				{/if}
 				<li class="flex items-center justify-between gap-4">
 					<a
 						title="GitHub"
