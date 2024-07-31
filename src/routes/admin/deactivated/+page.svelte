@@ -17,8 +17,8 @@
 				<th class="flex items-center"
 					><input id="all" type="checkbox" class="checkbox" use:toggleSelectAll /></th
 				>
-				<th>Entry</th>
-				<th>Reason</th>
+				<th class="text-left">Entry</th>
+				<th class="text-left">Reason</th>
 			</tr>
 		</thead>
 		<tbody>

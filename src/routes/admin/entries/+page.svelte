@@ -15,8 +15,8 @@
 	<table class="w-full">
 		<thead>
 			<tr class="px-6">
-				<th>Entry</th>
-				<th>Actions</th>
+				<th class="text-left">Entry</th>
+				<th class="text-left">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
