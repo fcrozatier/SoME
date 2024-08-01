@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { COMPETITION_SHORT_NAME } from '$lib/config';
 	import Icon from '$lib/components/Icon.svelte';
-	import { winners, honorables } from '$lib/results';
 	import Youtube from '$lib/components/Youtube.svelte';
+	import { honorables, winners } from '$lib/results';
 </script>
 
 <svelte:head>
-	<title>Previous edition &middot; {COMPETITION_SHORT_NAME}</title>
+	<title>Previous edition &middot; SoME</title>
 </svelte:head>
 
 <section class="layout-prose pb-10">
@@ -110,9 +109,9 @@
 		<div>
 			<a
 				href="https://www.youtube.com/playlist?list=PLnQX-jgAF5pQS2GUFCsatSyZkSH7e8UM8"
-				target="_blank"><button class="btn btn-neutral">All videos</button></a
+				target="_blank"><button class="btn btn-primary">All videos</button></a
 			>
-			<a href="/previous/non-videos"><button class="btn btn-neutral">All non-videos</button></a>
+			<a href="/previous/non-videos"><button class="btn btn-primary">All non-videos</button></a>
 		</div>
 	</div>
 </section>
