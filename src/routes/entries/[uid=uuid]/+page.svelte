@@ -91,11 +91,11 @@
 				</div>
 			</div>
 			<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
-				<div class="flex flex-col items-center gap-2">
+				<div class="flex flex-col items-center gap-2 relative -top-2">
+					<span class="">Rank</span>
 					<span class="text-5xl">
 						{data.entry.rank ?? '-'}
 					</span>
-					<span>Rank</span>
 				</div>
 			</div>
 		</div>
