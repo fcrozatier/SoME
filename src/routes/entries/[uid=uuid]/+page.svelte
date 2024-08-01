@@ -35,6 +35,7 @@
 <article class="layout-prose">
 	<Display data={data.entry}></Display>
 
+	<h3>Analytics</h3>
 	{#if data.feedbacks.length === 0}
 		<p>No feedback received on this entry yet</p>
 	{:else}
@@ -78,7 +79,7 @@
 					<span class="text-5xl">
 						{data.feedbacks.length}
 					</span>
-					<span>Votes</span>
+					<span>Vote{data.feedbacks.length === 1 ? '' : 's'}</span>
 				</div>
 			</div>
 			<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
@@ -86,7 +87,15 @@
 					<span class="text-5xl">
 						{comments.length}
 					</span>
-					<span>Comments</span>
+					<span>Comment{comments.length === 1 ? '' : 's'}</span>
+				</div>
+			</div>
+			<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
+				<div class="flex flex-col items-center gap-2">
+					<span class="text-5xl">
+						{data.entry.rank ?? '-'}
+					</span>
+					<span>Rank</span>
 				</div>
 			</div>
 		</div>
@@ -98,7 +107,7 @@
 		></div>
 
 		{#if comments.length > 0}
-			<p class="font-semibold">Comments</p>
+			<h3>Comments</h3>
 
 			{#each comments as { feedback, score }}
 				<div class="grid grid-cols-[1fr_2rem] items-start border-b first:border-t py-4">
