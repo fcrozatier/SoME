@@ -36,18 +36,18 @@
 			{#if voteOpen() && data.token}
 				<a
 					href="/vote"
-					class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 					use:current={'vote'}>Vote</a
 				>
 				<a
 					href="/feedback"
-					class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 					use:current={'feedback'}>Feedback</a
 				>
 			{/if}
 			<a
 				href="/algorithm"
-				class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+				class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 				use:current={'algorithm'}
 			>
 				Algorithm
@@ -55,7 +55,7 @@
 			{#if $page.data.isAdmin}
 				<a
 					href="/admin"
-					class="border-b-2 border-transparent hover:border-gray-900 aria-[current=page]:border-gray-900"
+					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 					use:current={'admin'}>Admin</a
 				>
 			{/if}
@@ -79,7 +79,7 @@
 	</nav>
 	<dialog class="m-0 left-full -translate-x-full" bind:this={sideNav}>
 		<aside class="" use:clickOutside={() => sideNav.close()}>
-			<h2 class="font-semibold">Menu</h2>
+			<h2 class="font-medium">Menu</h2>
 			<ul class="flex-col flex gap-4 mt-4">
 				{#if voteOpen() && data.token}
 					<li>
