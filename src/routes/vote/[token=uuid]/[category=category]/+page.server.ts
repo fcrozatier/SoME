@@ -107,7 +107,7 @@ export const actions = {
 			return fail(400, { id, voteFail: true });
 		}
 
-		let maybeRude = false;
+		let maybe_rude = false;
 
 		if (validation.data.feedback) {
 			const completion = await openai.chat.completions.create({
@@ -125,7 +125,7 @@ export const actions = {
 				],
 			});
 
-			maybeRude = completion.choices[0].message.content?.match(/OK|REVIEW/g)?.at(-1) === 'REVIEW';
+			maybe_rude = completion.choices[0].message.content?.match(/OK|REVIEW/g)?.at(-1) === 'REVIEW';
 		}
 
 		try {
@@ -138,7 +138,7 @@ export const actions = {
 					userUid: token,
 					score: validation.data.score.toString(),
 					feedback: validation.data.feedback,
-					maybeRude,
+					maybe_rude,
 				})
 				.onConflictDoUpdate({
 					target: [votes.userUid, votes.entryUid],
