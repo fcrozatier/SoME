@@ -97,6 +97,7 @@
 	</p>
 </section>
 
+<!-- Timeline -->
 <section class="layout-prose pb-4">
 	<h2 class="mb-6 text-4xl font-black">Timeline</h2>
 	<p>The competition has three phases:</p>
@@ -162,6 +163,7 @@
 	{/if}
 </section>
 
+<!-- Rules -->
 <section id="rules" class="layout-prose pb-32">
 	<h2 class="mb-16 text-4xl font-black">How does it work?</h2>
 
