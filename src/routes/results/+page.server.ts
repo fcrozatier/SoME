@@ -1,27 +1,23 @@
 import { db } from '$lib/server/db/client.js';
 import type { SelectEntry } from '$lib/server/db/schema.js';
+import { resultsAvailable } from '$lib/utils';
+import { error } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
 
-export const load = async () => {
-	const videos: Pick<SelectEntry, 'uid' | 'title' | 'category' | 'rank' | 'thumbnail' | 'url'>[] =
-		await db.execute(sql`
-		 select uid, title, category, rank, thumbnail, url from entries
-		 where active='t'
-		 and category='video'
-		 order by rank asc
-     limit 3
-		`);
+export const load = async ({ locals }) => {
+	if (!(resultsAvailable() || locals.isAdmin)) {
+		error(400, { message: 'Results not available' });
+	}
 
-	const non_videos: Pick<
+	const top: Pick<
 		SelectEntry,
-		'uid' | 'title' | 'category' | 'rank' | 'thumbnail' | 'url'
+		'uid' | 'title' | 'description' | 'category' | 'rank' | 'thumbnail' | 'url'
 	>[] = await db.execute(sql`
-		 select uid, title, category rank, thumbnail, url from entries
+		 select uid, title, description, category, rank, thumbnail, url from entries
 		 where active='t'
-		 and category='non-video'
 		 order by rank asc
-     limit 3
+     limit 25
 		`);
 
-	return { videos, non_videos };
+	return { top };
 };
