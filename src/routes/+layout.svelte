@@ -7,7 +7,7 @@
 	import Toasts from '$lib/components/Toasts.svelte';
 	import { BETA_TEST, COMPETITION_FULL_NAME } from '$lib/config';
 	import Menu from '$lib/icons/menu.svg';
-	import { registrationOpen, voteOpen } from '$lib/utils';
+	import { registrationOpen, resultsAvailable, voteOpen } from '$lib/utils';
 	import '../app.css';
 	import Timer from '../lib/components/Timer.svelte';
 	import '../math.css';
@@ -45,6 +45,13 @@
 					use:current={'feedback'}>Feedback</a
 				>
 			{/if}
+			{#if resultsAvailable()}
+				<a
+					href="/results"
+					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
+					use:current={'results'}>Results</a
+				>
+			{/if}
 			<a
 				href="/algorithm"
 				class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
@@ -79,7 +86,7 @@
 	</nav>
 	<dialog class="m-0 left-full -translate-x-full" bind:this={sideNav}>
 		<aside class="" use:clickOutside={() => sideNav.close()}>
-			<h2 class="font-medium">Menu</h2>
+			<h2 class="font-semibold">Menu</h2>
 			<ul class="flex-col flex gap-4 mt-4">
 				{#if voteOpen() && data.token}
 					<li>
@@ -87,6 +94,11 @@
 					</li>
 					<li>
 						<a href="/feedback">Feedback</a>
+					</li>
+				{/if}
+				{#if resultsAvailable()}
+					<li>
+						<a href="/results">Results</a>
 					</li>
 				{/if}
 				<li>
@@ -97,7 +109,7 @@
 						<a href="/admin">Admin</a>
 					</li>
 				{/if}
-				<li class="flex items-center justify-between gap-4">
+				<li class="flex items-center justify-between gap-4 mt-4">
 					<a
 						title="GitHub"
 						href="https://github.com/fcrozatier/SoME"
