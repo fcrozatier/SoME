@@ -2,6 +2,8 @@
 	import { goto, preloadData, pushState } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions.js';
+	import Thumbnail from '$lib/components/Thumbnail.svelte';
+	import Youtube from '$lib/components/Youtube.svelte';
 	import type { ComponentProps } from 'svelte';
 	import EntriesPage from '../../entries/[uid=uuid]/+page.svelte';
 
@@ -9,77 +11,118 @@
 
 	let displayDialog: HTMLDialogElement;
 	let entry: ComponentProps<EntriesPage>['data'] | undefined;
+
+	async function loadData(
+		e: MouseEvent & {
+			currentTarget: EventTarget & HTMLAnchorElement;
+		},
+	) {
+		if (window.innerWidth < 640 || e.shiftKey || e.metaKey || e.ctrlKey) {
+			return;
+		}
+
+		e.preventDefault();
+
+		const { href } = e.currentTarget;
+		const result = await preloadData(href);
+
+		if (result.type === 'loaded' && result.status === 200) {
+			pushState(href, { entry: result.data });
+			// @ts-ignore
+			entry = result.data;
+			displayDialog.showModal();
+		} else {
+			goto(href);
+		}
+	}
 </script>
 
-<article class="layout-prose">
+<svelte:head>
+	<title>Ranking &middot; SoME</title>
+</svelte:head>
+
+<article class="layout-prose text-center">
 	<h2>Ranking of the {$page.params.category} entries</h2>
-
-	<table class="table w-full">
-		<thead>
-			<tr>
-				<th>Title</th>
-				<th>Rank</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.entries as { uid, title, rank }}
-				<tr>
-					<td
-						><a
-							href={`/entries/${uid}`}
-							on:click={async (e) => {
-								if (window.innerWidth < 640 || e.shiftKey || e.metaKey || e.ctrlKey) {
-									return;
-								}
-
-								e.preventDefault();
-
-								const { href } = e.currentTarget;
-								const result = await preloadData(href);
-
-								if (result.type === 'loaded' && result.status === 200) {
-									pushState(href, { entry: result.data });
-									// @ts-ignore
-									entry = result.data;
-									displayDialog.showModal();
-								} else {
-									goto(href);
-								}
-							}}>{title}</a
-						></td
-					>
-					<td>{rank}</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
 </article>
 
-{#if entry}
-	<dialog
-		class="fixed inset-0 pt-0 m-auto overflow-auto max-w-3xl overscroll-y-none"
-		bind:this={displayDialog}
-		on:close={() => {
-			history.back();
-			entry = undefined;
-		}}
-		open
-	>
-		<article class="" use:clickOutside={() => displayDialog.close()}>
+<table class="table max-w-3xl mx-auto hidden sm:block">
+	<thead>
+		<tr>
+			<th>Entry</th>
+			<th class="hidden sm:block">Title</th>
+			<th>Rank</th>
+		</tr>
+	</thead>
+	<tbody>
+		{#each data.entries as { uid, title, category, thumbnail, url, rank }}
+			<tr class="py-2">
+				<td>
+					{#if category === 'video'}
+						<Youtube width={240} src={url}></Youtube>
+					{:else if thumbnail}
+						<a href={url} target="_blank" class="w-[240px]">
+							<Thumbnail uid={thumbnail} width={240}></Thumbnail>
+						</a>
+					{/if}
+				</td>
+				<td>
+					<a href={`/entries/${uid}`} on:click={loadData}>
+						<h3 class="max-w-sm text-base m-0">{title}</h3>
+					</a>
+				</td>
+				<td>#{rank}</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
+
+<div class="sm:hidden grid justify-center gap-8">
+	{#each data.entries as { uid, title, category, thumbnail, url, rank }}
+		<div>
+			{#if category === 'video'}
+				<Youtube width={320} src={url}></Youtube>
+			{:else if thumbnail}
+				<a href={url} target="_blank" class="w-[320px]">
+					<Thumbnail uid={thumbnail} width={320}></Thumbnail>
+				</a>
+			{/if}
+			<div>
+				<span>#{rank}</span><a href={`/entries/${uid}`} on:click={loadData}
+					><h3 class="max-w-xs text-base m-0">{title}</h3>
+				</a>
+			</div>
+		</div>
+	{/each}
+</div>
+
+<dialog
+	class="fixed inset-0 pt-0 m-auto overflow-auto max-w-3xl overscroll-y-none"
+	bind:this={displayDialog}
+	on:close={() => {
+		history.back();
+		entry = undefined;
+	}}
+>
+	<article use:clickOutside={() => displayDialog.close()}>
+		{#if entry}
 			<EntriesPage data={entry}></EntriesPage>
 			<p class="flex gap-2 mt-12">
 				<button class="btn btn-outline" on:click={() => displayDialog.close()}>Close</button>
 			</p>
-		</article>
-	</dialog>
-{/if}
+		{/if}
+	</article>
+</dialog>
 
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 1rem;
+		grid-template-columns: 240px 1fr auto;
+		gap: 2rem;
 		align-items: start;
+
+		@media (max-width: 640px) {
+			grid-template-columns: 1fr auto;
+		}
 	}
 
 	tr:nth-child(even) {
