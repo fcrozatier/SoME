@@ -41,7 +41,7 @@
 		},
 		{
 			title: 'Results and feedback',
-			description: 'The top entries are revealed and the complete list of entries is published.',
+			description: 'The top entries are revealed with the complete ranking of entries.',
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE],
 		},
@@ -143,10 +143,9 @@
 								</button>
 							{/if}
 						{:else if i === 2}
-							<!-- TODO -->
-							<!-- <a class="btn-primary btn mr-4" href="">See results</a> -->
+							<a class="btn-primary btn mr-4" href="/results">Results</a>
 							{#if data.token}
-								<a class="btn-primary btn" href="/feedback/{data.token}">See feedbacks</a>
+								<a class="btn-primary btn" href="/feedback/{data.token}">Your feedbacks</a>
 							{/if}
 						{/if}
 					</p>
