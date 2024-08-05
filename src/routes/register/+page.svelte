@@ -12,6 +12,7 @@
 	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
 	import { tick } from 'svelte';
 
+	export let data;
 	export let form;
 
 	export const snapshot = {
@@ -136,7 +137,7 @@
 			<div class="form-control max-w-md">
 				<span class="label-text"> I am a </span>
 				{#each userTypes as type, i}
-					{@const disabled = type === 'creator' && !registrationOpen()}
+					{@const disabled = type === 'creator' && !registrationOpen() && !data.isAdmin}
 					<label
 						for="user-type-{i}"
 						class={`label ${

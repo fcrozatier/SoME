@@ -1,30 +1,31 @@
-import { error, fail } from '@sveltejs/kit';
-import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
-import { RegistrationSchema, validateForm } from '$lib/server/validation';
-import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
 import { dev } from '$app/environment';
-import { saveThumbnail } from '$lib/server/s3';
 import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from '$env/static/public';
 import { db } from '$lib/server/db/client.js';
+import { postgresErrorCode } from '$lib/server/db/errors.js';
 import {
 	entries,
 	users as usersTable,
 	usersToEntries,
 	type NewUser,
 } from '$lib/server/db/schema.js';
-import postgres from 'postgres';
-import { postgresErrorCode } from '$lib/server/db/errors.js';
+import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
+import { saveThumbnail } from '$lib/server/s3';
+import { RegistrationSchema, validateForm } from '$lib/server/validation';
+import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
+import { error, fail } from '@sveltejs/kit';
 import { inArray } from 'drizzle-orm';
+import postgres from 'postgres';
 
-export const load = () => {
-	if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END)) {
+export const load = ({ locals }) => {
+	if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END) && !locals.isAdmin) {
 		throw error(403, 'The registration phase is not open');
 	}
+	return { isAdmin: locals.isAdmin };
 };
 
 export const actions = {
-	default: async ({ request }) => {
-		if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END)) {
+	default: async ({ request, locals }) => {
+		if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END) && !locals.isAdmin) {
 			return fail(422, { invalid: true });
 		}
 
@@ -59,7 +60,7 @@ export const actions = {
 		// Save data
 		try {
 			if (validation.data.userType === 'creator') {
-				if (!registrationOpen()) {
+				if (!registrationOpen() && !locals.isAdmin) {
 					return fail(422, { invalid: true });
 				}
 				const { thumbnail, link } = validation.data;
