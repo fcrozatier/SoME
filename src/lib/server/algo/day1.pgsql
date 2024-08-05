@@ -10,9 +10,10 @@ with cached as (
 total as (
   select entry_uid, count(*) as count
   from (
-    select entry_uid from votes
+    select entry_uid, created_at from votes
     union all
-    select entry_uid from cache
+    select entry_uid, created_at from cache
+    where date_part('year', created_at)='2024'
     ) as summation
   group by entry_uid
 ),
@@ -30,6 +31,7 @@ selection as (
     else
       entries.category='video'
       and active='true'
+      and date_part('year', entries.created_at)='2024'
       and uid not in (select entry_uid from votes where votes.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267')
       and uid not in (select entry_uid from skips where skips.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267')
       and uid not in (select entry_uid from flags where flags.user_uid='021b26a1-acab-4eb7-ab99-fe563f79a267')

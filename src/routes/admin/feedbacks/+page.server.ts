@@ -13,6 +13,7 @@ export const load = async () => {
 			from entries join votes
 			on uid=entry_uid
 			where entries.active='true'
+			and date_part('year', entries.created_at)='2024'
 			and votes.reviewed='false'
 			and votes.maybe_rude='true'
 			order by uid

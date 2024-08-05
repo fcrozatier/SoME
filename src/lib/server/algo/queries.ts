@@ -16,9 +16,10 @@ export function query1(token: string, category: string) {
 			total as (
 				select entry_uid, count(*) as count
 				from (
-					select entry_uid from votes
+					select entry_uid, created_at from votes
 					union all
-					select entry_uid from cache
+					select entry_uid, created_at from cache
+					where date_part('year', created_at)='2024'
 					) as summation
 				group by entry_uid
 			),
@@ -36,6 +37,7 @@ export function query1(token: string, category: string) {
 					else
 						entries.category=${category}
 						and active='true'
+						and date_part('year', entries.created_at)='2024'
 						and uid not in (select entry_uid from votes where votes.user_uid=${token})
 						and uid not in (select entry_uid from skips where skips.user_uid=${token})
 						and uid not in (select entry_uid from flags where flags.user_uid=${token})
@@ -83,7 +85,7 @@ export function query2(token: string, category: string) {
 
 			median as (
 				select entry_uid, percentile_cont(0.5) within group (order by score) as score
-				from (select entry_uid, score from votes) as Q
+				from (select entry_uid, score from votes where date_part('year', created_at)='2024') as Q
 				group by entry_uid
 			),
 
@@ -100,6 +102,7 @@ export function query2(token: string, category: string) {
 					else
 						entries.category=${category}
 						and active='true'
+						and date_part('year', created_at)='2024'
 						and uid not in (select entry_uid from votes where votes.user_uid=${token})
 						and uid not in (select entry_uid from skips where skips.user_uid=${token})
 						and uid not in (select entry_uid from flags where flags.user_uid=${token})
@@ -146,7 +149,7 @@ export function query3(token: string, category: string) {
 			scores as (
 				select entry_uid, count(*), percentile_cont(0.5) within group (order by score) as median,
 				stddev_samp(score) as std
-				from (select entry_uid, score from votes) as Q
+				from (select entry_uid, score from votes where date_part('year', created_at)='2024') as Q
 				group by entry_uid
 			),
 
@@ -172,6 +175,7 @@ export function query3(token: string, category: string) {
 					else
 						entries.category=${category}
 						and active='true'
+						and date_part('year', created_at)='2024'
 						and uid not in (select entry_uid from votes where votes.user_uid=${token})
 						and uid not in (select entry_uid from skips where skips.user_uid=${token})
 						and uid not in (select entry_uid from flags where flags.user_uid=${token})
@@ -228,6 +232,7 @@ export function rank(category: string) {
 		with scores as (
 			select entry_uid, percentile_cont(0.5) within group (order by score) as median
 			from votes
+			where date_part('year', created_at)='2024'
 			group by entry_uid
 		),
 

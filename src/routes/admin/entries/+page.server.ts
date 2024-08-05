@@ -8,6 +8,7 @@ export const load = async () => {
 			select uid, title
 			from entries
 			where entries.active='true'
+			and date_part('year', entries.created_at)='2024'
 			order by created_at
 			limit all
 			offset 0;

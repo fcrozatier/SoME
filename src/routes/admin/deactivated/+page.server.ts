@@ -10,7 +10,8 @@ export const load = async () => {
 			select uid, title, url, reason
 			from entries join flags
 			on uid=entry_uid
-			where "entries".active='false'
+			where entries.active='false'
+			and date_part('year', entries.created_at)='2024'
 			order by uid
 			limit all
 			offset 0;

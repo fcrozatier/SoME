@@ -15,6 +15,7 @@ export const load = async ({ locals }) => {
 	>[] = await db.execute(sql`
 		 select uid, title, description, category, rank, thumbnail, url from entries
 		 where active='t'
+		 and date_part('year', entries.created_at)='2024'
 		 order by rank asc
      limit 25
 		`);

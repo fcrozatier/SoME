@@ -1,6 +1,7 @@
 with scores as (
   select entry_uid, percentile_cont(0.5) within group (order by score) as median
   from votes
+  where date_part('year', created_at)='2024'
   group by entry_uid
 ),
 

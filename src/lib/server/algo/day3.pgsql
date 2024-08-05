@@ -10,7 +10,7 @@ with cached as (
 scores as (
   select entry_uid, count(*), percentile_cont(0.5) within group (order by score) as median,
   stddev_samp(score) as std
-  from (select entry_uid, score from votes) as Q
+  from (select entry_uid, score from votes where date_part('year', created_at)='2024') as Q
   group by entry_uid
 ),
 
@@ -36,6 +36,7 @@ selection as (
     else
       entries.category='video'
       and active='true'
+      and date_part('year', created_at)='2024'
       and uid not in (select entry_uid from votes where votes.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')
       and uid not in (select entry_uid from skips where skips.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')
       and uid not in (select entry_uid from flags where flags.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')

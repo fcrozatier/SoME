@@ -9,6 +9,7 @@ export const load = async ({ params }) => {
 	const entries: Pick<SelectEntry, 'title' | 'rank'>[] = await db.execute(sql`
 		 select title, rank from entries
 		 where active='t'
+		 and date_part('year', entries.created_at)='2024'
 		 and category=${category}
 		 order by rank asc
 		`);
