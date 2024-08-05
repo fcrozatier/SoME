@@ -1,0 +1,16 @@
+with median_scores as (
+  select entry_uid, percentile_cont(0.5) within group (order by score) as score
+  from (
+    select entry_uid, score
+    from votes join entries on votes.entry_uid=entries.uid
+    where date_part('year', entries.created_at)='2024') as Q
+  group by entry_uid
+  order by score
+),
+
+quartile as (
+  select percentile_cont(0.25) within group (order by score) as value
+  from median_scores
+)
+
+update entries set active='f' where uid in (select entry_uid from median_scores where score < (select value from quartile))
