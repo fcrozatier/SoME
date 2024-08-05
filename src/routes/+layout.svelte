@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { clickOutside, current } from '$lib/actions';
+	import { clickOutside } from '$lib/actions';
 	import Banner from '$lib/components/Banner.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Toasts from '$lib/components/Toasts.svelte';
@@ -37,25 +37,25 @@
 				<a
 					href="/vote"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					use:current={'vote'}>Vote</a
+					aria-current={$page.url.pathname.includes('/vote') ? 'page' : null}>Vote</a
 				>
 				<a
 					href="/feedback"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					use:current={'feedback'}>Feedback</a
+					aria-current={$page.url.pathname.includes('/feedback') ? 'page' : null}>Feedback</a
 				>
 			{/if}
 			{#if resultsAvailable()}
 				<a
 					href="/results"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					use:current={'results'}>Results</a
+					aria-current={$page.url.pathname.includes('/results') ? 'page' : null}>Results</a
 				>
 			{/if}
 			<a
 				href="/algorithm"
 				class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-				use:current={'algorithm'}
+				aria-current={$page.url.pathname.includes('/algorithm') ? 'page' : null}
 			>
 				Algorithm
 			</a>
@@ -63,7 +63,7 @@
 				<a
 					href="/admin"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					use:current={'admin'}>Admin</a
+					aria-current={$page.url.pathname.includes('/admin') ? 'page' : null}>Admin</a
 				>
 			{/if}
 		</span>

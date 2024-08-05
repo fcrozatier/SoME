@@ -1,6 +1,3 @@
-import { page } from '$app/stores';
-import { get } from 'svelte/store';
-
 export function clickOutside(node: Element, callback: (node?: Element) => void) {
 	const handleClick = (e: Event) => {
 		if (node && !node.contains(e.target as Element)) {
@@ -46,8 +43,4 @@ export function toggleSelectAll(node: HTMLElement) {
 			node.removeEventListener('click', handleClick, true);
 		},
 	};
-}
-
-export function current(node: HTMLElement, key: string) {
-	node.ariaCurrent = get(page).url.pathname.includes(key) ? 'page' : null;
 }
