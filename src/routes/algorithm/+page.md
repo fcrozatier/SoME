@@ -70,7 +70,7 @@ This voting system involves scoring entries individually (rather than using pair
 
 This approach has many interesting [properties](https://www.pnas.org/doi/pdf/10.1073/pnas.0702634104) particularly due to its reliance on the median. It is not sensitive to extreme votes from absolute fans or spammers, accurately reflects the majority opinion, and is more robust to increased noise compared to PageRank. For instance, if an entry receives a few scores of 0 and 10 but most people rate it a 7, the median score of 7 will be selected.
 
-On the other hand, pairwise ranking suffers from several flaws:
+Moreover, pairwise ranking suffers from several flaws:
 - Comparing unrelated entries can be difficult, leading to ties or comparisons that are impossible due to different audiences, topics or prerequisites. This can result in implementation issues, such as disconnected graphs, as well as decision fatigue for voters.
 - With <math><mi>N</mi></math> entries we have <math>
   <mrow><mi>N</mi><mo form="prefix" stretchy="false">(</mo><mi>N</mi>
