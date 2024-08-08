@@ -278,11 +278,6 @@ export const videos = [
 		title: 'What are Hyperbolas? | Ch 1, Hyperbolic Trigonometry',
 	},
 	{
-		href: 'https://youtube.com/embed/Y4mnlIvVJEs',
-		title:
-			'Random Matrices in Unexpected Places: Atomic Nuclei, Chaotic Billiards, Riemann Zeta #SoME2',
-	},
-	{
 		href: 'https://youtube.com/embed/Zhx-RZlBsTc',
 		title: "A geometry teacher's challenge problem",
 	},
@@ -408,10 +403,6 @@ export const videos = [
 	{
 		href: 'https://youtube.com/embed/eHbtc50-qXo',
 		title: 'A Dozen Proofs: Sum of Integers Formula (visual proofs) #SoME2',
-	},
-	{
-		href: 'https://youtube.com/embed/lgGpaFmJidM',
-		title: 'Ducks, Dragons, and the Essence of Composite Functions #SoME2',
 	},
 	{
 		href: 'https://youtube.com/embed/yaF7JehEBz0',
@@ -1003,10 +994,6 @@ export const videos = [
 	{
 		href: 'https://youtube.com/embed/bdg8vAyBvWA',
 		title: "Fermat's Last Theorem implies Euclids Theorem #SoME2",
-	},
-	{
-		href: 'https://youtube.com/embed/Hi4quO55G-M',
-		title: 'Step Zero of Analytic Continuation  Gateway to the Riemann Hypothesis  #mathmatics',
 	},
 	{
 		href: 'https://youtube.com/embed/PQLkAp7RxhE',

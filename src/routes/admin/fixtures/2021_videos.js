@@ -1666,10 +1666,6 @@ export const videos = [
 		title: 'Why is it impossible to solve cross square problem?? | Cross square problem',
 	},
 	{
-		href: 'https://youtube.com/embed/MDvhE2SyOj0',
-		title: 'Dynamic Eigen Decomposition I: Parameter Variation in System Dynamics',
-	},
-	{
 		href: 'https://youtube.com/embed/0KAz-nrc-XQ',
 		title: 'the Parametric Parabola for grasshopper, created by the_Dominion',
 	},
@@ -1702,7 +1698,6 @@ export const videos = [
 		href: 'https://youtube.com/embed/mo9LkPGo9Is',
 		title: 'The Seek-Ant! Get It ... secant? ( #3B1B #SoME1 )',
 	},
-	{ href: 'https://youtube.com/embed/ifnTHa_HOhc', title: 'Intro Linear Equation' },
 	{
 		href: 'https://youtube.com/embed/EWsNiTMDsrM',
 		title: 'Simplify Rational Expressions - Intro | Step-By-Step Example',
@@ -1903,7 +1898,6 @@ export const videos = [
 		href: 'https://youtube.com/embed/Pffc-Ouk0eo',
 		title: '01 - LATTICE BOLTZMANN METHOD - INTRODUCTION - LEGENDADO: PT-BR',
 	},
-	{ href: 'https://youtube.com/embed/GjSx0OTW-ns', title: 'Classification of traingle ...|' },
 	{
 		href: 'https://youtube.com/embed/9QgZEV27hmE',
 		title: 'Taylor Series for circles and hyperbolas using excel.',
@@ -2087,7 +2081,6 @@ export const videos = [
 		href: 'https://youtube.com/embed/9KG-S93uG5g',
 		title: 'Even More Paradoxical: The Twin Paradox in Curved Spacetime',
 	},
-	{ href: 'https://youtube.com/embed/7e7UAnHdhgY', title: 'A Proof of Childish Intuition' },
 	{
 		href: 'https://youtube.com/embed/MTjjO1yI20E',
 		title: 'Why Equilibrium Constant is taught wrong? #SoME | Chemistry 101 | Episode 3',
@@ -2115,7 +2108,7 @@ export const videos = [
 		href: 'https://youtube.com/embed/Gc-n3JSTZXg',
 		title: 'What is a Group (Intuitively) - Group Theory 001',
 	},
-	{ href: 'https://youtube.com/embed/GjSx0OTW-ns', title: 'Classification of traingle ...|' },
+	{ href: 'https://youtube.com/embed/GjSx0OTW-ns', title: 'Classification of triangle ...' },
 	{
 		href: 'https://youtube.com/embed/zbp4jXnlAeE',
 		title: 'General Process | Chapter 1 | Visualizer by mathocube |',
@@ -2187,10 +2180,6 @@ export const videos = [
 	{
 		href: 'https://youtube.com/embed/FGoepdkjbAw',
 		title: 'Where parallel lines meet: an introduction to harmonics',
-	},
-	{
-		href: 'https://youtube.com/embed/b_LHcVp8Tps',
-		title: 'CubeMatic: Addition in base 10 is faster than no base { SoME1}',
 	},
 	{
 		href: 'https://youtube.com/embed/59euYgD10iw',
@@ -2296,11 +2285,6 @@ export const videos = [
 	{
 		href: 'https://youtube.com/embed/g7DWrO19CNY',
 		title: 'Is the Sieve of Eratosthenese past its prime?',
-	},
-	{ href: 'https://youtube.com/embed/etTcru7CrWU', title: 'A gentle introduction to beamforming' },
-	{
-		href: 'https://youtube.com/embed/eMVOWa-_yBQ',
-		title: 'Pooling Tests Optimally - Summer of Maths Exposition 01',
 	},
 	{
 		href: 'https://youtube.com/embed/Rxpd1h4EaeQ',
