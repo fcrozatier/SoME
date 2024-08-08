@@ -57,7 +57,12 @@
 			$page.url.searchParams.set('category', category);
 			$page.url.searchParams.set('year', year);
 			$page.url.searchParams.set('page', '1');
-			goto(`?${$page.url.searchParams.toString()}`);
+			pageNumber = '1';
+			goto(`?${$page.url.searchParams.toString()}`, {
+				invalidateAll: true,
+				keepFocus: true,
+				noScroll: true,
+			});
 		}}
 	>
 		<div>
