@@ -1,4 +1,4 @@
-[
+export const non_videos = [
 	{
 		url: 'https://mattferraro.dev/posts/caustics-engineering',
 		title: 'Hiding Images in Plain Sight: The Physics Of Magic Windows',

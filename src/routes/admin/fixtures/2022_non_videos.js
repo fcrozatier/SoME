@@ -1,4 +1,4 @@
-[
+export const non_videos = [
 	{ url: 'https://www.lukelavalva.com/theoryofsliding', title: 'Theory of Sliding' },
 	{
 		url: 'https://explanaria.github.io/crystalgroups',
