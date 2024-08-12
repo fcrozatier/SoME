@@ -201,13 +201,4 @@
 	tr:nth-child(even) {
 		background-color: rgb(242, 242, 242);
 	}
-
-	/* .pagination-grid {
-		display: grid;
-		place-items: center;
-
-		& > * {
-			grid-area: 1/1;
-		}
-	} */
 </style>
