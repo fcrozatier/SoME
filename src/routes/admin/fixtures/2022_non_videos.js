@@ -1,28 +1,36 @@
 export const non_videos = [
-	{ url: 'https://www.lukelavalva.com/theoryofsliding', title: 'Theory of Sliding' },
 	{
 		url: 'https://explanaria.github.io/crystalgroups',
 		title: 'Groups & Clear Crystal Conundrums',
 	},
 	{
-		url: 'https://www.ethanepperly.com/index.php/2022/08/13/chebyshev-polynomials/',
-		title: 'Chebyshev Polynomials',
-	},
-	{
-		url: 'https://calmcode.io/blog/inverse-turing-test.html',
-		title: 'Inverse Turing Test',
+		url: 'https://thenumb.at/Autodiff/',
+		title: 'Differentiable Programming from Scratch',
 	},
 	{
 		url: 'http://xperimex.com/blog/panorama-homography/',
 		title: 'Pleasing Panoramas and Matrix Multiplication',
 	},
 	{
-		url: 'https://btm.qva.mybluehost.me/solving-freudenthals-impossible-problem/',
-		title: 'Solving Freudenthal’s Impossible Problem',
+		url: 'https://calmcode.io/blog/inverse-turing-test.html',
+		title: 'Inverse Turing Test',
 	},
 	{
 		url: 'https://www.summbit.com/blog/bezier-curve-guide/',
 		title: 'An Interactive Guide for Bézier Curves',
+	},
+	{
+		url: 'https://almostsurelymath.blog/2022/07/28/does-every-game-have-a-winner/',
+		title: 'Does Every Game have a Winner?',
+	},
+	{ url: 'https://www.lukelavalva.com/theoryofsliding', title: 'Theory of Sliding' },
+	{
+		url: 'https://www.ethanepperly.com/index.php/2022/08/13/chebyshev-polynomials/',
+		title: 'Chebyshev Polynomials',
+	},
+	{
+		url: 'https://btm.qva.mybluehost.me/solving-freudenthals-impossible-problem/',
+		title: 'Solving Freudenthal’s Impossible Problem',
 	},
 	{
 		url: 'https://allroadslead2rome.vercel.app/',
@@ -53,10 +61,7 @@ export const non_videos = [
 		url: 'http://sambrunacini.com/computational-geometry-and-topographical-maps/',
 		title: 'Computational Geometry and Topographical Maps',
 	},
-	{
-		url: 'https://almostsurelymath.blog/2022/07/28/does-every-game-have-a-winner/',
-		title: 'Does Every Game have a Winner?',
-	},
+
 	{ url: 'https://fourierplayground.esdy.io/', title: 'Fourier Playground' },
 	{
 		url: 'https://quantum9innovation.github.io/axiom/posts/pythagorean/',
@@ -70,10 +75,6 @@ export const non_videos = [
 	{
 		url: 'https://blog.sheddow.xyz/gcd-euclid-and-bezout/',
 		title: 'GCD, Euclid and Bezout: an Eternal Golden Braid',
-	},
-	{
-		url: 'https://thenumb.at/Autodiff/',
-		title: 'Differentiable Programming from Scratch',
 	},
 	{
 		url: 'https://www.theadder.org/computational-complexity-explained-through-songs/',
