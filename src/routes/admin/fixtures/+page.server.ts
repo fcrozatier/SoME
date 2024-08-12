@@ -19,23 +19,23 @@ const data = {
 
 export const actions = {
 	default: async ({ request }) => {
-		const type = (await request.formData()).get('type')?.toString();
-		if (!type) return fail(400);
-		const category = type[0] === 'v' ? 'video' : 'non-video';
-		const year = type.slice(1);
-		const all = data[type as keyof typeof data];
-		for (let i = 0; i < all.length; i++) {
-			await db.insert(entries).values({
-				category,
-				title: all[i].title,
-				url: all[i].url,
-				rank: i + 1,
-				description: all[i]?.description ?? '',
-				thumbnail: all[i]?.thumbnail,
-				uid: crypto.randomUUID(),
-				createdAt: `${year}-06-01`,
-			});
-		}
-		console.log(`added ${year} ${category}s`);
+		// const type = (await request.formData()).get('type')?.toString();
+		// if (!type) return fail(400);
+		// const category = type[0] === 'v' ? 'video' : 'non-video';
+		// const year = type.slice(1);
+		// const all = data[type as keyof typeof data];
+		// for (let i = 0; i < all.length; i++) {
+		// 	await db.insert(entries).values({
+		// 		category,
+		// 		title: all[i].title,
+		// 		url: all[i].url,
+		// 		rank: i + 1,
+		// 		description: all[i]?.description ?? '',
+		// 		thumbnail: all[i]?.thumbnail,
+		// 		uid: crypto.randomUUID(),
+		// 		createdAt: `${year}-06-01`,
+		// 	});
+		// }
+		// console.log(`added ${year} ${category}s`);
 	},
 };
