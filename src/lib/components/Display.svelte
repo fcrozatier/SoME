@@ -22,6 +22,8 @@
 			<a href={data.url} target="_blank">
 				<Thumbnail uid={data.thumbnail} width={560}></Thumbnail>
 			</a>
+		{:else}
+			<a href={data.url} target="_blank">{data.url} </a>
 		{/if}
 	</div>
 </div>
