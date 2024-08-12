@@ -35,10 +35,8 @@
 <article class="layout-prose">
 	<Display data={data.entry}></Display>
 
-	<h3>Analytics</h3>
-	{#if data.feedbacks.length === 0}
-		<p>No feedback received on this entry yet</p>
-	{:else}
+	{#if data.feedbacks.length !== 0}
+		<h3>Analytics</h3>
 		{@const median = data.entry.final_score ? round(+data.entry.final_score, 1) : 0}
 		{@const comments = data.feedbacks.filter((f) => f.feedback !== '' && !f.maybe_rude)}
 		<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
