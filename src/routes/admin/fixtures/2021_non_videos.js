@@ -346,8 +346,7 @@ export const non_videos = [
 	},
 	{
 		url: 'https://www.physicslog.com/blog/2021/05/oscillatory-sequence/',
-		title:
-			'Logical treatment for the oscillatory sequence 1, 2, 3, 4, 3, 2, 1, 2, . . . to find any term and a computer program to assist the operation',
+		title: 'Logical treatment for the oscillatory sequence 1, 2, 3, 4, 3, 2, 1, 2, . . .',
 	},
 	{ url: 'https://silentteacher.toxicode.fr/some1.html', title: 'Silent Teacher - Proportions' },
 	{
