@@ -5,6 +5,7 @@ import { non_videos as n2021 } from './2021_non_videos';
 import { videos as v2021 } from './2021_videos';
 import { non_videos as n2022 } from './2022_non_videos';
 import { videos as v2022 } from './2022_videos';
+import { non_videos as n2023 } from './2023_non_videos';
 import { videos as v2023 } from './2023_videos';
 
 const data = {
@@ -13,6 +14,7 @@ const data = {
 	v2021: v2021,
 	n2021: n2021,
 	n2022: n2022,
+	n2023: n2023,
 };
 
 export const actions = {
@@ -30,7 +32,8 @@ export const actions = {
 				title: all[i]?.title ?? '',
 				url: all[i].url,
 				rank: i + 1,
-				description: '',
+				description: all[i]?.description ?? '',
+				thumbnail: all[i]?.thumbnail,
 				uid: crypto.randomUUID(),
 				createdAt: `${year}-06-01`,
 			});
