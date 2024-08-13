@@ -373,7 +373,9 @@
 						? 'Please correct the highlighted fields above'
 						: form?.network
 							? 'There was a network error. Please try again later'
-							: ''}
+							: form?.closedForCreators
+								? 'Registration is closed for creators'
+								: ''}
 				</p>
 			{/if}
 			<p>

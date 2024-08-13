@@ -26,7 +26,7 @@
 			</strong>
 			remaining to submit an entry <span class="text-xl">&rarr;</span>
 		{:else}
-			<p class="font-semibold">Registration closed for creators</p>
+			<p class="font-semibold">Registration is closed for creators</p>
 		{/if}
 	</a>
 {/if}

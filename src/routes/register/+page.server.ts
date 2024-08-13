@@ -61,7 +61,7 @@ export const actions = {
 		try {
 			if (validation.data.userType === 'creator') {
 				if (!registrationOpen() && !locals.isAdmin) {
-					return fail(422, { invalid: true });
+					return fail(422, { closedForCreators: true });
 				}
 				const { thumbnail, link } = validation.data;
 				let thumbnailKey = null;
