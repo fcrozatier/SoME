@@ -10,7 +10,7 @@ export const load = async ({ url }) => {
 		url.searchParams.set('page', '1');
 		page = '1';
 	}
-	const limit = 2;
+	const limit = 50;
 
 	const entries: Pick<SelectEntry, 'uid' | 'title'>[] = await db.execute(sql`
 			select uid, title
