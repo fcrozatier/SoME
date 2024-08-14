@@ -1,16 +1,35 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions';
 	import Display from '$lib/components/Display.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 
 	export let data;
 	export let form;
 
+	let pageNumber = $page.url.searchParams.get('page') ?? '1';
 	let displayDialog: HTMLDialogElement;
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl">
 	<h2>Entries to review</h2>
+
+	<div class="mt-10 mx-auto flex justify-center">
+		<Pagination
+			pages={data.pages}
+			bind:pageNumber
+			onChange={() => {
+				$page.url.searchParams.set('page', pageNumber);
+				goto(`?${$page.url.searchParams.toString()}`, {
+					invalidateAll: true,
+					keepFocus: true,
+					noScroll: true,
+				});
+			}}
+		></Pagination>
+	</div>
 
 	<table class="w-full">
 		<thead>
@@ -51,6 +70,21 @@
 			{/each}
 		</tbody>
 	</table>
+
+	<div class="mt-10 mx-auto flex justify-center">
+		<Pagination
+			pages={data.pages}
+			bind:pageNumber
+			onChange={() => {
+				$page.url.searchParams.set('page', pageNumber);
+				goto(`?${$page.url.searchParams.toString()}`, {
+					invalidateAll: true,
+					keepFocus: true,
+					noScroll: true,
+				});
+			}}
+		></Pagination>
+	</div>
 </article>
 
 <dialog class="fixed inset-0 pt-0 m-auto overflow-auto" bind:this={displayDialog}>
