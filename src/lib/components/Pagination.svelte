@@ -10,13 +10,13 @@
 			{#each new Array(pages) as _, i}
 				<div class="pagination-grid">
 					<label
-						for={`radio${i}`}
+						for={`radio${i + 1}`}
 						class="join-item btn order-2"
 						class:btn-primary={i + 1 === +pageNumber}
 						>{i + 1}
 					</label>
 					<input
-						id={`radio${i}`}
+						id={`radio${i + 1}`}
 						class="order-1"
 						type="radio"
 						name="pagination"
