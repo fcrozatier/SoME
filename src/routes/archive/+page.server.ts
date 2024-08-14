@@ -41,5 +41,5 @@ export const load = async ({ url }) => {
 		`)
 	)[0] as { count: number };
 
-	return { entries, pages: Math.ceil(total.count / 50) };
+	return { entries, pages: Math.ceil(total.count / limit) };
 };
