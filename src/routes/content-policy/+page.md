@@ -10,8 +10,7 @@
 ## Content Policy
 
 Please note that this page does not contain legal advice. Rather, it is a set of guidelines to
-follow to make sure that your submission to the {COMPETITION_FULL_NAME} abides by proper copyright
-law and is eligible for winning the cash prize at the end.
+follow to make sure that your submission to the {COMPETITION_FULL_NAME} abides by proper copyright law.
 
 In general, as long as you double-check to make sure you have permission to use all material
 (music, video, imagery, text, etc.) contained in your submission to the Summer of Math
@@ -21,7 +20,7 @@ page should (hopefully) help you navigate a bit.
 <h3 id="fair-use">On Copyrighted material and Fair Use</h3>
 
 **In general, you are not allowed to use copyrighted material in the Summer of Math Exposition
-without permission; however, you can still use the content in such a way that it falls under [fair](https://support.google.com/legal/answer/4558992).**
+without permission; however, you can still use the content in such a way that it falls under [fair use](https://support.google.com/legal/answer/4558992).**
 
 What does this mean? Well…
 
@@ -67,8 +66,8 @@ In addition, the Summer of Math Exposition provides a cash prize to several of t
 So let's break this down. Here is a list of software you can and cannot use for this competition:
 **Definitely OK:**
 
-- Any open source programming language (C, Python, Julia, etc). If some company somewhere is using the language to make money, then it stands to reason that you can as well.
-- Virtually any other open source software with a traditional license: MIT, BSD, Apache, GNU, etc). Note that if you use the GNU license, you must also license any derivative software as open source as well, but it is still permissible to use such code commercially.
+- Any open source programming language (C, Python, Julia, etc).
+- Virtually any other open source software with a traditional license: MIT, BSD, Apache, GNU, etc. Note that if you use the GNU license, you must also license any derivative software as open source as well, but it is still permissible to use such code commercially.
 
 **Maybe OK:**
 
@@ -113,8 +112,7 @@ revenue. If you are using it for a classroom, that’s totally fine; however, yo
 a youtube video if you also have ads enabled because you could be making income from the ads.
 
 For this reason, CC-NC can technically be used in the competition, but anything using CC-NC
-content is ineligible for winning the cash prize at the end. Such content can still be judged in
-the Peer Review and be manually judged by Grant, James, and the rest of the panel.
+content is ineligible for winning a cash prize at the end.
 
 ### CC-SA: Creative Commons Share Alike
 
@@ -169,7 +167,7 @@ submission for the Summer of Math Exposition; however, such models can be used i
 
 Note that there are no restrictions on using AI voice banks or other tools where every person willingly contributed to the training data.
 For this contest, we are making a distinction between _general_ AI and _generative_ AI -- those that use some form of large language model, stable diffusion, etc.
-P
+
 This is a slightly nuanced issue, so we will provide our justification for this statement here, along with examples of appropriate usage.
 
 ### Justification
@@ -194,30 +192,28 @@ allow people to potentially use software illegally in this competition. Once mor
 the books, we will have a clearer idea of how AI can be used in content creation. For now,
 because it’s a gray area, we are dancing around it for this competition.
 
-We are happy to discuss this further on [discord](https://discord.gg/48ygmYHau7)
-
 ### Examples of appropriate usage
 
-Though we ask all participants to avoid using AI in their entries (and also flag any AI-generated entries in the Peer Review), there are a few ways in which AI can be unambiguously used in SoME3. Namely, if AI is used at any part of the creative process besides in the final submission or if the AI work is being used as in Fair Use.
+Though we ask all participants to avoid using AI in their entries (and also flag any AI-generated entries in the Peer Review), there are a few ways in which AI can be unambiguously used in SoME. Namely, if AI is used at any part of the creative process besides in the final submission or if the AI work is being used as in Fair Use.
 
 #### Using it as part of a creative workflow
 
-It is totally fine to use AI as part of a creative workflow if no AI-generated media is present in the final submission for SoME3.
+It is totally fine to use AI as part of a creative workflow if no AI-generated media is present in the final submission for SoME.
 
 Here are some specific examples:
 
 - Let’s say you are making a video on the Hausdorff distance and are unsure of whether your script adequately explains the concept. You then ask ChatGPT for the key take-aways of your script to male sure your key-points are coming across. This is totally OK because you are using ChatGPT as a “second opinion” on the topic.
-- Let’s say you are writing a blog post, but are unsure of what visuals to use in this case. You then ask Dalle to sketch up some ideas, which you then use as inspiration for your own visuals later on. This is also totally OK as long as you do not use the Dalle output in your final post. If you do decide to use the Dalle visuals in your post, then make sure you are using them in Fair Use (outlined below)
+- Let’s say you are writing a blog post, but are unsure of what visuals to use in this case. You then ask Dall-e to sketch up some ideas, which you then use as inspiration for your own visuals later on. This is also totally OK as long as you do not use the Dalle output in your final post. If you do decide to use the Dalle visuals in your post, then make sure you are using them in Fair Use (outlined below)
 
 #### Using it in Fair Use
 
-Let’s apply the Fair Use guidelines from the Copyrighted Material section above for specific cases of AI-generated media you would like to use for SoME3.
+Let’s apply the Fair Use guidelines from the Copyrighted Material section above for specific cases of AI-generated media you would like to use for SoME.
 
 Totally OK:
 
 - Using an AI-generated image in your video by **comparing it to hand-drawn** art or **using it as justification for a broader narrative** such as supplementary material to explain some mathematical concept.
 
-  Specific example: let’s say you are making a video on eigenvalues and you ask Dalle to generate a “generic human face” and compare that to a paper you found on [eigenfaces](https://en.wikipedia.org/wiki/Eigenface). This is totally fine because you are comparing and contrasting Dalle’s output to a known concept in computer graphics as a way to better explain eigenvalues
+  Specific example: let’s say you are making a video on eigenvalues and you ask Dall-e to generate a “generic human face” and compare that to a paper you found on [eigenfaces](https://en.wikipedia.org/wiki/Eigenface). This is totally fine because you are comparing and contrasting Dalle’s output to a known concept in computer graphics as a way to better explain eigenvalues
 
 - Using ChatGPT to generate a paragraph in your script and explaining **any inaccuracies you might have found.**
 
