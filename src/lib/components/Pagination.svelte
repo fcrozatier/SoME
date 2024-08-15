@@ -1,28 +1,69 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+
 	export let pages: number;
 	export let pageNumber = '1';
 	export let onChange = () => {};
+
+	const makeArray = (current: number) => {
+		const array: number[] = [];
+
+		if (width < 500) {
+			for (const num of [
+				1,
+				Math.max(1, current - 1),
+				current,
+				Math.min(current + 1, pages),
+				pages,
+			]) {
+				const last = array.at(-1);
+				if (last && !Number.isNaN(last) && last < num - 1) {
+					array.push(NaN);
+				}
+				if (!array.includes(num)) {
+					array.push(num);
+				}
+			}
+			return array;
+		}
+		return Array.from({ length: pages }, (_, i) => i + 1);
+	};
+
+	$: width = browser ? window.innerWidth : Infinity;
+	$: array = makeArray(+pageNumber);
 </script>
+
+<svelte:window
+	on:resize={() => {
+		width = window.innerWidth;
+		array = makeArray(+pageNumber);
+		array = array;
+	}}
+/>
 
 <div class="mt-10 mx-auto flex justify-center">
 	{#if pages > 1}
 		<form class="join" on:change={onChange}>
-			{#each new Array(pages) as _, i}
+			{#each array as n}
 				<div class="pagination-grid">
-					<label
-						for={`radio${i + 1}`}
-						class="join-item btn order-2"
-						class:btn-primary={i + 1 === +pageNumber}
-						>{i + 1}
-					</label>
-					<input
-						id={`radio${i + 1}`}
-						class="order-1"
-						type="radio"
-						name="pagination"
-						value={i + 1}
-						bind:group={pageNumber}
-					/>
+					{#if Number.isNaN(n)}
+						<span class="px-2"> ... </span>
+					{:else}
+						<label
+							for={`radio${n}`}
+							class="join-item btn order-2"
+							class:btn-primary={n === +pageNumber}
+							>{n}
+						</label>
+						<input
+							id={`radio${n}`}
+							class="order-1"
+							type="radio"
+							name="pagination"
+							value={n}
+							bind:group={pageNumber}
+						/>
+					{/if}
 				</div>
 			{/each}
 		</form>
@@ -33,6 +74,7 @@
 	.pagination-grid {
 		display: grid;
 		place-items: center;
+		align-items: center;
 
 		& > * {
 			grid-area: 1/1;
