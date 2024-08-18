@@ -10,7 +10,7 @@
 
 ## Algorithm
 
-There are [numerous](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems#Comparison_of_single-winner_voting_methods) voting systems for single or multi-winner evaluations, but none are designed for massive competitions with hundreds of candidates and partial information, where voters only know a fraction of the candidates.
+There are numerous [voting systems](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems#Comparison_of_single-winner_voting_methods) for single or multi-winner evaluations, but none are designed for massive competitions with hundreds of candidates and partial information, where voters only know a fraction of the candidates.
 
 This article details the algorithm currently in use by the {COMPETITION_FULL_NAME}, along with its explanation and history.
 
