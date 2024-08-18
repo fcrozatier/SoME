@@ -276,6 +276,16 @@
 	</details>
 	<details>
 		<summary>
+			<div class="text-xl font-medium">I'm not a creator, can I participate?</div>
+		</summary>
+		<p>Sure, you can participate in the peer review phase by registering as a judge.</p>
+		<p>
+			You'll discover new Science content creators, will be able vote for the best ones and leave
+			comments and advices for creators to learn from.
+		</p>
+	</details>
+	<details>
+		<summary>
 			<div class="text-xl font-medium">How will winners be selected?</div>
 		</summary>
 		<p>
