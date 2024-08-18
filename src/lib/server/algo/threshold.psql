@@ -1,0 +1,20 @@
+with nb_votes as (
+  select entry_uid, count(*) as v
+  from votes
+  where date_part('year', created_at)='2024'
+  group by entry_uid
+),
+
+nb_skips as (
+  select entry_uid, count(*) as s
+  from skips
+  where date_part('year', created_at)='2024'
+  group by entry_uid
+)
+
+select uid, nb_votes.v, nb_skips.s, COALESCE(nb_votes.v,0) + COALESCE(nb_skips.s, 0) as total
+from entries
+left join nb_votes on entries.uid=nb_votes.entry_uid
+left join nb_skips on entries.uid=nb_skips.entry_uid
+where date_part('year', created_at)='2024'
+order by total;
