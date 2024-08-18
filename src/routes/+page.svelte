@@ -319,7 +319,9 @@
 				of an aha moment.
 			</li>
 		</ul>
-		You can learn more about the algorithm and voting system we use<a href="/algorithm">here</a>
+		You can learn more about the algorithm and voting system we use&nbsp;<a href="/algorithm"
+			>here</a
+		>
 	</details>
 </section>
 
