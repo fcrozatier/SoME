@@ -7,6 +7,7 @@
 	import NewVote from '$lib/components/NewVote.svelte';
 	import Slider from '$lib/components/Slider.svelte';
 	import { newToast } from '$lib/components/Toasts.svelte';
+	import { onMount } from 'svelte';
 	import { formAction } from './config';
 
 	export let data;
@@ -20,11 +21,28 @@
 	let score = 5;
 	let feedback = '';
 
+	let targetTime: number;
 	let cooldown = 590;
 	let interval: ReturnType<typeof setInterval>;
 
+	const visibilitychange = () => {
+		if (document.visibilityState === 'visible') {
+			cooldown = Math.round((targetTime - Date.now()) / 100);
+		}
+	};
+
+	onMount(() => {
+		targetTime = Date.now() + 59 * 1000;
+		document.addEventListener('visibilitychange', visibilitychange);
+
+		return () => {
+			document.removeEventListener('visibilitychange', visibilitychange);
+		};
+	});
+
 	afterNavigate(() => {
 		splitButtonOpen = false;
+		targetTime = Date.now() + 59 * 1000;
 		cooldown = 590;
 		interval = setInterval(() => {
 			if (cooldown > 0) {
