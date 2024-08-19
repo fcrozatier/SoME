@@ -166,91 +166,94 @@
 
 	<h2>Feedbacks</h2>
 	<p>Here is the feedback you received from people who reviewed your work.</p>
+	{#if data.groups}
+		{#each Object.entries(data.groups) as [title, group]}
+			<h3>{title}</h3>
+			{#if !group || group?.length === 0}
+				<p>No feedback received on this entry yet</p>
+			{:else}
+				{@const median = round(group?.[0].median, 1)}
+				{@const comments = group.filter((f) => f.feedback !== '' && !f.maybe_rude)}
+				<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
+					<div
+						class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
+						class:bg-error={median <= 3}
+						class:bg-success={median > 7}
+						class:bg-warning={median > 3 && median <= 7}
+						class:border-error={median <= 3}
+						class:border-success={median > 7}
+						class:border-warning={median > 3 && median <= 7}
+					>
+						<div class="flex flex-col items-center gap-2">
+							<span
+								class="text-5xl"
+								class:text-error={median <= 3}
+								class:text-success={median > 7}
+								class:text-warning={median > 3 && median <= 7}
+							>
+								{median}
+							</span>
+							<span
+								>Overall <button
+									on:click={() =>
+										newToast({
+											type: 'info',
+											content:
+												'Your median score. <a class="underline underline-offset-2 inline cursor-pointer" href="/algorithm">Learn more</a>',
+											duration: 5000,
+										})}
+									class="font-semibold">score*</button
+								></span
+							>
+						</div>
+					</div>
+					<div class="rounded-3xl border-2 aspect-square w-40 max-w-sm grid place-items-center">
+						<div class="flex flex-col items-center gap-2">
+							<span class="text-5xl">
+								{group.length}
+							</span>
+							<span>Votes</span>
+						</div>
+					</div>
+					<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
+						<div class="flex flex-col items-center gap-2">
+							<span class="text-5xl">
+								{comments.length}
+							</span>
+							<span>Comments</span>
+						</div>
+					</div>
+				</div>
 
-	{#each Object.entries(data.groups) as [title, group]}
-		<h3>{title}</h3>
-		{#if !group || group?.length === 0}
-			<p>No feedback received on this entry yet</p>
-		{:else}
-			{@const median = round(group?.[0].median, 1)}
-			{@const comments = group.filter((f) => f.feedback !== '' && !f.maybe_rude)}
-			<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
 				<div
-					class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
-					class:bg-error={median <= 3}
-					class:bg-success={median > 7}
-					class:bg-warning={median > 3 && median <= 7}
-					class:border-error={median <= 3}
-					class:border-success={median > 7}
-					class:border-warning={median > 3 && median <= 7}
-				>
-					<div class="flex flex-col items-center gap-2">
-						<span
-							class="text-5xl"
-							class:text-error={median <= 3}
-							class:text-success={median > 7}
-							class:text-warning={median > 3 && median <= 7}
-						>
-							{median}
-						</span>
-						<span
-							>Overall <button
-								on:click={() =>
-									newToast({
-										type: 'info',
-										content:
-											'Your median score. <a class="underline underline-offset-2 inline cursor-pointer" href="/algorithm">Learn more</a>',
-										duration: 5000,
-									})}
-								class="font-semibold">score*</button
-							></span
-						>
-					</div>
-				</div>
-				<div class="rounded-3xl border-2 aspect-square w-40 max-w-sm grid place-items-center">
-					<div class="flex flex-col items-center gap-2">
-						<span class="text-5xl">
-							{group.length}
-						</span>
-						<span>Votes</span>
-					</div>
-				</div>
-				<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
-					<div class="flex flex-col items-center gap-2">
-						<span class="text-5xl">
-							{comments.length}
-						</span>
-						<span>Comments</span>
-					</div>
-				</div>
-			</div>
+					use:hist={group.map((i) => ({
+						score: +i.score,
+					}))}
+				></div>
 
-			<div
-				use:hist={group.map((i) => ({
-					score: +i.score,
-				}))}
-			></div>
+				{#if comments.length > 0}
+					<p class="font-semibold">Comments</p>
 
-			{#if comments.length > 0}
-				<p class="font-semibold">Comments</p>
-
-				{#each comments as { feedback, score }}
-					<div class="grid grid-cols-[1fr_2rem] items-start border-b first:border-t py-4">
-						<p class="my-0 leading-loose whitespace-pre-wrap">{feedback}</p>
-						<span
-							class="ml-auto w-full bg-opacity-10 border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center"
-							class:bg-error={median <= 3}
-							class:bg-success={median > 7}
-							class:bg-warning={median > 3 && median <= 7}
-							class:border-error={median <= 3}
-							class:border-success={median > 7}
-							class:border-warning={median > 3 && median <= 7}>{round(score, 1)}</span
-						>
-					</div>
-				{/each}
+					{#each comments as { feedback, score }}
+						<div class="grid grid-cols-[1fr_2rem] items-start border-b first:border-t py-4">
+							<p class="my-0 leading-loose whitespace-pre-wrap">{feedback}</p>
+							<span
+								class="ml-auto w-full bg-opacity-10 border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center"
+								class:bg-error={median <= 3}
+								class:bg-success={median > 7}
+								class:bg-warning={median > 3 && median <= 7}
+								class:border-error={median <= 3}
+								class:border-success={median > 7}
+								class:border-warning={median > 3 && median <= 7}>{round(score, 1)}</span
+							>
+						</div>
+					{/each}
+				{/if}
 			{/if}
-		{/if}
+		{:else}
+			<p>No entry found</p>
+		{/each}
 	{:else}
-		<p>No entry found</p>
-	{/each}
+		<p>Nothing here yet</p>
+	{/if}
 </article>
