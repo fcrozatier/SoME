@@ -3,6 +3,9 @@
 	"version": "0.0.1",
 	"description": "Summer of Math Exposition",
 	"private": true,
+	"engines": {
+		"node": ">=22.0.0"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
