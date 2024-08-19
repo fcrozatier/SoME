@@ -39,13 +39,13 @@
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 					aria-current={$page.url.pathname.includes('/vote') ? 'page' : null}>Vote</a
 				>
+			{/if}
+			{#if resultsAvailable()}
 				<a
 					href="/feedback"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 					aria-current={$page.url.pathname.includes('/feedback') ? 'page' : null}>Feedback</a
 				>
-			{/if}
-			{#if resultsAvailable()}
 				<a
 					href="/results"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
