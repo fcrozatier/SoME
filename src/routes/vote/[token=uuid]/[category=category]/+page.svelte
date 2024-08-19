@@ -19,6 +19,7 @@
 	let splitButtonOpen = false;
 
 	let score = 5;
+	let ready = false;
 	let feedback = '';
 
 	let targetTime: number;
@@ -98,6 +99,10 @@
 					newToast({ type: 'info', content: 'Please do not rush the review process' });
 					return cancel();
 				}
+				if (!ready) {
+					newToast({ type: 'info', content: 'Please do not forget to grade the entry' });
+					return cancel();
+				}
 				const buttons = document.querySelectorAll('button');
 				buttons.forEach((b) => b.setAttribute('disabled', 'on'));
 
@@ -149,6 +154,7 @@
 					label3="Not as good"
 					label7="Better than most"
 					bind:value={score}
+					bind:ready
 				></Slider>
 			</div>
 
