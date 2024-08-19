@@ -17,4 +17,6 @@ from entries
 left join nb_votes on entries.uid=nb_votes.entry_uid
 left join nb_skips on entries.uid=nb_skips.entry_uid
 where date_part('year', created_at)='2024'
+and entries.category='video'
+and entries.active='t'
 order by total;
