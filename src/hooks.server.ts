@@ -40,7 +40,7 @@ export const handle = async function ({ event, resolve }) {
 		const validation = TokenSchema.safeParse(token);
 		if (!validation.success) {
 			event.cookies.delete('token', { path: '/' });
-			throw redirect(303, '/');
+			redirect(303, '/');
 		}
 
 		event.locals.token = validation.data;

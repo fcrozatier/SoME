@@ -21,7 +21,7 @@ export const load = async (event) => {
 	const { token, category } = event.params;
 
 	if (!voteOpen()) {
-		throw redirect(302, `/vote/${token}`);
+		redirect(302, `/vote/${token}`);
 	}
 
 	const result: postgres.RowList<(SelectEntry & { total_votes: number })[]> = await db.execute(
