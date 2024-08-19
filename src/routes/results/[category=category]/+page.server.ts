@@ -1,11 +1,11 @@
 import { db } from '$lib/server/db/client.js';
 import type { SelectEntry } from '$lib/server/db/schema.js';
 import { resultsAvailable } from '$lib/utils.js';
-import { error } from 'console';
+import { error } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
 
 export const load = async ({ params, locals }) => {
-	if (!(resultsAvailable() || locals.isAdmin)) {
+	if (!resultsAvailable() && !locals.isAdmin) {
 		error(400, { message: 'Results not available' });
 	}
 
