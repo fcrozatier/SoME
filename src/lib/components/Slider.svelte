@@ -32,27 +32,27 @@
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relative -left-1"
-				on:click={() => (value = 1)}>{label1}</label
+				on:pointerdown={() => (value = 1)}>{label1}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left sm:block relative -left-1"
-				on:click={() => (value = 3)}>{label3}</label
+				on:pointerdown={() => (value = 3)}>{label3}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relative -right-2"
-				on:click={() => (value = 5)}>{label5}</label
+				on:pointerdown={() => (value = 5)}>{label5}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left sm:block relative -right-4"
-				on:click={() => (value = 7)}>{label7}</label
+				on:pointerdown={() => (value = 7)}>{label7}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relatite -right-0"
-				on:click={() => (value = 9)}>{label9}</label
+				on:pointerdown={() => (value = 9)}>{label9}</label
 			>
 		</div>
 		<div class="h-[500px]">
