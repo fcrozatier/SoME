@@ -92,11 +92,11 @@
 					<li>
 						<a href="/vote">Vote</a>
 					</li>
+				{/if}
+				{#if resultsAvailable()}
 					<li>
 						<a href="/feedback">Feedback</a>
 					</li>
-				{/if}
-				{#if resultsAvailable()}
 					<li>
 						<a href="/results">Results</a>
 					</li>
