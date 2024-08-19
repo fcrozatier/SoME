@@ -116,7 +116,11 @@
 					math {data.category === 'video' ? 'video' : 'article'} you've seen?
 					<button
 						class="font-semibold hover:underline text-sm"
-						on:click={() => guidelines.showModal()}>(Guidelines*)</button
+						type="button"
+						on:click={() => {
+							guidelines.showModal();
+							guidelines.scrollTo({ top: 0 });
+						}}>(Guidelines*)</button
 					>
 				</p>
 				<Slider
@@ -213,7 +217,7 @@
 	{/if}
 </article>
 
-<dialog class="relative" bind:this={guidelines}>
+<dialog class="" bind:this={guidelines}>
 	<article use:clickOutside={() => guidelines.close()}>
 		<h2 id="guidlines" class="text-center mt-0 mb-8">Guidelines</h2>
 
@@ -250,7 +254,7 @@
 	</article>
 </dialog>
 
-<dialog class="mb-auto" bind:this={flagDialog}>
+<dialog class="" bind:this={flagDialog}>
 	<form
 		method="post"
 		action="?/flag"
