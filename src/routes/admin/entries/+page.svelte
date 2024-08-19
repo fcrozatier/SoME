@@ -55,6 +55,7 @@
 
 									if (result.type === 'success' && action.search.includes('display')) {
 										displayDialog.show();
+										displayDialog.scrollTo({ top: 0 });
 									}
 								};
 							}}

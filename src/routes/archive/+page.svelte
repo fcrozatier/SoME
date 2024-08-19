@@ -39,6 +39,7 @@
 			// @ts-ignore
 			entry = result.data;
 			displayDialog.showModal();
+			displayDialog.scrollTo({ top: 0 });
 		} else {
 			goto(href);
 		}
