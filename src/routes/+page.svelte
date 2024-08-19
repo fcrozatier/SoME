@@ -184,7 +184,8 @@
 		</p>
 		{#if registrationOpen()}
 			<p>
-				Which means you still have <span>{remaining.formatted}</span> left to submit an entry!
+				Which means you still have <span class="tabular-nums">{remaining.formatted}</span> left to submit
+				an entry!
 			</p>
 		{/if}
 		<p>
