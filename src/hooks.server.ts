@@ -1,7 +1,10 @@
 import { JWT_SECRET } from '$env/static/private';
-import { client } from '$lib/server/db/client';
+import { MAX_AGE } from '$lib/server/config';
+import { client, db } from '$lib/server/db/client';
+import { usersToEntries } from '$lib/server/db/schema';
 import { JWTPayloadSchema, TokenSchema } from '$lib/server/validation';
 import { redirect, type Handle } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
 import jsonwebtoken from 'jsonwebtoken';
 
 process.on('sveltekit:shutdown', (reason) => {
@@ -18,7 +21,21 @@ export const handle = async function ({ event, resolve }) {
 	}
 
 	const token = event.cookies.get('token');
+	const is_creator = event.cookies.get('is_creator');
 	const jwt = event.cookies.get('jwt');
+
+	let isCreator = is_creator;
+
+	if (is_creator === undefined && token) {
+		isCreator = (
+			(await db.select().from(usersToEntries).where(eq(usersToEntries.userUid, token))).length > 0
+		).toString();
+
+		event.cookies.set('is_creator', isCreator, {
+			path: '/',
+			maxAge: MAX_AGE,
+		});
+	}
 
 	if (event.request.url.includes('admin')) {
 		if (jwt) {
@@ -35,6 +52,8 @@ export const handle = async function ({ event, resolve }) {
 			event.locals.isAdmin = false;
 		}
 	}
+
+	event.locals.isCreator = isCreator === 'true';
 
 	if (token) {
 		const validation = TokenSchema.safeParse(token);

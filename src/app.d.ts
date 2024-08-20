@@ -3,6 +3,7 @@ declare namespace App {
 	interface Locals {
 		token?: string;
 		isAdmin?: boolean;
+		isCreator?: boolean;
 	}
 	// interface PageData {}
 	// interface Platform {}

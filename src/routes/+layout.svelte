@@ -39,13 +39,15 @@
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 					aria-current={$page.url.pathname.includes('/vote') ? 'page' : null}>Vote</a
 				>
+				{#if data.isCreator}
+					<a
+						href="/feedback"
+						class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
+						aria-current={$page.url.pathname.includes('/feedback') ? 'page' : null}>Feedback</a
+					>
+				{/if}
 			{/if}
 			{#if resultsAvailable()}
-				<a
-					href="/feedback"
-					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={$page.url.pathname.includes('/feedback') ? 'page' : null}>Feedback</a
-				>
 				<a
 					href="/results"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
@@ -92,11 +94,13 @@
 					<li>
 						<a href="/vote">Vote</a>
 					</li>
+					{#if data.isCreator}
+						<li>
+							<a href="/feedback">Feedback</a>
+						</li>
+					{/if}
 				{/if}
 				{#if resultsAvailable()}
-					<li>
-						<a href="/feedback">Feedback</a>
-					</li>
 					<li>
 						<a href="/results">Results</a>
 					</li>
