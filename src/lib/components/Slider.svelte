@@ -65,7 +65,7 @@
 				step=".01"
 				class="range"
 				bind:value
-				on:click={() => (ready = true)}
+				on:change={() => (ready = true)}
 				class:range-error={value <= 3}
 				class:range-success={value >= 7}
 				class:range-warning={value > 3 && value < 7}
