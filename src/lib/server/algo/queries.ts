@@ -222,8 +222,8 @@ export function queryFeedbacks(token: string) {
 			where entry_uid in (select entry_uid from created)
 		)
 
-		select created.entry_uid, title, score, median, feedback, maybe_rude from (scores join feedbacks on scores.entry_uid=feedbacks.entry_uid)
-		join created on scores.entry_uid=created.entry_uid;
+		select created.entry_uid, title, score, median, feedback, maybe_rude from created left join (feedbacks join scores on scores.entry_uid=feedbacks.entry_uid)
+		on feedbacks.entry_uid=created.entry_uid;
 	`;
 }
 
