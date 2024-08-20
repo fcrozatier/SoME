@@ -4,7 +4,6 @@ import { surveys } from '$lib/server/db/schema.js';
 import { FeedbackSchema, validateForm } from '$lib/server/validation';
 import { fail, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import type postgres from 'postgres';
 import { z } from 'zod';
 
 export const load = async (event) => {
