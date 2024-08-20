@@ -9,6 +9,8 @@
 	export let label7 = '';
 	export let label9 = '';
 
+	let input: HTMLInputElement;
+
 	function label(value: number) {
 		if (value < 1.5) return label1;
 		if (value < 2.5) return label3 + '-';
@@ -20,6 +22,11 @@
 		if (value < 8.5) return label7 + '+';
 		return label9;
 	}
+
+	const changeValue = (newValue: number) => {
+		value = newValue;
+		ready = true;
+	};
 </script>
 
 <div class="h-[400px] sm:h-auto py-10">
@@ -32,27 +39,27 @@
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relative -left-1"
-				on:pointerdown={() => (value = 1)}>{label1}</label
+				on:pointerdown={() => changeValue(1)}>{label1}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left sm:block relative -left-1"
-				on:pointerdown={() => (value = 3)}>{label3}</label
+				on:pointerdown={() => changeValue(3)}>{label3}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relative -right-2"
-				on:pointerdown={() => (value = 5)}>{label5}</label
+				on:pointerdown={() => changeValue(5)}>{label5}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left sm:block relative -right-4"
-				on:pointerdown={() => (value = 7)}>{label7}</label
+				on:pointerdown={() => changeValue(7)}>{label7}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relatite -right-0"
-				on:pointerdown={() => (value = 9)}>{label9}</label
+				on:pointerdown={() => changeValue(9)}>{label9}</label
 			>
 		</div>
 		<div class="h-[500px]">
@@ -65,6 +72,7 @@
 				step=".01"
 				class="range"
 				bind:value
+				bind:this={input}
 				on:change={() => (ready = true)}
 				class:range-error={value <= 3}
 				class:range-success={value >= 7}
