@@ -56,7 +56,7 @@
 						class:text-success={median > 7}
 						class:text-warning={median > 3 && median <= 7}
 					>
-						{median}
+						{median || '-'}
 					</span>
 					<span
 						>Overall <button
@@ -108,16 +108,16 @@
 			<h3>Comments</h3>
 
 			{#each comments as { feedback, score }}
-				<div class="grid grid-cols-[1fr_2rem] items-start border-b first:border-t py-4">
+				<div class="grid grid-cols-[1fr_2rem] items-start border-b gap-x-4 first:border-t py-4">
 					<p class="my-0 leading-loose whitespace-pre-wrap">{feedback}</p>
 					<span
 						class="ml-auto w-full bg-opacity-10 border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center"
-						class:bg-error={median <= 3}
-						class:bg-success={median > 7}
-						class:bg-warning={median > 3 && median <= 7}
-						class:border-error={median <= 3}
-						class:border-success={median > 7}
-						class:border-warning={median > 3 && median <= 7}>{round(+score, 1)}</span
+						class:bg-error={+score <= 3}
+						class:bg-success={+score > 7}
+						class:bg-warning={+score > 3 && +score <= 7}
+						class:border-error={+score <= 3}
+						class:border-success={+score > 7}
+						class:border-warning={+score > 3 && +score <= 7}>{round(+score, 1)}</span
 					>
 				</div>
 			{/each}
