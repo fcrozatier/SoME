@@ -11,7 +11,7 @@ export const actions: Actions = {
 		const validation = await validateForm(request, EmailForm);
 
 		if (!validation.success) {
-			return fail(400, { emailInvalid: true });
+			return fail(400, { error: true, emailInvalid: true });
 		}
 
 		try {
@@ -19,7 +19,11 @@ export const actions: Actions = {
 			const user = (await db.select().from(users).where(eq(users.email, validation.data.email)))[0];
 
 			if (!user) {
-				return fail(400, { emailInvalid: true });
+				console.log('nono');
+				return fail(400, {
+					error: true,
+					message: "email not found. Did you register to this year's event?",
+				});
 			}
 			const token = user.uid;
 
@@ -30,7 +34,7 @@ export const actions: Actions = {
 			return { success: true };
 		} catch (error) {
 			console.log(error);
-			return fail(400, { error: true });
+			return fail(400, { error: true, message: 'Something went wrong' });
 		}
 	},
 };

@@ -387,11 +387,11 @@
 			submitter?.setAttribute('disabled', 'on');
 			return async ({ update, result }) => {
 				submitter?.removeAttribute('disabled');
-				await update({ invalidateAll: false });
 				if (result.type === 'success') {
 					newToast({ type: 'success', content: 'Email sent!' });
 					personalLinkDialog.close();
 				}
+				await update();
 			};
 		}}
 	>
@@ -414,8 +414,8 @@
 			<button type="button" class="btn-outline btn" on:click={closeDialog}>Close</button>
 			<button type="submit" class="btn-primary btn">Send email</button>
 		</p>
-		{#if form?.error || form?.emailInvalid}
-			<span class="text-error">Something went wrong.</span>
+		{#if form?.error}
+			<span class="text-error">{form.message}</span>
 		{/if}
 	</form>
 </dialog>
