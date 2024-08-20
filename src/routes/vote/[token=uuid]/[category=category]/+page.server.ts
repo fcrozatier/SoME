@@ -1,6 +1,6 @@
 import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from '$env/static/private';
 import type { Category } from '$lib/config';
-import { query1 } from '$lib/server/algo/queries';
+import { query2 } from '$lib/server/algo/queries';
 import { db } from '$lib/server/db/client';
 import { cache, flags, skips, votes, type SelectEntry } from '$lib/server/db/schema';
 import { decrypt, encrypt } from '$lib/server/encryption';
@@ -25,7 +25,7 @@ export const load = async (event) => {
 	}
 
 	const result: postgres.RowList<(SelectEntry & { total_votes: number })[]> = await db.execute(
-		query1(token, category),
+		query2(token, category),
 	);
 
 	if (!result) return { stopVote: true };
