@@ -105,21 +105,23 @@
 		<p>
 			If you don't want to submit an entry you can still help out in the voting phase as a judge.
 		</p>
-		<h3>Important Notes:</h3>
-		<ul>
-			<li>
-				You can only submit one entry per person/group for the competition; however, you may submit
-				multiple entries if you are a part of different groups.
-			</li>
-			<li>
-				You should not register both as a creator and as a judge. If you are a creator, you will
-				automatically be signed up as a judge as well.
-			</li>
-			<li>
-				Please read the <a href="/#rules"><u>rules and judging criteria</u></a> before submitting your
-				entry.
-			</li>
-		</ul>
+		{#if registrationOpen()}
+			<h3>Important Notes:</h3>
+			<ul>
+				<li>
+					You can only submit one entry per person/group for the competition; however, you may
+					submit multiple entries if you are a part of different groups.
+				</li>
+				<li>
+					You should not register both as a creator and as a judge. If you are a creator, you will
+					automatically be signed up as a judge as well.
+				</li>
+				<li>
+					Please read the <a href="/#rules"><u>rules and judging criteria</u></a> before submitting your
+					entry.
+				</li>
+			</ul>
+		{/if}
 
 		<form
 			method="post"
