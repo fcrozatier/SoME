@@ -43,6 +43,7 @@
 
 	afterNavigate(() => {
 		splitButtonOpen = false;
+		ready = false;
 		targetTime = Date.now() + 59 * 1000;
 		cooldown = 590;
 		interval = setInterval(() => {
