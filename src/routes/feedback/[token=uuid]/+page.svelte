@@ -44,7 +44,7 @@
 </svelte:head>
 
 <article class="layout-prose">
-	{#if !data.surveyTaken && !form?.surveySuccess}
+	<!-- {#if !data.surveyTaken && !form?.surveySuccess}
 		<h2>Survey</h2>
 		<p>
 			We recognize that the results have not been announced yet, but in the meantime please consider
@@ -162,7 +162,7 @@
 				</p>
 			{/if}
 		</form>
-	{/if}
+	{/if} -->
 
 	<h2>Feedbacks</h2>
 	<p>Here is the feedback you received from people who reviewed your work.</p>
@@ -172,10 +172,10 @@
 			{#if !group || group?.length === 0}
 				<p>No feedback received on this entry yet</p>
 			{:else}
-				{@const median = round(group?.[0].median, 1)}
-				{@const comments = group.filter((f) => f.feedback !== '' && !f.maybe_rude)}
+				{@const median = round(group?.[0].median, 0)}
+				{@const comments = group.filter((f) => f.feedback && f.feedback !== '' && !f.maybe_rude)}
 				<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
-					<div
+					<!-- <div
 						class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
 						class:bg-error={median <= 3}
 						class:bg-success={median > 7}
@@ -191,7 +191,7 @@
 								class:text-success={median > 7}
 								class:text-warning={median > 3 && median <= 7}
 							>
-								{median}
+								{median || '-'}
 							</span>
 							<span
 								>Overall <button
@@ -206,7 +206,7 @@
 								></span
 							>
 						</div>
-					</div>
+					</div> -->
 					<div class="rounded-3xl border-2 aspect-square w-40 max-w-sm grid place-items-center">
 						<div class="flex flex-col items-center gap-2">
 							<span class="text-5xl">
@@ -235,16 +235,16 @@
 					<p class="font-semibold">Comments</p>
 
 					{#each comments as { feedback, score }}
-						<div class="grid grid-cols-[1fr_2rem] items-start border-b first:border-t py-4">
+						<div class="grid grid-cols-[1fr_2rem] gap-x-4 items-start border-b first:border-t py-4">
 							<p class="my-0 leading-loose whitespace-pre-wrap">{feedback}</p>
 							<span
 								class="ml-auto w-full bg-opacity-10 border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center"
-								class:bg-error={median <= 3}
-								class:bg-success={median > 7}
-								class:bg-warning={median > 3 && median <= 7}
-								class:border-error={median <= 3}
-								class:border-success={median > 7}
-								class:border-warning={median > 3 && median <= 7}>{round(score, 1)}</span
+								class:bg-error={+score <= 3}
+								class:bg-success={+score > 7}
+								class:bg-warning={+score > 3 && +score <= 7}
+								class:border-error={+score <= 3}
+								class:border-success={+score > 7}
+								class:border-warning={+score > 3 && +score <= 7}>{round(score, 1)}</span
 							>
 						</div>
 					{/each}
