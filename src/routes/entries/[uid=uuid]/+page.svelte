@@ -19,7 +19,8 @@
 						),
 					),
 					Plot.ruleY([0]),
-					Plot.ruleX([0]),
+					Plot.tickX([9], { opacity: 0 }),
+					Plot.ruleX([1]),
 				],
 			}),
 		);
