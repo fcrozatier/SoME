@@ -14,12 +14,12 @@
 					Plot.rectY(
 						arg,
 						Plot.binX(
-							{ y: 'count', fill: 'x', domain: [1, 9] },
-							{ x: 'score', domain: [1, 9], interval: 0.5 },
+							{ y: 'count', fill: 'x', domain: [1, 9.5] },
+							{ x: 'score', domain: [1, 9.5], interval: 0.5 },
 						),
 					),
 					Plot.ruleY([0]),
-					Plot.tickX([9], { opacity: 0 }),
+					Plot.tickX([9.5], { opacity: 0 }),
 					Plot.ruleX([1]),
 				],
 			}),
