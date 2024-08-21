@@ -100,7 +100,10 @@
 					newToast({ type: 'info', content: 'Please do not rush the review process' });
 					return cancel();
 				}
-				if (!ready) {
+				if (
+					!ready &&
+					!(action.search === formAction('skip') || action.search === formAction('hard_skip'))
+				) {
 					newToast({ type: 'info', content: 'Please do not forget to grade the entry' });
 					return cancel();
 				}
