@@ -4,12 +4,12 @@
 	import { clickOutside } from '$lib/actions';
 	import Banner from '$lib/components/Banner.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import Timer from '$lib/components/Timer.svelte';
 	import Toasts from '$lib/components/Toasts.svelte';
-	import { BETA_TEST, COMPETITION_FULL_NAME } from '$lib/config';
+	import { COMPETITION_FULL_NAME } from '$lib/config';
 	import Menu from '$lib/icons/menu.svg';
 	import { registrationOpen, resultsAvailable, voteOpen } from '$lib/utils';
 	import '../app.css';
-	import Timer from '../lib/components/Timer.svelte';
 	import '../math.css';
 
 	export let data;
@@ -132,7 +132,7 @@
 		</aside>
 	</dialog>
 
-	<Banner test={BETA_TEST} />
+	<Banner display={false && !!data.token && !data.surveyTaken} />
 	<Timer display={registrationOpen()}></Timer>
 
 	<main class="prose mb-40 mt-8 max-w-full">
