@@ -131,7 +131,7 @@ export function query2(token: string, category: string) {
 		`;
 }
 
-const multiplier_start_date = '2024-08-20';
+const multiplier_start_date = '2024-08-23';
 
 /**
  * Select entries at random with probability weighted by median score with a (utility) boost based on the std
@@ -156,12 +156,12 @@ export function query3(token: string, category: string) {
 			multiplier as (
 				select entry_uid, count(*) as value
 				from votes
-				where created_at < ${multiplier_start_date}
+				where created_at <= ${multiplier_start_date}
 				group by entry_uid
 			),
 
 			selection as (
-				select uid, title, entries.category, coalesce(scores.median, 9) + coalesce(multiplier.value, 0) * coalesce(scores.std, 0) / coalesce(scores.count, 1) as score
+				select uid, title, description, entries.category, url, thumbnail, coalesce(scores.median, 9) + coalesce(multiplier.value, 0) * coalesce(scores.std, 0) / coalesce(scores.count, 1) as score
 				from entries
 				left join multiplier
 				on entries.uid=multiplier.entry_uid
