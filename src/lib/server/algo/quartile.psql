@@ -30,7 +30,8 @@ quartile as (
 )
 
 
-select uid, score, COALESCE(nb_votes.v,0) + COALESCE(nb_skips.s, 0) as total from entries
+select uid, score, COALESCE(nb_votes.v,0) + COALESCE(nb_skips.s, 0) as total
+from entries
 left join median_scores on entry_uid=uid
 left join nb_votes on entries.uid=nb_votes.entry_uid
 left join nb_skips on entries.uid=nb_skips.entry_uid
