@@ -1,7 +1,7 @@
 import { JWT_SECRET } from '$env/static/private';
 import { MAX_AGE } from '$lib/server/config';
 import { client, db } from '$lib/server/db/client';
-import { usersToEntries } from '$lib/server/db/schema';
+import { surveys, usersToEntries } from '$lib/server/db/schema';
 import { JWTPayloadSchema, TokenSchema } from '$lib/server/validation';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
@@ -23,6 +23,20 @@ export const handle = async function ({ event, resolve }) {
 	const token = event.cookies.get('token');
 	const is_creator = event.cookies.get('is_creator');
 	const jwt = event.cookies.get('jwt');
+	const survey = event.cookies.get('survey');
+
+	let surveyTaken = survey === 'true';
+
+	if (!survey && token) {
+		surveyTaken = (await db.select().from(surveys).where(eq(surveys.userUid, token))).length > 0;
+
+		event.cookies.set('survey', surveyTaken.toString(), {
+			path: '/',
+			maxAge: MAX_AGE,
+		});
+	}
+
+	event.locals.surveyTaken = surveyTaken;
 
 	let isCreator = is_creator;
 

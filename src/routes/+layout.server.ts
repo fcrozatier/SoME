@@ -1,3 +1,3 @@
 export const load = ({ locals }) => {
-	return { token: locals.token, isAdmin: locals.isAdmin, isCreator: locals.isCreator };
+	return { ...locals };
 };
