@@ -4,6 +4,7 @@ declare namespace App {
 		token?: string;
 		isAdmin?: boolean;
 		isCreator?: boolean;
+		surveyTaken?: boolean;
 	}
 	// interface PageData {}
 	// interface Platform {}
