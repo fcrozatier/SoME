@@ -60,15 +60,10 @@
 						{median || '-'}
 					</span>
 					<span
-						>Overall <button
-							on:click={() =>
-								newToast({
-									type: 'info',
-									content:
-										'Median score. <a class="underline underline-offset-2 inline cursor-pointer" href="/algorithm">Learn more</a>',
-									duration: 5000,
-								})}
-							class="font-semibold">score*</button
+						>Overall <a
+							href="/algorithm"
+							target="_blank"
+							class="no-underline hover:underline font-semibold">score*</a
 						></span
 					>
 				</div>
