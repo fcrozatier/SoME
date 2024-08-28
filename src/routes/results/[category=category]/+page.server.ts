@@ -5,9 +5,9 @@ import { error } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
 
 export const load = async ({ params, locals }) => {
-	if (!resultsAvailable() && !locals.isAdmin) {
-		error(400, { message: 'Results not available' });
-	}
+	// if (!resultsAvailable() && !locals.isAdmin) {
+	// 	error(400, { message: 'Results not available' });
+	// }
 
 	const { category } = params;
 	const entries: Pick<SelectEntry, 'uid' | 'title' | 'category' | 'thumbnail' | 'url' | 'rank'>[] =
