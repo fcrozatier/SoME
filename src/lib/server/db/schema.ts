@@ -5,6 +5,7 @@ import {
 	integer,
 	pgTable,
 	primaryKey,
+	serial,
 	text,
 	timestamp,
 	uuid,
@@ -127,15 +128,20 @@ export const cache = pgTable(
 	},
 );
 
-export const surveys = pgTable('surveys', {
-	userUid: uuid('user_uid')
-		.references(() => users.uid, { onDelete: 'cascade' })
-		.primaryKey(),
-	some: decimal('some', { precision: 4, scale: 2 }).notNull(),
-	site: decimal('site', { precision: 4, scale: 2 }).notNull(),
-	feedback: text('feedback'),
-	createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
-});
+export const surveys = pgTable(
+	'surveys',
+	{
+		id: serial('id').primaryKey(),
+		userUid: uuid('user_uid').references(() => users.uid, { onDelete: 'cascade' }),
+		some: decimal('some', { precision: 4, scale: 2 }).notNull(),
+		site: decimal('site', { precision: 4, scale: 2 }).notNull(),
+		feedback: text('feedback'),
+		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
+	},
+	({ userUid }) => ({
+		userIdx: index().on(userUid),
+	}),
+);
 
 export type NewUser = typeof users.$inferInsert;
 export type SelectEntry = typeof entries.$inferSelect;

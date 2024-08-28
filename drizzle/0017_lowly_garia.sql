@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "surveys_user_uid_index" ON "surveys" USING btree ("user_uid");
