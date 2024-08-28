@@ -131,5 +131,7 @@
 				</p>
 			{/if}
 		</form>
+	{:else if data.surveyTaken}
+		<p>You already did the survey. Thank you</p>
 	{/if}
 </article>
