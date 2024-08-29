@@ -58,6 +58,8 @@ export const handle = async function ({ event, resolve }) {
 		});
 	}
 
+	event.locals.isCreator = isCreator === 'true';
+
 	if (jwt) {
 		try {
 			const payload = jsonwebtoken.verify(jwt, JWT_SECRET, { algorithms: ['HS256'] });
@@ -71,8 +73,6 @@ export const handle = async function ({ event, resolve }) {
 	} else {
 		event.locals.isAdmin = false;
 	}
-
-	event.locals.isCreator = isCreator === 'true';
 
 	if (token) {
 		const validation = TokenSchema.safeParse(token);
