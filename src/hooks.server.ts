@@ -1,10 +1,10 @@
 import { JWT_SECRET } from '$env/static/private';
 import { MAX_AGE } from '$lib/server/config';
 import { client, db } from '$lib/server/db/client';
-import { surveys, usersToEntries } from '$lib/server/db/schema';
+import { usersToEntries } from '$lib/server/db/schema';
 import { JWTPayloadSchema, TokenSchema } from '$lib/server/validation';
 import { redirect, type Handle } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import jsonwebtoken from 'jsonwebtoken';
 
 process.on('sveltekit:shutdown', (reason) => {
@@ -28,7 +28,14 @@ export const handle = async function ({ event, resolve }) {
 	let surveyTaken = survey === 'true';
 
 	if (!survey && token) {
-		surveyTaken = (await db.select().from(surveys).where(eq(surveys.userUid, token))).length > 0;
+		surveyTaken =
+			(
+				await db.execute(sql`
+					select from surveys
+					where user_uid=${token}
+					and date_part('year', created_at)='2024';
+				`)
+			).length > 0;
 
 		event.cookies.set('survey', surveyTaken.toString(), {
 			path: '/',

@@ -3,29 +3,10 @@ import { db } from '$lib/server/db/client';
 import { surveys } from '$lib/server/db/schema';
 import { FeedbackSchema, validateForm } from '$lib/server/validation';
 import { fail, type Actions } from '@sveltejs/kit';
-import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-export const load = async ({ cookies, locals }) => {
-	const token = cookies.get('token');
-	let surveyTaken = locals.surveyTaken;
-
-	if (surveyTaken) {
-		return { surveyTaken };
-	}
-
-	if (token) {
-		surveyTaken =
-			(
-				await db.execute(sql`
-			select from surveys
-			where user_uid=${token}
-			and date_part('year', created_at)='2024';
-			`)
-			).length > 0;
-	}
-
-	return { surveyTaken };
+export const load = async ({ locals }) => {
+	return { surveyTaken: locals.surveyTaken };
 };
 
 const SurveySchema = z.object({
