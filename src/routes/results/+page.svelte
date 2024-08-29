@@ -53,10 +53,10 @@
 			<div class="flex flex-col gap-3">
 				<div>
 					{#if honorable.category === 'video'}
-						<Youtube width={360} src={honorable.url}></Youtube>
+						<Youtube width={320} src={honorable.url}></Youtube>
 					{:else if honorable.thumbnail}
-						<a href={honorable.url} target="_blank" class="w-[420px]">
-							<Thumbnail uid={honorable.thumbnail} width={360}></Thumbnail>
+						<a href={honorable.url} target="_blank" class="w-[360px]">
+							<Thumbnail uid={honorable.thumbnail} width={320}></Thumbnail>
 						</a>
 					{/if}
 				</div>
