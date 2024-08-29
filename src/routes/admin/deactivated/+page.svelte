@@ -35,7 +35,7 @@
 						/></td
 					>
 					<td><a class="capitalize" href={entry.url} target="_blank">{entry.title}</a></td>
-					<td><span class="">{entry.uid}</span></td>
+					<td><span class="font-mono">{entry.uid}</span></td>
 					<td><span class="">{entry.reason}</span></td>
 				</tr>
 			{:else}
@@ -66,7 +66,7 @@
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: auto 1fr 295px 1fr;
+		grid-template-columns: auto 1fr 320px 1fr;
 		gap: 1rem;
 		align-items: start;
 	}
