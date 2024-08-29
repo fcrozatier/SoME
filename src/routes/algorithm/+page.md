@@ -44,7 +44,7 @@ However, the benchmark revealed that PageRank is very sensitive to noise (errors
 
 While developing this custom massive voting system I created a [benchmark](https://github.com/fcrozatier/voting-systems-benchmark) to better understand the relative performance of these voting systems.
 
-The benchmark's concept is simple: simulate a vote with characteristics similar to those expected in the competition, with around 500 entries and 15,000 votes. We start by creating a random ranking representing be the "true" ranking of the entries. Then, we perform the vote according to different voting systems in an idealized scenario: if entry A has better rank than B (in the "true" ranking) then voters choose A 99% of the time.
+The benchmark's concept is simple: simulate a vote with characteristics similar to those expected in the competition, with around 500 entries and 15,000 votes. We start by creating a random ranking representing the "true" ranking of the entries. Then, we perform the vote according to different voting systems in an idealized scenario: if entry A has better rank than B (in the "true" ranking) then voters choose A 99% of the time.
 
 This is an "idealized" scenario where almost everyone agrees and votes according to the "true" ranking. In this scenario we expect the inferred ranking from the voting system to closely match the true ranking. To measure this we compare how well the top 10% of the true ranking and inferred ranking overlap.
 
