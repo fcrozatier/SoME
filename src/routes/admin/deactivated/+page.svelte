@@ -14,10 +14,11 @@
 	<table class="w-full">
 		<thead>
 			<tr class="px-6">
-				<th class="flex items-center"
-					><input id="all" type="checkbox" class="checkbox" use:toggleSelectAll /></th
-				>
+				<th class="flex items-center">
+					<input id="all" type="checkbox" class="checkbox" use:toggleSelectAll />
+				</th>
 				<th class="text-left">Entry</th>
+				<th class="text-left">Id</th>
 				<th class="text-left">Reason</th>
 			</tr>
 		</thead>
@@ -34,6 +35,7 @@
 						/></td
 					>
 					<td><a class="capitalize" href={entry.url} target="_blank">{entry.title}</a></td>
+					<td><span class="">{entry.uid}</span></td>
 					<td><span class="">{entry.reason}</span></td>
 				</tr>
 			{:else}
@@ -64,7 +66,7 @@
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: auto 1fr 1fr;
+		grid-template-columns: auto 1fr 295px 1fr;
 		gap: 1rem;
 		align-items: start;
 	}
