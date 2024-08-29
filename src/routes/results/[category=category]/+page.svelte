@@ -2,6 +2,7 @@
 	import { goto, preloadData, pushState } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from '$lib/actions.js';
+	import Pagination from '$lib/components/Pagination.svelte';
 	import Thumbnail from '$lib/components/Thumbnail.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
 	import type { ComponentProps } from 'svelte';
@@ -11,6 +12,7 @@
 
 	let displayDialog: HTMLDialogElement;
 	let entry: ComponentProps<EntriesPage>['data'] | undefined;
+	let pageNumber: string;
 
 	async function loadData(
 		e: MouseEvent & {
@@ -45,6 +47,21 @@
 <article class="layout-prose text-center">
 	<h2>Ranking of the {$page.params.category} entries</h2>
 </article>
+
+<div class="my-10 mx-auto flex justify-center">
+	<Pagination
+		pages={data.pages}
+		bind:pageNumber
+		onChange={() => {
+			$page.url.searchParams.set('page', pageNumber);
+			goto(`?${$page.url.searchParams.toString()}`, {
+				invalidateAll: true,
+				keepFocus: true,
+				noScroll: true,
+			});
+		}}
+	></Pagination>
+</div>
 
 <table class="table max-w-3xl mx-auto hidden sm:block">
 	<thead>
@@ -94,6 +111,19 @@
 			</div>
 		</div>
 	{/each}
+</div>
+
+<div class="mt-10 mx-auto flex justify-center">
+	<Pagination
+		pages={data.pages}
+		bind:pageNumber
+		onChange={() => {
+			$page.url.searchParams.set('page', pageNumber);
+			goto(`?${$page.url.searchParams.toString()}`, {
+				invalidateAll: true,
+			});
+		}}
+	></Pagination>
 </div>
 
 <dialog
