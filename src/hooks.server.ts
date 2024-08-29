@@ -58,20 +58,18 @@ export const handle = async function ({ event, resolve }) {
 		});
 	}
 
-	if (event.request.url.includes('admin')) {
-		if (jwt) {
-			try {
-				const payload = jsonwebtoken.verify(jwt, JWT_SECRET, { algorithms: ['HS256'] });
-				const { data, success } = JWTPayloadSchema.safeParse(payload);
+	if (jwt) {
+		try {
+			const payload = jsonwebtoken.verify(jwt, JWT_SECRET, { algorithms: ['HS256'] });
+			const { data, success } = JWTPayloadSchema.safeParse(payload);
 
-				event.locals.isAdmin = success && data.isAdmin;
-			} catch (error) {
-				event.cookies.delete('jwt', { path: '/' });
-				event.locals.isAdmin = false;
-			}
-		} else {
+			event.locals.isAdmin = success && data.isAdmin;
+		} catch (error) {
+			event.cookies.delete('jwt', { path: '/' });
 			event.locals.isAdmin = false;
 		}
+	} else {
+		event.locals.isAdmin = false;
 	}
 
 	event.locals.isCreator = isCreator === 'true';
