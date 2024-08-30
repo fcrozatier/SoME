@@ -8,7 +8,10 @@
 		test, please submit your favorite 3blue1brown video or blog post as an entry and participate in
 		each phase of the competition!
 	</div> -->
-	<a href="/survey" class="flex alert alert-warning mx-auto max-w-2xl text-sm sticky top-0 z-10">
+	<a
+		href="/survey"
+		class="flex alert font-semibold alert-warning mx-auto max-w-2xl text-sm sticky top-0 z-10"
+	>
 		<div class="">
 			We'd love your feedback! Please take a minute to share your thoughts on the event.
 		</div>
