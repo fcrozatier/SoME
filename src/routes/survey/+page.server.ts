@@ -10,8 +10,8 @@ export const load = async ({ locals }) => {
 };
 
 const SurveySchema = z.object({
-	some: z.string(),
-	site: z.string(),
+	some: z.coerce.number().gte(1).lte(10),
+	site: z.coerce.number().gte(1).lte(10),
 	feedback: FeedbackSchema,
 });
 
@@ -34,7 +34,9 @@ export const actions: Actions = {
 		try {
 			await db.insert(surveys).values({
 				userUid: token,
-				...validation.data,
+				some: validation.data.some.toString(),
+				site: validation.data.site.toString(),
+				feedback: validation.data.feedback,
 			});
 
 			cookies.set('survey', 'true', {
