@@ -11,13 +11,13 @@ export const load = async ({ locals }) => {
 
 	const top: Pick<
 		SelectEntry,
-		'uid' | 'title' | 'description' | 'category' | 'rank' | 'thumbnail' | 'url'
+		'uid' | 'title' | 'description' | 'category' | 'thumbnail' | 'url'
 	>[] = await db.execute(sql`
-		 select uid, title, description, category, rank, thumbnail, url from entries
+		 select uid, title, description, category, thumbnail, url from entries
 		 where active='t'
 		 and date_part('year', entries.created_at)='2024'
-		 order by rank asc
-     limit 25
+		 order by final_score desc
+     limit 25;
 		`);
 
 	return { top };
