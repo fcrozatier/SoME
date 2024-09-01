@@ -32,7 +32,8 @@ export const load = async ({ params, locals, url }) => {
 	const total = (
 		await db.execute(sql`
 		 select count(*) from entries
-		 where date_part('year', entries.created_at)='2024'
+		 where active='t'
+		 and date_part('year', entries.created_at)='2024'
 		 and category=${category}
 		`)
 	)[0] as { count: number };
