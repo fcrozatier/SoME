@@ -77,10 +77,10 @@
 			<tr class="py-2">
 				<td>
 					{#if category === 'video' && url && YOUTUBE_EMBED.test(url)}
-						<Youtube src={url} width={240}></Youtube>
+						<Youtube src={url} width={272}></Youtube>
 					{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-						<a href={url} target="_blank" class="w-[240px]">
-							<Thumbnail uid={thumbnail} width={240}></Thumbnail>
+						<a href={url} target="_blank" class="w-[272px]">
+							<Thumbnail uid={thumbnail} width={272}></Thumbnail>
 						</a>
 					{:else}
 						<a href={url} target="_blank">{url} </a>
@@ -152,7 +152,7 @@
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: 240px 1fr auto;
+		grid-template-columns: 272px 1fr auto;
 		gap: 2rem;
 		align-items: start;
 
