@@ -56,7 +56,7 @@
 					{#if honorable.category === 'video' && honorable.url && YOUTUBE_EMBED.test(honorable.url)}
 						<Youtube src={honorable.url} width={320}></Youtube>
 					{:else if honorable.thumbnail && honorable.url && !YOUTUBE_EMBED.test(honorable.url)}
-						<a href={honorable.url} target="_blank" class="w-[360px]">
+						<a href={honorable.url} target="_blank" class="w-[320px]">
 							<Thumbnail uid={honorable.thumbnail} width={320}></Thumbnail>
 						</a>
 					{:else}
