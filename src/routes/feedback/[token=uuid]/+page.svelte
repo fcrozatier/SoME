@@ -43,7 +43,7 @@
 				{@const median = round(group?.[0].median, 0)}
 				{@const comments = group.filter((f) => f.feedback && f.feedback !== '' && !f.maybe_rude)}
 				<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
-					<!-- <div
+					<div
 						class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
 						class:bg-error={median <= 3}
 						class:bg-success={median > 7}
@@ -62,19 +62,14 @@
 								{median || '-'}
 							</span>
 							<span
-								>Overall <button
-									on:click={() =>
-										newToast({
-											type: 'info',
-											content:
-												'Your median score. <a class="underline underline-offset-2 inline cursor-pointer" href="/algorithm">Learn more</a>',
-											duration: 5000,
-										})}
-									class="font-semibold">score*</button
+								>Overall <a
+									href="/algorithm"
+									target="_blank"
+									class="no-underline hover:underline font-semibold">score*</a
 								></span
 							>
 						</div>
-					</div> -->
+					</div>
 					<div class="rounded-3xl border-2 aspect-square w-40 max-w-sm grid place-items-center">
 						<div class="flex flex-col items-center gap-2">
 							<span class="text-5xl">
