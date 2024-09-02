@@ -5,6 +5,7 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	import Thumbnail from '$lib/components/Thumbnail.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
+	import { YOUTUBE_EMBED } from '$lib/utils';
 	import type { ComponentProps } from 'svelte';
 	import EntriesPage from '../../entries/[uid=uuid]/+page.svelte';
 
@@ -97,12 +98,14 @@
 <div class="sm:hidden grid justify-center gap-8">
 	{#each data.entries as { uid, title, category, thumbnail, url, rank }}
 		<div>
-			{#if category === 'video'}
-				<Youtube width={320} src={url}></Youtube>
-			{:else if thumbnail}
+			{#if category === 'video' && url && YOUTUBE_EMBED.test(url)}
+				<Youtube src={url} width={320}></Youtube>
+			{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
 				<a href={url} target="_blank" class="w-[320px]">
 					<Thumbnail uid={thumbnail} width={320}></Thumbnail>
 				</a>
+			{:else}
+				<a href={url} target="_blank">{url} </a>
 			{/if}
 			<div>
 				<span>#{rank}</span><a href={`/entries/${uid}`} on:click={loadData}
