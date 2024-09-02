@@ -96,6 +96,11 @@
 		creation of excellent math content online. You can participate as either a creator or judge.
 	</p>
 </section>
+<section>
+	<p class="text-center">
+		<a href="/results" class="btn btn-success">Results Available! </a>
+	</p>
+</section>
 
 <!-- Timeline -->
 <section class="layout-prose pb-4">
