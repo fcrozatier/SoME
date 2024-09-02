@@ -4,7 +4,7 @@ Subject: SoME Results Are Out! 🌟
 
 Dear community,
 
-We are thrilled to announce that the results for the Summer of Math Exposition (SoME) are now available! 🎉
+We are thrilled to announce that the results for the Summer of Math Exposition are now available! 🎉
 
 Thousands of judges collectively spent hundreds of hours to review the 220+ entries in this year's competition. We want to extend our heartfelt thanks to all of you for your dedication and participation. The feedback gathered on all the entries will be invaluable as we learn from each other and continue improving the quality of online science expositions.
 
