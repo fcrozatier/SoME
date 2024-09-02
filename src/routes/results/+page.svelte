@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Thumbnail from '$lib/components/Thumbnail.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
+	import { YOUTUBE_EMBED } from '$lib/utils.js';
 
 	export let data;
 </script>
@@ -52,12 +53,14 @@
 		{#each data.top.slice(5) as honorable}
 			<div class="flex flex-col gap-3">
 				<div>
-					{#if honorable.category === 'video'}
-						<Youtube width={320} src={honorable.url}></Youtube>
-					{:else if honorable.thumbnail}
+					{#if honorable.category === 'video' && honorable.url && YOUTUBE_EMBED.test(honorable.url)}
+						<Youtube src={honorable.url} width={320}></Youtube>
+					{:else if honorable.thumbnail && honorable.url && !YOUTUBE_EMBED.test(honorable.url)}
 						<a href={honorable.url} target="_blank" class="w-[360px]">
 							<Thumbnail uid={honorable.thumbnail} width={320}></Thumbnail>
 						</a>
+					{:else}
+						<a href={honorable.url} target="_blank">{honorable.url} </a>
 					{/if}
 				</div>
 				<div class="px-2">
