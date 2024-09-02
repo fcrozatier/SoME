@@ -1,0 +1,1 @@
+ALTER TABLE "surveys" ADD COLUMN "off_season" boolean;

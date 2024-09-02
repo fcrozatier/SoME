@@ -99,6 +99,25 @@
 				</div>
 			</div>
 			<div class="form-control">
+				<label for="off_season" class="label flex gap-2">
+					<span class="flex-1">
+						For the off-season, would you like the site to feature a Hacker News/Reddit style
+						leaderboard showcasing the hotttest science content of the month, along with a monthly
+						digest or newsletter?
+					</span>
+				</label>
+				<div class="flex items-center gap-4">
+					<div class="flex items-center gap-2">
+						<input name="offSeason" id="yes" class="radio" type="radio" value="yes" />
+						<label for="yes"> Yes </label>
+					</div>
+					<div class="flex items-center gap-2">
+						<input name="offSeason" id="no" class="radio" type="radio" value="no" />
+						<label for="no"> No </label>
+					</div>
+				</div>
+			</div>
+			<div class="form-control">
 				<label for="feedback" class="label flex gap-2">
 					<span class="flex-1">
 						Do you have general feedback or ways you would like to see the Summer of Math Exposition

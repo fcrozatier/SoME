@@ -136,6 +136,7 @@ export const surveys = pgTable(
 		some: decimal('some', { precision: 4, scale: 2 }).notNull(),
 		site: decimal('site', { precision: 4, scale: 2 }).notNull(),
 		feedback: text('feedback'),
+		offSeason: boolean('off_season'),
 		createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 	},
 	({ userUid }) => ({
