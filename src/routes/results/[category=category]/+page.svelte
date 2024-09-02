@@ -76,12 +76,14 @@
 		{#each data.entries as { uid, title, category, thumbnail, url, rank }}
 			<tr class="py-2">
 				<td>
-					{#if category === 'video'}
-						<Youtube width={240} src={url}></Youtube>
-					{:else if thumbnail}
+					{#if category === 'video' && url && YOUTUBE_EMBED.test(url)}
+						<Youtube src={url} width={240}></Youtube>
+					{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
 						<a href={url} target="_blank" class="w-[240px]">
 							<Thumbnail uid={thumbnail} width={240}></Thumbnail>
 						</a>
+					{:else}
+						<a href={url} target="_blank">{url} </a>
 					{/if}
 				</td>
 				<td>
