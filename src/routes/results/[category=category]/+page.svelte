@@ -91,7 +91,7 @@
 						<h3 class="max-w-sm text-base m-0">{title}</h3>
 					</a>
 				</td>
-				<td>#{rank}</td>
+				<td>{rank ? `#${rank}` : '-'}</td>
 			</tr>
 		{/each}
 	</tbody>

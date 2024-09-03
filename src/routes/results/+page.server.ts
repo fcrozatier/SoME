@@ -16,7 +16,7 @@ export const load = async ({ locals }) => {
 		 select uid, title, description, category, thumbnail, url from entries
 		 where active='t'
 		 and date_part('year', entries.created_at)='2024'
-		 order by final_score desc
+		 order by final_score desc nulls last
      limit 25;
 		`);
 

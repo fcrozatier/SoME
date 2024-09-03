@@ -24,7 +24,7 @@ export const load = async ({ params, locals, url }) => {
 		 where active='t'
 		 and date_part('year', entries.created_at)='2024'
 		 and category=${category}
-		 order by rank asc, created_at
+		 order by rank asc, created_at nulls last
 		 limit ${limit}
      offset ${(+page - 1) * limit}
 		`);
