@@ -94,13 +94,13 @@
 					<li>
 						<a href="/vote">Vote</a>
 					</li>
+				{/if}
+				{#if resultsAvailable()}
 					{#if data.isCreator}
 						<li>
 							<a href="/feedback">Feedback</a>
 						</li>
 					{/if}
-				{/if}
-				{#if resultsAvailable()}
 					<li>
 						<a href="/results">Results</a>
 					</li>
