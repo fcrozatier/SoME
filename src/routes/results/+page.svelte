@@ -9,7 +9,7 @@
 	$: width = browser ? w() : 0;
 
 	function w() {
-		return window.innerWidth < 500 ? (window.innerWidth < 400 ? window.innerWidth - 32 : 360) : 420;
+		return window.innerWidth < 500 ? (window.innerWidth < 400 ? window.innerWidth - 40 : 360) : 420;
 	}
 </script>
 
@@ -39,7 +39,7 @@
 		class="grid lg:grid-cols-2 items-start content-center justify-center gap-x-4 lg:gap-x-8 lg:gap-y-20"
 	>
 		{#each data.top.slice(0, 5) as winner}
-			<div class="mx-auto px-4">
+			<div class="mx-auto lg:mr-0 px-4">
 				{#if winner.category === 'video'}
 					<Youtube {width} src={winner.url}></Youtube>
 				{:else if winner.thumbnail}
