@@ -370,18 +370,6 @@
 	</div>
 </section>
 
-<!-- Sponsor -->
-<section class="mt-10 pt-10">
-	<h2 class="text-center text-2xl font-light">
-		Operations for this contest have been generously funded by
-	</h2>
-	<div class="flex justify-center">
-		<a href="https://www.janestreet.com/" target="_blank">
-			<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem" />
-		</a>
-	</div>
-</section>
-
 <dialog class="mb-auto" bind:this={personalLinkDialog}>
 	<form
 		class=""

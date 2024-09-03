@@ -138,9 +138,21 @@
 	<main class="prose mb-40 mt-8 max-w-full">
 		<h1 class="text-center">{COMPETITION_FULL_NAME}</h1>
 		<slot />
+
+		<!-- Sponsor -->
+		<section class="mt-10 pt-10">
+			<h2 class="text-center text-2xl font-light">
+				Operations for this contest have been generously funded by
+			</h2>
+			<div class="flex justify-center">
+				<a href="https://www.janestreet.com/" target="_blank">
+					<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem" />
+				</a>
+			</div>
+		</section>
 	</main>
 
-	<footer class="mt-auto flex flex-wrap justify-center wh gap-x-20 gap-y-10 p-4">
+	<footer class="mt-auto flex flex-wrap justify-center gap-x-20 gap-y-10 p-4">
 		<a href="/gdpr"> GDPR </a>
 		<a href="/content-policy"> Content Policy </a>
 		<a href="/contact"> Contact </a>
