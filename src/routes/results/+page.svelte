@@ -1,10 +1,23 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import Thumbnail from '$lib/components/Thumbnail.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { YOUTUBE_EMBED } from '$lib/utils.js';
 
 	export let data;
+
+	$: width = browser ? w() : 0;
+
+	function w() {
+		return window.innerWidth < 500 ? (window.innerWidth < 400 ? window.innerWidth - 32 : 360) : 420;
+	}
 </script>
+
+<svelte:window
+	on:resize={() => {
+		width = w();
+	}}
+/>
 
 <svelte:head>
 	<title>Results &middot; SoME</title>
@@ -26,12 +39,12 @@
 		class="grid lg:grid-cols-2 items-start content-center justify-center gap-x-4 lg:gap-x-8 lg:gap-y-20"
 	>
 		{#each data.top.slice(0, 5) as winner}
-			<div class="ml-auto px-4">
+			<div class="mx-auto px-4">
 				{#if winner.category === 'video'}
-					<Youtube width={420} src={winner.url}></Youtube>
+					<Youtube {width} src={winner.url}></Youtube>
 				{:else if winner.thumbnail}
-					<a href={winner.url} target="_blank" class="w-[420px]">
-						<Thumbnail uid={winner.thumbnail} width={420}></Thumbnail>
+					<a href={winner.url} target="_blank" class={`w-[${width}px]`}>
+						<Thumbnail uid={winner.thumbnail} {width}></Thumbnail>
 					</a>
 				{/if}
 			</div>
