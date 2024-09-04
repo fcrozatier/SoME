@@ -142,6 +142,7 @@
 				</a>
 			</div>
 		</section>
+		<!-- Links -->
 		<section class="flex flex-wrap content-center justify-center gap-x-20 gap-y-10">
 			<a href="/algorithm"> Algorithm </a>
 			<a href="/contact"> Contact </a>
