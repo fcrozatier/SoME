@@ -23,13 +23,13 @@
 	<title>Results &middot; SoME</title>
 </svelte:head>
 
-<section class="layout-prose pb-10">
-	<p class=" mb-16 text-center text-3xl font-light">Results</p>
-	<p>
-		You can find the 2024 winners below. The full list of video entries is available <a
-			href="/results/video">here</a
-		>. The full list of non-video entries is available <a href="/results/non-video">here</a>.
-	</p>
+<section class="layout-prose pb-10 text-center">
+	<p class=" mb-8 text-center text-4xl font-black">Results</p>
+	<p>You can find the winners for the 2024 edition below.</p>
+	<div>
+		<a href="/results/video"><button class="btn btn-primary">All videos</button></a>
+		<a href="/results/non-video"><button class="btn btn-primary">All non-videos</button></a>
+	</div>
 </section>
 
 <section class="pb-28">
