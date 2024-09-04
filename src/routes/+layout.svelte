@@ -125,13 +125,15 @@
 	<Banner display={true && !!data.token && !data.surveyTaken} />
 	<Timer display={registrationOpen()}></Timer>
 
-	<main class="prose mb-40 mt-8 max-w-full">
+	<main class="prose mt-8 max-w-full">
 		<h1 class="text-center">{COMPETITION_FULL_NAME}</h1>
 		<slot />
+	</main>
 
+	<footer class="mt-auto p-4 mx-4">
 		<!-- Sponsor -->
-		<section class="mt-10 pt-10">
-			<h2 class="text-center text-2xl font-light">
+		<section class="mt-10 mb-40 pt-10">
+			<h2 class="text-center mb-4 text-2xl font-light">
 				Operations for this contest have been generously funded by
 			</h2>
 			<div class="flex justify-center">
@@ -140,12 +142,12 @@
 				</a>
 			</div>
 		</section>
-	</main>
-
-	<footer class="mt-auto flex flex-wrap justify-center gap-x-20 gap-y-10 p-4">
-		<a href="/algorithm"> Algorithm </a>
-		<a href="/gdpr"> GDPR </a>
-		<a href="/content-policy"> Content Policy </a>
-		<a href="/contact"> Contact </a>
+		<section class="flex flex-wrap content-center justify-center gap-x-20 gap-y-10">
+			<a href="/algorithm"> Algorithm </a>
+			<a href="/contact"> Contact </a>
+			<a href="/content-policy"> Content Policy </a>
+			<a href="/gdpr"> GDPR </a>
+			<a href="/rules">Rules</a>
+		</section>
 	</footer>
 </div>
