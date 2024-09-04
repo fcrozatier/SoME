@@ -54,13 +54,6 @@
 					aria-current={$page.url.pathname.includes('/results') ? 'page' : null}>Results</a
 				>
 			{/if}
-			<a
-				href="/algorithm"
-				class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-				aria-current={$page.url.pathname.includes('/algorithm') ? 'page' : null}
-			>
-				Algorithm
-			</a>
 			{#if $page.data.isAdmin}
 				<a
 					href="/admin"
@@ -105,9 +98,6 @@
 						<a href="/results">Results</a>
 					</li>
 				{/if}
-				<li>
-					<a href="/algorithm"> Algorithm </a>
-				</li>
 				{#if $page.data.isAdmin}
 					<li>
 						<a href="/admin">Admin</a>
@@ -153,9 +143,9 @@
 	</main>
 
 	<footer class="mt-auto flex flex-wrap justify-center gap-x-20 gap-y-10 p-4">
+		<a href="/algorithm"> Algorithm </a>
 		<a href="/gdpr"> GDPR </a>
 		<a href="/content-policy"> Content Policy </a>
 		<a href="/contact"> Contact </a>
-		<a href="/previous"> Previous Edition </a>
 	</footer>
 </div>
