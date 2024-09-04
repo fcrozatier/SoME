@@ -1,10 +1,25 @@
 import { dev } from '$app/environment';
 import { db } from '$lib/server/db/client';
-import { users } from '$lib/server/db/schema';
+import { users, type SelectEntry } from '$lib/server/db/schema';
 import { EmailForm, validateForm } from '$lib/server/validation';
 import { fail, type Actions } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { sendEmail } from '../lib/server/email';
+
+export const load = async ({ locals }) => {
+	const top: Pick<
+		SelectEntry,
+		'uid' | 'title' | 'description' | 'category' | 'thumbnail' | 'url'
+	>[] = await db.execute(sql`
+		 select uid, title, description, category, thumbnail, url from entries
+		 where active='t'
+		 and date_part('year', entries.created_at)='2024'
+		 order by final_score desc nulls last
+     limit 25;
+		`);
+
+	return { top };
+};
 
 export const actions: Actions = {
 	resend_link: async ({ request }) => {
