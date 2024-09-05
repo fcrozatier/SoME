@@ -53,6 +53,11 @@
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
 					aria-current={$page.url.pathname.includes('/results') ? 'page' : null}>Results</a
 				>
+				<a
+					href="/archive"
+					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
+					aria-current={$page.url.pathname.includes('/archive') ? 'page' : null}>Archive</a
+				>
 			{/if}
 			{#if $page.data.isAdmin}
 				<a
@@ -96,6 +101,9 @@
 					{/if}
 					<li>
 						<a href="/results">Results</a>
+					</li>
+					<li>
+						<a href="/archive">Archive</a>
 					</li>
 				{/if}
 				{#if $page.data.isAdmin}
