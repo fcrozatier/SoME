@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { newToast } from '$lib/components/Toasts.svelte';
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
 	import ResultsPage from './results/+page.svelte';
 
 	export let data;
-	// export let form;
+	export let form;
 
 	// let personalLinkDialog: HTMLDialogElement;
 	// let email: string;
@@ -31,6 +33,45 @@
 		creation of excellent math content online. You can participate as either a creator or judge.
 		<a href="/rules">Learn more</a>
 	</p>
+	<form
+		class="grid justify-center"
+		method="post"
+		action="?/newsletter"
+		use:enhance={({ submitter }) => {
+			submitter?.setAttribute('disabled', 'on');
+
+			return async ({ result, update }) => {
+				submitter?.removeAttribute('disabled');
+				await update();
+
+				if (result.type === 'success') {
+					newToast({
+						type: 'success',
+						content: "You'll be notified of future editions! 🎉",
+					});
+				}
+			};
+		}}
+	>
+		<h3 class="">Receive News on Upcoming Editions</h3>
+		<label for="newsletter" class="label pb-1 label-text"> Email </label>
+		<div class="flex gap-2">
+			<input
+				id="newsletter"
+				type="email"
+				name="email"
+				class="input input-bordered"
+				placeholder="john.doe@gmail.com"
+				required
+			/>
+			<button type="submit" class="btn">Stay updated</button>
+		</div>
+		{#if form?.message}
+			<div class="text-sm pt-1" class:text-error={form.error} class:text-success={form.success}>
+				{form.message}
+			</div>
+		{/if}
+	</form>
 </section>
 
 <ResultsPage {data}></ResultsPage>
