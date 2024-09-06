@@ -11,6 +11,8 @@
 
 	export let data;
 
+	$: pages = data.pages;
+
 	let category: Category;
 	let year: string;
 	let pageNumber = $page.url.searchParams.get('page') ?? '1';
@@ -91,18 +93,20 @@
 		</div>
 	</form>
 	<div class="mt-10 mx-auto flex justify-center">
-		<Pagination
-			pages={data.pages}
-			bind:pageNumber
-			onChange={() => {
-				$page.url.searchParams.set('page', pageNumber);
-				goto(`?${$page.url.searchParams.toString()}`, {
-					invalidateAll: true,
-					keepFocus: true,
-					noScroll: true,
-				});
-			}}
-		></Pagination>
+		{#key pages}
+			<Pagination
+				{pages}
+				bind:pageNumber
+				onChange={() => {
+					$page.url.searchParams.set('page', pageNumber);
+					goto(`?${$page.url.searchParams.toString()}`, {
+						invalidateAll: true,
+						keepFocus: true,
+						noScroll: true,
+					});
+				}}
+			></Pagination>
+		{/key}
 	</div>
 </section>
 
@@ -157,16 +161,18 @@
 </div>
 
 <div class="mt-10 mx-auto flex justify-center">
-	<Pagination
-		pages={data.pages}
-		bind:pageNumber
-		onChange={() => {
-			$page.url.searchParams.set('page', pageNumber);
-			goto(`?${$page.url.searchParams.toString()}`, {
-				invalidateAll: true,
-			});
-		}}
-	></Pagination>
+	{#key pages}
+		<Pagination
+			{pages}
+			bind:pageNumber
+			onChange={() => {
+				$page.url.searchParams.set('page', pageNumber);
+				goto(`?${$page.url.searchParams.toString()}`, {
+					invalidateAll: true,
+				});
+			}}
+		></Pagination>
+	{/key}
 </div>
 
 <dialog
