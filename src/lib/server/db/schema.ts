@@ -148,3 +148,4 @@ export type NewUser = typeof users.$inferInsert;
 export type SelectEntry = typeof entries.$inferSelect;
 export type SelectVote = typeof votes.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;
+export type SelectSurveys = typeof surveys.$inferSelect;
