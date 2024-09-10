@@ -130,7 +130,7 @@
 		</aside>
 	</dialog>
 
-	<Banner display={true && !!data.token && !data.surveyTaken} />
+	<Banner display={false && !!data.token && !data.surveyTaken} />
 	<Timer display={registrationOpen()}></Timer>
 
 	<main class="prose mt-8 max-w-full">
