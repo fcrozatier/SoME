@@ -19,8 +19,9 @@ import postgres from 'postgres';
 
 export const load = async ({ params, locals }) => {
 	if (!locals.isAdmin) {
-		return fail(400);
+		return error(400, { message: 'The competition is closed' });
 	}
+
 	const entryUid = params.entryUid;
 
 	const entry = (await db.select().from(entries).where(eq(entries.uid, entryUid)))[0];
