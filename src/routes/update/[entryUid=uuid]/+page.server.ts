@@ -17,7 +17,10 @@ import { error, fail } from '@sveltejs/kit';
 import { and, eq, inArray } from 'drizzle-orm';
 import postgres from 'postgres';
 
-export const load = async ({ params }) => {
+export const load = async ({ params, locals }) => {
+	if (!locals.isAdmin) {
+		return fail(400);
+	}
 	const entryUid = params.entryUid;
 
 	const entry = (await db.select().from(entries).where(eq(entries.uid, entryUid)))[0];
