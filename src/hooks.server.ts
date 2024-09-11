@@ -84,6 +84,10 @@ export const handle = async function ({ event, resolve }) {
 		event.locals.token = validation.data;
 	}
 
+	if (event.url.pathname.includes('admin/') && !event.locals.isAdmin) {
+		throw redirect(303, '/admin');
+	}
+
 	const response = await resolve(event);
 	return response;
 } satisfies Handle;
