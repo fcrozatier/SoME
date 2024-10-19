@@ -20,7 +20,7 @@ This article details the algorithm currently in use by the {COMPETITION_FULL_NAM
 
 The first two editions of the competition used a variant of the [Bradley Terry model](https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model) called [Crowd BT](https://pages.stern.nyu.edu/~xchen3/images/crowd_pairwise.pdf)
 
-The reasons for this choice were two-fold. Firstly, there was an off-the-shelf implementation that allowed for quick setup. Secondly, this system, called [Gavel](https://anishathalye.com/gavel-an-expo-judging-system/), was already used in hackathons and seemed like a good fit.
+The reasons for this choice were two-fold. There was an off-the-shelf implementation that allowed for quick setup, and this system, called [Gavel](https://anishathalye.com/gavel-an-expo-judging-system/), was already used in hackathons and seemed like a good fit.
 
 The idea is simple: you're presented with two entries, and a vote consists of choosing the better one. This is called pairwise ranking.
 
