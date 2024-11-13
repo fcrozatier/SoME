@@ -42,15 +42,15 @@ export const actions: Actions = {
 		}
 
 		if (!dev) {
+			// Commented: 13/11/24
 			// Validate email
-			const emailValidation = await validateEmail(email);
-
-			if (!emailValidation || emailValidation.result !== 'deliverable') {
-				return fail(400, {
-					error: true,
-					message: 'Undeliverable email',
-				});
-			}
+			// const emailValidation = await validateEmail(email);
+			// if (!emailValidation || emailValidation.result !== 'deliverable') {
+			// 	return fail(400, {
+			// 		error: true,
+			// 		message: 'Undeliverable email',
+			// 	});
+			// }
 		}
 
 		const token = crypto.randomUUID();
