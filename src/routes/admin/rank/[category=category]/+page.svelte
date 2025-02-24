@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { newToast } from '$lib/components/Toasts.svelte';
 
 	let { data } = $props();
 </script>
 
 <article class="layout-prose">
-	<h2>Rank {$page.params.category} entries</h2>
+	<h2>Rank {page.params.category} entries</h2>
 
 	<form
 		method="post"

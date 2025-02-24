@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { clickOutside } from '$lib/actions';
 	import Banner from '$lib/components/Banner.svelte';
 	import Icon from '$lib/components/Icon.svelte';
@@ -12,12 +12,12 @@
 	import '../app.css';
 	import '../math.css';
 
-	export let data;
+	let { data, children } = $props();
 
-	let sideNav: HTMLDialogElement;
+	let sideNav: HTMLDialogElement | undefined = $state();
 
 	beforeNavigate(() => {
-		sideNav.close();
+		sideNav?.close();
 	});
 </script>
 
@@ -29,7 +29,7 @@
 		<a class="inline-flex items-center gap-4" href="/">
 			<Icon class="rounded-full" name="logo" width="3.5em" />
 		</a>
-		<button class="ml-auto mr-4 sm:hidden" on:click={() => sideNav.showModal()}
+		<button class="ml-auto mr-4 sm:hidden" onclick={() => sideNav?.showModal()}
 			><img src={Menu} alt="Menu" /></button
 		>
 		<span class="navbar-start gap-8 hidden sm:flex">
@@ -37,7 +37,7 @@
 				<a
 					href="/vote"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={$page.url.pathname.includes('/vote') ? 'page' : null}>Vote</a
+					aria-current={page.url.pathname.includes('/vote') ? 'page' : null}>Vote</a
 				>
 			{/if}
 			{#if resultsAvailable()}
@@ -45,25 +45,25 @@
 					<a
 						href="/feedback"
 						class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-						aria-current={$page.url.pathname.includes('/feedback') ? 'page' : null}>Feedback</a
+						aria-current={page.url.pathname.includes('/feedback') ? 'page' : null}>Feedback</a
 					>
 				{/if}
 				<a
 					href="/results"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={$page.url.pathname.includes('/results') ? 'page' : null}>Results</a
+					aria-current={page.url.pathname.includes('/results') ? 'page' : null}>Results</a
 				>
 				<a
 					href="/archive"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={$page.url.pathname.includes('/archive') ? 'page' : null}>Archive</a
+					aria-current={page.url.pathname.includes('/archive') ? 'page' : null}>Archive</a
 				>
 			{/if}
-			{#if $page.data.isAdmin}
+			{#if page.data.isAdmin}
 				<a
 					href="/admin"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={$page.url.pathname.includes('/admin') ? 'page' : null}>Admin</a
+					aria-current={page.url.pathname.includes('/admin') ? 'page' : null}>Admin</a
 				>
 			{/if}
 		</span>
@@ -85,7 +85,7 @@
 		</span>
 	</nav>
 	<dialog class="m-0 left-full -translate-x-full" bind:this={sideNav}>
-		<aside class="" use:clickOutside={() => sideNav.close()}>
+		<aside class="" use:clickOutside={() => sideNav?.close()}>
 			<h2 class="font-semibold">Menu</h2>
 			<ul class="flex-col flex gap-4 mt-4">
 				{#if voteOpen() && data.token}
@@ -106,7 +106,7 @@
 						<a href="/archive">Archive</a>
 					</li>
 				{/if}
-				{#if $page.data.isAdmin}
+				{#if page.data.isAdmin}
 					<li>
 						<a href="/admin">Admin</a>
 					</li>
@@ -135,7 +135,7 @@
 
 	<main class="prose mt-8 max-w-full">
 		<h1 class="text-center">{COMPETITION_FULL_NAME}</h1>
-		<slot />
+		{@render children?.()}
 	</main>
 
 	<footer class="mt-auto p-4 mx-4">

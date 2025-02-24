@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 
-	export let pages: number;
-	export let pageNumber = '1';
-	export let onChange = () => {};
+	interface Props {
+		pages: number;
+		pageNumber?: string;
+		onChange?: any;
+	}
+
+	let { pages, pageNumber = $bindable('1'), onChange = () => {} }: Props = $props();
 
 	const makeArray = (current: number) => {
 		const array: number[] = [];
@@ -29,21 +33,15 @@
 		return Array.from({ length: pages }, (_, i) => i + 1);
 	};
 
-	$: width = browser ? window.innerWidth : Infinity;
-	$: array = makeArray(+pageNumber);
+	let width = $state(browser ? window.innerWidth : Infinity);
+	let array = $derived(makeArray(+pageNumber));
 </script>
 
-<svelte:window
-	on:resize={() => {
-		width = window.innerWidth;
-		array = makeArray(+pageNumber);
-		array = array;
-	}}
-/>
+<svelte:window bind:innerWidth={width} />
 
 <div class="mt-10 mx-auto flex justify-center">
 	{#if pages > 1}
-		<form class="join" on:change={onChange}>
+		<form class="join" onchange={onChange}>
 			{#each array as n}
 				<div class="pagination-grid">
 					{#if Number.isNaN(n)}

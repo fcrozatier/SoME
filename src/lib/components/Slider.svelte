@@ -1,15 +1,27 @@
 <script lang="ts">
-	export let name: string;
-	export let value: number;
-	export let ready = false;
+	interface Props {
+		name: string;
+		value: number;
+		ready?: boolean;
+		label1?: string;
+		label3?: string;
+		label5?: string;
+		label7?: string;
+		label9?: string;
+	}
 
-	export let label1 = '';
-	export let label3 = '';
-	export let label5 = '';
-	export let label7 = '';
-	export let label9 = '';
+	let {
+		name,
+		value = $bindable(),
+		ready = $bindable(false),
+		label1 = '',
+		label3 = '',
+		label5 = '',
+		label7 = '',
+		label9 = '',
+	}: Props = $props();
 
-	let input: HTMLInputElement;
+	let input: HTMLInputElement | undefined = $state();
 
 	function label(value: number) {
 		if (value < 1.5) return label1;
@@ -39,27 +51,27 @@
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relative -left-1"
-				on:pointerdown={() => changeValue(1)}>{label1}</label
+				onpointerdown={() => changeValue(1)}>{label1}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left sm:block relative -left-1"
-				on:pointerdown={() => changeValue(3)}>{label3}</label
+				onpointerdown={() => changeValue(3)}>{label3}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relative -right-2"
-				on:pointerdown={() => changeValue(5)}>{label5}</label
+				onpointerdown={() => changeValue(5)}>{label5}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left sm:block relative -right-4"
-				on:pointerdown={() => changeValue(7)}>{label7}</label
+				onpointerdown={() => changeValue(7)}>{label7}</label
 			>
 			<label
 				for={name}
 				class="cursor-pointer rotate-90 sm:rotate-0 text-nowrap origin-left relatite -right-0"
-				on:pointerdown={() => changeValue(9)}>{label9}</label
+				onpointerdown={() => changeValue(9)}>{label9}</label
 			>
 		</div>
 		<div class="h-[500px]">
@@ -73,7 +85,7 @@
 				class="range"
 				bind:value
 				bind:this={input}
-				on:change={() => (ready = true)}
+				onchange={() => (ready = true)}
 				class:range-error={value <= 3}
 				class:range-success={value >= 7}
 				class:range-warning={value > 3 && value < 7}

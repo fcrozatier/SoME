@@ -3,18 +3,19 @@
 	import { goto } from '$app/navigation';
 	import { newToast } from '$lib/components/Toasts.svelte';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
-	let someValue = 5;
-	let siteValue = 5;
-	let feedback = '';
+	let someValue = $state(5);
+	let siteValue = $state(5);
+	let feedback = $state('');
 
-	let errorSummary: HTMLDivElement | undefined;
+	let errorSummary: HTMLDivElement | undefined = $state();
 
-	$: if (form?.surveyFail) {
-		errorSummary?.scrollIntoView();
-	}
+	$effect(() => {
+		if (form?.surveyFail) {
+			errorSummary?.scrollIntoView();
+		}
+	});
 </script>
 
 <article class="layout-prose">
@@ -58,7 +59,7 @@
 				/>
 				<div class="w-full flex justify-between text-xs px-1">
 					{#each Array.from({ length: 10 }) as _, i}
-						<button type="button" on:click={() => (someValue = i + 1)}>{i + 1}</button>
+						<button type="button" onclick={() => (someValue = i + 1)}>{i + 1}</button>
 					{/each}
 				</div>
 				<div class="w-full flex justify-between text-xs px-1">
@@ -89,7 +90,7 @@
 				/>
 				<div class="w-full flex justify-between text-xs px-1">
 					{#each Array.from({ length: 10 }) as _, i}
-						<button type="button" on:click={() => (siteValue = i + 1)}>{i + 1}</button>
+						<button type="button" onclick={() => (siteValue = i + 1)}>{i + 1}</button>
 					{/each}
 				</div>
 				<div class="w-full flex justify-between text-xs px-1">

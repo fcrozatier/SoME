@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from '$env/static/public';
 	import { newToast } from '$lib/components/Toasts.svelte';
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
@@ -282,7 +282,7 @@
 			{/if}
 		</div>
 
-		{#if form?.fieldErrors || $page.status !== 200}
+		{#if form?.fieldErrors || page.status !== 200}
 			<p class="block text-error">
 				Something went wrong. {form?.message || ''}
 			</p>

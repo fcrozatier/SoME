@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto, preloadData, pushState } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { clickOutside } from '$lib/actions.js';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import Thumbnail from '$lib/components/Thumbnail.svelte';
@@ -9,18 +9,18 @@
 	import type { ComponentProps } from 'svelte';
 	import EntriesPage from '../entries/[uid=uuid]/+page.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	$: pages = data.pages;
+	let pages = $derived(data.pages);
 
-	let category: Category;
-	let year: string;
-	let pageNumber = $page.url.searchParams.get('page') ?? '1';
+	let category: Category = $state('video');
+	let year: string = $state('2023');
+	let pageNumber = $state(page.url.searchParams.get('page') ?? '1');
 
 	const years = ['2023', '2022', '2021'];
 
-	let displayDialog: HTMLDialogElement;
-	let entry: ComponentProps<EntriesPage>['data'] | undefined;
+	let displayDialog: HTMLDialogElement | undefined = $state();
+	let entry: ComponentProps<typeof EntriesPage>['data'] | undefined = $state();
 
 	async function loadData(
 		e: MouseEvent & {
@@ -40,8 +40,8 @@
 			pushState(href, { entry: result.data });
 			// @ts-ignore
 			entry = result.data;
-			displayDialog.showModal();
-			displayDialog.scrollTo({ top: 0 });
+			displayDialog?.showModal();
+			displayDialog?.scrollTo({ top: 0 });
 		} else {
 			goto(href);
 		}
@@ -56,12 +56,12 @@
 	<p class=" mb-16 text-center text-3xl font-light">Archive</p>
 	<form
 		class="flex gap-3 justify-center"
-		on:change={() => {
-			$page.url.searchParams.set('category', category);
-			$page.url.searchParams.set('year', year);
-			$page.url.searchParams.set('page', '1');
+		onchange={() => {
+			page.url.searchParams.set('category', category);
+			page.url.searchParams.set('year', year);
+			page.url.searchParams.set('page', '1');
 			pageNumber = '1';
-			goto(`?${$page.url.searchParams.toString()}`, {
+			goto(`?${page.url.searchParams.toString()}`, {
 				invalidateAll: true,
 				keepFocus: true,
 				noScroll: true,
@@ -74,8 +74,7 @@
 			</label>
 			<select class="select-bordered select" bind:value={year} name="year" id="year">
 				{#each years as year}
-					<option value={year} selected={$page.url.searchParams.get('year') === year}>{year}</option
-					>
+					<option value={year} selected={page.url.searchParams.get('year') === year}>{year}</option>
 				{/each}
 			</select>
 		</div>
@@ -85,7 +84,7 @@
 			</label>
 			<select class="select-bordered select" bind:value={category} name="category" id="category">
 				{#each categories as category}
-					<option value={category} selected={$page.url.searchParams.get('category') === category}
+					<option value={category} selected={page.url.searchParams.get('category') === category}
 						>{category}</option
 					>
 				{/each}
@@ -98,8 +97,8 @@
 				{pages}
 				bind:pageNumber
 				onChange={() => {
-					$page.url.searchParams.set('page', pageNumber);
-					goto(`?${$page.url.searchParams.toString()}`, {
+					page.url.searchParams.set('page', pageNumber);
+					goto(`?${page.url.searchParams.toString()}`, {
 						invalidateAll: true,
 						keepFocus: true,
 						noScroll: true,
@@ -131,7 +130,7 @@
 					{/if}
 				</td>
 				<td>
-					<a href={`/entries/${uid}`} on:click={loadData}>
+					<a href={`/entries/${uid}`} onclick={loadData}>
 						<h3 class="max-w-sm text-base m-0">{title}</h3>
 					</a>
 				</td>
@@ -152,7 +151,7 @@
 				</a>
 			{/if}
 			<div>
-				<span>#{rank}</span><a href={`/entries/${uid}`} on:click={loadData}
+				<span>#{rank}</span><a href={`/entries/${uid}`} onclick={loadData}
 					><h3 class="max-w-xs text-base m-0">{title}</h3>
 				</a>
 			</div>
@@ -166,8 +165,8 @@
 			{pages}
 			bind:pageNumber
 			onChange={() => {
-				$page.url.searchParams.set('page', pageNumber);
-				goto(`?${$page.url.searchParams.toString()}`, {
+				page.url.searchParams.set('page', pageNumber);
+				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 				});
 			}}
@@ -178,16 +177,16 @@
 <dialog
 	class="fixed inset-0 pt-0 m-auto overflow-auto max-w-3xl overscroll-y-none"
 	bind:this={displayDialog}
-	on:close={() => {
+	onclose={() => {
 		history.back();
 		entry = undefined;
 	}}
 >
-	<article use:clickOutside={() => displayDialog.close()}>
+	<article use:clickOutside={() => displayDialog?.close()}>
 		{#if entry}
 			<EntriesPage data={entry}></EntriesPage>
 			<p class="flex gap-2 mt-12">
-				<button class="btn btn-outline" on:click={() => displayDialog.close()}>Close</button>
+				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
 			</p>
 		{/if}
 	</article>

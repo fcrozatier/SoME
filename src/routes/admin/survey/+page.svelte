@@ -23,7 +23,11 @@
 					<td>{feedback}</td>
 				</tr>
 			{:else}
-				<p>No surveys yet</p>
+				<tr>
+					<td>
+						<p>No surveys yet</p>
+					</td>
+				</tr>
 			{/each}
 		</tbody>
 	</table>

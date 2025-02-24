@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { afterNavigate, goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { clickOutside } from '$lib/actions';
 	import Display from '$lib/components/Display.svelte';
 	import NewVote from '$lib/components/NewVote.svelte';
@@ -10,21 +10,20 @@
 	import { onMount } from 'svelte';
 	import { formAction } from './config';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
-	let flagDialog: HTMLDialogElement;
-	let guidelines: HTMLDialogElement;
-	let actionScreen: HTMLDialogElement;
-	let splitButtonOpen = false;
+	let flagDialog: HTMLDialogElement | undefined = $state();
+	let guidelines: HTMLDialogElement | undefined = $state();
+	let actionScreen: HTMLDialogElement | undefined = $state();
+	let splitButtonOpen = $state(false);
 
-	let score = 5;
-	let ready = false;
-	let feedback = '';
+	let score = $state(5);
+	let ready = $state(false);
+	let feedback = $state('');
 
 	let targetTime: number;
-	let cooldown = 590;
-	let interval: ReturnType<typeof setInterval>;
+	let cooldown = $state(590);
+	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
 	const visibilitychange = () => {
 		if (document.visibilityState === 'visible') {
@@ -56,12 +55,12 @@
 
 		if (
 			!data.stopVote &&
-			!$page.url.searchParams.get('screen') &&
+			!page.url.searchParams.get('screen') &&
 			data.total_votes &&
 			data.total_votes > 0 &&
 			data.total_votes % 5 === 0
 		) {
-			actionScreen.showModal();
+			actionScreen?.showModal();
 		}
 	});
 
@@ -84,7 +83,7 @@
 		<div>
 			<p class="text-success">Thank you for participating!</p>
 
-			<NewVote {page} displayCategories="others-only" />
+			<NewVote displayCategories="others-only" />
 		</div>
 	{:else}
 		<Display {data}></Display>
@@ -127,7 +126,7 @@
 					score = 5;
 
 					// Like update but scrolls to top
-					await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
+					await goto(`/vote/${page.params['token']}/${page.params['category']}`, {
 						noScroll: false,
 						invalidateAll: true,
 					});
@@ -144,9 +143,9 @@
 					<button
 						class="font-semibold hover:underline text-sm"
 						type="button"
-						on:click={() => {
-							guidelines.showModal();
-							guidelines.scrollTo({ top: 0 });
+						onclick={() => {
+							guidelines?.showModal();
+							guidelines?.scrollTo({ top: 0 });
 						}}>(Guidelines*)</button
 					>
 				</p>
@@ -202,7 +201,7 @@
 						aria-expanded={splitButtonOpen}
 						aria-haspopup="true"
 						title="Open for more skip actions"
-						on:click={() => {
+						onclick={() => {
 							if (!splitButtonOpen) splitButtonOpen = true;
 						}}>&vellip;</button
 					>
@@ -226,7 +225,7 @@
 				<button
 					type="button"
 					class="btn btn-outline btn-error"
-					on:click={() => flagDialog.showModal()}>Flag</button
+					onclick={() => flagDialog?.showModal()}>Flag</button
 				>
 			</div>
 			{#if form?.voteFail || form?.skipFail}
@@ -246,7 +245,7 @@
 </article>
 
 <dialog class="" bind:this={guidelines}>
-	<article use:clickOutside={() => guidelines.close()}>
+	<article use:clickOutside={() => guidelines?.close()}>
 		<h2 id="guidlines" class="text-center mt-0 mb-8">Guidelines</h2>
 
 		<p>When scoring an entry you might consider the following principles:</p>
@@ -275,7 +274,7 @@
 		</p>
 
 		<p class="text-center mt-8 mb-2">
-			<button type="button" class="btn-outline btn" on:click={() => guidelines.close()}
+			<button type="button" class="btn-outline btn" onclick={() => guidelines?.close()}
 				>Close</button
 			>
 		</p>
@@ -286,17 +285,17 @@
 	<form
 		method="post"
 		action="?/flag"
-		use:clickOutside={() => flagDialog.close()}
+		use:clickOutside={() => flagDialog?.close()}
 		use:enhance={({ formElement }) => {
 			const buttons = document.querySelectorAll('button');
 			buttons.forEach((b) => b.setAttribute('disabled', 'on'));
 			return async () => {
 				buttons.forEach((b) => b.removeAttribute('disabled'));
 				formElement.reset();
-				flagDialog.close();
+				flagDialog?.close();
 				clearInterval(interval);
 				newToast({ type: 'info', content: 'Entry flagged' });
-				await goto(`/vote/${$page.params['token']}/${$page.params['category']}`, {
+				await goto(`/vote/${page.params['token']}/${page.params['category']}`, {
 					noScroll: false,
 					invalidateAll: true,
 				});
@@ -324,12 +323,12 @@
 		<input type="hidden" value={data.uid} name="uid" />
 		<input type="hidden" value={data.tag} name="tag" />
 		<p class="mb-0 mt-8 flex items-center gap-2">
-			<button type="button" class="btn-outline btn" on:click={() => flagDialog.close()}
+			<button type="button" class="btn-outline btn" onclick={() => flagDialog?.close()}
 				>Cancel</button
 			>
 			<button type="submit" class="btn-outline btn-error btn">Report </button>
 			{#if form?.id === 'FLAG' && form?.flagFail}
-				<p class="text-error">Something went wrong.</p>
+				<span class="text-error">Something went wrong.</span>
 			{/if}
 		</p>
 	</form>
@@ -340,6 +339,6 @@
 		<h2 class="mt-0">You've made {data.total_votes} votes!</h2>
 		<p class="text-success">Thank you.</p>
 		<p class="">You can continue voting, change category or take a break at any time</p>
-		<NewVote {page} />
+		<NewVote />
 	</form>
 </dialog>

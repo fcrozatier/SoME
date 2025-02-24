@@ -1,7 +1,12 @@
 <script lang="ts">
-	export let name: keyof typeof icons;
-	export let width = '1rem';
-	export let height = width;
+	interface Props {
+		class?: string;
+		name: keyof typeof icons;
+		width: string;
+		height?: string;
+	}
+
+	let { class: className, name, width, height = width }: Props = $props();
 
 	let icons = {
 		discord: {
@@ -50,6 +55,6 @@
 		: [displayIcon.box, displayIcon.box];
 </script>
 
-<svg class={$$props.class} {width} {height} viewBox="0 0 {boxWidth} {boxHeight}"
+<svg class={className} {width} {height} viewBox="0 0 {boxWidth} {boxHeight}"
 	>{@html displayIcon.svg}</svg
 >
