@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let data;
+	let { data } = $props();
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl overflow-x-auto">
@@ -23,7 +23,11 @@
 					<td>{feedback}</td>
 				</tr>
 			{:else}
-				<p>No surveys yet</p>
+				<tr>
+					<td>
+						<p>No surveys yet</p>
+					</td>
+				</tr>
 			{/each}
 		</tbody>
 	</table>

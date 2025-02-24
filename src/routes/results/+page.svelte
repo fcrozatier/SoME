@@ -4,17 +4,16 @@
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { YOUTUBE_EMBED } from '$lib/utils.js';
 
-	export let data;
-
-	$: width = browser ? w() : 0;
+	let { data } = $props();
 
 	function w() {
 		return window.innerWidth < 500 ? (window.innerWidth < 400 ? window.innerWidth - 40 : 360) : 420;
 	}
+	let width = $state(browser ? w() : 0);
 </script>
 
 <svelte:window
-	on:resize={() => {
+	onresize={() => {
 		width = w();
 	}}
 />

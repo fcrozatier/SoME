@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import { writable } from 'svelte/store';
 
 	interface ToastConfig {
@@ -73,7 +73,7 @@
 			in:receive={{ key: toast.id, duration: 300, easing: quintOut }}
 			out:send={{ key: toast.id, duration: 200 }}
 			animate:flip={{ duration: 200, easing: quintOut }}
-			on:introend={() => willRemove(toast)}
+			onintroend={() => willRemove(toast)}
 		>
 			{@html toast.content}
 		</output>

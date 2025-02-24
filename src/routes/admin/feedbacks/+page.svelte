@@ -3,9 +3,9 @@
 	import { toggleSelectAll } from '$lib/actions';
 	import { newToast } from '$lib/components/Toasts.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	let selected: [string, string][] = [];
+	let selected: [string, string][] = $state([]);
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl">
@@ -37,7 +37,11 @@
 					<td><span class="whitespace-pre-wrap">{f.feedback}</span></td>
 				</tr>
 			{:else}
-				<p class="px-6">No feedback to review</p>
+				<tr>
+					<td>
+						<p class="px-6">No feedback to review</p>
+					</td>
+				</tr>
 			{/each}
 		</tbody>
 	</table>

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { templateNames } from '$lib/config';
 
-	let selected: string[] = [];
+	let selected: string[] = $state([]);
 </script>
 
 <article class="layout-prose">
@@ -43,7 +43,7 @@
 				>Send message to all recipients of the mailing list</button
 			>
 		</p>
-		{#if $page.status !== 200}
+		{#if page.status !== 200}
 			<p class="text-error">Something went wrong</p>
 		{/if}
 	</form>

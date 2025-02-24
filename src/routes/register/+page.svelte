@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { PUBLIC_REGISTRATION_END } from '$env/static/public';
 	import Time from '$lib/components/Time.svelte';
 	import {
@@ -12,8 +12,7 @@
 	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
 	import { tick } from 'svelte';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
 	export const snapshot = {
 		capture: () => {
@@ -38,13 +37,13 @@
 		},
 	};
 
-	let userType: (typeof userTypes)[number];
-	let email: string;
-	let otherContributors: string[] = [];
-	let category: string;
-	let title: string;
-	let description = '';
-	let link: string;
+	let userType: (typeof userTypes)[number] = $state('judge');
+	let email = $state('');
+	let otherContributors: string[] = $state([]);
+	let category = $state('');
+	let title = $state('');
+	let description = $state('');
+	let link = $state('');
 
 	async function addContributor() {
 		otherContributors = [...otherContributors, ''];
@@ -203,7 +202,7 @@
 							<button
 								type="button"
 								class="btn-outline btn-xs btn-circle btn opacity-80"
-								on:click={() => {
+								onclick={() => {
 									otherContributors.splice(i, 1);
 									otherContributors = otherContributors;
 								}}>&cross;</button
@@ -216,7 +215,7 @@
 					<button
 						type="button"
 						class="btn-outline btn-sm btn-circle btn opacity-80"
-						on:click={addContributor}
+						onclick={addContributor}
 					>
 						+</button
 					>
@@ -281,7 +280,7 @@
 						rows="8"
 						bind:value={description}
 						required
-					/>
+					></textarea>
 					<div class="label">
 						<span class="label-text-alt text-error">
 							{#if form?.fieldErrors?.description}
@@ -369,7 +368,7 @@
 				</div>
 			{/if}
 
-			{#if form?.fieldErrors || $page.status !== 200}
+			{#if form?.fieldErrors || page.status !== 200}
 				<p class="block text-error">
 					Something went wrong. {form?.invalid
 						? 'Please correct the highlighted fields above'

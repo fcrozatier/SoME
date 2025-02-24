@@ -2,7 +2,11 @@
 	import type { SelectEntry } from '$lib/server/db/schema';
 	import Youtube from './Youtube.svelte';
 
-	export let entries: Pick<SelectEntry, 'category' | 'url' | 'thumbnail'>[];
+	interface Props {
+		entries: Pick<SelectEntry, 'category' | 'url' | 'thumbnail'>[];
+	}
+
+	let { entries }: Props = $props();
 </script>
 
 <div

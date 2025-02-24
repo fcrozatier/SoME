@@ -1,7 +1,11 @@
 <script lang="ts">
-	export let datetime: string;
-	export let time = true;
-	export let options: Intl.DateTimeFormatOptions | undefined = undefined;
+	interface Props {
+		datetime: string;
+		time?: boolean;
+		options?: Intl.DateTimeFormatOptions | undefined;
+	}
+
+	let { datetime, time = true, options = undefined }: Props = $props();
 
 	const intl = new Intl.DateTimeFormat(
 		'en',

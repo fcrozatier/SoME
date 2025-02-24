@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { clickOutside } from '$lib/actions';
 	import Display from '$lib/components/Display.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
 
-	export let data;
-	export let form;
+	let { data, form = $bindable() } = $props();
 
-	let pageNumber = $page.url.searchParams.get('page') ?? '1';
-	let displayDialog: HTMLDialogElement;
+	let pageNumber = $state(page.url.searchParams.get('page') ?? '1');
+	let displayDialog: HTMLDialogElement | undefined = $state();
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl">
@@ -21,8 +20,8 @@
 			pages={data.pages}
 			bind:pageNumber
 			onChange={() => {
-				$page.url.searchParams.set('page', pageNumber);
-				goto(`?${$page.url.searchParams.toString()}`, {
+				page.url.searchParams.set('page', pageNumber);
+				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 					keepFocus: true,
 					noScroll: true,
@@ -54,8 +53,8 @@
 									buttons.forEach((b) => b.removeAttribute('disabled'));
 
 									if (result.type === 'success' && action.search.includes('display')) {
-										displayDialog.show();
-										displayDialog.scrollTo({ top: 0 });
+										displayDialog?.show();
+										displayDialog?.scrollTo({ top: 0 });
 									}
 								};
 							}}
@@ -67,7 +66,11 @@
 					</td>
 				</tr>
 			{:else}
-				<p class="px-6">No entries to review</p>
+				<tr>
+					<td>
+						<p class="px-6">No entries to review</p>
+					</td>
+				</tr>
 			{/each}
 		</tbody>
 	</table>
@@ -77,8 +80,8 @@
 			pages={data.pages}
 			bind:pageNumber
 			onChange={() => {
-				$page.url.searchParams.set('page', pageNumber);
-				goto(`?${$page.url.searchParams.toString()}`, {
+				page.url.searchParams.set('page', pageNumber);
+				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 					keepFocus: true,
 					noScroll: true,
@@ -91,17 +94,17 @@
 <dialog
 	class="fixed inset-0 pt-0 m-auto overflow-auto"
 	bind:this={displayDialog}
-	on:close={() => {
+	onclose={() => {
 		// Stop playing
 		form = null;
 	}}
 >
-	<article class="" use:clickOutside={() => displayDialog.close()}>
+	<article class="" use:clickOutside={() => displayDialog?.close()}>
 		{#if form?.entry}
 			<Display data={form.entry}></Display>
 
 			<p class="flex gap-2">
-				<button class="btn btn-outline" on:click={() => displayDialog.close()}>Close</button>
+				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
 				<a class="btn btn-outline" href={`/update/${form.entry.uid}`}>Update</a>
 			</p>
 		{/if}

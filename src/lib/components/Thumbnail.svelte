@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from '$env/static/public';
 
-	export let uid: string;
-	export let width = 480;
+	interface Props {
+		uid: string;
+		width?: number;
+	}
+
+	let { uid, width = 480 }: Props = $props();
 </script>
 
 <img
