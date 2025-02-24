@@ -1,4 +1,4 @@
-﻿export const non_videos = [
+export const non_videos = [
 	{
 		title: 'How Computers Use Numbers',
 		description:

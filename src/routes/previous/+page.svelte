@@ -80,7 +80,7 @@
 							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 							allowfullscreen
 							loading="lazy"
-						/>
+						></iframe>
 					{:else}
 						<a href={honorable.link} target="_blank" class="w-[420px]">
 							<img

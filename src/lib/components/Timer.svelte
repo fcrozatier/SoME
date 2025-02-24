@@ -2,9 +2,13 @@
 	import { timeLeft } from '$lib/utils';
 	import { onMount } from 'svelte';
 
-	export let display = false;
+	interface Props {
+		display?: boolean;
+	}
 
-	let remaining = timeLeft();
+	let { display = false }: Props = $props();
+
+	let remaining = $state(timeLeft());
 
 	let interval: NodeJS.Timeout | undefined;
 	onMount(() => {

@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { newToast } from '$lib/components/Toasts.svelte';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <article class="layout-prose">

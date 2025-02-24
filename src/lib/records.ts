@@ -1,4 +1,4 @@
-﻿export const nonVideos = [
+export const nonVideos = [
 	{
 		title: 'Trying to Understand Irrational Numbers Using a Rational Way',
 		description:

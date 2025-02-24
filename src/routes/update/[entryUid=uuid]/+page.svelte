@@ -7,8 +7,7 @@
 	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
 	import { tick } from 'svelte';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
 	export const snapshot = {
 		capture: () => {
@@ -31,12 +30,12 @@
 		},
 	};
 
-	let email = data.emails[0];
-	let otherContributors = data.emails.slice(1);
-	let category = data.category;
-	let title = data.title;
-	let description = data.description;
-	let link = data.url;
+	let email = $state(data.emails[0]);
+	let otherContributors = $state(data.emails.slice(1));
+	let category = $state(data.category);
+	let title = $state(data.title);
+	let description = $state(data.description);
+	let link = $state(data.url);
 
 	async function addContributor() {
 		otherContributors = [...otherContributors, ''];
@@ -106,7 +105,7 @@
 					<button
 						type="button"
 						class="btn-outline btn-xs btn-circle btn opacity-80"
-						on:click={() => {
+						onclick={() => {
 							otherContributors.splice(i, 1);
 							otherContributors = otherContributors;
 						}}>&cross;</button
@@ -119,7 +118,7 @@
 			<button
 				type="button"
 				class="btn-outline btn-sm btn-circle btn opacity-80"
-				on:click={addContributor}
+				onclick={addContributor}
 			>
 				+</button
 			>
@@ -181,7 +180,7 @@
 				rows="8"
 				bind:value={description}
 				required
-			/>
+			></textarea>
 			<div class="label">
 				<span class="label-text-alt text-error">
 					{#if form?.fieldErrors?.description}

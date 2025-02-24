@@ -5,7 +5,7 @@
 	"private": true,
 	"engines": {
 		"node": "23.x",
-		"pnpm": "9.x"
+		"pnpm": "10.x"
 	},
 	"scripts": {
 		"dev": "vite dev",
@@ -26,7 +26,7 @@
 		"@playwright/test": "^1.50.1",
 		"@sveltejs/adapter-node": "^5.2.12",
 		"@sveltejs/kit": "^2.17.2",
-		"@sveltejs/vite-plugin-svelte": "^3.1.2",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@tailwindcss/typography": "^0.5.16",
 		"@types/jsonwebtoken": "^9.0.9",
 		"@types/katex": "^0.16.7",
@@ -40,8 +40,8 @@
 		"prettier": "^3.5.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"rehype-target-plugin": "^1.0.1",
-		"svelte": "^4.2.19",
-		"svelte-check": "^3.8.6",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
 		"svelte-target-blank": "^1.0.0",
 		"tailwindcss": "^3.4.17",
 		"typescript": "^5.7.3",

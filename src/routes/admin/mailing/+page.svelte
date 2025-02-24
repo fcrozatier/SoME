@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { templateNames } from '$lib/config';
 
-	let selected: string[] = [];
+	let selected: string[] = $state([]);
 </script>
 
 <article class="layout-prose">

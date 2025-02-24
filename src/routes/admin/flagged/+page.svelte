@@ -3,9 +3,9 @@
 	import { toggleSelectAll } from '$lib/actions';
 	import { newToast } from '$lib/components/Toasts.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	let selected: string[] = [];
+	let selected: string[] = $state([]);
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl overflow-x-auto">
@@ -37,7 +37,11 @@
 					<td><span class="">{entry.reason}</span></td>
 				</tr>
 			{:else}
-				<p>No entries to review</p>
+				<tr>
+					<td>
+						<p>No entries to review</p>
+					</td>
+				</tr>
 			{/each}
 		</tbody>
 	</table>

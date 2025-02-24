@@ -1,6 +1,10 @@
 <script lang="ts">
-	export let src: string;
-	export let width = 420;
+	interface Props {
+		src: string;
+		width?: number;
+	}
+
+	let { src, width = 420 }: Props = $props();
 </script>
 
 <iframe

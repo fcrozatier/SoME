@@ -1,13 +1,22 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	import type { KatexOptions } from 'katex';
 	import katex from 'katex';
 </script>
 
 <script lang="ts">
-	export let displayMode = false;
-	export let nowrap = false;
-	export let tex: string;
-	export let options: KatexOptions = { output: 'html' };
+	interface Props {
+		displayMode?: boolean;
+		nowrap?: boolean;
+		tex: string;
+		options?: KatexOptions;
+	}
+
+	let {
+		displayMode = false,
+		nowrap = false,
+		tex,
+		options = { output: 'html' }
+	}: Props = $props();
 </script>
 
 <!-- SSR with renderToString -->

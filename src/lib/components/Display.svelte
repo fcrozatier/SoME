@@ -3,13 +3,17 @@
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { YOUTUBE_EMBED } from '$lib/utils';
 
-	export let data: {
+	interface Props {
+		data: {
 		title?: string;
 		description?: string;
 		category?: string;
 		url?: string;
 		thumbnail?: string | null;
 	};
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <div>

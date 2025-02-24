@@ -4,8 +4,8 @@
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
 	import ResultsPage from './results/+page.svelte';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
+
 
 	// let personalLinkDialog: HTMLDialogElement;
 	// let email: string;
