@@ -68,19 +68,26 @@
 			{/if}
 		</span>
 
-		<span class="navbar-end ml-auto mr-4 gap-3 hidden sm:flex">
+		<span class="navbar-end ml-auto mr-4 gap-6 hidden sm:flex">
+			<a
+				title="BlueSky"
+				href="https://bsky.app/profile/fcrozatier.bsky.social"
+				class="fill-gray-800 hover:opacity-100 hover:fill-[#0085ff]"
+				target="_blank"
+				><Icon name="bluesky" width="1.5rem" />
+			</a>
 			<a
 				title="GitHub"
 				href="https://github.com/fcrozatier/SoME"
 				class="fill-gray-800 hover:opacity-100"
 				target="_blank"
-				><Icon name="github" width="1.8rem" />
+				><Icon name="github" width="1.5rem" />
 			</a>
 			<a title="Substack" href="https://3blue1brown.substack.com" target="_blank">
-				<Icon class="fill-gray-800 px-2 hover:fill-[#f35300]" name="substack" width="2.5rem" />
+				<Icon class="fill-gray-800 hover:fill-[#f35300]" name="substack" width="1.5rem" />
 			</a>
 			<a title="Discord" href="https://discord.gg/WZvZMVsXXR" target="_blank">
-				<Icon class="fill-gray-800 px-2 hover:fill-[#5865f2]" name="discord" width="2.5rem" />
+				<Icon class="fill-gray-800 hover:fill-[#5865f2]" name="discord" width="1.5rem" />
 			</a>
 		</span>
 	</nav>
