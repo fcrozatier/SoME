@@ -1,6 +1,6 @@
-import type { ParamMatcher } from '@sveltejs/kit';
-import { z } from 'zod';
+import { uuid } from "$lib/server/validation";
+import type { ParamMatcher } from "@sveltejs/kit";
 
 export const match = ((param) => {
-	return z.string().uuid().safeParse(param).success;
+	return uuid(param);
 }) satisfies ParamMatcher;
