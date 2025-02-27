@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { categories, listFormatter } from '$lib/config';
-	import { page } from '$app/state';
-	import { voteOpen } from '$lib/utils';
+	import { categories, listFormatter } from "$lib/config";
+	import { page } from "$app/state";
+	import { voteOpen } from "$lib/utils";
 </script>
 
 <article class="layout-prose">

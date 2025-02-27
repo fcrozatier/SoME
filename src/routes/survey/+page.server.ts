@@ -1,9 +1,9 @@
-import { MAX_AGE } from '$lib/server/config';
-import { db } from '$lib/server/db/client';
-import { surveys } from '$lib/server/db/schema';
-import { FeedbackSchema, validateForm } from '$lib/server/validation';
-import { fail, type Actions } from '@sveltejs/kit';
-import { z } from 'zod';
+import { MAX_AGE } from "$lib/server/config";
+import { db } from "$lib/server/db/client";
+import { surveys } from "$lib/server/db/schema";
+import { FeedbackSchema, validateForm } from "$lib/validation";
+import { fail, type Actions } from "@sveltejs/kit";
+import { z } from "zod";
 
 export const load = async ({ locals }) => {
 	return { surveyTaken: locals.surveyTaken };
@@ -16,22 +16,22 @@ const SurveySchema = z.object({
 	offSeason: z
 		.string()
 		.optional()
-		.transform((str) => str?.length && str === 'yes')
+		.transform((str) => str?.length && str === "yes")
 		.pipe(z.boolean().optional()),
 });
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
-		const token = cookies.get('token');
+		const token = cookies.get("token");
 
 		const validation = await validateForm(request, SurveySchema);
 
-		if (!token) return fail(400, { surveyFail: true, reason: 'User not found' });
+		if (!token) return fail(400, { surveyFail: true, reason: "User not found" });
 
 		if (!validation.success) {
-			const fieldErrors = validation.error.flatten()['fieldErrors'];
+			const fieldErrors = validation.error.flatten()["fieldErrors"];
 			const reasons = Object.values(fieldErrors).flat();
-			const listFormatter = new Intl.ListFormat('en', { type: 'conjunction', style: 'short' });
+			const listFormatter = new Intl.ListFormat("en", { type: "conjunction", style: "short" });
 
 			return fail(400, { surveyFail: true, reason: listFormatter.format(reasons) });
 		}
@@ -44,8 +44,8 @@ export const actions: Actions = {
 				site: validation.data.site.toString(),
 			});
 
-			cookies.set('survey', 'true', {
-				path: '/',
+			cookies.set("survey", "true", {
+				path: "/",
 				maxAge: MAX_AGE,
 			});
 

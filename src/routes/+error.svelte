@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/state';
+	import { page } from "$app/state";
 </script>
 
 <article class="layout-prose min-h-[100vh]">

@@ -1,23 +1,30 @@
-import { categories, templateNames } from '$lib/config';
-import { z } from 'zod';
+import { categories, templateNames } from "$lib/config";
+import { z } from "zod";
+import * as fg from "formgator";
 
-const SHARP_IMAGE_INPUT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+export const uuid = (str: string | null) => !!str && uuid4.test(str);
+
+const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
 export const CategorySchema = z.enum(categories);
 
 const EmailSchema = z.string().email().max(128);
 
-export const EmailForm = z.object({
-	email: EmailSchema,
-});
+export const FGEmailSchema = fg.email({ required: true, maxlength: 128 });
 
 export const TokenSchema = z.string().uuid();
 
 const UrlSchema = z
 	.string()
-	.url({ message: 'Invalid url, please provide the full url with the https:// prefix' })
-	.refine((str) => !str.includes('playlist'), { message: 'Playlists are not allowed' });
+	.url({
+		message: "Invalid url, please provide the full url with the https:// prefix",
+	})
+	.refine((str) => !str.includes("playlist"), {
+		message: "Playlists are not allowed",
+	});
 
 export const FlagForm = z.object({
 	selection: z.string().transform((val, ctx) => {
@@ -56,14 +63,14 @@ export const JWTPayloadSchema = z.object({
 	isAdmin: z.boolean(),
 });
 
-const CheckboxSchema = z.literal('on', {
+const CheckboxSchema = z.literal("on", {
 	errorMap: () => {
-		return { message: 'Must be checked' };
+		return { message: "Must be checked" };
 	},
 });
 
 const JudgeSchema = z.object({
-	userType: z.literal('judge'),
+	userType: z.literal("judge"),
 	email: EmailSchema,
 	rules: CheckboxSchema,
 });
@@ -71,25 +78,27 @@ const JudgeSchema = z.object({
 const TitleSchema = z
 	.string()
 	.trim()
-	.min(1, { message: 'Title cannot be empty' })
-	.max(128, { message: 'Title too long' });
+	.min(1, { message: "Title cannot be empty" })
+	.max(128, { message: "Title too long" });
 
 const DescriptionSchema = z
 	.string()
 	.trim()
-	.min(10, { message: 'Description too short' })
-	.max(5000, { message: 'Description too long' });
+	.min(10, { message: "Description too short" })
+	.max(5000, { message: "Description too long" });
 
 const ThumbnailSchema = z
 	.instanceof(File)
-	.refine((file) => file.size < MAX_IMG_SIZE, { message: 'Image too big: 1MB max' })
+	.refine((file) => file.size < MAX_IMG_SIZE, {
+		message: "Image too big: 1MB max",
+	})
 	.refine((file) => SHARP_IMAGE_INPUT_TYPES.includes(file.type), {
-		message: 'Must be a jpeg, png, webp or gif image',
+		message: "Must be a jpeg, png, webp or gif image",
 	})
 	.optional();
 
 export const CreatorSchema = z.object({
-	userType: z.literal('creator'),
+	userType: z.literal("creator"),
 	email: EmailSchema,
 	others: z.string().transform((val, ctx) => {
 		try {
@@ -97,7 +106,7 @@ export const CreatorSchema = z.object({
 		} catch {
 			ctx.addIssue({
 				code: z.ZodIssueCode.custom,
-				message: 'Invalid email',
+				message: "Invalid email",
 			});
 
 			return z.NEVER;
@@ -112,7 +121,7 @@ export const CreatorSchema = z.object({
 	copyright: CheckboxSchema,
 });
 
-export const RegistrationSchema = z.discriminatedUnion('userType', [JudgeSchema, CreatorSchema]);
+export const RegistrationSchema = z.discriminatedUnion("userType", [JudgeSchema, CreatorSchema]);
 
 export const FeedbackSchema = z
 	.string()
@@ -122,7 +131,7 @@ export const FeedbackSchema = z
 			return feedback.length - (feedback.match(/\r\n/g) ?? []).length <= 5000;
 		},
 		{
-			message: 'Feedback too long',
+			message: "Feedback too long",
 		},
 	)
 	.optional();
@@ -140,7 +149,7 @@ export const SkipSchema = z.object({
 });
 
 export const FlagSchema = z.object({
-	reason: z.string().min(1).max(100, { message: 'Reason too long' }),
+	reason: z.string().min(1).max(100, { message: "Reason too long" }),
 	uid: z.string(),
 	tag: z.string(),
 });

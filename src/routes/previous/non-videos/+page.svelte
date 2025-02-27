@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from '$env/static/public';
-	import { nonVideos } from '$lib/records';
+	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
+	import { nonVideos } from "$lib/records";
 </script>
 
 <section class="pb-32">
@@ -14,7 +14,7 @@
 					<a href={entry.link} target="_blank" class="w-80">
 						<img
 							class="aspect-video rounded-lg max-w-full m-0"
-							src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace('https://', '')}/${
+							src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace("https://", "")}/${
 								entry.thumbnail
 							}`}
 							alt="no thumbnail provided"

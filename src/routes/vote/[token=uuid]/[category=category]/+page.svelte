@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { afterNavigate, goto } from '$app/navigation';
-	import { page } from '$app/state';
-	import { clickOutside } from '$lib/actions';
-	import Display from '$lib/components/Display.svelte';
-	import NewVote from '$lib/components/NewVote.svelte';
-	import Slider from '$lib/components/Slider.svelte';
-	import { newToast } from '$lib/components/Toasts.svelte';
-	import { onMount } from 'svelte';
-	import { formAction } from './config';
+	import { enhance } from "$app/forms";
+	import { afterNavigate, goto } from "$app/navigation";
+	import { page } from "$app/state";
+	import { clickOutside } from "$lib/actions";
+	import Display from "$lib/components/Display.svelte";
+	import NewVote from "$lib/components/NewVote.svelte";
+	import Slider from "$lib/components/Slider.svelte";
+	import { newToast } from "$lib/components/Toasts.svelte";
+	import { onMount } from "svelte";
+	import { formAction } from "./config";
 
 	let { data, form } = $props();
 
@@ -19,24 +19,24 @@
 
 	let score = $state(5);
 	let ready = $state(false);
-	let feedback = $state('');
+	let feedback = $state("");
 
 	let targetTime: number;
 	let cooldown = $state(590);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
 	const visibilitychange = () => {
-		if (document.visibilityState === 'visible') {
+		if (document.visibilityState === "visible") {
 			cooldown = Math.round((targetTime - Date.now()) / 100);
 		}
 	};
 
 	onMount(() => {
 		targetTime = Date.now() + 59 * 1000;
-		document.addEventListener('visibilitychange', visibilitychange);
+		document.addEventListener("visibilitychange", visibilitychange);
 
 		return () => {
-			document.removeEventListener('visibilitychange', visibilitychange);
+			document.removeEventListener("visibilitychange", visibilitychange);
 		};
 	});
 
@@ -55,7 +55,7 @@
 
 		if (
 			!data.stopVote &&
-			!page.url.searchParams.get('screen') &&
+			!page.url.searchParams.get("screen") &&
 			data.total_votes &&
 			data.total_votes > 0 &&
 			data.total_votes % 5 === 0
@@ -94,39 +94,39 @@
 			use:enhance={({ cancel, action }) => {
 				if (
 					cooldown > 0 &&
-					!(action.search === formAction('skip') || action.search === formAction('hard_skip'))
+					!(action.search === formAction("skip") || action.search === formAction("hard_skip"))
 				) {
-					newToast({ type: 'info', content: 'Please do not rush the review process' });
+					newToast({ type: "info", content: "Please do not rush the review process" });
 					return cancel();
 				}
 				if (
 					!ready &&
-					!(action.search === formAction('skip') || action.search === formAction('hard_skip'))
+					!(action.search === formAction("skip") || action.search === formAction("hard_skip"))
 				) {
-					newToast({ type: 'info', content: 'Please do not forget to grade the entry' });
+					newToast({ type: "info", content: "Please do not forget to grade the entry" });
 					return cancel();
 				}
-				const buttons = document.querySelectorAll('button');
-				buttons.forEach((b) => b.setAttribute('disabled', 'on'));
+				const buttons = document.querySelectorAll("button");
+				buttons.forEach((b) => b.setAttribute("disabled", "on"));
 
 				return async ({ action }) => {
-					buttons.forEach((b) => b.removeAttribute('disabled'));
-					if (action.search === formAction('skip') || action.search === formAction('hard_skip')) {
+					buttons.forEach((b) => b.removeAttribute("disabled"));
+					if (action.search === formAction("skip") || action.search === formAction("hard_skip")) {
 						const message = `Entry skipped${
-							action.search === formAction('hard_skip') ? " (you won't see it again)" : ''
+							action.search === formAction("hard_skip") ? " (you won't see it again)" : ""
 						}`;
 
-						newToast({ type: 'info', content: message });
+						newToast({ type: "info", content: message });
 					} else {
-						newToast({ type: 'success', content: 'Thank you! 🎉 🥳' });
+						newToast({ type: "success", content: "Thank you! 🎉 🥳" });
 					}
 
 					clearInterval(interval);
-					feedback = '';
+					feedback = "";
 					score = 5;
 
 					// Like update but scrolls to top
-					await goto(`/vote/${page.params['token']}/${page.params['category']}`, {
+					await goto(`/vote/${page.params["token"]}/${page.params["category"]}`, {
 						noScroll: false,
 						invalidateAll: true,
 					});
@@ -139,7 +139,7 @@
 				<h3 class="mb-0">Vote</h3>
 				<p class="mb-4">
 					How valuable is this entry to the space of online math exposition, compared to the typical
-					math {data.category === 'video' ? 'video' : 'article'} you've seen?
+					math {data.category === "video" ? "video" : "article"} you've seen?
 					<button
 						class="font-semibold hover:underline text-sm"
 						type="button"
@@ -211,14 +211,14 @@
 								if (splitButtonOpen) splitButtonOpen = false;
 							}}
 							type="submit"
-							formaction={formAction('hard_skip')}
+							formaction={formAction("hard_skip")}
 							class="btn btn-primary text-xs bg-black absolute left-0 px-2 top-[105%]"
 							>Don't show again</button
 						>
 					{/if}
 					<button
 						type="submit"
-						formaction={formAction('skip')}
+						formaction={formAction("skip")}
 						class="btn btn-outline rounded-e-none">Skip</button
 					>
 				</div>
@@ -287,15 +287,15 @@
 		action="?/flag"
 		use:clickOutside={() => flagDialog?.close()}
 		use:enhance={({ formElement }) => {
-			const buttons = document.querySelectorAll('button');
-			buttons.forEach((b) => b.setAttribute('disabled', 'on'));
+			const buttons = document.querySelectorAll("button");
+			buttons.forEach((b) => b.setAttribute("disabled", "on"));
 			return async () => {
-				buttons.forEach((b) => b.removeAttribute('disabled'));
+				buttons.forEach((b) => b.removeAttribute("disabled"));
 				formElement.reset();
 				flagDialog?.close();
 				clearInterval(interval);
-				newToast({ type: 'info', content: 'Entry flagged' });
-				await goto(`/vote/${page.params['token']}/${page.params['category']}`, {
+				newToast({ type: "info", content: "Entry flagged" });
+				await goto(`/vote/${page.params["token"]}/${page.params["category"]}`, {
 					noScroll: false,
 					invalidateAll: true,
 				});
@@ -327,7 +327,7 @@
 				>Cancel</button
 			>
 			<button type="submit" class="btn-outline btn-error btn">Report </button>
-			{#if form?.id === 'FLAG' && form?.flagFail}
+			{#if form?.id === "FLAG" && form?.flagFail}
 				<span class="text-error">Something went wrong.</span>
 			{/if}
 		</p>

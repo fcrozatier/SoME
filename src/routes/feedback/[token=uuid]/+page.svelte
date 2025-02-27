@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { COMPETITION_SHORT_NAME } from '$lib/config';
-	import { round } from '@fcrozatier/ts-helpers';
+	import { COMPETITION_SHORT_NAME } from "$lib/config";
+	import { round } from "@fcrozatier/ts-helpers";
 
-	import * as Plot from '@observablehq/plot';
+	import * as Plot from "@observablehq/plot";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(
 			Plot.plot({
-				color: { scheme: 'RdYlGn', type: 'categorical' },
+				color: { scheme: "RdYlGn", type: "categorical" },
 				marks: [
 					Plot.rectY(
 						arg,
 						Plot.binX(
-							{ y: 'count', fill: 'x', domain: [1, 9.5] },
-							{ x: 'score', domain: [1, 9.5], interval: 0.5 },
+							{ y: "count", fill: "x", domain: [1, 9.5] },
+							{ x: "score", domain: [1, 9.5], interval: 0.5 },
 						),
 					),
 					Plot.ruleY([0]),
@@ -41,7 +41,7 @@
 				<p>No feedback received on this entry yet</p>
 			{:else}
 				{@const median = round(group?.[0].median, 0)}
-				{@const comments = group.filter((f) => f.feedback && f.feedback !== '' && !f.maybe_rude)}
+				{@const comments = group.filter((f) => f.feedback && f.feedback !== "" && !f.maybe_rude)}
 				<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
 					<div
 						class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
@@ -59,7 +59,7 @@
 								class:text-success={median > 7}
 								class:text-warning={median > 3 && median <= 7}
 							>
-								{median || '-'}
+								{median || "-"}
 							</span>
 							<span
 								>Overall <a

@@ -14,7 +14,7 @@ Unicode range 1D49C to 1D4B5.
 
 @font-face {
 	font-family: Latin Modern Math;
-	src: url('/fonts/Temml.woff2');
+	src: url("/fonts/Temml.woff2");
 }
 
 math {
@@ -29,7 +29,7 @@ math {
 	white-space: pre;
 	direction: ltr;
 	/* Prevent Firefox from omitting the dot on i or j. */
-	font-feature-settings: 'dtls' off;
+	font-feature-settings: "dtls" off;
 }
 
 math * {
@@ -37,7 +37,7 @@ math * {
 }
 
 math {
-	font-family: 'Latin Modern Math', math;
+	font-family: "Latin Modern Math", math;
 }
 
 /* Next line is active in Firefox and Safari.
@@ -47,7 +47,7 @@ math.tml-display {
 }
 
 *.mathscr {
-	font-family: 'Temml';
+	font-family: "Temml";
 }
 
 /* Chromium prime alignment */
@@ -78,7 +78,8 @@ mrow.tml-bcancel {
 }
 
 mrow.tml-xcancel {
-	background: linear-gradient(
+	background:
+		linear-gradient(
 			to top left,
 			rgba(0, 0, 0, 0) 0%,
 			rgba(0, 0, 0, 0) calc(50% - 0.06em),
@@ -161,7 +162,7 @@ math > mrow {
 /* AMS environment auto-numbering via CSS counter. */
 .tml-eqn::before {
 	counter-increment: tmlEqnNo;
-	content: '(' counter(tmlEqnNo) ')';
+	content: "(" counter(tmlEqnNo) ")";
 }
 
 body {

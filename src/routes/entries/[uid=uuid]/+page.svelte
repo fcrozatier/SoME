@@ -1,21 +1,21 @@
 <script lang="ts">
-	import Display from '$lib/components/Display.svelte';
-	import { newToast } from '$lib/components/Toasts.svelte';
-	import { COMPETITION_SHORT_NAME } from '$lib/config';
-	import { round } from '@fcrozatier/ts-helpers';
+	import Display from "$lib/components/Display.svelte";
+	import { newToast } from "$lib/components/Toasts.svelte";
+	import { COMPETITION_SHORT_NAME } from "$lib/config";
+	import { round } from "@fcrozatier/ts-helpers";
 
-	import * as Plot from '@observablehq/plot';
+	import * as Plot from "@observablehq/plot";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(
 			Plot.plot({
-				color: { scheme: 'RdYlGn', type: 'categorical' },
+				color: { scheme: "RdYlGn", type: "categorical" },
 				marks: [
 					Plot.rectY(
 						arg,
 						Plot.binX(
-							{ y: 'count', fill: 'x', domain: [1, 9.5] },
-							{ x: 'score', domain: [1, 9.5], interval: 0.5 },
+							{ y: "count", fill: "x", domain: [1, 9.5] },
+							{ x: "score", domain: [1, 9.5], interval: 0.5 },
 						),
 					),
 					Plot.ruleY([0]),
@@ -39,7 +39,7 @@
 	{#if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>
 		{@const median = data.entry.final_score ? round(+data.entry.final_score, 1) : 0}
-		{@const comments = data.feedbacks.filter((f) => f.feedback !== '' && !f.maybe_rude)}
+		{@const comments = data.feedbacks.filter((f) => f.feedback !== "" && !f.maybe_rude)}
 		<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
 			<div
 				class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
@@ -57,7 +57,7 @@
 						class:text-success={median > 7}
 						class:text-warning={median > 3 && median <= 7}
 					>
-						{median || '-'}
+						{median || "-"}
 					</span>
 					<span
 						>Overall <a
@@ -73,7 +73,7 @@
 					<span class="text-5xl">
 						{data.feedbacks.length}
 					</span>
-					<span>Vote{data.feedbacks.length === 1 ? '' : 's'}</span>
+					<span>Vote{data.feedbacks.length === 1 ? "" : "s"}</span>
 				</div>
 			</div>
 			<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
@@ -81,14 +81,14 @@
 					<span class="text-5xl">
 						{comments.length}
 					</span>
-					<span>Comment{comments.length === 1 ? '' : 's'}</span>
+					<span>Comment{comments.length === 1 ? "" : "s"}</span>
 				</div>
 			</div>
 			<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
 				<div class="flex flex-col items-center gap-2 relative -top-2">
 					<span class="">Rank</span>
 					<span class="text-5xl">
-						{data.entry.rank ?? '-'}
+						{data.entry.rank ?? "-"}
 					</span>
 				</div>
 			</div>

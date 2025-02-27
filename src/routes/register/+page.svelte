@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { page } from '$app/state';
-	import { PUBLIC_REGISTRATION_END } from '$env/static/public';
-	import Time from '$lib/components/Time.svelte';
+	import { enhance } from "$app/forms";
+	import { page } from "$app/state";
+	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
+	import Time from "$lib/components/Time.svelte";
 	import {
 		COMPETITION_FULL_NAME,
 		COMPETITION_SHORT_NAME,
 		categories,
 		userTypes,
-	} from '$lib/config';
-	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
-	import { tick } from 'svelte';
+	} from "$lib/config";
+	import { YOUTUBE_EMBEDDABLE, registrationOpen } from "$lib/utils";
+	import { tick } from "svelte";
 
 	let { data, form } = $props();
 
@@ -37,16 +37,16 @@
 		},
 	};
 
-	let userType: (typeof userTypes)[number] = $state('judge');
-	let email = $state('');
+	let userType: (typeof userTypes)[number] = $state("judge");
+	let email = $state("");
 	let otherContributors: string[] = $state([]);
-	let category = $state('');
-	let title = $state('');
-	let description = $state('');
-	let link = $state('');
+	let category = $state("");
+	let title = $state("");
+	let description = $state("");
+	let link = $state("");
 
 	async function addContributor() {
-		otherContributors = [...otherContributors, ''];
+		otherContributors = [...otherContributors, ""];
 		await tick();
 		const lastEmail = document.getElementById(`email-${otherContributors.length - 1}`);
 		(lastEmail as HTMLInputElement)?.focus();
@@ -81,7 +81,7 @@
 				voting phase. <strong>Please do not delete this email.</strong>
 			</p>
 		{/if}
-		{#if userType === 'creator'}
+		{#if userType === "creator"}
 			<p>If needed you can update your entry at any time here:</p>
 			<p>
 				<a href="/update/{form.entryUid}" target="_blank"
@@ -126,25 +126,25 @@
 			method="post"
 			enctype="multipart/form-data"
 			use:enhance={({ submitter, formData }) => {
-				formData.append('others', JSON.stringify(otherContributors));
-				submitter?.setAttribute('disabled', 'on');
+				formData.append("others", JSON.stringify(otherContributors));
+				submitter?.setAttribute("disabled", "on");
 
 				return async ({ update }) => {
 					await update();
-					submitter?.removeAttribute('disabled');
+					submitter?.removeAttribute("disabled");
 				};
 			}}
 		>
 			<div class="form-control max-w-md">
 				<span class="label-text"> I am a </span>
 				{#each userTypes as type, i}
-					{@const disabled = type === 'creator' && !registrationOpen() && !data.isAdmin}
+					{@const disabled = type === "creator" && !registrationOpen() && !data.isAdmin}
 					<label
 						for="user-type-{i}"
 						class={`label ${
-							disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+							disabled ? "cursor-not-allowed" : "cursor-pointer"
 						} justify-start gap-2`}
-						title={disabled ? 'The deadline has expired' : userType}
+						title={disabled ? "The deadline has expired" : userType}
 					>
 						<input
 							id="user-type-{i}"
@@ -157,13 +157,13 @@
 							{disabled}
 						/>
 						<span class="label-text">
-							{type === 'creator' ? 'Creator or group of Creators' : 'Judge'}
+							{type === "creator" ? "Creator or group of Creators" : "Judge"}
 						</span>
 					</label>
 				{/each}
 
 				{#if form?.fieldErrors?.userType}
-					<span class="text-error">{form.fieldErrors.userType.join(', ')}</span>
+					<span class="text-error">{form.fieldErrors.userType.join(", ")}</span>
 				{/if}
 			</div>
 
@@ -181,10 +181,10 @@
 					required
 				/>
 				{#if form?.fieldErrors?.email}
-					<span class="block text-error">{form.fieldErrors.email.join(', ')}</span>
+					<span class="block text-error">{form.fieldErrors.email.join(", ")}</span>
 				{/if}
 			</div>
-			{#if userType === 'creator'}
+			{#if userType === "creator"}
 				{#each otherContributors as _, i}
 					<div class="form-control max-w-md">
 						<label for="email-{i}" class="label">
@@ -225,11 +225,11 @@
 				<span class="block text-error">email already registered: {form.emailExists}</span>
 			{:else if form?.undeliverable}
 				<span class="block text-error"
-					>undeliverable email{otherContributors.length > 0 ? ': ' + form.undeliverable : ''}</span
+					>undeliverable email{otherContributors.length > 0 ? ": " + form.undeliverable : ""}</span
 				>
 			{/if}
 
-			{#if userType === 'creator'}
+			{#if userType === "creator"}
 				<div class="form-control max-w-md">
 					<label for="category" class="label">
 						<span class="label-text"> Category </span>
@@ -246,7 +246,7 @@
 						{/each}
 					</select>
 					{#if form?.fieldErrors?.category}
-						<span class="block text-error">{form.fieldErrors.category.join(', ')}</span>
+						<span class="block text-error">{form.fieldErrors.category.join(", ")}</span>
 					{/if}
 				</div>
 
@@ -263,7 +263,7 @@
 						required
 					/>
 					{#if form?.fieldErrors?.title}
-						<span class="block text-error">{form.fieldErrors.title.join(', ')}</span>
+						<span class="block text-error">{form.fieldErrors.title.join(", ")}</span>
 					{/if}
 				</div>
 
@@ -284,7 +284,7 @@
 					<div class="label">
 						<span class="label-text-alt text-error">
 							{#if form?.fieldErrors?.description}
-								{form.fieldErrors.description.join(', ')}
+								{form.fieldErrors.description.join(", ")}
 							{/if}
 						</span>
 						<span class="label-text-alt">{description.length}/5000</span>
@@ -304,7 +304,7 @@
 						bind:value={link}
 					/>
 					{#if form?.fieldErrors?.link}
-						<span class="block text-error">{form.fieldErrors.link.join(', ')} </span>
+						<span class="block text-error">{form.fieldErrors.link.join(", ")} </span>
 					{:else if form?.linkExists}
 						<span class="block text-error">entry already registered</span>
 					{/if}
@@ -325,7 +325,7 @@
 							required
 						/>
 						{#if form?.fieldErrors?.thumbnail}
-							<span class="block text-error">{form.fieldErrors.thumbnail.join(', ')} </span>
+							<span class="block text-error">{form.fieldErrors.thumbnail.join(", ")} </span>
 						{:else if form?.thumbnailRequired}
 							<span class="block text-error">A thumbnail is required</span>
 						{/if}
@@ -341,11 +341,11 @@
 					</span>
 				</label>
 				{#if form?.fieldErrors?.rules}
-					<span class="block text-error">{form.fieldErrors.rules.join(', ')} </span>
+					<span class="block text-error">{form.fieldErrors.rules.join(", ")} </span>
 				{/if}
 			</div>
 
-			{#if userType === 'creator'}
+			{#if userType === "creator"}
 				<div class="form-control max-w-md">
 					<label for="copyright" class="label items-start justify-normal gap-4">
 						<input id="copyright" type="checkbox" name="copyright" class="checkbox" required />
@@ -363,7 +363,7 @@
 						</span>
 					</label>
 					{#if form?.fieldErrors?.copyright}
-						<span class="block text-error">{form.fieldErrors.copyright.join(', ')} </span>
+						<span class="block text-error">{form.fieldErrors.copyright.join(", ")} </span>
 					{/if}
 				</div>
 			{/if}
@@ -371,18 +371,18 @@
 			{#if form?.fieldErrors || page.status !== 200}
 				<p class="block text-error">
 					Something went wrong. {form?.invalid
-						? 'Please correct the highlighted fields above'
+						? "Please correct the highlighted fields above"
 						: form?.network
-							? 'There was a network error. Please try again later'
+							? "There was a network error. Please try again later"
 							: form?.closedForCreators
-								? 'Registration is closed for creators'
-								: ''}
+								? "Registration is closed for creators"
+								: ""}
 				</p>
 			{/if}
 			<p>
-				{#if userType === 'judge'}
+				{#if userType === "judge"}
 					<button class="btn-primary btn block"> Register </button>
-				{:else if userType === 'creator'}
+				{:else if userType === "creator"}
 					<button class="btn-primary btn block"> Submit </button>
 				{/if}
 			</p>
@@ -395,6 +395,6 @@
 
 <style>
 	label {
-		margin-top: theme('margin.2');
+		margin-top: theme("margin.2");
 	}
 </style>

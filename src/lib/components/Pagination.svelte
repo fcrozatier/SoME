@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser } from "$app/environment";
 
 	interface Props {
 		pages: number;
@@ -7,7 +7,7 @@
 		onChange?: any;
 	}
 
-	let { pages, pageNumber = $bindable('1'), onChange = () => {} }: Props = $props();
+	let { pages, pageNumber = $bindable("1"), onChange = () => {} }: Props = $props();
 
 	const makeArray = (current: number) => {
 		const array: number[] = [];

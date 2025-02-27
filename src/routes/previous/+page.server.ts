@@ -1,6 +1,6 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect } from "@sveltejs/kit";
 
 export const load = ({ request }) => {
-	console.log('REDIRECTING previous -> archive', request.referrer);
-	return redirect(301, '/archive');
+	console.log("REDIRECTING previous -> archive", request.referrer);
+	return redirect(301, "/archive");
 };

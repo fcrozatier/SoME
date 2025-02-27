@@ -1,14 +1,14 @@
-import { JWT_SECRET } from '$env/static/private';
-import { MAX_AGE } from '$lib/server/config';
-import { client, db } from '$lib/server/db/client';
-import { usersToEntries } from '$lib/server/db/schema';
-import { JWTPayloadSchema, TokenSchema } from '$lib/server/validation';
-import { redirect, type Handle } from '@sveltejs/kit';
-import { eq, sql } from 'drizzle-orm';
-import jsonwebtoken from 'jsonwebtoken';
+import { JWT_SECRET } from "$env/static/private";
+import { MAX_AGE } from "$lib/server/config";
+import { client, db } from "$lib/server/db/client";
+import { usersToEntries } from "$lib/server/db/schema";
+import { JWTPayloadSchema, TokenSchema } from "$lib/validation";
+import { redirect, type Handle } from "@sveltejs/kit";
+import { eq, sql } from "drizzle-orm";
+import jsonwebtoken from "jsonwebtoken";
 
-process.on('sveltekit:shutdown', (reason) => {
-	console.log('\nclosing db connections, reason', reason);
+process.on("sveltekit:shutdown", (reason) => {
+	console.log("\nclosing db connections, reason", reason);
 	client.end();
 });
 
@@ -20,12 +20,12 @@ export const handle = async function ({ event, resolve }) {
 		return new Response(null, { status: 418 });
 	}
 
-	const token = event.cookies.get('token');
-	const is_creator = event.cookies.get('is_creator');
-	const jwt = event.cookies.get('jwt');
-	const survey = event.cookies.get('survey');
+	const token = event.cookies.get("token");
+	const is_creator = event.cookies.get("is_creator");
+	const jwt = event.cookies.get("jwt");
+	const survey = event.cookies.get("survey");
 
-	let surveyTaken = survey === 'true';
+	let surveyTaken = survey === "true";
 
 	if (!survey && token) {
 		surveyTaken =
@@ -37,8 +37,8 @@ export const handle = async function ({ event, resolve }) {
 				`)
 			).length > 0;
 
-		event.cookies.set('survey', surveyTaken.toString(), {
-			path: '/',
+		event.cookies.set("survey", surveyTaken.toString(), {
+			path: "/",
 			maxAge: MAX_AGE,
 		});
 	}
@@ -52,22 +52,22 @@ export const handle = async function ({ event, resolve }) {
 			(await db.select().from(usersToEntries).where(eq(usersToEntries.userUid, token))).length > 0
 		).toString();
 
-		event.cookies.set('is_creator', isCreator, {
-			path: '/',
+		event.cookies.set("is_creator", isCreator, {
+			path: "/",
 			maxAge: MAX_AGE,
 		});
 	}
 
-	event.locals.isCreator = isCreator === 'true';
+	event.locals.isCreator = isCreator === "true";
 
 	if (jwt) {
 		try {
-			const payload = jsonwebtoken.verify(jwt, JWT_SECRET, { algorithms: ['HS256'] });
+			const payload = jsonwebtoken.verify(jwt, JWT_SECRET, { algorithms: ["HS256"] });
 			const { data, success } = JWTPayloadSchema.safeParse(payload);
 
 			event.locals.isAdmin = success && data.isAdmin;
 		} catch (error) {
-			event.cookies.delete('jwt', { path: '/' });
+			event.cookies.delete("jwt", { path: "/" });
 			event.locals.isAdmin = false;
 		}
 	} else {
@@ -77,15 +77,15 @@ export const handle = async function ({ event, resolve }) {
 	if (token) {
 		const validation = TokenSchema.safeParse(token);
 		if (!validation.success) {
-			event.cookies.delete('token', { path: '/' });
-			redirect(303, '/');
+			event.cookies.delete("token", { path: "/" });
+			redirect(303, "/");
 		}
 
 		event.locals.token = validation.data;
 	}
 
-	if (event.url.pathname.includes('admin/') && !event.locals.isAdmin) {
-		throw redirect(303, '/admin');
+	if (event.url.pathname.includes("admin/") && !event.locals.isAdmin) {
+		throw redirect(303, "/admin");
 	}
 
 	const response = await resolve(event);

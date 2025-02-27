@@ -5,18 +5,18 @@ export function clickOutside(node: Element, callback: (node?: Element) => void) 
 		}
 	};
 
-	document.addEventListener('click', handleClick, true);
+	document.addEventListener("click", handleClick, true);
 
 	return {
 		destroy() {
-			document.removeEventListener('click', handleClick, true);
+			document.removeEventListener("click", handleClick, true);
 		},
 	};
 }
 
 export function toggleSelectAll(node: HTMLElement) {
 	const handleClick = () => {
-		const allSelected = document.getElementById('all');
+		const allSelected = document.getElementById("all");
 		const inputs = document.querySelectorAll<HTMLInputElement>(
 			'input[type="checkbox"]:not([id="all"])',
 		);
@@ -36,11 +36,11 @@ export function toggleSelectAll(node: HTMLElement) {
 		}
 	};
 
-	node.addEventListener('click', handleClick, true);
+	node.addEventListener("click", handleClick, true);
 
 	return {
 		destroy() {
-			node.removeEventListener('click', handleClick, true);
+			node.removeEventListener("click", handleClick, true);
 		},
 	};
 }

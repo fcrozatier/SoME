@@ -1,11 +1,11 @@
-import { db } from '$lib/server/db/client';
-import { type SelectEntry, type SelectFlag } from '$lib/server/db/schema';
-import { FlagForm, validateForm } from '$lib/server/validation';
-import { fail } from '@sveltejs/kit';
-import { sql } from 'drizzle-orm';
+import { db } from "$lib/server/db/client";
+import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
+import { FlagForm, validateForm } from "$lib/validation";
+import { fail } from "@sveltejs/kit";
+import { sql } from "drizzle-orm";
 
 export const load = async () => {
-	const flagged: (Pick<SelectEntry, 'uid' | 'title' | 'url'> & Pick<SelectFlag, 'reason'>)[] =
+	const flagged: (Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">)[] =
 		await db.execute(sql`
 			select uid, title, url, reason
 			from entries join flags

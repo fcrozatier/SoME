@@ -1,18 +1,18 @@
-import { db } from '$lib/server/db/client';
-import { type SelectEntry } from '$lib/server/db/schema';
-import { fail } from '@sveltejs/kit';
-import { sql } from 'drizzle-orm';
+import { db } from "$lib/server/db/client";
+import { type SelectEntry } from "$lib/server/db/schema";
+import { fail } from "@sveltejs/kit";
+import { sql } from "drizzle-orm";
 
 export const load = async ({ url }) => {
-	let page = url.searchParams.get('page');
+	let page = url.searchParams.get("page");
 
 	if (!page) {
-		url.searchParams.set('page', '1');
-		page = '1';
+		url.searchParams.set("page", "1");
+		page = "1";
 	}
 	const limit = 50;
 
-	const entries: Pick<SelectEntry, 'uid' | 'title'>[] = await db.execute(sql`
+	const entries: Pick<SelectEntry, "uid" | "title">[] = await db.execute(sql`
 			select uid, title
 			from entries
 			where entries.active='true'
@@ -35,13 +35,13 @@ export const load = async ({ url }) => {
 
 export const actions = {
 	display: async ({ request }) => {
-		const uid = (await request.formData()).get('uid')?.toString();
+		const uid = (await request.formData()).get("uid")?.toString();
 
 		if (!uid) return fail(400);
 
 		const entry: Pick<
 			SelectEntry,
-			'uid' | 'title' | 'url' | 'description' | 'category' | 'thumbnail'
+			"uid" | "title" | "url" | "description" | "category" | "thumbnail"
 		>[] = await db.execute(sql`
 			select uid, title, url, description, category, thumbnail
 			from entries where uid=${uid}

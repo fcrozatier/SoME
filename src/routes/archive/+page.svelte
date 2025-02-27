@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { goto, preloadData, pushState } from '$app/navigation';
-	import { page } from '$app/state';
-	import { clickOutside } from '$lib/actions.js';
-	import Pagination from '$lib/components/Pagination.svelte';
-	import Thumbnail from '$lib/components/Thumbnail.svelte';
-	import Youtube from '$lib/components/Youtube.svelte';
-	import { categories, type Category } from '$lib/config.js';
-	import type { ComponentProps } from 'svelte';
-	import EntriesPage from '../entries/[uid=uuid]/+page.svelte';
+	import { goto, preloadData, pushState } from "$app/navigation";
+	import { page } from "$app/state";
+	import { clickOutside } from "$lib/actions.js";
+	import Pagination from "$lib/components/Pagination.svelte";
+	import Thumbnail from "$lib/components/Thumbnail.svelte";
+	import Youtube from "$lib/components/Youtube.svelte";
+	import { categories, type Category } from "$lib/config.js";
+	import type { ComponentProps } from "svelte";
+	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 
 	let { data } = $props();
 
 	let pages = $derived(data.pages);
 
-	let category: Category = $state('video');
-	let year: string = $state('2023');
-	let pageNumber = $state(page.url.searchParams.get('page') ?? '1');
+	let category: Category = $state("video");
+	let year: string = $state("2023");
+	let pageNumber = $state(page.url.searchParams.get("page") ?? "1");
 
-	const years = ['2023', '2022', '2021'];
+	const years = ["2023", "2022", "2021"];
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
-	let entry: ComponentProps<typeof EntriesPage>['data'] | undefined = $state();
+	let entry: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();
 
 	async function loadData(
 		e: MouseEvent & {
@@ -36,7 +36,7 @@
 		const { href } = e.currentTarget;
 		const result = await preloadData(href);
 
-		if (result.type === 'loaded' && result.status === 200) {
+		if (result.type === "loaded" && result.status === 200) {
 			pushState(href, { entry: result.data });
 			// @ts-ignore
 			entry = result.data;
@@ -57,10 +57,10 @@
 	<form
 		class="flex gap-3 justify-center"
 		onchange={() => {
-			page.url.searchParams.set('category', category);
-			page.url.searchParams.set('year', year);
-			page.url.searchParams.set('page', '1');
-			pageNumber = '1';
+			page.url.searchParams.set("category", category);
+			page.url.searchParams.set("year", year);
+			page.url.searchParams.set("page", "1");
+			pageNumber = "1";
 			goto(`?${page.url.searchParams.toString()}`, {
 				invalidateAll: true,
 				keepFocus: true,
@@ -74,7 +74,7 @@
 			</label>
 			<select class="select-bordered select" bind:value={year} name="year" id="year">
 				{#each years as year}
-					<option value={year} selected={page.url.searchParams.get('year') === year}>{year}</option>
+					<option value={year} selected={page.url.searchParams.get("year") === year}>{year}</option>
 				{/each}
 			</select>
 		</div>
@@ -84,7 +84,7 @@
 			</label>
 			<select class="select-bordered select" bind:value={category} name="category" id="category">
 				{#each categories as category}
-					<option value={category} selected={page.url.searchParams.get('category') === category}
+					<option value={category} selected={page.url.searchParams.get("category") === category}
 						>{category}</option
 					>
 				{/each}
@@ -97,7 +97,7 @@
 				{pages}
 				bind:pageNumber
 				onChange={() => {
-					page.url.searchParams.set('page', pageNumber);
+					page.url.searchParams.set("page", pageNumber);
 					goto(`?${page.url.searchParams.toString()}`, {
 						invalidateAll: true,
 						keepFocus: true,
@@ -121,7 +121,7 @@
 		{#each data.entries as { uid, title, category, thumbnail, url, rank }}
 			<tr class="py-2">
 				<td>
-					{#if category === 'video'}
+					{#if category === "video"}
 						<Youtube width={240} src={url}></Youtube>
 					{:else if thumbnail}
 						<a href={url} target="_blank" class="w-[240px]">
@@ -143,7 +143,7 @@
 <div class="sm:hidden grid justify-center gap-8">
 	{#each data.entries as { uid, title, category, thumbnail, url, rank }}
 		<div>
-			{#if category === 'video'}
+			{#if category === "video"}
 				<Youtube width={320} src={url}></Youtube>
 			{:else if thumbnail}
 				<a href={url} target="_blank" class="w-[320px]">
@@ -165,7 +165,7 @@
 			{pages}
 			bind:pageNumber
 			onChange={() => {
-				page.url.searchParams.set('page', pageNumber);
+				page.url.searchParams.set("page", pageNumber);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 				});

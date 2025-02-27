@@ -1,8 +1,8 @@
-import { sendTemplate } from '$lib/server/email';
-import type { Actions } from '@sveltejs/kit';
-import { fail } from '@sveltejs/kit';
-import { EmailTemplateSchema, validateForm } from '$lib/server/validation';
-import { dev } from '$app/environment';
+import { sendTemplate } from "$lib/server/email";
+import type { Actions } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
+import { EmailTemplateSchema, validateForm } from "$lib/validation";
+import { dev } from "$app/environment";
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -16,14 +16,14 @@ export const actions: Actions = {
 
 			if (!dev) {
 				// Fire and forget
-				console.log('send template email');
+				console.log("send template email");
 				await sendTemplate(validation.data.template_name);
 			}
 
 			return { success: true };
 		} catch (e) {
-			console.error('Could not send template', e);
+			console.error("Could not send template", e);
 			return fail(500);
 		}
-	}
+	},
 };

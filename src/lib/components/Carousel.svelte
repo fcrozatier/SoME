@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { SelectEntry } from '$lib/server/db/schema';
-	import Youtube from './Youtube.svelte';
+	import type { SelectEntry } from "$lib/server/db/schema";
+	import Youtube from "./Youtube.svelte";
 
 	interface Props {
-		entries: Pick<SelectEntry, 'category' | 'url' | 'thumbnail'>[];
+		entries: Pick<SelectEntry, "category" | "url" | "thumbnail">[];
 	}
 
 	let { entries }: Props = $props();
@@ -15,7 +15,7 @@
 >
 	{#each entries as entry}
 		<div class="snap-center">
-			{#if entry.category === 'video'}
+			{#if entry.category === "video"}
 				<Youtube src={entry.url}></Youtube>
 			{:else}
 				<a href={entry.url} target="_blank" class="inline-block w-[420px]">

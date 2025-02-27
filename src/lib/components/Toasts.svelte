@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import { writable } from 'svelte/store';
+	import { writable } from "svelte/store";
 
 	interface ToastConfig {
 		/**
@@ -7,7 +7,7 @@
 		 */
 		content: string;
 		duration?: number;
-		type?: 'info' | 'success' | 'error';
+		type?: "info" | "success" | "error";
 	}
 
 	interface Toast extends ToastConfig {
@@ -30,21 +30,21 @@
 		toasts.update((state) => {
 			return [
 				...state,
-				{ ...config, id, duration: config.duration ?? 3000, type: config.type ?? 'info' },
+				{ ...config, id, duration: config.duration ?? 3000, type: config.type ?? "info" },
 			];
 		});
 	}
 </script>
 
 <script lang="ts">
-	import { flip } from 'svelte/animate';
-	import { quintOut } from 'svelte/easing';
-	import { crossfade } from 'svelte/transition';
+	import { flip } from "svelte/animate";
+	import { quintOut } from "svelte/easing";
+	import { crossfade } from "svelte/transition";
 
 	const [send, receive] = crossfade({
 		fallback(node, params) {
 			const style = getComputedStyle(node);
-			const transform = style.transform === 'none' ? '' : style.transform;
+			const transform = style.transform === "none" ? "" : style.transform;
 			const duration = params.duration ? +params.duration : 100;
 
 			return {
@@ -67,9 +67,9 @@
 		<!-- output is announced to screen readers with implicit role status -->
 		<output
 			class="toast"
-			class:bg-green-600={toast.type === 'success'}
-			class:bg-gray-900={toast.type === 'info'}
-			class:bg-red-600={toast.type === 'error'}
+			class:bg-green-600={toast.type === "success"}
+			class:bg-gray-900={toast.type === "info"}
+			class:bg-red-600={toast.type === "error"}
 			in:receive={{ key: toast.id, duration: 300, easing: quintOut }}
 			out:send={{ key: toast.id, duration: 200 }}
 			animate:flip={{ duration: 200, easing: quintOut }}
@@ -92,18 +92,18 @@
 		display: grid;
 		justify-content: center;
 		justify-items: center;
-		gap: theme('spacing.2');
+		gap: theme("spacing.2");
 	}
 
 	.toast {
 		max-width: min(60ch, 90vw);
-		padding-block: theme('spacing.3');
-		padding-inline: theme('spacing.4');
+		padding-block: theme("spacing.3");
+		padding-inline: theme("spacing.4");
 
-		font-size: theme('fontSize.sm');
-		color: theme('colors.white');
+		font-size: theme("fontSize.sm");
+		color: theme("colors.white");
 
-		border-radius: theme('borderRadius.DEFAULT');
-		box-shadow: theme('boxShadow.sm');
+		border-radius: theme("borderRadius.DEFAULT");
+		box-shadow: theme("boxShadow.sm");
 	}
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { page } from '$app/state';
-	import { newToast } from '$lib/components/Toasts.svelte';
+	import { enhance } from "$app/forms";
+	import { page } from "$app/state";
+	import { newToast } from "$lib/components/Toasts.svelte";
 
 	let { data } = $props();
 </script>
@@ -13,13 +13,13 @@
 		method="post"
 		action="?/rank"
 		use:enhance={({ submitter }) => {
-			submitter?.setAttribute('disabled', 'on');
+			submitter?.setAttribute("disabled", "on");
 
 			return async ({ update, result }) => {
 				await update();
-				submitter?.removeAttribute('disabled');
-				if (result.type === 'success') {
-					newToast({ content: 'Entries ranked!', type: 'success' });
+				submitter?.removeAttribute("disabled");
+				if (result.type === "success") {
+					newToast({ content: "Entries ranked!", type: "success" });
 				}
 			};
 		}}

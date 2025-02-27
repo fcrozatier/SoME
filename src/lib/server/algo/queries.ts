@@ -1,5 +1,5 @@
-import { sql } from 'drizzle-orm';
-import { usersToEntries } from '../db/schema';
+import { sql } from "drizzle-orm";
+import { usersToEntries } from "../db/schema";
 
 /**
  * Select entry at random and prioritize entries with less votes (or incoming votes)
@@ -131,7 +131,7 @@ export function query2(token: string, category: string) {
 		`;
 }
 
-const multiplier_start_date = '2024-08-23';
+const multiplier_start_date = "2024-08-23";
 
 /**
  * Select entries at random with probability weighted by median score with a (utility) boost based on the std

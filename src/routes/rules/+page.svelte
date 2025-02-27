@@ -5,10 +5,10 @@
 		PUBLIC_RESULTS_AVAILABLE,
 		PUBLIC_VOTE_END,
 		PUBLIC_VOTE_START,
-	} from '$env/static/public';
-	import Time from '$lib/components/Time.svelte';
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
-	import { phaseOpen, resultsAvailable, voteOpen } from '$lib/utils';
+	} from "$env/static/public";
+	import Time from "$lib/components/Time.svelte";
+	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from "$lib/config";
+	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils";
 
 	// let remaining = timeLeft();
 
@@ -25,32 +25,32 @@
 
 	const phases = [
 		{
-			title: 'Join the competition as a participant or judge',
+			title: "Join the competition as a participant or judge",
 			description:
 				'Participants all work on their projects and the <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a> server allows creators to share partial progress, find collaborators and ask for help.',
 			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
 			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END],
 		},
 		{
-			title: 'Vote for the best contributions',
+			title: "Vote for the best contributions",
 			description:
 				"Peer review! You'll be successively shown entries to review and optionally provide feedback. This is the heart of the event and in past years this phase has been what jump-started meaningful exposure for many entries.",
 			isOpen: voteOpen(),
 			dates: [PUBLIC_VOTE_START, PUBLIC_VOTE_END],
 		},
 		{
-			title: 'Results and feedback',
-			description: 'The top entries are revealed with the complete ranking of entries.',
+			title: "Results and feedback",
+			description: "The top entries are revealed with the complete ranking of entries.",
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE],
 		},
 	];
 
 	const dateFormat = {
-		month: 'short',
-		day: '2-digit',
-		hour: 'numeric',
-		minute: 'numeric',
+		month: "short",
+		day: "2-digit",
+		hour: "numeric",
+		minute: "numeric",
 	} as const;
 </script>
 
@@ -65,7 +65,7 @@
 		<p>The competition has three phases:</p>
 		<ul class="-ml-7 list-outside">
 			{#each phases as phase, i}
-				<li class={phase.isOpen ? 'marker:text-green-500' : ''}>
+				<li class={phase.isOpen ? "marker:text-green-500" : ""}>
 					<div class="mb-4 mt-8">
 						<span class="flex items-center gap-2 text-xl font-semibold">
 							Phase {i + 1}:

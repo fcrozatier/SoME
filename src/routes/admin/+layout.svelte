@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { COMPETITION_SHORT_NAME } from '$lib/config';
-	import type { Snippet } from 'svelte';
+	import { COMPETITION_SHORT_NAME } from "$lib/config";
+	import type { Snippet } from "svelte";
 
 	interface Props {
 		children?: Snippet;

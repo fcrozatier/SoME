@@ -1,16 +1,16 @@
-import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from '$env/static/private';
-import type { Category } from '$lib/config';
-import { query3 } from '$lib/server/algo/queries';
-import { db } from '$lib/server/db/client';
-import { cache, flags, skips, votes, type SelectEntry } from '$lib/server/db/schema';
-import { decrypt, encrypt } from '$lib/server/encryption';
-import { FlagSchema, SkipSchema, validateForm, VoteSchema } from '$lib/server/validation';
-import { voteOpen } from '$lib/utils';
-import { fail, redirect } from '@sveltejs/kit';
-import { and, eq } from 'drizzle-orm';
-import { OpenAI } from 'openai';
-import type postgres from 'postgres';
-import { action } from './config';
+import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from "$env/static/private";
+import type { Category } from "$lib/config";
+import { query3 } from "$lib/server/algo/queries";
+import { db } from "$lib/server/db/client";
+import { cache, flags, skips, votes, type SelectEntry } from "$lib/server/db/schema";
+import { decrypt, encrypt } from "$lib/server/encryption";
+import { FlagSchema, SkipSchema, validateForm, VoteSchema } from "$lib/validation";
+import { voteOpen } from "$lib/utils";
+import { fail, redirect } from "@sveltejs/kit";
+import { and, eq } from "drizzle-orm";
+import { OpenAI } from "openai";
+import type postgres from "postgres";
+import { action } from "./config";
 
 const openai = new OpenAI({
 	apiKey: OPENAI_API_KEY,
@@ -62,11 +62,11 @@ export const load = async (event) => {
 	return { stopVote: true };
 };
 
-let id: 'FLAG' | 'VOTE' | 'SKIP' | 'HARD_SKIP';
+let id: "FLAG" | "VOTE" | "SKIP" | "HARD_SKIP";
 
 export const actions = {
 	flag: async ({ request, params }) => {
-		id = 'FLAG';
+		id = "FLAG";
 		const { token, category } = params;
 
 		const validation = await validateForm(request, FlagSchema);
@@ -93,12 +93,12 @@ export const actions = {
 
 			return { id, flagSuccess: true };
 		} catch (error) {
-			console.log('error:', error);
+			console.log("error:", error);
 			return fail(400, { id, flagFail: true });
 		}
 	},
 	vote: async ({ request, params }) => {
-		id = 'VOTE';
+		id = "VOTE";
 		const { token, category } = params;
 		const validation = await validateForm(request, VoteSchema);
 
@@ -111,21 +111,21 @@ export const actions = {
 
 		if (validation.data.feedback) {
 			const completion = await openai.chat.completions.create({
-				model: 'gpt-4',
+				model: "gpt-4",
 				temperature: 0.2,
 				messages: [
 					{
-						role: 'system',
+						role: "system",
 						content: MODERATION_PROMPT,
 					},
 					{
-						role: 'user',
+						role: "user",
 						content: validation.data.feedback,
 					},
 				],
 			});
 
-			maybe_rude = completion.choices[0].message.content?.match(/OK|REVIEW/g)?.at(-1) === 'REVIEW';
+			maybe_rude = completion.choices[0].message.content?.match(/OK|REVIEW/g)?.at(-1) === "REVIEW";
 		}
 
 		try {
@@ -151,12 +151,12 @@ export const actions = {
 
 			return { id, voteSuccess: true };
 		} catch (error) {
-			console.log('error:', error);
+			console.log("error:", error);
 			return fail(400, { id, voteFail: true });
 		}
 	},
 	[action.hard_skip]: async ({ request, params }) => {
-		id = 'HARD_SKIP';
+		id = "HARD_SKIP";
 		const { token, category } = params;
 		const validation = await validateForm(request, SkipSchema);
 
@@ -182,12 +182,12 @@ export const actions = {
 
 			return { id, skipSuccess: true };
 		} catch (error) {
-			console.log('error:', error);
+			console.log("error:", error);
 			return fail(400, { id, skipFail: true });
 		}
 	},
 	[action.skip]: async ({ params }) => {
-		id = 'SKIP';
+		id = "SKIP";
 		const { token, category } = params;
 
 		await db
