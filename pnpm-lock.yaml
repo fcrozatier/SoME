@@ -81,6 +81,9 @@ importers:
       drizzle-kit:
         specifier: ^0.24.2
         version: 0.24.2
+      formgator:
+        specifier: ^0.1.1
+        version: 0.1.1(@sveltejs/kit@2.17.2(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.2)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(yaml@2.7.0)))(svelte@5.20.2)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(yaml@2.7.0)))
       mdsvex:
         specifier: ^0.12.3
         version: 0.12.3(svelte@5.20.2)
@@ -1959,6 +1962,14 @@ packages:
   formdata-node@4.4.1:
     resolution: {integrity: sha512-0iirZp3uVDjVGt9p49aTaqjk84TrglENEDuqfdlZQ1roC9CWlPk6Avf8EEnZNcAqPonwkG35x4n3ww/1THYAeQ==}
     engines: {node: '>= 12.20'}
+
+  formgator@0.1.1:
+    resolution: {integrity: sha512-OmTCyQyoqo4FE0WrS4k1FjrtGeV9L5dQrPTA1mS2mVmdcVXHCOFpXhg1I/KnMX+8vIHvfGF1cghYRzs2bz2A6w==}
+    peerDependencies:
+      '@sveltejs/kit': '>=2.0.0'
+    peerDependenciesMeta:
+      '@sveltejs/kit':
+        optional: true
 
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
@@ -4943,6 +4954,10 @@ snapshots:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 4.0.0-beta.3
+
+  formgator@0.1.1(@sveltejs/kit@2.17.2(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.2)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(yaml@2.7.0)))(svelte@5.20.2)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(yaml@2.7.0))):
+    optionalDependencies:
+      '@sveltejs/kit': 2.17.2(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.2)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(yaml@2.7.0)))(svelte@5.20.2)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(yaml@2.7.0))
 
   fraction.js@4.3.7: {}
 
