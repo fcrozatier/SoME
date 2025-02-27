@@ -1,15 +1,16 @@
-import { dev } from '$app/environment';
-import { db } from '$lib/server/db/client';
-import { users, type SelectEntry } from '$lib/server/db/schema';
-import { EmailForm, validateForm } from '$lib/validation';
-import { fail, type Actions } from '@sveltejs/kit';
-import { eq, sql } from 'drizzle-orm';
-import { addToMailingList, sendEmail, validateEmail } from '../lib/server/email';
+import { dev } from "$app/environment";
+import { db } from "$lib/server/db/client";
+import { type SelectEntry, users } from "$lib/server/db/schema";
+import { addToMailingList, sendEmail } from "$lib/server/email";
+import { FGEmailSchema } from "$lib/validation";
+import { type Actions, fail } from "@sveltejs/kit";
+import { eq, sql } from "drizzle-orm";
+import { formgate } from "formgator/sveltekit";
 
-export const load = async ({ locals }) => {
+export const load = async () => {
 	const top: Pick<
 		SelectEntry,
-		'uid' | 'title' | 'description' | 'category' | 'thumbnail' | 'url'
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url"
 	>[] = await db.execute(sql`
 		 select uid, title, description, category, thumbnail, url from entries
 		 where active='t'
@@ -22,61 +23,55 @@ export const load = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	newsletter: async ({ request }) => {
-		const validation = await validateForm(request, EmailForm);
+	newsletter: formgate(
+		{ email: FGEmailSchema },
+		async (data) => {
+			const email = data.email;
 
-		if (!validation.success) {
-			return fail(400, { error: true, message: 'Invalid email' });
-		}
+			// Find user
+			const user =
+				(await db.select().from(users).where(eq(users.email, email)))[0];
 
-		const email = validation.data.email;
+			if (user) {
+				return fail(400, {
+					error: true,
+					message: "Email already registered",
+				});
+			}
 
-		// Find user
-		const user = (await db.select().from(users).where(eq(users.email, email)))[0];
+			if (!dev) {
+				// Commented: 13/11/24
+				// Validate email
+				// const emailValidation = await validateEmail(email);
+				// if (!emailValidation || emailValidation.result !== 'deliverable') {
+				// 	return fail(400, {
+				// 		error: true,
+				// 		message: 'Undeliverable email',
+				// 	});
+				// }
+			}
 
-		if (user) {
-			return fail(400, {
-				error: true,
-				message: 'Email already registered',
+			const token = crypto.randomUUID();
+
+			await db.insert(users).values({
+				uid: token,
+				email,
 			});
-		}
 
-		if (!dev) {
-			// Commented: 13/11/24
-			// Validate email
-			// const emailValidation = await validateEmail(email);
-			// if (!emailValidation || emailValidation.result !== 'deliverable') {
-			// 	return fail(400, {
-			// 		error: true,
-			// 		message: 'Undeliverable email',
-			// 	});
-			// }
-		}
+			if (!dev) {
+				await addToMailingList(email, token);
+			}
 
-		const token = crypto.randomUUID();
+			return { success: true };
+		},
+	),
 
-		await db.insert(users).values({
-			uid: token,
-			email,
-		});
-
-		if (!dev) {
-			await addToMailingList(email, token);
-		}
-
-		return { success: true };
-	},
-
-	resend_link: async ({ request }) => {
-		const validation = await validateForm(request, EmailForm);
-
-		if (!validation.success) {
-			return fail(400, { error: true, emailInvalid: true });
-		}
-
+	resend_link: formgate({ email: FGEmailSchema }, async (data) => {
 		try {
 			// Find user
-			const user = (await db.select().from(users).where(eq(users.email, validation.data.email)))[0];
+			const user = (await db.select().from(users).where(
+				eq(users.email, data.email),
+			))[0];
 
 			if (!user) {
 				return fail(400, {
@@ -88,12 +83,12 @@ export const actions: Actions = {
 
 			console.log(`Your personal link is /vote/${token}`);
 			if (!dev) {
-				await sendEmail(validation.data.email, 'resend_token', { token });
+				await sendEmail(data.email, "resend_token", { token });
 			}
 			return { success: true };
 		} catch (error) {
 			console.log(error);
-			return fail(400, { error: true, message: 'Something went wrong' });
+			return fail(400, { error: true, message: "Something went wrong" });
 		}
-	},
+	}),
 };

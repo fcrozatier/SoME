@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { newToast } from '$lib/components/Toasts.svelte';
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
-	import ResultsPage from './results/+page.svelte';
+	import { enhance } from "$app/forms";
+	import { newToast } from "$lib/components/Toasts.svelte";
+	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from "$lib/config";
+	import ResultsPage from "./results/+page.svelte";
 
 	let { data, form } = $props();
-
 
 	// let personalLinkDialog: HTMLDialogElement;
 	// let email: string;
@@ -38,15 +37,15 @@
 		method="post"
 		action="?/newsletter"
 		use:enhance={({ submitter }) => {
-			submitter?.setAttribute('disabled', 'on');
+			submitter?.setAttribute("disabled", "on");
 
 			return async ({ result, update }) => {
-				submitter?.removeAttribute('disabled');
+				submitter?.removeAttribute("disabled");
 				await update();
 
-				if (result.type === 'success') {
+				if (result.type === "success") {
 					newToast({
-						type: 'success',
+						type: "success",
 						content: "You'll be notified of future editions! 🎉",
 					});
 				}
@@ -61,14 +60,15 @@
 				type="email"
 				name="email"
 				class="input input-bordered"
-				placeholder="john.doe@gmail.com"
+				placeholder="your email"
+				maxlength="128"
 				required
 			/>
 			<button type="submit" class="btn">Stay updated</button>
 		</div>
-		{#if form?.message}
-			<div class="text-sm pt-1" class:text-error={form.error} class:text-success={form.success}>
-				{form.message}
+		{#if form && !form.success}
+			<div class="text-sm pt-1 font-medium text-error">
+				{form.issues?.email?.message}
 			</div>
 		{/if}
 	</form>

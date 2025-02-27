@@ -1,5 +1,6 @@
 import { categories, templateNames } from "$lib/config";
 import { z } from "zod";
+import * as fg from "formgator";
 
 const uuid4 =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -18,9 +19,7 @@ export const CategorySchema = z.enum(categories);
 
 const EmailSchema = z.string().email().max(128);
 
-export const EmailForm = z.object({
-	email: EmailSchema,
-});
+export const FGEmailSchema = fg.email({ required: true, maxlength: 128 });
 
 export const TokenSchema = z.string().uuid();
 
