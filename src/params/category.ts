@@ -1,7 +1,6 @@
-import type { ParamMatcher } from '@sveltejs/kit';
-import { categories } from '$lib/config';
-import { z } from 'zod';
+import { categories } from "$lib/config";
+import type { ParamMatcher } from "@sveltejs/kit";
 
 export const match = ((param) => {
-	return z.enum(categories).safeParse(param).success;
+	return categories.includes(param as typeof categories[number]);
 }) satisfies ParamMatcher;
