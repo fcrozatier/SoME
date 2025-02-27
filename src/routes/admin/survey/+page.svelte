@@ -19,7 +19,7 @@
 				<tr class="px-6 py-2">
 					<td class="text-center font-mono">{some}</td>
 					<td class="text-center font-mono">{site}</td>
-					<td class="text-center">{off_season ? 'y' : '-'}</td>
+					<td class="text-center">{off_season ? "y" : "-"}</td>
 					<td>{feedback}</td>
 				</tr>
 			{:else}

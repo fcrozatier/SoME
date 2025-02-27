@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import Thumbnail from '$lib/components/Thumbnail.svelte';
-	import Youtube from '$lib/components/Youtube.svelte';
-	import { YOUTUBE_EMBED } from '$lib/utils.js';
+	import { browser } from "$app/environment";
+	import Thumbnail from "$lib/components/Thumbnail.svelte";
+	import Youtube from "$lib/components/Youtube.svelte";
+	import { YOUTUBE_EMBED } from "$lib/utils.js";
 
 	let { data } = $props();
 
@@ -39,7 +39,7 @@
 	>
 		{#each data.top.slice(0, 5) as winner}
 			<div class="mx-auto lg:mr-0 px-4">
-				{#if winner.category === 'video'}
+				{#if winner.category === "video"}
 					<Youtube {width} src={winner.url}></Youtube>
 				{:else if winner.thumbnail}
 					<a href={winner.url} target="_blank" class={`w-[${width}px]`}>
@@ -65,7 +65,7 @@
 		{#each data.top.slice(5) as honorable}
 			<div class="flex flex-col gap-3">
 				<div>
-					{#if honorable.category === 'video' && honorable.url && YOUTUBE_EMBED.test(honorable.url)}
+					{#if honorable.category === "video" && honorable.url && YOUTUBE_EMBED.test(honorable.url)}
 						<Youtube src={honorable.url} width={320}></Youtube>
 					{:else if honorable.thumbnail && honorable.url && !YOUTUBE_EMBED.test(honorable.url)}
 						<a href={honorable.url} target="_blank" class="w-[320px]">

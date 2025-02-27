@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import { newToast } from '$lib/components/Toasts.svelte';
+	import { enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
+	import { newToast } from "$lib/components/Toasts.svelte";
 
 	let { data, form } = $props();
 
 	let someValue = $state(5);
 	let siteValue = $state(5);
-	let feedback = $state('');
+	let feedback = $state("");
 
 	let errorSummary: HTMLDivElement | undefined = $state();
 
@@ -26,13 +26,13 @@
 			method="post"
 			class="space-y-4"
 			use:enhance={({ submitter }) => {
-				submitter?.setAttribute('disabled', 'on');
+				submitter?.setAttribute("disabled", "on");
 				return async ({ update, result }) => {
-					if (result.type === 'success') {
-						newToast({ type: 'success', content: 'Thank you for taking the survey! 🎉 🥳' });
-						await goto('/');
+					if (result.type === "success") {
+						newToast({ type: "success", content: "Thank you for taking the survey! 🎉 🥳" });
+						await goto("/");
 					}
-					submitter?.removeAttribute('disabled');
+					submitter?.removeAttribute("disabled");
 					await update();
 				};
 			}}

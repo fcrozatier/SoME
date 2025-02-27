@@ -1,24 +1,24 @@
-import { dev } from '$app/environment';
-import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from '$env/static/public';
-import { db } from '$lib/server/db/client.js';
-import { postgresErrorCode } from '$lib/server/db/errors.js';
+import { dev } from "$app/environment";
+import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from "$env/static/public";
+import { db } from "$lib/server/db/client.js";
+import { postgresErrorCode } from "$lib/server/db/errors.js";
 import {
 	entries,
 	users as usersTable,
 	usersToEntries,
 	type NewUser,
-} from '$lib/server/db/schema.js';
-import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
-import { saveThumbnail } from '$lib/server/s3';
-import { RegistrationSchema, validateForm } from '$lib/validation';
-import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
-import { error, fail } from '@sveltejs/kit';
-import { inArray } from 'drizzle-orm';
-import postgres from 'postgres';
+} from "$lib/server/db/schema.js";
+import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
+import { saveThumbnail } from "$lib/server/s3";
+import { RegistrationSchema, validateForm } from "$lib/validation";
+import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from "$lib/utils";
+import { error, fail } from "@sveltejs/kit";
+import { inArray } from "drizzle-orm";
+import postgres from "postgres";
 
 export const load = ({ locals }) => {
 	if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END) && !locals.isAdmin) {
-		throw error(403, 'The registration phase is not open');
+		throw error(403, "The registration phase is not open");
 	}
 	return { isAdmin: locals.isAdmin };
 };
@@ -35,11 +35,11 @@ export const actions = {
 			return fail(400, validation.error.flatten());
 		}
 
-		let entryUid = '';
+		let entryUid = "";
 		let users: { token: string; email: string }[] = [
 			{ email: validation.data.email, token: crypto.randomUUID() },
 		];
-		if (validation.data.userType === 'creator') {
+		if (validation.data.userType === "creator") {
 			validation.data.others.forEach((x) => users.push({ email: x, token: crypto.randomUUID() }));
 		}
 
@@ -51,7 +51,7 @@ export const actions = {
 			if (emailValidation.some((x) => x === null)) {
 				return fail(400, { invalid: true });
 			}
-			const undeliverable = emailValidation.find((x) => x?.result !== 'deliverable');
+			const undeliverable = emailValidation.find((x) => x?.result !== "deliverable");
 			if (undeliverable) {
 				return fail(400, { undeliverable: undeliverable.address });
 			}
@@ -59,7 +59,7 @@ export const actions = {
 
 		// Save data
 		try {
-			if (validation.data.userType === 'creator') {
+			if (validation.data.userType === "creator") {
 				if (!registrationOpen() && !locals.isAdmin) {
 					return fail(422, { closedForCreators: true });
 				}
@@ -69,7 +69,7 @@ export const actions = {
 				if (!YOUTUBE_EMBEDDABLE.test(link)) {
 					if (!thumbnail) return fail(400, { thumbnailRequired: true });
 
-					thumbnailKey = crypto.randomUUID() + '.webp';
+					thumbnailKey = crypto.randomUUID() + ".webp";
 				} else {
 					// Normalize youtube links
 					normalizedLink = normalizeYoutubeLink(link);
@@ -121,36 +121,36 @@ export const actions = {
 				try {
 					for (const user of users) {
 						await addToMailingList(user.email, user.token);
-						await sendEmail(user.email, 'registration', { token: user.token });
+						await sendEmail(user.email, "registration", { token: user.token });
 
-						if (validation.data.userType === 'creator') {
-							await sendEmail(user.email, 'update', { token: entryUid });
+						if (validation.data.userType === "creator") {
+							await sendEmail(user.email, "update", { token: entryUid });
 						}
 					}
 				} catch (e) {
-					console.error('Cannot send email', e);
+					console.error("Cannot send email", e);
 				}
 			}
 			return {
 				success: true,
-				user: users.length === 1 ? users[0] : { email: '', token: '' },
+				user: users.length === 1 ? users[0] : { email: "", token: "" },
 				entryUid,
 			};
 		} catch (error) {
-			console.log('something went wrong', error);
+			console.log("something went wrong", error);
 			if (
 				error instanceof postgres.PostgresError &&
 				error.code === postgresErrorCode.unique_violation
 			) {
 				console.log(error.message);
-				if (error.constraint_name === 'users_email_unique') {
+				if (error.constraint_name === "users_email_unique") {
 					// Only the judges flow can arrive here as we do not block the creator flow on duplicates emails. Example detail
 					// Key (email)=(alice@gmail.com) already exists.
 					const match = error.detail?.match(/\(email\)=\((.*)\)/);
-					const email = match ? match[1] : '';
+					const email = match ? match[1] : "";
 
 					return fail(422, { emailExists: email });
-				} else if (error.constraint_name === 'entries_url_unique') {
+				} else if (error.constraint_name === "entries_url_unique") {
 					return fail(422, { linkExists: true });
 				}
 			}

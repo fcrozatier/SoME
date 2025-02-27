@@ -8,14 +8,14 @@
 	let { datetime, time = true, options = undefined }: Props = $props();
 
 	const intl = new Intl.DateTimeFormat(
-		'en',
+		"en",
 		options ?? {
 			// weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: time ? 'numeric' : undefined,
-			minute: time ? 'numeric' : undefined,
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+			hour: time ? "numeric" : undefined,
+			minute: time ? "numeric" : undefined,
 		},
 	);
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { timeLeft } from '$lib/utils';
-	import { onMount } from 'svelte';
+	import { timeLeft } from "$lib/utils";
+	import { onMount } from "svelte";
 
 	interface Props {
 		display?: boolean;

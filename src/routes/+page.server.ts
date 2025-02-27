@@ -23,55 +23,49 @@ export const load = async () => {
 };
 
 export const actions: Actions = {
-	newsletter: formgate(
-		{ email: FGEmailSchema },
-		async (data) => {
-			const email = data.email;
+	newsletter: formgate({ email: FGEmailSchema }, async (data) => {
+		const email = data.email;
 
-			// Find user
-			const user =
-				(await db.select().from(users).where(eq(users.email, email)))[0];
+		// Find user
+		const user = (await db.select().from(users).where(eq(users.email, email)))[0];
 
-			if (user) {
-				return fail(400, {
-					error: true,
-					message: "Email already registered",
-				});
-			}
-
-			if (!dev) {
-				// Commented: 13/11/24
-				// Validate email
-				// const emailValidation = await validateEmail(email);
-				// if (!emailValidation || emailValidation.result !== 'deliverable') {
-				// 	return fail(400, {
-				// 		error: true,
-				// 		message: 'Undeliverable email',
-				// 	});
-				// }
-			}
-
-			const token = crypto.randomUUID();
-
-			await db.insert(users).values({
-				uid: token,
-				email,
+		if (user) {
+			return fail(400, {
+				error: true,
+				message: "Email already registered",
 			});
+		}
 
-			if (!dev) {
-				await addToMailingList(email, token);
-			}
+		if (!dev) {
+			// Commented: 13/11/24
+			// Validate email
+			// const emailValidation = await validateEmail(email);
+			// if (!emailValidation || emailValidation.result !== 'deliverable') {
+			// 	return fail(400, {
+			// 		error: true,
+			// 		message: 'Undeliverable email',
+			// 	});
+			// }
+		}
 
-			return { success: true };
-		},
-	),
+		const token = crypto.randomUUID();
+
+		await db.insert(users).values({
+			uid: token,
+			email,
+		});
+
+		if (!dev) {
+			await addToMailingList(email, token);
+		}
+
+		return { success: true };
+	}),
 
 	resend_link: formgate({ email: FGEmailSchema }, async (data) => {
 		try {
 			// Find user
-			const user = (await db.select().from(users).where(
-				eq(users.email, data.email),
-			))[0];
+			const user = (await db.select().from(users).where(eq(users.email, data.email)))[0];
 
 			if (!user) {
 				return fail(400, {

@@ -14,24 +14,24 @@
 		name,
 		value = $bindable(),
 		ready = $bindable(false),
-		label1 = '',
-		label3 = '',
-		label5 = '',
-		label7 = '',
-		label9 = '',
+		label1 = "",
+		label3 = "",
+		label5 = "",
+		label7 = "",
+		label9 = "",
 	}: Props = $props();
 
 	let input: HTMLInputElement | undefined = $state();
 
 	function label(value: number) {
 		if (value < 1.5) return label1;
-		if (value < 2.5) return label3 + '-';
+		if (value < 2.5) return label3 + "-";
 		if (value < 3.5) return label3;
-		if (value < 4.5) return label5 + '-';
+		if (value < 4.5) return label5 + "-";
 		if (value < 5.5) return label5;
-		if (value < 6.5) return label5 + '+';
+		if (value < 6.5) return label5 + "+";
 		if (value < 7.5) return label7;
-		if (value < 8.5) return label7 + '+';
+		if (value < 8.5) return label7 + "+";
 		return label9;
 	}
 
@@ -96,6 +96,6 @@
 </div>
 
 <p class="">
-	Your estimation: <span class="font-semibold">{ready ? label(value) : 'Please make a choice'}</span
+	Your estimation: <span class="font-semibold">{ready ? label(value) : "Please make a choice"}</span
 	>
 </p>

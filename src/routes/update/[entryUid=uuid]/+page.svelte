@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { page } from '$app/state';
-	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from '$env/static/public';
-	import { newToast } from '$lib/components/Toasts.svelte';
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from '$lib/config';
-	import { YOUTUBE_EMBEDDABLE, registrationOpen } from '$lib/utils';
-	import { tick } from 'svelte';
+	import { enhance } from "$app/forms";
+	import { page } from "$app/state";
+	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
+	import { newToast } from "$lib/components/Toasts.svelte";
+	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from "$lib/config";
+	import { YOUTUBE_EMBEDDABLE, registrationOpen } from "$lib/utils";
+	import { tick } from "svelte";
 
 	let { data, form } = $props();
 
@@ -38,7 +38,7 @@
 	let link = $state(data.url);
 
 	async function addContributor() {
-		otherContributors = [...otherContributors, ''];
+		otherContributors = [...otherContributors, ""];
 		await tick();
 		const lastEmail = document.getElementById(`email-${otherContributors.length - 1}`);
 		(lastEmail as HTMLInputElement)?.focus();
@@ -57,16 +57,16 @@
 		method="post"
 		enctype="multipart/form-data"
 		use:enhance={async ({ submitter, formData }) => {
-			formData.append('others', JSON.stringify(otherContributors));
-			formData.set('userType', 'creator');
-			submitter?.setAttribute('disabled', 'on');
+			formData.append("others", JSON.stringify(otherContributors));
+			formData.set("userType", "creator");
+			submitter?.setAttribute("disabled", "on");
 
 			return async ({ update, result }) => {
-				if (result.type === 'success') {
-					newToast({ content: 'Entry updated!', type: 'success' });
+				if (result.type === "success") {
+					newToast({ content: "Entry updated!", type: "success" });
 				}
 				await update({ reset: false });
-				submitter?.removeAttribute('disabled');
+				submitter?.removeAttribute("disabled");
 			};
 		}}
 	>
@@ -84,7 +84,7 @@
 				required
 			/>
 			{#if form?.fieldErrors?.email}
-				<span class="block text-error">{form.fieldErrors.email.join(', ')}</span>
+				<span class="block text-error">{form.fieldErrors.email.join(", ")}</span>
 			{/if}
 		</div>
 
@@ -126,7 +126,7 @@
 
 		{#if form?.undeliverable}
 			<span class="block text-error"
-				>undeliverable email{otherContributors.length > 0 ? ': ' + form.undeliverable : ''}</span
+				>undeliverable email{otherContributors.length > 0 ? ": " + form.undeliverable : ""}</span
 			>
 		{/if}
 
@@ -146,7 +146,7 @@
 				{/each}
 			</select>
 			{#if form?.fieldErrors?.category}
-				<span class="block text-error">{form.fieldErrors.category.join(', ')}</span>
+				<span class="block text-error">{form.fieldErrors.category.join(", ")}</span>
 			{/if}
 		</div>
 
@@ -163,7 +163,7 @@
 				required
 			/>
 			{#if form?.fieldErrors?.title}
-				<span class="block text-error">{form.fieldErrors.title.join(', ')}</span>
+				<span class="block text-error">{form.fieldErrors.title.join(", ")}</span>
 			{/if}
 		</div>
 
@@ -184,7 +184,7 @@
 			<div class="label">
 				<span class="label-text-alt text-error">
 					{#if form?.fieldErrors?.description}
-						{form.fieldErrors.description.join(', ')}
+						{form.fieldErrors.description.join(", ")}
 					{/if}
 				</span>
 				<span class="label-text-alt">{description.length}/5000</span>
@@ -208,7 +208,7 @@
 				disabled={!registrationOpen()}
 			/>
 			{#if form?.fieldErrors?.link}
-				<span class="block text-error">{form.fieldErrors.link.join(', ')} </span>
+				<span class="block text-error">{form.fieldErrors.link.join(", ")} </span>
 			{:else if form?.linkExists}
 				<span class="block text-error">entry already registered</span>
 			{/if}
@@ -219,7 +219,7 @@
 				<p>Current thumbnail</p>
 				<img
 					class="my-0 max-w-full rounded-lg"
-					src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace('https://', '')}/${data.thumbnail}`}
+					src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace("https://", "")}/${data.thumbnail}`}
 					alt="thumbnail"
 					width="480"
 					height="270"
@@ -242,7 +242,7 @@
 					required
 				/>
 				{#if form?.fieldErrors?.thumbnail}
-					<span class="block text-error">{form.fieldErrors.thumbnail.join(', ')} </span>
+					<span class="block text-error">{form.fieldErrors.thumbnail.join(", ")} </span>
 				{:else if form?.thumbnailRequired}
 					<span class="block text-error">A thumbnail is required</span>
 				{/if}
@@ -257,7 +257,7 @@
 				</span>
 			</label>
 			{#if form?.fieldErrors?.rules}
-				<span class="block text-error">{form.fieldErrors.rules.join(', ')} </span>
+				<span class="block text-error">{form.fieldErrors.rules.join(", ")} </span>
 			{/if}
 		</div>
 
@@ -278,13 +278,13 @@
 				</span>
 			</label>
 			{#if form?.fieldErrors?.copyright}
-				<span class="block text-error">{form.fieldErrors.copyright.join(', ')} </span>
+				<span class="block text-error">{form.fieldErrors.copyright.join(", ")} </span>
 			{/if}
 		</div>
 
 		{#if form?.fieldErrors || page.status !== 200}
 			<p class="block text-error">
-				Something went wrong. {form?.message || ''}
+				Something went wrong. {form?.message || ""}
 			</p>
 		{/if}
 		<p>
@@ -298,6 +298,6 @@
 
 <style>
 	label {
-		margin-top: theme('margin.2');
+		margin-top: theme("margin.2");
 	}
 </style>

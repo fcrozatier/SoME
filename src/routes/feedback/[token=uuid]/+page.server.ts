@@ -1,7 +1,7 @@
-import { queryFeedbacks } from '$lib/server/algo/queries';
-import { db } from '$lib/server/db/client';
-import { surveys } from '$lib/server/db/schema.js';
-import { eq } from 'drizzle-orm';
+import { queryFeedbacks } from "$lib/server/algo/queries";
+import { db } from "$lib/server/db/client";
+import { surveys } from "$lib/server/db/schema.js";
+import { eq } from "drizzle-orm";
 
 export const load = async (event) => {
 	const { token } = event.params;

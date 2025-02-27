@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
-	import { page } from '$app/state';
-	import { clickOutside } from '$lib/actions';
-	import Banner from '$lib/components/Banner.svelte';
-	import Icon from '$lib/components/Icon.svelte';
-	import Timer from '$lib/components/Timer.svelte';
-	import Toasts from '$lib/components/Toasts.svelte';
-	import { COMPETITION_FULL_NAME } from '$lib/config';
-	import Menu from '$lib/icons/menu.svg';
-	import { registrationOpen, resultsAvailable, voteOpen } from '$lib/utils';
-	import '../app.css';
-	import '../math.css';
+	import { beforeNavigate } from "$app/navigation";
+	import { page } from "$app/state";
+	import { clickOutside } from "$lib/actions";
+	import Banner from "$lib/components/Banner.svelte";
+	import Icon from "$lib/components/Icon.svelte";
+	import Timer from "$lib/components/Timer.svelte";
+	import Toasts from "$lib/components/Toasts.svelte";
+	import { COMPETITION_FULL_NAME } from "$lib/config";
+	import Menu from "$lib/icons/menu.svg";
+	import { registrationOpen, resultsAvailable, voteOpen } from "$lib/utils";
+	import "../app.css";
+	import "../math.css";
 
 	let { data, children } = $props();
 
@@ -37,7 +37,7 @@
 				<a
 					href="/vote"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={page.url.pathname.includes('/vote') ? 'page' : null}>Vote</a
+					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>Vote</a
 				>
 			{/if}
 			{#if resultsAvailable()}
@@ -45,25 +45,25 @@
 					<a
 						href="/feedback"
 						class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-						aria-current={page.url.pathname.includes('/feedback') ? 'page' : null}>Feedback</a
+						aria-current={page.url.pathname.includes("/feedback") ? "page" : null}>Feedback</a
 					>
 				{/if}
 				<a
 					href="/results"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={page.url.pathname.includes('/results') ? 'page' : null}>Results</a
+					aria-current={page.url.pathname.includes("/results") ? "page" : null}>Results</a
 				>
 				<a
 					href="/archive"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={page.url.pathname.includes('/archive') ? 'page' : null}>Archive</a
+					aria-current={page.url.pathname.includes("/archive") ? "page" : null}>Archive</a
 				>
 			{/if}
 			{#if page.data.isAdmin}
 				<a
 					href="/admin"
 					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={page.url.pathname.includes('/admin') ? 'page' : null}>Admin</a
+					aria-current={page.url.pathname.includes("/admin") ? "page" : null}>Admin</a
 				>
 			{/if}
 		</span>

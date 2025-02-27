@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { page } from '$app/state';
-	import { templateNames } from '$lib/config';
+	import { enhance } from "$app/forms";
+	import { page } from "$app/state";
+	import { templateNames } from "$lib/config";
 
 	let selected: string[] = $state([]);
 </script>
@@ -12,11 +12,11 @@
 	<form
 		method="post"
 		use:enhance={({ submitter }) => {
-			submitter?.setAttribute('disabled', 'on');
+			submitter?.setAttribute("disabled", "on");
 
 			return async ({ update }) => {
 				await update();
-				submitter?.removeAttribute('disabled');
+				submitter?.removeAttribute("disabled");
 			};
 		}}
 	>
@@ -34,7 +34,7 @@
 						bind:group={selected}
 						required
 					/>
-					<span class="label-text capitalize"> {template_name.replaceAll('_', ' ')} </span>
+					<span class="label-text capitalize"> {template_name.replaceAll("_", " ")} </span>
 				</label>
 			{/each}
 		</div>

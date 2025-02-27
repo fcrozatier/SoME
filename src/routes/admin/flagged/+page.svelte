@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { toggleSelectAll } from '$lib/actions';
-	import { newToast } from '$lib/components/Toasts.svelte';
+	import { enhance } from "$app/forms";
+	import { toggleSelectAll } from "$lib/actions";
+	import { newToast } from "$lib/components/Toasts.svelte";
 
 	let { data } = $props();
 
@@ -48,19 +48,19 @@
 	<form
 		method="post"
 		use:enhance={({ formData }) => {
-			const buttons = document.querySelectorAll('button');
-			buttons.forEach((b) => b.setAttribute('disabled', 'on'));
-			formData.append('selection', JSON.stringify(selected));
+			const buttons = document.querySelectorAll("button");
+			buttons.forEach((b) => b.setAttribute("disabled", "on"));
+			formData.append("selection", JSON.stringify(selected));
 
 			return async ({ update, result, action }) => {
-				buttons.forEach((b) => b.removeAttribute('disabled'));
-				if (result.type === 'success') {
+				buttons.forEach((b) => b.removeAttribute("disabled"));
+				if (result.type === "success") {
 					const content =
-						(selected.length === 1 ? 'Entry' : 'Entries') +
-						' ' +
-						(action.search === '?/ignore' ? 'ignored' : 'deactivated');
+						(selected.length === 1 ? "Entry" : "Entries") +
+						" " +
+						(action.search === "?/ignore" ? "ignored" : "deactivated");
 
-					newToast({ type: 'info', content });
+					newToast({ type: "info", content });
 				}
 				await update();
 			};

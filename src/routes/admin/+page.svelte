@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { enhance } from "$app/forms";
 
 	let { form, data } = $props();
 </script>
@@ -24,10 +24,10 @@
 			method="post"
 			action="?/login"
 			use:enhance={({ submitter }) => {
-				submitter?.setAttribute('disabled', 'on');
+				submitter?.setAttribute("disabled", "on");
 				return async ({ update }) => {
 					await update();
-					submitter?.removeAttribute('disabled');
+					submitter?.removeAttribute("disabled");
 				};
 			}}
 		>

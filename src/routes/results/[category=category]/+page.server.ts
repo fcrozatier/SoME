@@ -1,24 +1,24 @@
-import { db } from '$lib/server/db/client.js';
-import type { SelectEntry } from '$lib/server/db/schema.js';
-import { resultsAvailable } from '$lib/utils.js';
-import { error } from '@sveltejs/kit';
-import { sql } from 'drizzle-orm';
+import { db } from "$lib/server/db/client.js";
+import type { SelectEntry } from "$lib/server/db/schema.js";
+import { resultsAvailable } from "$lib/utils.js";
+import { error } from "@sveltejs/kit";
+import { sql } from "drizzle-orm";
 
 export const load = async ({ params, locals, url }) => {
 	if (!resultsAvailable() && !locals.isAdmin) {
-		error(400, { message: 'Results not available' });
+		error(400, { message: "Results not available" });
 	}
 
-	let page = url.searchParams.get('page');
+	let page = url.searchParams.get("page");
 	const limit = 50;
 
 	if (!page) {
-		url.searchParams.set('page', '1');
-		page = '1';
+		url.searchParams.set("page", "1");
+		page = "1";
 	}
 
 	const { category } = params;
-	const entries: Pick<SelectEntry, 'uid' | 'title' | 'category' | 'thumbnail' | 'url' | 'rank'>[] =
+	const entries: Pick<SelectEntry, "uid" | "title" | "category" | "thumbnail" | "url" | "rank">[] =
 		await db.execute(sql`
 		 select uid, title, category, thumbnail, url, rank from entries
 		 where active='t'

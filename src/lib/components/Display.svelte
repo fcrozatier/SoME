@@ -1,16 +1,16 @@
 <script lang="ts">
-	import Thumbnail from '$lib/components/Thumbnail.svelte';
-	import Youtube from '$lib/components/Youtube.svelte';
-	import { YOUTUBE_EMBED } from '$lib/utils';
+	import Thumbnail from "$lib/components/Thumbnail.svelte";
+	import Youtube from "$lib/components/Youtube.svelte";
+	import { YOUTUBE_EMBED } from "$lib/utils";
 
 	interface Props {
 		data: {
-		title?: string;
-		description?: string;
-		category?: string;
-		url?: string;
-		thumbnail?: string | null;
-	};
+			title?: string;
+			description?: string;
+			category?: string;
+			url?: string;
+			thumbnail?: string | null;
+		};
 	}
 
 	let { data }: Props = $props();
@@ -20,7 +20,7 @@
 	<h3>{data.title}</h3>
 	<p>{data.description}</p>
 	<div class="flex justify-center">
-		{#if data.category === 'video' && data.url && YOUTUBE_EMBED.test(data.url)}
+		{#if data.category === "video" && data.url && YOUTUBE_EMBED.test(data.url)}
 			<Youtube src={data.url} width={560}></Youtube>
 		{:else if data.thumbnail && data.url && !YOUTUBE_EMBED.test(data.url)}
 			<a href={data.url} target="_blank">

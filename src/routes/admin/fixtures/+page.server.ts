@@ -1,12 +1,12 @@
-import { db } from '$lib/server/db/client';
-import { entries } from '$lib/server/db/schema';
-import { fail } from '@sveltejs/kit';
-import { non_videos as n2021 } from './2021_non_videos';
-import { videos as v2021 } from './2021_videos';
-import { non_videos as n2022 } from './2022_non_videos';
-import { videos as v2022 } from './2022_videos';
-import { non_videos as n2023 } from './2023_non_videos';
-import { videos as v2023 } from './2023_videos';
+import { db } from "$lib/server/db/client";
+import { entries } from "$lib/server/db/schema";
+import { fail } from "@sveltejs/kit";
+import { non_videos as n2021 } from "./2021_non_videos";
+import { videos as v2021 } from "./2021_videos";
+import { non_videos as n2022 } from "./2022_non_videos";
+import { videos as v2022 } from "./2022_videos";
+import { non_videos as n2023 } from "./2023_non_videos";
+import { videos as v2023 } from "./2023_videos";
 
 const data = {
 	v2023: v2023,

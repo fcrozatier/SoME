@@ -4,7 +4,7 @@ import {
 	PUBLIC_RESULTS_AVAILABLE,
 	PUBLIC_VOTE_END,
 	PUBLIC_VOTE_START,
-} from '$env/static/public';
+} from "$env/static/public";
 
 export function competitionStarted() {
 	if (!PUBLIC_REGISTRATION_START) return false;
@@ -63,6 +63,6 @@ export function timeLeft() {
 	const min = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
 	const sec = Math.floor((ms % (1000 * 60)) / 1000);
 
-	const days = `${d > 0 ? d.toString() + ` day${d > 1 ? 's' : ''} ` : ''}`;
+	const days = `${d > 0 ? d.toString() + ` day${d > 1 ? "s" : ""} ` : ""}`;
 	return { ms, formatted: `${days}${h}h ${min}min ${sec}s` };
 }

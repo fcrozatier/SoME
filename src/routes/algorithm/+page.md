@@ -5,6 +5,7 @@
 </script>
 
 <svelte:head>
+
 <title>Algorithm &middot; {COMPETITION_SHORT_NAME}</title>
 </svelte:head>
 
@@ -71,13 +72,14 @@ This voting system involves scoring entries individually (rather than using pair
 This approach has many interesting [properties](https://www.pnas.org/doi/pdf/10.1073/pnas.0702634104) particularly due to its reliance on the median. It is not sensitive to extreme votes from absolute fans or spammers, accurately reflects the majority opinion, and is more robust to increased noise compared to PageRank. For instance, if an entry receives a few scores of 0 and 10 but most people rate it a 7, the median score of 7 will be selected.
 
 Moreover, pairwise ranking suffers from several flaws:
+
 - Comparing unrelated entries can be difficult, leading to ties or comparisons that are impossible due to different audiences, topics or prerequisites. This can result in implementation issues, such as disconnected graphs, as well as decision fatigue for voters.
 - With <math><mi>N</mi></math> entries we have <math>
   <mrow><mi>N</mi><mo form="prefix" stretchy="false">(</mo><mi>N</mi>
-    <mo>−</mo>
-    <mn>1</mn><mo form="postfix" stretchy="false">)</mo><mi>/</mi><mn>2</mn>
+  <mo>−</mo>
+  <mn>1</mn><mo form="postfix" stretchy="false">)</mo><mi>/</mi><mn>2</mn>
   </mrow>
-</math> possible comparisons, which dilutes information on the edges and makes these arrows less reliable when using pairwise ranking versus individual ranking with the same number of votes.
+  </math> possible comparisons, which dilutes information on the edges and makes these arrows less reliable when using pairwise ranking versus individual ranking with the same number of votes.
 - From a user experience perspective, pairwise ranking requires watching two videos before voting, which can be time-consuming (especially if videos are up to 30 minutes long). This may lead to decisions influenced by the more vivid memory of the most recent entry viewed, introducing biais.
 
 For these reasons, we chose Majority Judgement. Our implementation uses a continuous scale, avoiding some edge cases and ties found in the traditional version.
@@ -89,7 +91,6 @@ This question explicitly leverages the judge's experience, and can be viewed of 
 Additionally, judges can skip entries they feel unqualified to evaluate.
 
 Overall, this system provides a better experience for judges. They only need to watch one entry before casting their vote and assign a single score based on a natural question, reducing decision fatigue. Additionally, the score aggregation method described here is the most accurate and robust among those we benchmarked.
-
 
 ### Optimizing for Quality
 

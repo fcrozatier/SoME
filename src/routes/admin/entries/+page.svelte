@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/state';
-	import { clickOutside } from '$lib/actions';
-	import Display from '$lib/components/Display.svelte';
-	import Pagination from '$lib/components/Pagination.svelte';
+	import { applyAction, enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
+	import { page } from "$app/state";
+	import { clickOutside } from "$lib/actions";
+	import Display from "$lib/components/Display.svelte";
+	import Pagination from "$lib/components/Pagination.svelte";
 
 	let { data, form = $bindable() } = $props();
 
-	let pageNumber = $state(page.url.searchParams.get('page') ?? '1');
+	let pageNumber = $state(page.url.searchParams.get("page") ?? "1");
 	let displayDialog: HTMLDialogElement | undefined = $state();
 </script>
 
@@ -20,7 +20,7 @@
 			pages={data.pages}
 			bind:pageNumber
 			onChange={() => {
-				page.url.searchParams.set('page', pageNumber);
+				page.url.searchParams.set("page", pageNumber);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 					keepFocus: true,
@@ -45,14 +45,14 @@
 						<form
 							method="POST"
 							use:enhance={() => {
-								const buttons = document.querySelectorAll('button');
-								buttons.forEach((b) => b.setAttribute('disabled', 'on'));
+								const buttons = document.querySelectorAll("button");
+								buttons.forEach((b) => b.setAttribute("disabled", "on"));
 
 								return async ({ result, action }) => {
 									await applyAction(result);
-									buttons.forEach((b) => b.removeAttribute('disabled'));
+									buttons.forEach((b) => b.removeAttribute("disabled"));
 
-									if (result.type === 'success' && action.search.includes('display')) {
+									if (result.type === "success" && action.search.includes("display")) {
 										displayDialog?.show();
 										displayDialog?.scrollTo({ top: 0 });
 									}
@@ -80,7 +80,7 @@
 			pages={data.pages}
 			bind:pageNumber
 			onChange={() => {
-				page.url.searchParams.set('page', pageNumber);
+				page.url.searchParams.set("page", pageNumber);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 					keepFocus: true,

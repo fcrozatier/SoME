@@ -1,6 +1,6 @@
 <script module lang="ts">
-	import type { KatexOptions } from 'katex';
-	import katex from 'katex';
+	import type { KatexOptions } from "katex";
+	import katex from "katex";
 </script>
 
 <script lang="ts">
@@ -11,12 +11,7 @@
 		options?: KatexOptions;
 	}
 
-	let {
-		displayMode = false,
-		nowrap = false,
-		tex,
-		options = { output: 'html' }
-	}: Props = $props();
+	let { displayMode = false, nowrap = false, tex, options = { output: "html" } }: Props = $props();
 </script>
 
 <!-- SSR with renderToString -->

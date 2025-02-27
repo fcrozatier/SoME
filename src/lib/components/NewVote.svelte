@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { categories } from '$lib/config';
-	import { page } from '$app/state';
+	import { categories } from "$lib/config";
+	import { page } from "$app/state";
 
 	interface Props {
-		displayCategories?: 'all' | 'others-only';
+		displayCategories?: "all" | "others-only";
 	}
 
-	let { displayCategories = 'all' }: Props = $props();
+	let { displayCategories = "all" }: Props = $props();
 </script>
 
-{#if displayCategories !== 'others-only'}
+{#if displayCategories !== "others-only"}
 	<p>
 		<button class="btn-primary btn-lg btn">New vote</button>
 	</p>
