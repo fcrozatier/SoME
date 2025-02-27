@@ -10,7 +10,7 @@ import {
 } from '$lib/server/db/schema.js';
 import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
 import { saveThumbnail } from '$lib/server/s3';
-import { RegistrationSchema, validateForm } from '$lib/server/validation';
+import { RegistrationSchema, validateForm } from '$lib/validation';
 import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
 import { error, fail } from '@sveltejs/kit';
 import { inArray } from 'drizzle-orm';

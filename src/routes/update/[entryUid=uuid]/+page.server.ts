@@ -11,7 +11,7 @@ import {
 } from '$lib/server/db/schema.js';
 import { addToMailingList, sendEmail, validateEmail } from '$lib/server/email';
 import { saveThumbnail } from '$lib/server/s3';
-import { CreatorSchema, validateForm } from '$lib/server/validation';
+import { CreatorSchema, validateForm } from '$lib/validation';
 import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from '$lib/utils';
 import { error, fail } from '@sveltejs/kit';
 import { and, eq, inArray } from 'drizzle-orm';

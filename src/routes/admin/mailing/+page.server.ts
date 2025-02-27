@@ -1,7 +1,7 @@
 import { sendTemplate } from '$lib/server/email';
 import type { Actions } from '@sveltejs/kit';
 import { fail } from '@sveltejs/kit';
-import { EmailTemplateSchema, validateForm } from '$lib/server/validation';
+import { EmailTemplateSchema, validateForm } from '$lib/validation';
 import { dev } from '$app/environment';
 
 export const actions: Actions = {

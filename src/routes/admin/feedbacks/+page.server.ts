@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db/client';
 import { type SelectEntry } from '$lib/server/db/schema';
-import { FeedbackForm, validateForm } from '$lib/server/validation';
+import { FeedbackForm, validateForm } from '$lib/validation';
 import { fail } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
 

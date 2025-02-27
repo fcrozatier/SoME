@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
 import { db } from '$lib/server/db/client';
 import { users, type SelectEntry } from '$lib/server/db/schema';
-import { EmailForm, validateForm } from '$lib/server/validation';
+import { EmailForm, validateForm } from '$lib/validation';
 import { fail, type Actions } from '@sveltejs/kit';
 import { eq, sql } from 'drizzle-orm';
 import { addToMailingList, sendEmail, validateEmail } from '../lib/server/email';

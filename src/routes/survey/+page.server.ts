@@ -1,7 +1,7 @@
 import { MAX_AGE } from '$lib/server/config';
 import { db } from '$lib/server/db/client';
 import { surveys } from '$lib/server/db/schema';
-import { FeedbackSchema, validateForm } from '$lib/server/validation';
+import { FeedbackSchema, validateForm } from '$lib/validation';
 import { fail, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 

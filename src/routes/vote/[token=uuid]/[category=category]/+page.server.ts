@@ -4,7 +4,7 @@ import { query3 } from '$lib/server/algo/queries';
 import { db } from '$lib/server/db/client';
 import { cache, flags, skips, votes, type SelectEntry } from '$lib/server/db/schema';
 import { decrypt, encrypt } from '$lib/server/encryption';
-import { FlagSchema, SkipSchema, validateForm, VoteSchema } from '$lib/server/validation';
+import { FlagSchema, SkipSchema, validateForm, VoteSchema } from '$lib/validation';
 import { voteOpen } from '$lib/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';

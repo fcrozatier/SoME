@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db/client';
 import { type SelectEntry, type SelectFlag } from '$lib/server/db/schema';
-import { FlagForm, validateForm } from '$lib/server/validation';
+import { FlagForm, validateForm } from '$lib/validation';
 import { fail, type Actions } from '@sveltejs/kit';
 import { sql } from 'drizzle-orm';
 

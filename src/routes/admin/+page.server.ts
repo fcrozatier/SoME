@@ -2,7 +2,7 @@ import { ADMIN_PASSWORD, JWT_SECRET } from '$env/static/private';
 import { MAX_AGE } from '$lib/server/config';
 import { db } from '$lib/server/db/client.js';
 import { users } from '$lib/server/db/schema.js';
-import { PasswordForm, validateForm } from '$lib/server/validation';
+import { PasswordForm, validateForm } from '$lib/validation';
 import { fail } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import jsonwebtoken from 'jsonwebtoken';
