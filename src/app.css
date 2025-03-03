@@ -1,6 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui';
+
+@theme {
+	--color-primary: #2b3440;
+	--color-secondary: #f000b8;
+	--color-accent: #1dcdbc;
+	--color-neutral: #2b3440;
+	--color-base-100: #ffffff;
+	--color-info: #3abff8;
+	--color-success: #36d399;
+	--color-warning: #fbbd23;
+	--color-error: #f87272;
+	--color-base-content: black;
+}
 
 :root {
 	--light-gold: #fffaf4;
@@ -25,13 +38,17 @@ body {
 }
 
 dialog {
-	@apply max-w-2xl rounded-xl p-12 pb-10 shadow-2xl;
+	@apply shadow-2xl;
+	max-width: var(--container-2xl);
+	border-radius: var(--radius-xl);
+	padding: var(--spacing-12);
+	padding-bottom: var(--spacing-10);
 	max-height: 80vh;
 	visibility: hidden;
 }
 
 dialog:not([open]) {
-	@apply pointer-events-none;
+	pointer-events: none;
 }
 
 dialog[open] {
@@ -47,8 +64,8 @@ dialog::backdrop {
 }
 
 details {
-	@apply py-4;
-	border-block: 1px solid theme(borderColor.DEFAULT);
+	padding-block: var(--spacing-4);
+	border-block: 1px solid var(--color-gray-200);
 }
 details[open] > summary::after {
 	transform: rotate(-135deg);
@@ -60,16 +77,16 @@ details + details {
 }
 
 summary {
-	@apply relative cursor-pointer select-none list-none;
 	--outline-width: 0;
+	@apply relative cursor-pointer select-none list-none;
 }
 summary:hover::before {
-	background-color: theme(colors.gray.200);
+	background-color: var(--color-gray-200);
 }
 
 summary:focus-visible::before {
-	background-color: theme(colors.gray.200);
-	outline: 1px solid theme(colors.gray.500);
+	background-color: var(--color-gray-200);
+	outline: 1px solid var(--color-gray-500);
 	outline-offset: 2px;
 }
 
@@ -83,7 +100,7 @@ summary::before {
 	top: -2px;
 	right: 0;
 	border-radius: 50%;
-	background-color: theme(colors.gray.100);
+	background-color: var(--color-gray-100);
 	width: var(--bg-size);
 	height: var(--bg-size);
 	transition: var(--outline-offset-transition);
@@ -94,8 +111,8 @@ summary::after {
 	right: calc((var(--bg-size) - var(--arrow-size)) / 2);
 	transition: transform 100ms ease-out;
 	transform: rotate(45deg);
-	border-right: 2px solid theme(colors.gray.500);
-	border-bottom: 2px solid theme(colors.gray.500);
+	border-right: 2px solid var(--color-gray-500);
+	border-bottom: 2px solid var(--color-gray-500);
 	width: var(--arrow-size);
 	height: var(--arrow-size);
 }
@@ -123,7 +140,7 @@ summary::after {
 }
 .scrollbar::-webkit-scrollbar-thumb {
 	background-color: var(--thumb);
-	border-radius: theme("borderRadius.md");
+	border-radius: var(--radius-md);
 	border: 2px solid var(--track);
 }
 
