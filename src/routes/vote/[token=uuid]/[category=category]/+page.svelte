@@ -335,7 +335,7 @@
 </dialog>
 
 <dialog class="mb-auto" bind:this={actionScreen}>
-	<form class="max-w-screen-sm" method="dialog">
+	<form class="max-w-(--breakpoint-sm)" method="dialog">
 		<h2 class="mt-0">You've made {data.total_votes} votes!</h2>
 		<p class="text-success">Thank you.</p>
 		<p class="">You can continue voting, change category or take a break at any time</p>

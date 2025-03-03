@@ -298,6 +298,6 @@
 
 <style>
 	label {
-		margin-top: theme("margin.2");
+		margin-top: var(--spacing-2);
 	}
 </style>

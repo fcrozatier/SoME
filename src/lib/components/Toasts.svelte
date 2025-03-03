@@ -66,7 +66,7 @@
 	{#each $toasts as toast (toast.id)}
 		<!-- output is announced to screen readers with implicit role status -->
 		<output
-			class="toast"
+			class="toast text-sm text-white rounded-md py-3 px-4 shadow-sm"
 			class:bg-green-600={toast.type === "success"}
 			class:bg-gray-900={toast.type === "info"}
 			class:bg-red-600={toast.type === "error"}
@@ -92,18 +92,10 @@
 		display: grid;
 		justify-content: center;
 		justify-items: center;
-		gap: theme("spacing.2");
+		gap: var(--spacing-2);
 	}
 
 	.toast {
 		max-width: min(60ch, 90vw);
-		padding-block: theme("spacing.3");
-		padding-inline: theme("spacing.4");
-
-		font-size: theme("fontSize.sm");
-		color: theme("colors.white");
-
-		border-radius: theme("borderRadius.DEFAULT");
-		box-shadow: theme("boxShadow.sm");
 	}
 </style>

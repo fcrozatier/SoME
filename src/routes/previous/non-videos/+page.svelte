@@ -36,6 +36,6 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(200px, 250px));
 		justify-content: center;
-		gap: theme(space.12) theme(space.16);
+		gap: var(--spacing-12) var(--spacing-16);
 	}
 </style>
