@@ -30,7 +30,7 @@
 	<p>
 		The {COMPETITION_FULL_NAME} ({COMPETITION_SHORT_NAME}) is an annual competition to foster the
 		creation of excellent math content online. You can participate as either a creator or judge.
-		<a href="/rules">Learn more</a>
+		<a href="/rules" rel="terms-of-service">Learn more</a>
 	</p>
 	<form
 		class="grid justify-center"

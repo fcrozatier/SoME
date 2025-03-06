@@ -116,7 +116,7 @@
 					automatically be signed up as a judge as well.
 				</li>
 				<li>
-					Please read the <a href="/#rules"><u>rules and judging criteria</u></a> before submitting your
+					Please read the <a href="/rules"><u>rules and judging criteria</u></a> before submitting your
 					entry.
 				</li>
 			</ul>
@@ -337,7 +337,7 @@
 				<label for="rules" class="label justify-normal gap-4">
 					<input id="rules" type="checkbox" name="rules" class="checkbox" required />
 					<span class="label-text">
-						I've read the <a href="/#rules">rules</a> of the competition
+						I've read the <a href="/rules">rules</a> of the competition
 					</span>
 				</label>
 				{#if form?.fieldErrors?.rules}
@@ -387,7 +387,7 @@
 				{/if}
 			</p>
 			<p class="text-sm">
-				<a href="/gdpr">Privacy policy</a>
+				<a href="/gdpr" rel="privacy-policy">Privacy policy</a>
 			</p>
 		</form>
 	{/if}

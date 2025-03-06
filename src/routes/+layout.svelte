@@ -26,7 +26,7 @@
 <!-- Isolation: isolate from toasts to avoid stacking issues  -->
 <div class="flex isolate min-h-[100vh] flex-col">
 	<nav class="navbar gap-8 p-4">
-		<a  href="/">
+		<a  href="/" rel="home">
 			<Icon class="rounded-full" name="logo" width="3.5em" />
 		</a>
 		<button class="ml-auto mr-4 sm:hidden" onclick={() => sideNav?.showModal()}
@@ -71,6 +71,7 @@
 		<span class="navbar-end ml-auto mr-4 gap-6 hidden sm:flex">
 			<a
 				title="BlueSky"
+				rel="author"
 				href="https://bsky.app/profile/fcrozatier.bsky.social"
 				class="fill-gray-800 hover:opacity-100 hover:fill-[#0085ff]"
 				target="_blank"
@@ -152,18 +153,18 @@
 				Operations for this contest have been generously funded by
 			</h2>
 			<div class="flex justify-center">
-				<a href="https://www.janestreet.com/" target="_blank">
+				<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
 					<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem" />
 				</a>
 			</div>
 		</section>
 		<!-- Links -->
 		<section class="flex flex-wrap content-center justify-center gap-x-20 gap-y-10">
-			<a href="/algorithm"> Algorithm </a>
+			<a href="/algorithm" rel="about"> Algorithm </a>
 			<a href="/contact"> Contact </a>
 			<a href="/content-policy"> Content Policy </a>
-			<a href="/gdpr"> GDPR </a>
-			<a href="/rules">Rules</a>
+			<a href="/gdpr" rel="privacy-policy"> GDPR </a>
+			<a href="/rules" rel="terms-of-service">Rules</a>
 		</section>
 	</footer>
 </div>

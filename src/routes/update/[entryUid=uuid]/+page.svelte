@@ -253,7 +253,7 @@
 			<label for="rules" class="label justify-normal gap-4">
 				<input id="rules" type="checkbox" name="rules" class="checkbox" required />
 				<span class="label-text">
-					I've read the <a href="/#rules">rules</a> of the competition
+					I've read the <a href="/rules">rules</a> of the competition
 				</span>
 			</label>
 			{#if form?.fieldErrors?.rules}

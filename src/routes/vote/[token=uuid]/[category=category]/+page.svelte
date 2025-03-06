@@ -237,7 +237,7 @@
 		</form>
 
 		<p class="pt-8">
-			If an entry is inappropriate or does not follow the <a href="/#rules">rules</a> you can flag it
+			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it
 			and we will review it manually. You can also skip an entry in case you can't rank it (maybe you
 			do not have the prerequisites)
 		</p>
