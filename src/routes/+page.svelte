@@ -52,15 +52,15 @@
 			};
 		}}
 	>
-		<h3 class="">Receive News on Upcoming Editions</h3>
-		<label for="newsletter" class="label pb-1 label-text"> Email </label>
+		<h3 id="stay-tuned">Receive News on Upcoming Editions</h3>
 		<div class="flex gap-2">
 			<input
-				id="newsletter"
 				type="email"
 				name="email"
 				class="input input-bordered"
-				placeholder="your email"
+				placeholder="Email"
+				aria-label="Email"
+				aria-describedby="stay-tuned"
 				maxlength="128"
 				required
 			/>
