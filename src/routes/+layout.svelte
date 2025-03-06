@@ -26,7 +26,7 @@
 <!-- Isolation: isolate from toasts to avoid stacking issues  -->
 <div class="flex isolate min-h-[100vh] flex-col">
 	<nav class="navbar gap-8 p-4">
-		<a class="inline-flex items-center gap-4" href="/">
+		<a  href="/">
 			<Icon class="rounded-full" name="logo" width="3.5em" />
 		</a>
 		<button class="ml-auto mr-4 sm:hidden" onclick={() => sideNav?.showModal()}
