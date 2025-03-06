@@ -26,7 +26,7 @@
 <!-- Isolation: isolate from toasts to avoid stacking issues  -->
 <div class="flex isolate min-h-[100vh] flex-col">
 	<nav class="navbar gap-8 p-4">
-		<a  href="/" rel="home">
+		<a href="/" rel="home">
 			<Icon class="rounded-full" name="logo" width="3.5em" />
 		</a>
 		<button class="ml-auto mr-4 sm:hidden" onclick={() => sideNav?.showModal()}
@@ -50,19 +50,19 @@
 				{/if}
 				<a
 					href="/results"
-					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
+					class="font-medium underline-offset-[6px] hover:underline aria-[current=page]:underline"
 					aria-current={page.url.pathname.includes("/results") ? "page" : null}>Results</a
 				>
 				<a
 					href="/archive"
-					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
+					class="font-medium underline-offset-[6px] hover:underline aria-[current=page]:underline"
 					aria-current={page.url.pathname.includes("/archive") ? "page" : null}>Archive</a
 				>
 			{/if}
 			{#if page.data.isAdmin}
 				<a
 					href="/admin"
-					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
+					class="font-medium underline-offset-[6px] hover:underline aria-[current=page]:underline"
 					aria-current={page.url.pathname.includes("/admin") ? "page" : null}>Admin</a
 				>
 			{/if}
