@@ -25,9 +25,9 @@
 <section class="layout-prose pb-10 text-center">
 	<p class=" mb-8 text-center text-4xl font-black">Results</p>
 	<p>You can find the winners for the 2024 edition below.</p>
-	<div>
-		<a href="/results/video"><button class="btn btn-primary">All videos</button></a>
-		<a href="/results/non-video"><button class="btn btn-primary">All non-videos</button></a>
+	<div class="flex gap-2 justify-center">
+		<a class="btn btn-neutral" href="/results/video">All videos</a>
+		<a class="btn btn-neutral" href="/results/non-video">All non-videos</a>
 	</div>
 </section>
 
@@ -42,7 +42,7 @@
 				{#if winner.category === "video"}
 					<Youtube {width} src={winner.url}></Youtube>
 				{:else if winner.thumbnail}
-					<a href={winner.url} target="_blank" class={`w-[${width}px]`}>
+					<a href={winner.url} target="_blank">
 						<Thumbnail uid={winner.thumbnail} {width}></Thumbnail>
 					</a>
 				{/if}
@@ -88,9 +88,9 @@
 		<h2 class="mb-10 text-4xl font-black">All entries</h2>
 
 		<p>You can find the whole ranking of entries here:</p>
-		<div>
-			<a href="/results/video"><button class="btn btn-primary">All videos</button></a>
-			<a href="/results/non-video"><button class="btn btn-primary">All non-videos</button></a>
+		<div class="flex gap-2 justify-center">
+			<a class="btn btn-neutral" href="/results/video">All videos</a>
+			<a class="btn btn-neutral" href="/results/non-video">All non-videos</a>
 		</div>
 	</div>
 </section>

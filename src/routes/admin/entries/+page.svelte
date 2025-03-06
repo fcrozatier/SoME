@@ -60,7 +60,7 @@
 							}}
 						>
 							<input type="hidden" name="uid" value={entry.uid} />
-							<button formaction="?/display" class="btn btn-primary btn-sm">Display</button>
+							<button formaction="?/display" class="btn btn-neutral btn-sm">Display</button>
 						</form>
 						<a class="btn btn-sm" href={`/update/${entry.uid}`}>Update</a>
 					</td>

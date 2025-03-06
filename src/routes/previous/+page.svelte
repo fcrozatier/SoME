@@ -109,9 +109,9 @@
 		<div>
 			<a
 				href="https://www.youtube.com/playlist?list=PLnQX-jgAF5pQS2GUFCsatSyZkSH7e8UM8"
-				target="_blank"><button class="btn btn-primary">All videos</button></a
+				target="_blank"><button class="btn btn-neutral">All videos</button></a
 			>
-			<a href="/previous/non-videos"><button class="btn btn-primary">All non-videos</button></a>
+			<a href="/previous/non-videos"><button class="btn btn-neutral">All non-videos</button></a>
 		</div>
 	</div>
 </section>

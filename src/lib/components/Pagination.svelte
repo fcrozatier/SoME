@@ -50,7 +50,7 @@
 						<label
 							for={`radio${n}`}
 							class="join-item btn order-2"
-							class:btn-primary={n === +pageNumber}
+							class:btn-neutral={n === +pageNumber}
 							>{n}
 						</label>
 						<input

@@ -288,7 +288,7 @@
 			</p>
 		{/if}
 		<p>
-			<button class="btn-primary btn block"> Submit </button>
+			<button class="btn-neutral btn block"> Submit </button>
 		</p>
 		<p class="text-sm">
 			<a href="/gdpr">Privacy policy</a>

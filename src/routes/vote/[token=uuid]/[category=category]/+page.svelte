@@ -183,7 +183,7 @@
 				</div>
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse">
-				<button class="btn btn-primary inline-flex gap-4"
+				<button class="btn btn-neutral inline-flex gap-4"
 					>Vote
 					{#if cooldown > 0}
 						<div
@@ -212,7 +212,7 @@
 							}}
 							type="submit"
 							formaction={formAction("hard_skip")}
-							class="btn btn-primary text-xs bg-black absolute left-0 px-2 top-[105%]"
+							class="btn btn-neutral text-xs bg-black absolute left-0 px-2 top-[105%]"
 							>Don't show again</button
 						>
 					{/if}

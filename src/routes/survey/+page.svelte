@@ -140,7 +140,7 @@
 			</div>
 
 			<p>
-				<button class="btn btn-primary">Submit survey</button>
+				<button class="btn btn-neutral">Submit survey</button>
 			</p>
 			{#if form?.surveyFail}
 				<p class="text-error" bind:this={errorSummary}>

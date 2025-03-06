@@ -69,7 +69,7 @@
 		}}
 	>
 		<div class="flex gap-4">
-			<button type="submit" formaction="?/keep" class="btn btn-primary" disabled={!selected.length}
+			<button type="submit" formaction="?/keep" class="btn btn-neutral" disabled={!selected.length}
 				>Keep</button
 			>
 			<button type="submit" formaction="?/remove" class="btn-error btn" disabled={!selected.length}

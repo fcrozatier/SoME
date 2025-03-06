@@ -2,7 +2,7 @@
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
 
-@theme {
+:root {
 	--color-primary: #2b3440;
 	--color-secondary: #f000b8;
 	--color-accent: #1dcdbc;
@@ -13,9 +13,7 @@
 	--color-warning: #fbbd23;
 	--color-error: #f87272;
 	--color-base-content: black;
-}
 
-:root {
 	--light-gold: #fffaf4;
 }
 
@@ -117,7 +115,11 @@ summary::after {
 	height: var(--arrow-size);
 }
 
-.btn-primary {
+.btn {
+	text-decoration: none
+}
+
+.btn-neutral {
 	@apply text-white;
 }
 

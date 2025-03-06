@@ -10,7 +10,7 @@
 		<p>Choose a category:</p>
 		<p class="flex gap-4">
 			{#each categories as category}
-				<a class="btn-primary btn" href={`/vote/${page.params.token}/${category}`}
+				<a class="btn-neutral btn" href={`/vote/${page.params.token}/${category}`}
 					>{category} entries</a
 				>
 			{/each}
