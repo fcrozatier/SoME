@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Icon from "$lib/components/Icon.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { honorables, winners } from "$lib/results";
 </script>

@@ -3,7 +3,8 @@
 	import { page } from "$app/state";
 	import { clickOutside } from "$lib/actions";
 	import Banner from "$lib/components/Banner.svelte";
-	import Icon from "$lib/components/Icon.svelte";
+	import Icon from "$lib/components/icons/Icon.svelte";
+	import Icons from "$lib/components/icons/Icons.svelte";
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { COMPETITION_FULL_NAME } from "$lib/config";
@@ -20,6 +21,7 @@
 	beforeNavigate(() => dialog?.close());
 </script>
 
+<Icons />
 <Toasts />
 
 {#snippet menu()}
@@ -73,7 +75,7 @@
 			href="https://bsky.app/profile/fcrozatier.bsky.social"
 			class="fill-gray-800 p-2 hover:opacity-100 hover:fill-[#0085ff]"
 			target="_blank"
-			><Icon name="bluesky" width={iconSize} />
+			><Icon name="bluesky" class="size-6" />
 		</a>
 
 		<a
@@ -81,7 +83,7 @@
 			href="https://github.com/fcrozatier/SoME"
 			class="fill-gray-800 p-2 hover:opacity-100"
 			target="_blank"
-			><Icon name="github" width={iconSize} />
+			><Icon name="github" class="size-6" />
 		</a>
 
 		<a
@@ -90,7 +92,7 @@
 			class="fill-gray-800 hover:fill-[#f35300] p-2"
 			target="_blank"
 		>
-			<Icon name="substack" width={iconSize} />
+			<Icon name="substack" class="size-6" />
 		</a>
 		<a
 			title="Discord"
@@ -98,7 +100,7 @@
 			class="fill-gray-800 hover:fill-[#5865f2] p-2"
 			target="_blank"
 		>
-			<Icon name="discord" width={iconSize} />
+			<Icon name="discord" class="size-6" />
 		</a>
 	</li>
 {/snippet}
@@ -107,7 +109,7 @@
 <div class="flex isolate min-h-[100vh] flex-col">
 	<nav class="navbar gap-8 p-4">
 		<a href="/" rel="home">
-			<Icon class="rounded-full" name="logo" width="3.5em" />
+			<Icon class="rounded-full size-14" name="logo" />
 		</a>
 		<button
 			class="ml-auto btn btn-ghost inline-flex items-center gap-2 px-3 text-base font-medium sm:hidden"
@@ -142,7 +144,7 @@
 			</h2>
 			<div class="flex justify-center">
 				<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
-					<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem" />
+					<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem"  />
 				</a>
 			</div>
 		</section>
