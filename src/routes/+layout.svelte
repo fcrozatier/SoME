@@ -8,7 +8,6 @@
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { COMPETITION_FULL_NAME } from "$lib/config";
-	import Menu from "$lib/icons/menu.svg";
 	import { registrationOpen, resultsAvailable, voteOpen } from "$lib/utils";
 	import "../app.css";
 	import "../math.css";
@@ -16,7 +15,6 @@
 	let { data, children } = $props();
 
 	let dialog: HTMLDialogElement | undefined = $state();
-	const iconSize = "1.3rem";
 
 	beforeNavigate(() => dialog?.close());
 </script>
@@ -115,7 +113,7 @@
 			class="ml-auto btn btn-ghost inline-flex items-center gap-2 px-3 text-base font-medium sm:hidden"
 			onclick={() => dialog?.showModal()}
 		>
-			<img src={Menu} alt="Menu" width="24" /> Menu
+			<Icon name="menu" /> Menu
 		</button>
 
 		<ul class="nav-menu gap-8 items-center hidden sm:flex w-full">
@@ -144,7 +142,7 @@
 			</h2>
 			<div class="flex justify-center">
 				<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
-					<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem"  />
+					<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem" />
 				</a>
 			</div>
 		</section>
