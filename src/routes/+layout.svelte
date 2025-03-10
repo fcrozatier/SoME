@@ -14,14 +14,94 @@
 
 	let { data, children } = $props();
 
-	let sideNav: HTMLDialogElement | undefined = $state();
+	let dialog: HTMLDialogElement | undefined = $state();
+	const iconSize = "1.3rem";
 
-	beforeNavigate(() => {
-		sideNav?.close();
-	});
+	beforeNavigate(() => dialog?.close());
 </script>
 
 <Toasts />
+
+{#snippet menu()}
+	{#if voteOpen() && data.token}
+		<li>
+			<a
+				href="/vote"
+				class="menu-item"
+				aria-current={page.url.pathname.includes("/vote") ? "page" : null}>Vote</a
+			>
+		</li>
+	{/if}
+	{#if resultsAvailable()}
+		{#if data.isCreator}
+			<li>
+				<a
+					href="/feedback"
+					class="menu-item"
+					aria-current={page.url.pathname.includes("/feedback") ? "page" : null}>Feedback</a
+				>
+			</li>
+		{/if}
+		<li>
+			<a
+				href="/results"
+				class="menu-item"
+				aria-current={page.url.pathname.includes("/results") ? "page" : null}>Results</a
+			>
+		</li>
+		<li>
+			<a
+				href="/archive"
+				class="menu-item"
+				aria-current={page.url.pathname.includes("/archive") ? "page" : null}>Archive</a
+			>
+		</li>
+	{/if}
+	{#if page.data.isAdmin}
+		<li>
+			<a
+				href="/admin"
+				class="menu-item"
+				aria-current={page.url.pathname.includes("/admin") ? "page" : null}>Admin</a
+			>
+		</li>
+	{/if}
+	<li class="menu-item-social flex items-center flex-1 gap-4 justify-end">
+		<a
+			title="BlueSky"
+			rel="author"
+			href="https://bsky.app/profile/fcrozatier.bsky.social"
+			class="fill-gray-800 p-2 hover:opacity-100 hover:fill-[#0085ff]"
+			target="_blank"
+			><Icon name="bluesky" width={iconSize} />
+		</a>
+
+		<a
+			title="GitHub"
+			href="https://github.com/fcrozatier/SoME"
+			class="fill-gray-800 p-2 hover:opacity-100"
+			target="_blank"
+			><Icon name="github" width={iconSize} />
+		</a>
+
+		<a
+			title="Substack"
+			href="https://3blue1brown.substack.com"
+			class="fill-gray-800 hover:fill-[#f35300] p-2"
+			target="_blank"
+		>
+			<Icon name="substack" width={iconSize} />
+		</a>
+		<a
+			title="Discord"
+			href="https://discord.gg/WZvZMVsXXR"
+			class="fill-gray-800 hover:fill-[#5865f2] p-2"
+			target="_blank"
+		>
+			<Icon name="discord" width={iconSize} />
+		</a>
+	</li>
+{/snippet}
 
 <!-- Isolation: isolate from toasts to avoid stacking issues  -->
 <div class="flex isolate min-h-[100vh] flex-col">
@@ -29,113 +109,21 @@
 		<a href="/" rel="home">
 			<Icon class="rounded-full" name="logo" width="3.5em" />
 		</a>
-		<button class="ml-auto mr-4 sm:hidden" onclick={() => sideNav?.showModal()}
-			><img src={Menu} alt="Menu" /></button
+		<button
+			class="ml-auto btn btn-ghost inline-flex items-center gap-2 px-3 text-base font-medium sm:hidden"
+			onclick={() => dialog?.showModal()}
 		>
-		<span class="navbar-start gap-8 hidden sm:flex">
-			{#if voteOpen() && data.token}
-				<a
-					href="/vote"
-					class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>Vote</a
-				>
-			{/if}
-			{#if resultsAvailable()}
-				{#if data.isCreator}
-					<a
-						href="/feedback"
-						class="border-b-[1.5px] border-transparent font-medium hover:border-gray-900 aria-[current=page]:border-gray-900"
-						aria-current={page.url.pathname.includes("/feedback") ? "page" : null}>Feedback</a
-					>
-				{/if}
-				<a
-					href="/results"
-					class="font-medium underline-offset-[6px] hover:underline aria-[current=page]:underline"
-					aria-current={page.url.pathname.includes("/results") ? "page" : null}>Results</a
-				>
-				<a
-					href="/archive"
-					class="font-medium underline-offset-[6px] hover:underline aria-[current=page]:underline"
-					aria-current={page.url.pathname.includes("/archive") ? "page" : null}>Archive</a
-				>
-			{/if}
-			{#if page.data.isAdmin}
-				<a
-					href="/admin"
-					class="font-medium underline-offset-[6px] hover:underline aria-[current=page]:underline"
-					aria-current={page.url.pathname.includes("/admin") ? "page" : null}>Admin</a
-				>
-			{/if}
-		</span>
+			<img src={Menu} alt="Menu" width="24" /> Menu
+		</button>
 
-		<span class="navbar-end ml-auto mr-4 gap-6 hidden sm:flex">
-			<a
-				title="BlueSky"
-				rel="author"
-				href="https://bsky.app/profile/fcrozatier.bsky.social"
-				class="fill-gray-800 hover:opacity-100 hover:fill-[#0085ff]"
-				target="_blank"
-				><Icon name="bluesky" width="1.5rem" />
-			</a>
-			<a
-				title="GitHub"
-				href="https://github.com/fcrozatier/SoME"
-				class="fill-gray-800 hover:opacity-100"
-				target="_blank"
-				><Icon name="github" width="1.5rem" />
-			</a>
-			<a title="Substack" href="https://3blue1brown.substack.com" target="_blank">
-				<Icon class="fill-gray-800 hover:fill-[#f35300]" name="substack" width="1.5rem" />
-			</a>
-			<a title="Discord" href="https://discord.gg/WZvZMVsXXR" target="_blank">
-				<Icon class="fill-gray-800 hover:fill-[#5865f2]" name="discord" width="1.5rem" />
-			</a>
-		</span>
+		<ul class="nav-menu gap-8 items-center hidden sm:flex w-full">
+			{@render menu()}
+		</ul>
 	</nav>
-	<dialog class="m-0 left-full -translate-x-full" bind:this={sideNav}>
-		<aside class="" use:clickOutside={() => sideNav?.close()}>
-			<h2 class="font-semibold">Menu</h2>
-			<ul class="flex-col flex gap-4 mt-4">
-				{#if voteOpen() && data.token}
-					<li>
-						<a href="/vote">Vote</a>
-					</li>
-				{/if}
-				{#if resultsAvailable()}
-					{#if data.isCreator}
-						<li>
-							<a href="/feedback">Feedback</a>
-						</li>
-					{/if}
-					<li>
-						<a href="/results">Results</a>
-					</li>
-					<li>
-						<a href="/archive">Archive</a>
-					</li>
-				{/if}
-				{#if page.data.isAdmin}
-					<li>
-						<a href="/admin">Admin</a>
-					</li>
-				{/if}
-				<li class="flex items-center justify-between gap-4 mt-4">
-					<a
-						title="GitHub"
-						href="https://github.com/fcrozatier/SoME"
-						class="fill-gray-800 hover:opacity-100"
-						target="_blank"
-						><Icon name="github" width="1.8rem" />
-					</a>
-					<a title="Substack" href="https://3blue1brown.substack.com" target="_blank">
-						<Icon class="fill-gray-800 px-2 hover:fill-[#f35300]" name="substack" width="2.5rem" />
-					</a>
-					<a title="Discord" href="https://discord.gg/WZvZMVsXXR" target="_blank">
-						<Icon class="fill-gray-800 px-2 hover:fill-[#5865f2]" name="discord" width="2.5rem" />
-					</a>
-				</li>
-			</ul>
-		</aside>
+	<dialog class="m-0 left-full -translate-x-full" bind:this={dialog}>
+		<ul class="nav-menu px-4 py-5 gap-4 flex flex-col" use:clickOutside={() => dialog?.close()}>
+			{@render menu()}
+		</ul>
 	</dialog>
 
 	<Banner display={false && !!data.token && !data.surveyTaken} />
@@ -168,3 +156,41 @@
 		</section>
 	</footer>
 </div>
+
+<style>
+	.nav-menu {
+		container-type: inline-size;
+		min-width: 250px;
+	}
+
+	.menu-item {
+		border-bottom: 2px solid transparent;
+		border-left: none;
+
+		font-weight: var(--font-weight-medium);
+		padding: calc(var(--spacing) * 2);
+
+		&:hover {
+			@media (hover: hover) {
+				border-color: var(--color-gray-900);
+			}
+		}
+
+		&[aria-current="page"] {
+			border-color: var(--color-gray-900);
+		}
+	}
+
+	@media (width < 40rem) {
+		.menu-item {
+			border-left: 2px solid transparent;
+			border-bottom: none;
+			padding: var(--spacing) calc(var(--spacing) * 2) var(--spacing) calc(var(--spacing) * 3);
+		}
+
+		.menu-item-social {
+			justify-content: start;
+			padding-left: calc(var(--spacing) * 2);
+		}
+	}
+</style>
