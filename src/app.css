@@ -35,7 +35,7 @@ body {
 	}
 }
 
-a:not(.btn) {
+a:not(:where(.btn)) {
 	border-radius: 2px;
 
 	&:focus-visible{
