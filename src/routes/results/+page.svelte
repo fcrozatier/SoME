@@ -35,21 +35,22 @@
 	<h2 class="mb-20 text-5xl font-black text-center">The top 5 entries are</h2>
 
 	<div
-		class="grid lg:grid-cols-2 items-start content-center justify-center gap-x-4 lg:gap-x-8 lg:gap-y-20"
+		class="grid lg:grid-cols-2 max-w-3/4 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 lg:gap-y-20"
 	>
 		{#each data.top.slice(0, 5) as winner}
-			<div class="mx-auto lg:mr-0 px-4">
+			<div class="grid grid-cols-subgrid col-span-full max-w-3xl ">
 				{#if winner.category === "video"}
-					<Youtube {width} src={winner.url}></Youtube>
+					<Youtube title={winner.title} src={winner.url}></Youtube>
 				{:else if winner.thumbnail}
 					<a href={winner.url} target="_blank">
 						<Thumbnail uid={winner.thumbnail} {width}></Thumbnail>
 					</a>
 				{/if}
-			</div>
-			<div class="max-w-sm mx-4 mb-10 lg:mb-0">
-				<h3 class="mt-2 mb-3">{winner.title}</h3>
-				<p class="line-clamp-6 leading-snug">{winner.description}</p>
+
+				<div class="md:mx-4 mb-10 mt-4 lg:my-0">
+					<h3 class="mt-0 text-trim mb-3">{winner.title}</h3>
+					<p class="line-clamp-4 lg:line-clamp-6 mb-0 leading-snug">{winner.description}</p>
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -66,7 +67,7 @@
 			<div class="flex flex-col gap-3">
 				<div>
 					{#if honorable.category === "video" && honorable.url && YOUTUBE_EMBED.test(honorable.url)}
-						<Youtube src={honorable.url} width={320}></Youtube>
+						<Youtube src={honorable.url}></Youtube>
 					{:else if honorable.thumbnail && honorable.url && !YOUTUBE_EMBED.test(honorable.url)}
 						<a href={honorable.url} target="_blank" class="w-[320px]">
 							<Thumbnail uid={honorable.thumbnail} width={320}></Thumbnail>
@@ -101,5 +102,10 @@
 		grid-template-columns: repeat(auto-fit, minmax(200px, 320px));
 		justify-content: center;
 		gap: var(--spacing-12) var(--spacing-16);
+	}
+
+	.text-trim {
+		text-box-trim: trim-start;
+		text-box-edge: cap;
 	}
 </style>
