@@ -152,7 +152,7 @@
 			</h2>
 			<div class="flex justify-center">
 				<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
-					<Icon class="opacity-10" name="janeStreet" width="18rem" height="5rem" />
+					<img class="opacity-20" src="/jane-street-logo.webp" alt="Jane Street" width="200">
 				</a>
 			</div>
 		</section>
