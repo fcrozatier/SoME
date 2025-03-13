@@ -19,6 +19,13 @@
 	beforeNavigate(() => dialog?.close());
 </script>
 
+<svelte:head>
+	<script
+		type="module"
+		src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1/lite-youtube.min.js"
+	></script>
+</svelte:head>
+
 <Icons />
 <Toasts />
 
@@ -113,7 +120,7 @@
 			class="ml-auto btn btn-ghost inline-flex items-center gap-2 px-3 text-base font-medium sm:hidden"
 			onclick={() => dialog?.showModal()}
 		>
-			<Icon name="menu" /> Menu
+			<Icon name="menu" class="size-6 stroke-[1.5px]" /> Menu
 		</button>
 
 		<ul class="nav-menu gap-8 items-center hidden sm:flex w-full">
@@ -121,7 +128,10 @@
 		</ul>
 	</nav>
 	<dialog class="m-0 left-full -translate-x-full" bind:this={dialog}>
-		<ul class="nav-menu px-4 py-5 gap-4 flex flex-col" use:clickOutside={() => dialog?.close()}>
+		<ul
+			class="nav-menu px-4 pt-6 pb-4 gap-4 flex flex-col"
+			use:clickOutside={() => dialog?.close()}
+		>
 			{@render menu()}
 		</ul>
 	</dialog>
@@ -160,7 +170,7 @@
 <style>
 	.nav-menu {
 		container-type: inline-size;
-		min-width: 250px;
+		min-width: 260px;
 	}
 
 	.menu-item {
@@ -185,12 +195,12 @@
 		.menu-item {
 			border-left: 2px solid transparent;
 			border-bottom: none;
-			padding: var(--spacing) calc(var(--spacing) * 2) var(--spacing) calc(var(--spacing) * 3);
+			padding: var(--spacing) calc(var(--spacing) * 2) var(--spacing) calc(var(--spacing) * 4);
 		}
 
 		.menu-item-social {
 			justify-content: start;
-			padding-left: calc(var(--spacing) * 2);
+			padding-left: calc(var(--spacing) * 2.5);
 		}
 	}
 </style>
