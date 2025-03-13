@@ -119,10 +119,10 @@
 	</thead>
 	<tbody>
 		{#each data.entries as { uid, title, category, thumbnail, url, rank }}
-			<tr class="py-2">
+			<tr class="py-2 independent-row">
 				<td>
 					{#if category === "video"}
-						<Youtube width={240} src={url}></Youtube>
+						<Youtube {title} src={url}></Youtube>
 					{:else if thumbnail}
 						<a href={url} target="_blank" class="w-[240px]">
 							<Thumbnail uid={thumbnail} width={240}></Thumbnail>
@@ -144,7 +144,7 @@
 	{#each data.entries as { uid, title, category, thumbnail, url, rank }}
 		<div>
 			{#if category === "video"}
-				<Youtube width={320} src={url}></Youtube>
+				<Youtube {title} src={url}></Youtube>
 			{:else if thumbnail}
 				<a href={url} target="_blank" class="w-[320px]">
 					<Thumbnail uid={thumbnail} width={320}></Thumbnail>
@@ -206,5 +206,10 @@
 
 	tr:nth-child(even) {
 		background-color: rgb(242, 242, 242);
+	}
+
+	.independent-row {
+		content-visibility: auto;
+		contain-intrinsic-size: auto 200px;
 	}
 </style>
