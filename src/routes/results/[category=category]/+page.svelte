@@ -139,6 +139,9 @@
 		gap: calc(var(--spacing) * 6);
 		align-items: start;
 		padding-inline-start: calc(var(--spacing) * 2);
+
+		content-visibility: auto;
+		contain-intrinsic-size: auto 200px;
 	}
 
 	thead > tr {
