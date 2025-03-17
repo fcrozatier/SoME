@@ -122,14 +122,14 @@
 		entry = undefined;
 	}}
 >
-	<article use:clickOutside={() => displayDialog?.close()}>
+	<div use:clickOutside={() => displayDialog?.close()}>
 		{#if entry}
 			<EntriesPage data={entry}></EntriesPage>
-			<p class="flex justify-end mt-12">
+			<div class="flex justify-end mt-12">
 				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
-			</p>
+			</div>
 		{/if}
-	</article>
+	</div>
 </dialog>
 
 <style>
