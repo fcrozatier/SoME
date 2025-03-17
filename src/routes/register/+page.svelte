@@ -395,6 +395,6 @@
 
 <style>
 	label {
-		margin-top: var(--spacing-2);
+		margin-top: calc(var(--spacing) * 2);
 	}
 </style>

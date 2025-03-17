@@ -92,7 +92,7 @@
 		display: grid;
 		justify-content: center;
 		justify-items: center;
-		gap: var(--spacing-2);
+		gap: calc(var(--spacing) * 2);
 	}
 
 	.toast {

@@ -120,6 +120,6 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(200px, 320px));
 		justify-content: center;
-		gap: var(--spacing-12) var(--spacing-16);
+		gap: calc(var(--spacing) * 12) calc(var(--spacing) * 16);
 	}
 </style>
