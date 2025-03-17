@@ -73,7 +73,9 @@
 			>
 		</li>
 	{/if}
-	<li class="menu-item-social mt-2 sm:mt-0 flex justify-between sm:justify-end items-center flex-1 gap-4">
+	<li
+		class="menu-item-social mt-2 sm:mt-0 flex justify-between sm:justify-end items-center flex-1 gap-4"
+	>
 		<a
 			title="BlueSky"
 			rel="author"
@@ -128,10 +130,7 @@
 		</ul>
 	</nav>
 	<dialog class="mt-0! left-full -translate-x-full" bind:this={dialog}>
-		<ul
-			class="nav-menu gap-4 flex flex-col"
-			use:clickOutside={() => dialog?.close()}
-		>
+		<ul class="nav-menu gap-4 flex flex-col" use:clickOutside={() => dialog?.close()}>
 			{@render menu()}
 		</ul>
 	</dialog>
@@ -152,7 +151,7 @@
 			</h2>
 			<div class="flex justify-center">
 				<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
-					<img class="opacity-20" src="/jane-street-logo.webp" alt="Jane Street" width="200">
+					<img class="opacity-20" src="/jane-street-logo.webp" alt="Jane Street" width="200" />
 				</a>
 			</div>
 		</section>

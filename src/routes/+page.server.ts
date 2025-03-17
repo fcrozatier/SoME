@@ -40,10 +40,10 @@ export const actions: Actions = {
 			// Last: 06/03/24
 			// Validate email
 			const emailValidation = await validateEmail(email);
-			if (!emailValidation || emailValidation.result !== 'deliverable') {
+			if (!emailValidation || emailValidation.result !== "deliverable") {
 				return fail(400, {
 					error: true,
-					message: 'Undeliverable email',
+					message: "Undeliverable email",
 				});
 			}
 		}

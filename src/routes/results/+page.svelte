@@ -58,7 +58,7 @@
 
 <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
 	<div class="mx-auto max-w-prose">
-		<h2 class="mt-0 mb-20  text-5xl font-black" style:color="var(--light-gold)">
+		<h2 class="mt-0 mb-20 text-5xl font-black" style:color="var(--light-gold)">
 			The 20 honorable mentions
 		</h2>
 	</div>
@@ -77,7 +77,9 @@
 					{/if}
 				</div>
 				<div class="px-2">
-					<h4 class="mt-0 line-clamp-2 text-balance" style:color="var(--light-gold)">{honorable.title}</h4>
+					<h4 class="mt-0 line-clamp-2 text-balance" style:color="var(--light-gold)">
+						{honorable.title}
+					</h4>
 				</div>
 			</div>
 		{/each}

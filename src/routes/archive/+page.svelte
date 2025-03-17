@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { beforeNavigate, goto, invalidateAll, preloadData, pushState } from "$app/navigation";
+	import { goto, preloadData, pushState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { clickOutside } from "$lib/actions.js";
 	import Pagination from "$lib/components/Pagination.svelte";
