@@ -11,9 +11,12 @@
 
 	let { data } = $props();
 
+	let pages = $derived(data.pages);
+
+	let pageNumber = $state(data.page);
+
 	let displayDialog: HTMLDialogElement | undefined = $state();
 	let entry: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();
-	let pageNumber: string = $state("1");
 
 	async function loadData(
 		e: MouseEvent & {
@@ -45,24 +48,32 @@
 	<title>Ranking &middot; SoME</title>
 </svelte:head>
 
-<article class="layout-prose text-center">
-	<h2>Ranking of the {page.params.category} entries</h2>
-</article>
+<section class="layout-prose">
+	<div class="text-center">
+		<h2>Ranking of the {page.params.category} entries</h2>
+	</div>
+	<div class="flex gap-2 justify-center">
+		<a class="btn btn-neutral" href="/results/video">All videos</a>
+		<a class="btn btn-neutral" href="/results/non-video">All non-videos</a>
+	</div>
 
-<div class="my-10 mx-auto flex justify-center">
-	<Pagination
-		pages={data.pages}
-		bind:pageNumber
-		onchange={() => {
-			page.url.searchParams.set("page", pageNumber);
-			goto(`?${page.url.searchParams.toString()}`, {
-				invalidateAll: true,
-				keepFocus: true,
-				noScroll: true,
-			});
-		}}
-	></Pagination>
-</div>
+	<div class="mt-10 mx-auto flex justify-center">
+		{#key pages}
+			<Pagination
+				{pages}
+				bind:pageNumber
+				onchange={() => {
+					page.url.searchParams.set("page", pageNumber);
+					goto(`?${page.url.searchParams.toString()}`, {
+						invalidateAll: true,
+						keepFocus: true,
+						noScroll: true,
+					});
+				}}
+			></Pagination>
+		{/key}
+	</div>
+</section>
 
 <div class="overflow-x-scroll sm:px-4">
 	<table class="table min-w-xl max-w-3xl mx-auto">
@@ -82,16 +93,18 @@
 								<Youtube src={url} {title}></Youtube>
 							{/key}
 						{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-							<a href={url} target="_blank" class="w-[272px]">
-								<Thumbnail uid={thumbnail} width={272}></Thumbnail>
+							<a href={url} target="_blank">
+								<Thumbnail uid={thumbnail} width={256}></Thumbnail>
 							</a>
 						{:else}
-							<a href={url} target="_blank">{url} </a>
+							<a href={url} class="line-clamp-1" target="_blank">{url}</a>
 						{/if}
 					</td>
 					<td>
 						<h3 class="text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
-						<p class="line-clamp-3">{description}</p>
+						{#if description}
+							<p class="line-clamp-3">{description}</p>
+						{/if}
 					</td>
 					<td class="items-center flex flex-col gap-4">
 						<span class="text-trim">{rank ? `#${rank}` : "-"}</span>
@@ -104,16 +117,18 @@
 </div>
 
 <div class="mt-10 mx-auto flex justify-center">
-	<Pagination
-		pages={data.pages}
-		bind:pageNumber
-		onchange={() => {
-			page.url.searchParams.set("page", pageNumber);
-			goto(`?${page.url.searchParams.toString()}`, {
-				invalidateAll: true,
-			});
-		}}
-	></Pagination>
+	{#key pages}
+		<Pagination
+			{pages}
+			bind:pageNumber
+			onchange={() => {
+				page.url.searchParams.set("page", pageNumber);
+				goto(`?${page.url.searchParams.toString()}`, {
+					invalidateAll: true,
+				});
+			}}
+		></Pagination>
+	{/key}
 </div>
 
 <dialog
@@ -126,7 +141,9 @@
 >
 	<div use:clickOutside={() => displayDialog?.close()}>
 		{#if entry}
-			<EntriesPage data={entry}></EntriesPage>
+			<div class="-mx-8">
+				<EntriesPage data={entry}></EntriesPage>
+			</div>
 			<div class="flex justify-end mt-12">
 				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
 			</div>
@@ -140,7 +157,7 @@
 		grid-template-columns: 256px 1fr auto;
 		gap: calc(var(--spacing) * 6);
 		align-items: start;
-		padding-inline-start: calc(var(--spacing) * 2);
+		padding-inline: calc(var(--spacing) * 2);
 
 		content-visibility: auto;
 		contain-intrinsic-size: auto 200px;

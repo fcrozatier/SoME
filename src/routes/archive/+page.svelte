@@ -18,8 +18,6 @@
 	let year = $state(data.year);
 	let pageNumber = $state(data.page);
 
-	$inspect(pageNumber);
-
 	const years = ["2023", "2022", "2021"];
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
@@ -194,7 +192,7 @@
 		grid-template-columns: 256px 1fr auto;
 		gap: calc(var(--spacing) * 6);
 		align-items: start;
-		padding-inline-start: calc(var(--spacing) * 2);
+		padding-inline: calc(var(--spacing) * 2);
 
 		content-visibility: auto;
 		contain-intrinsic-size: auto 200px;
