@@ -101,27 +101,6 @@
 	</table>
 </div>
 
-<!-- <div class="sm:hidden grid justify-center gap-8">
-	{#each data.entries as { uid, title, category, thumbnail, url, rank }}
-		<div>
-			{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
-				<Youtube src={url} width={320}></Youtube>
-			{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-				<a href={url} target="_blank" class="w-[320px]">
-					<Thumbnail uid={thumbnail} width={320}></Thumbnail>
-				</a>
-			{:else}
-				<a href={url} target="_blank">{url} </a>
-			{/if}
-			<div>
-				<span>#{rank}</span><a href={`/entries/${uid}`} onclick={loadData}
-					><h3 class="max-w-xs text-base m-0">{title}</h3>
-				</a>
-			</div>
-		</div>
-	{/each}
-</div> -->
-
 <div class="mt-10 mx-auto flex justify-center">
 	<Pagination
 		pages={data.pages}
