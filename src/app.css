@@ -15,6 +15,8 @@
 	--color-base-content: black;
 
 	--light-gold: #fffaf4;
+
+	interpolate-size: allow-keywords;
 }
 
 html,
@@ -71,12 +73,35 @@ dialog::backdrop {
 }
 
 details {
-	padding-block: var(--spacing-4);
+	padding-block: --spacing(8);
 	border-block: 1px solid var(--color-gray-200);
+
+	& > p:first-of-type {
+		margin-top: 0;
+	}
+
+	& > p:last-of-type {
+		margin-bottom: 0;
+	}
+
 }
-details[open] > summary::after {
-	transform: rotate(-135deg);
-	top: 10px;
+
+details::details-content {
+	block-size: 0;
+	overflow-y: clip;
+	transition: content-visibility 250ms allow-discrete, block-size 250ms;
+}
+
+details[open]::details-content{
+	block-size: auto;
+}
+
+details[open]{
+
+	& > summary::after {
+		transform: rotate(-135deg);
+		top: 10px;
+	}
 }
 
 details + details {
@@ -85,7 +110,14 @@ details + details {
 
 summary {
 	--outline-width: 0;
-	@apply relative cursor-pointer select-none list-none;
+	margin-bottom: --spacing(4);
+	padding-right: 30px;
+	position: relative;
+	cursor: pointer;
+	user-select: none;
+	list-style: none;
+	text-box-trim: trim-start;
+	text-box-edge: cap;
 }
 summary:hover::before {
 	background-color: var(--color-gray-200);
@@ -116,7 +148,7 @@ summary::after {
 	--arrow-size: 8px;
 	top: 7px;
 	right: calc((var(--bg-size) - var(--arrow-size)) / 2);
-	transition: transform 100ms ease-out;
+	transition: transform 200ms ease-out;
 	transform: rotate(45deg);
 	border-right: 2px solid var(--color-gray-500);
 	border-bottom: 2px solid var(--color-gray-500);
