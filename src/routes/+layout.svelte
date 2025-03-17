@@ -73,7 +73,7 @@
 			>
 		</li>
 	{/if}
-	<li class="menu-item-social flex items-center flex-1 gap-4 justify-end">
+	<li class="menu-item-social mt-2 sm:mt-0 flex justify-between sm:justify-end items-center flex-1 gap-4">
 		<a
 			title="BlueSky"
 			rel="author"
@@ -127,9 +127,9 @@
 			{@render menu()}
 		</ul>
 	</nav>
-	<dialog class="m-0 left-full -translate-x-full" bind:this={dialog}>
+	<dialog class="mt-0! left-full -translate-x-full" bind:this={dialog}>
 		<ul
-			class="nav-menu px-4 pt-6 pb-4 gap-4 flex flex-col"
+			class="nav-menu gap-4 flex flex-col"
 			use:clickOutside={() => dialog?.close()}
 		>
 			{@render menu()}
@@ -199,7 +199,6 @@
 		}
 
 		.menu-item-social {
-			justify-content: start;
 			padding-left: calc(var(--spacing) * 2.5);
 		}
 	}
