@@ -64,40 +64,44 @@
 	></Pagination>
 </div>
 
-<table class="table max-w-3xl mx-auto hidden sm:block">
-	<thead>
-		<tr>
-			<th>Entry</th>
-			<th class="hidden sm:block">Title</th>
-			<th>Rank</th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each data.entries as { uid, title, category, thumbnail, url, rank }}
-			<tr class="py-2">
-				<td>
-					{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
-						<Youtube src={url} width={272}></Youtube>
-					{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-						<a href={url} target="_blank" class="w-[272px]">
-							<Thumbnail uid={thumbnail} width={272}></Thumbnail>
-						</a>
-					{:else}
-						<a href={url} target="_blank">{url} </a>
-					{/if}
-				</td>
-				<td>
-					<a href={`/entries/${uid}`} onclick={loadData}>
-						<h3 class="max-w-sm text-base m-0">{title}</h3>
-					</a>
-				</td>
-				<td>{rank ? `#${rank}` : "-"}</td>
+<div class="overflow-x-scroll mx-4">
+	<table class="table max-w-3xl min-w-xl mx-auto">
+		<thead>
+			<tr>
+				<th>Entry</th>
+				<th>Title</th>
+				<th>Rank</th>
 			</tr>
-		{/each}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{#each data.entries as { uid, title, description, category, thumbnail, url, rank }}
+				<tr>
+					<td>
+						{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
+							<Youtube src={url} {title}></Youtube>
+						{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
+							<a href={url} target="_blank" class="w-[272px]">
+								<Thumbnail uid={thumbnail} width={272}></Thumbnail>
+							</a>
+						{:else}
+							<a href={url} target="_blank">{url} </a>
+						{/if}
+					</td>
+					<td>
+						<h3 class="max-w-sm text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
+						<p class="line-clamp-3">{description}</p>
+					</td>
+					<td class="text-trim text-end">
+						<a class="mr-4 btn btn-sm" href={`/entries/${uid}`} onclick={loadData}> details </a>
+						{rank ? `#${rank}` : "-"}
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
-<div class="sm:hidden grid justify-center gap-8">
+<!-- <div class="sm:hidden grid justify-center gap-8">
 	{#each data.entries as { uid, title, category, thumbnail, url, rank }}
 		<div>
 			{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
@@ -116,7 +120,7 @@
 			</div>
 		</div>
 	{/each}
-</div>
+</div> -->
 
 <div class="mt-10 mx-auto flex justify-center">
 	<Pagination
@@ -152,16 +156,22 @@
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: 272px 1fr auto;
-		gap: 2rem;
+		grid-template-columns: 256px 1fr auto;
+		gap: calc(var(--spacing) * 8);
 		align-items: start;
-
-		@media (max-width: 640px) {
-			grid-template-columns: 1fr auto;
-		}
+		padding-inline-start: calc(var(--spacing) * 2);
 	}
 
-	tr:nth-child(even) {
-		background-color: rgb(242, 242, 242);
+	thead > tr {
+		padding-block-end: calc(var(--spacing) * 2);
+	}
+
+	tbody > tr {
+		padding-block: calc(var(--spacing) * 6);
+	}
+
+	th,
+	td {
+		padding: 0;
 	}
 </style>

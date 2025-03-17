@@ -18,9 +18,11 @@ export const load = async ({ params, locals, url }) => {
 	}
 
 	const { category } = params;
-	const entries: Pick<SelectEntry, "uid" | "title" | "category" | "thumbnail" | "url" | "rank">[] =
-		await db.execute(sql`
-		 select uid, title, category, thumbnail, url, rank from entries
+	const entries: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank"
+	>[] = await db.execute(sql`
+		 select uid, title, description, category, thumbnail, url, rank from entries
 		 where active='t'
 		 and date_part('year', entries.created_at)='2024'
 		 and category=${category}
