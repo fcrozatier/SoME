@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, preloadData, pushState } from "$app/navigation";
+	import { beforeNavigate, goto, invalidateAll, preloadData, pushState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { clickOutside } from "$lib/actions.js";
 	import Pagination from "$lib/components/Pagination.svelte";
@@ -17,6 +17,8 @@
 	let category = $state(data.category);
 	let year = $state(data.year);
 	let pageNumber = $state(data.page);
+
+	$inspect(pageNumber);
 
 	const years = ["2023", "2022", "2021"];
 
@@ -124,7 +126,9 @@
 				<tr>
 					<td>
 						{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
-							<Youtube src={url} {title}></Youtube>
+							{#key url}
+								<Youtube src={url} {title}></Youtube>
+							{/key}
 						{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
 							<a href={url} target="_blank">
 								<Thumbnail uid={thumbnail} width={256}></Thumbnail>

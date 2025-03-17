@@ -78,7 +78,9 @@
 				<tr>
 					<td>
 						{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
-							<Youtube src={url} {title}></Youtube>
+							{#key url}
+								<Youtube src={url} {title}></Youtube>
+							{/key}
 						{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
 							<a href={url} target="_blank" class="w-[272px]">
 								<Thumbnail uid={thumbnail} width={272}></Thumbnail>
