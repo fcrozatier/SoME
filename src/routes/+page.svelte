@@ -26,7 +26,7 @@
 <section class="layout-prose pb-4">
 	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->
 
-	<p class=" mb-16 text-center text-3xl font-light">SoMEπ community edition, summer 2024.</p>
+	<p class=" mb-16 text-center text-3xl font-light">SoME4, summer 2025, coming soon...</p>
 	<p>
 		The {COMPETITION_FULL_NAME} ({COMPETITION_SHORT_NAME}) is an annual competition to foster the
 		creation of excellent math content online. You can participate as either a creator or judge.
@@ -122,11 +122,11 @@
 		action="?/resend_link"
 		use:clickOutside={closeDialog}
 		use:enhance={({ submitter }) => {
-			submitter?.setAttribute('disabled', 'on');
+			submitter?.setAttribute("disabled", "on");
 			return async ({ update, result }) => {
-				submitter?.removeAttribute('disabled');
-				if (result.type === 'success') {
-					newToast({ type: 'success', content: 'Email sent!' });
+				submitter?.removeAttribute("disabled");
+				if (result.type === "success") {
+					newToast({ type: "success", content: "Email sent!" });
 					personalLinkDialog.close();
 				}
 				await update();

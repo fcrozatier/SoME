@@ -40,7 +40,7 @@
 		},
 		{
 			title: "Results and feedback",
-			description: "The top entries are revealed with the complete ranking of entries.",
+			description: "The top entries and the complete ranking are revealed.",
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE],
 		},
@@ -74,14 +74,14 @@
 								<span class="badge badge-success">current</span>
 							{/if}
 						</span>
-						<span class="text-sm text-gray-500"
+						<!-- <span class="text-sm text-gray-500"
 							>{#if phase.dates.length > 1}
 								From <Time datetime={phase.dates[0]} options={dateFormat} /> to
 								<Time datetime={phase.dates[1]} options={dateFormat} />
 							{:else}
 								<Time datetime={phase.dates[0]} options={dateFormat} />
 							{/if}</span
-						>
+						> -->
 					</div>
 
 					<p class="text-sm">{@html phase.description}</p>
