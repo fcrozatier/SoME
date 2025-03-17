@@ -14,9 +14,9 @@
 
 	let pages = $derived(data.pages);
 
-	let category: Category = $state("video");
-	let year: string = $state("2023");
-	let pageNumber = $state(page.url.searchParams.get("page") ?? "1");
+	let category = $state(data.category);
+	let year = $state(data.year);
+	let pageNumber = $state(data.page);
 
 	const years = ["2023", "2022", "2021"];
 
@@ -126,11 +126,11 @@
 						{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
 							<Youtube src={url} {title}></Youtube>
 						{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-							<a href={url} target="_blank" class="w-[272px]">
-								<Thumbnail uid={thumbnail} width={272}></Thumbnail>
+							<a href={url} target="_blank">
+								<Thumbnail uid={thumbnail} width={256}></Thumbnail>
 							</a>
 						{:else}
-							<a href={url} target="_blank">{url} </a>
+							<a href={url} class="line-clamp-1" target="_blank">{url}</a>
 						{/if}
 					</td>
 					<td>

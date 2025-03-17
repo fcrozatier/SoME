@@ -1,10 +1,11 @@
+import type { Category } from "$lib/config.js";
 import { db } from "$lib/server/db/client.js";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ url }) => {
 	let year = url.searchParams.get("year");
-	let category = url.searchParams.get("category");
+	let category = url.searchParams.get("category") as Category;
 	let page = url.searchParams.get("page");
 	const limit = 50;
 
@@ -43,5 +44,11 @@ export const load = async ({ url }) => {
 		`)
 	)[0] as { count: number };
 
-	return { entries, pages: Math.ceil(total.count / limit) };
+	return {
+		entries,
+		year,
+		category,
+		page,
+		pages: Math.ceil(total.count / limit),
+	};
 };
