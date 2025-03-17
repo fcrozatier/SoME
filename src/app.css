@@ -51,9 +51,10 @@ dialog {
 	@apply shadow-2xl;
 	max-width: var(--container-2xl);
 	border-radius: var(--radius-xl);
-	padding: var(--spacing-12);
-	padding-bottom: var(--spacing-10);
+	padding: calc(var(--spacing) * 12);
+	padding-bottom: calc(var(--spacing) * 10);
 	max-height: 80vh;
+	margin-block: auto;
 	visibility: hidden;
 }
 

@@ -146,7 +146,7 @@
 	<article use:clickOutside={() => displayDialog?.close()}>
 		{#if entry}
 			<EntriesPage data={entry}></EntriesPage>
-			<p class="flex gap-2 mt-12">
+			<p class="flex justify-end mt-12">
 				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
 			</p>
 		{/if}
