@@ -38,7 +38,7 @@
 		class="grid lg:grid-cols-2 max-w-3/4 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 lg:gap-y-20"
 	>
 		{#each data.top.slice(0, 5) as winner}
-			<div class="grid grid-cols-subgrid col-span-full max-w-3xl ">
+			<div class="grid grid-cols-subgrid col-span-full max-w-3xl">
 				{#if winner.category === "video"}
 					<Youtube title={winner.title} src={winner.url}></Youtube>
 				{:else if winner.thumbnail}
@@ -48,7 +48,7 @@
 				{/if}
 
 				<div class="md:mx-4 mb-10 mt-4 lg:my-0">
-					<h3 class="mt-0 text-trim mb-3">{winner.title}</h3>
+					<h3 class="mt-0 text-trim text-balance leading-snu mb-3">{winner.title}</h3>
 					<p class="line-clamp-4 lg:line-clamp-6 mb-0 leading-snug">{winner.description}</p>
 				</div>
 			</div>
@@ -58,12 +58,12 @@
 
 <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
 	<div class="mx-auto max-w-prose">
-		<h2 class="mt-0 text-5xl font-black" style:color="var(--light-gold)">
+		<h2 class="mt-0 mb-20  text-5xl font-black" style:color="var(--light-gold)">
 			The 20 honorable mentions
 		</h2>
 	</div>
 	<div class="custom-grid px-4">
-		{#each data.top.slice(5) as honorable}
+		{#each data.top.slice(0) as honorable}
 			<div class="flex flex-col gap-3">
 				<div>
 					{#if honorable.category === "video" && honorable.url && YOUTUBE_EMBED.test(honorable.url)}
@@ -77,7 +77,7 @@
 					{/if}
 				</div>
 				<div class="px-2">
-					<h4 class="mt-0" style:color="var(--light-gold)">{honorable.title}</h4>
+					<h4 class="mt-0 line-clamp-2 text-balance" style:color="var(--light-gold)">{honorable.title}</h4>
 				</div>
 			</div>
 		{/each}
@@ -101,7 +101,7 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(200px, 320px));
 		justify-content: center;
-		gap: var(--spacing-12) var(--spacing-16);
+		gap: calc(var(--spacing) * 12);
 	}
 
 	.text-trim {
