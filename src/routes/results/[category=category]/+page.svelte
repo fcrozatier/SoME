@@ -64,13 +64,13 @@
 	></Pagination>
 </div>
 
-<div class="overflow-x-scroll mx-4">
-	<table class="table max-w-3xl min-w-xl mx-auto">
+<div class="overflow-x-scroll sm:px-4">
+	<table class="table min-w-xl max-w-3xl mx-auto">
 		<thead>
 			<tr>
 				<th>Entry</th>
 				<th>Title</th>
-				<th>Rank</th>
+				<th class="text-center">Rank</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -88,10 +88,10 @@
 						{/if}
 					</td>
 					<td>
-						<h3 class="max-w-sm text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
+						<h3 class="text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
 						<p class="line-clamp-3">{description}</p>
 					</td>
-					<td class="items-center gap-4 flex flex-col">
+					<td class="items-center flex flex-col gap-4">
 						<span class="text-trim">{rank ? `#${rank}` : "-"}</span>
 						<a class="btn btn-sm" href={`/entries/${uid}`} onclick={loadData}> details </a>
 					</td>
@@ -157,7 +157,7 @@
 	tr {
 		display: grid;
 		grid-template-columns: 256px 1fr auto;
-		gap: calc(var(--spacing) * 8);
+		gap: calc(var(--spacing) * 6);
 		align-items: start;
 		padding-inline-start: calc(var(--spacing) * 2);
 	}
