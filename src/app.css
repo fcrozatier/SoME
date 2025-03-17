@@ -45,7 +45,6 @@ a:not(:where(.btn)) {
 	}
 }
 
-
 dialog {
 	@apply shadow-2xl;
 	max-width: var(--container-2xl);
