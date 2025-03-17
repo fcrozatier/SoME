@@ -103,9 +103,4 @@
 		justify-content: center;
 		gap: calc(var(--spacing) * 12);
 	}
-
-	.text-trim {
-		text-box-trim: trim-start;
-		text-box-edge: cap;
-	}
 </style>

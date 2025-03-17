@@ -7,12 +7,14 @@
 	--color-secondary: #f000b8;
 	--color-accent: #1dcdbc;
 	--color-neutral: #2b3440;
-	--color-base-100: #ffffff;
 	--color-info: #3abff8;
 	--color-success: #36d399;
 	--color-warning: #fbbd23;
 	--color-error: #f87272;
 	--color-base-content: black;
+
+	--color-base-100: #ffffff;
+	--color-base-200: #f2f2f2;
 
 	--light-gold: #fffaf4;
 
@@ -184,6 +186,11 @@ summary::after {
 	background-color: var(--thumb);
 	border-radius: var(--radius-md);
 	border: 2px solid var(--track);
+}
+
+.text-trim {
+	text-box-trim: trim-start;
+	text-box-edge: cap;
 }
 
 .layout-prose {
