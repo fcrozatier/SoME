@@ -4,10 +4,10 @@
 	interface Props {
 		pages: number;
 		pageNumber?: string;
-		onChange?: any;
+		onchange?: any;
 	}
 
-	let { pages, pageNumber = $bindable("1"), onChange = () => {} }: Props = $props();
+	let { pages, pageNumber = $bindable("1"), onchange = () => {} }: Props = $props();
 
 	const makeArray = (current: number) => {
 		const array: number[] = [];
@@ -41,7 +41,7 @@
 
 <div class="mt-10 mx-auto flex justify-center">
 	{#if pages > 1}
-		<form class="join" onchange={onChange}>
+		<form class="join" {onchange}>
 			{#each array as n}
 				{#if Number.isNaN(n)}
 					<span class="px-2"> ... </span>

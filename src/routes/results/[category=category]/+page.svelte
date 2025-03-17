@@ -53,7 +53,7 @@
 	<Pagination
 		pages={data.pages}
 		bind:pageNumber
-		onChange={() => {
+		onchange={() => {
 			page.url.searchParams.set("page", pageNumber);
 			goto(`?${page.url.searchParams.toString()}`, {
 				invalidateAll: true,
@@ -105,7 +105,7 @@
 	<Pagination
 		pages={data.pages}
 		bind:pageNumber
-		onChange={() => {
+		onchange={() => {
 			page.url.searchParams.set("page", pageNumber);
 			goto(`?${page.url.searchParams.toString()}`, {
 				invalidateAll: true,

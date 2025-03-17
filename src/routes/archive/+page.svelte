@@ -5,10 +5,10 @@
 	import Pagination from "$lib/components/Pagination.svelte";
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
-	import { categories, type Category } from "$lib/config.js";
+	import { categories } from "$lib/config.js";
+	import { YOUTUBE_EMBED } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
-	import { YOUTUBE_EMBED } from "$lib/utils";
 
 	let { data } = $props();
 
@@ -97,7 +97,7 @@
 			<Pagination
 				{pages}
 				bind:pageNumber
-				onChange={() => {
+				onchange={() => {
 					page.url.searchParams.set("page", pageNumber);
 					goto(`?${page.url.searchParams.toString()}`, {
 						invalidateAll: true,
@@ -154,7 +154,7 @@
 		<Pagination
 			{pages}
 			bind:pageNumber
-			onChange={() => {
+			onchange={() => {
 				page.url.searchParams.set("page", pageNumber);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
