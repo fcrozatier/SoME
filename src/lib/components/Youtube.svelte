@@ -29,6 +29,10 @@
 </lite-youtube>
 
 <style>
+	lite-youtube {
+		border-radius: var(--radius-lg);
+	}
+
 	.lite-youtube-fallback {
 		aspect-ratio: 16 / 9; /* matches YouTube player */
 		display: flex;
