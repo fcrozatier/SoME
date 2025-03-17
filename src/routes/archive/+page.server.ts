@@ -23,9 +23,11 @@ export const load = async ({ url }) => {
 		page = "1";
 	}
 
-	const entries: Pick<SelectEntry, "uid" | "title" | "category" | "thumbnail" | "url" | "rank">[] =
-		await db.execute(sql`
-		 select uid, title, category, thumbnail, url, rank from entries
+	const entries: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank"
+	>[] = await db.execute(sql`
+		 select uid, title, description, category, thumbnail, url, rank from entries
 		 where date_part('year', entries.created_at)=${year}
 		 and category=${category}
 		 order by rank asc nulls last
