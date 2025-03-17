@@ -91,9 +91,9 @@
 						<h3 class="max-w-sm text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
 						<p class="line-clamp-3">{description}</p>
 					</td>
-					<td class="text-trim text-end">
-						<a class="mr-4 btn btn-sm" href={`/entries/${uid}`} onclick={loadData}> details </a>
-						{rank ? `#${rank}` : "-"}
+					<td class="items-center gap-4 flex flex-col">
+						<span class="text-trim">{rank ? `#${rank}` : "-"}</span>
+						<a class="btn btn-sm" href={`/entries/${uid}`} onclick={loadData}> details </a>
 					</td>
 				</tr>
 			{/each}
@@ -163,6 +163,7 @@
 	}
 
 	thead > tr {
+		padding-inline-end: calc(var(--spacing) * 4);
 		padding-block-end: calc(var(--spacing) * 2);
 	}
 
