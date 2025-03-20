@@ -4,10 +4,10 @@
 	interface Props {
 		pages: number;
 		pageNumber?: string;
-		onChange?: any;
+		onchange?: any;
 	}
 
-	let { pages, pageNumber = $bindable("1"), onChange = () => {} }: Props = $props();
+	let { pages, pageNumber = $bindable("1"), onchange = () => {} }: Props = $props();
 
 	const makeArray = (current: number) => {
 		const array: number[] = [];
@@ -41,41 +41,23 @@
 
 <div class="mt-10 mx-auto flex justify-center">
 	{#if pages > 1}
-		<form class="join" onchange={onChange}>
+		<form class="join" {onchange}>
 			{#each array as n}
-				<div class="pagination-grid">
-					{#if Number.isNaN(n)}
-						<span class="px-2"> ... </span>
-					{:else}
-						<label
-							for={`radio${n}`}
-							class="join-item btn order-2"
-							class:btn-primary={n === +pageNumber}
-							>{n}
-						</label>
-						<input
-							id={`radio${n}`}
-							class="order-1"
-							type="radio"
-							name="pagination"
-							value={n}
-							bind:group={pageNumber}
-						/>
-					{/if}
-				</div>
+				{#if Number.isNaN(n)}
+					<span class="px-2"> ... </span>
+				{:else}
+					<input
+						id={`radio${n}`}
+						class="join-item btn btn-square"
+						class:btn-neutral={n === +pageNumber}
+						type="radio"
+						name="pagination"
+						aria-label={`${n}`}
+						value={n}
+						bind:group={pageNumber}
+					/>
+				{/if}
 			{/each}
 		</form>
 	{/if}
 </div>
-
-<style>
-	.pagination-grid {
-		display: grid;
-		place-items: center;
-		align-items: center;
-
-		& > * {
-			grid-area: 1/1;
-		}
-	}
-</style>

@@ -1,16 +1,17 @@
+import type { Category } from "$lib/config.js";
 import { db } from "$lib/server/db/client.js";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ url }) => {
 	let year = url.searchParams.get("year");
-	let category = url.searchParams.get("category");
+	let category = url.searchParams.get("category") as Category;
 	let page = url.searchParams.get("page");
 	const limit = 50;
 
 	if (!year) {
-		url.searchParams.set("year", "2023");
-		year = "2023";
+		url.searchParams.set("year", "2024");
+		year = "2024";
 	}
 
 	if (!category) {
@@ -23,9 +24,11 @@ export const load = async ({ url }) => {
 		page = "1";
 	}
 
-	const entries: Pick<SelectEntry, "uid" | "title" | "category" | "thumbnail" | "url" | "rank">[] =
-		await db.execute(sql`
-		 select uid, title, category, thumbnail, url, rank from entries
+	const entries: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank"
+	>[] = await db.execute(sql`
+		 select uid, title, description, category, thumbnail, url, rank from entries
 		 where date_part('year', entries.created_at)=${year}
 		 and category=${category}
 		 order by rank asc nulls last
@@ -41,5 +44,11 @@ export const load = async ({ url }) => {
 		`)
 	)[0] as { count: number };
 
-	return { entries, pages: Math.ceil(total.count / limit) };
+	return {
+		entries,
+		year,
+		category,
+		page,
+		pages: Math.ceil(total.count / limit),
+	};
 };

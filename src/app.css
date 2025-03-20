@@ -1,14 +1,33 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui';
+
+@theme {
+	--color-light-gold: #fffaf4;
+
+	--color-base-900: #242321;
+}
 
 :root {
-	--light-gold: #fffaf4;
+	--color-primary: #2b3440;
+	--color-secondary: #f000b8;
+	--color-accent: #1dcdbc;
+	--color-neutral: #2b3440;
+	--color-info: #3abff8;
+	--color-success: #36d399;
+	--color-warning: #fbbd23;
+	--color-error: #f87272;
+	--color-base-content: black;
+
+	--color-base-100: #ffffff;
+	--color-base-200: #f2f2f2;
+
+	interpolate-size: allow-keywords;
 }
 
 html,
 body {
-	background-color: var(--light-gold);
+	background-color: var(--color-light-gold);
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -24,14 +43,27 @@ body {
 	}
 }
 
+a:not(:where(.btn)) {
+	border-radius: 2px;
+
+	&:focus-visible {
+		outline: 2px solid currentColor;
+	}
+}
+
 dialog {
-	@apply max-w-2xl rounded-xl p-12 pb-10 shadow-2xl;
+	@apply shadow-2xl;
+	max-width: var(--container-2xl);
+	border-radius: var(--radius-xl);
+	padding: calc(var(--spacing) * 12);
+	padding-bottom: calc(var(--spacing) * 10);
 	max-height: 80vh;
+	margin-block: auto;
 	visibility: hidden;
 }
 
 dialog:not([open]) {
-	@apply pointer-events-none;
+	pointer-events: none;
 }
 
 dialog[open] {
@@ -47,12 +79,35 @@ dialog::backdrop {
 }
 
 details {
-	@apply py-4;
-	border-block: 1px solid theme(borderColor.DEFAULT);
+	padding-block: --spacing(8);
+	border-block: 1px solid var(--color-gray-200);
+
+	& > p:first-of-type {
+		margin-top: 0;
+	}
+
+	& > p:last-of-type {
+		margin-bottom: 0;
+	}
 }
-details[open] > summary::after {
-	transform: rotate(-135deg);
-	top: 10px;
+
+details::details-content {
+	block-size: 0;
+	overflow-y: clip;
+	transition:
+		content-visibility 250ms allow-discrete,
+		block-size 250ms;
+}
+
+details[open]::details-content {
+	block-size: auto;
+}
+
+details[open] {
+	& > summary::after {
+		transform: rotate(-135deg);
+		top: 10px;
+	}
 }
 
 details + details {
@@ -60,16 +115,23 @@ details + details {
 }
 
 summary {
-	@apply relative cursor-pointer select-none list-none;
 	--outline-width: 0;
+	margin-bottom: --spacing(4);
+	padding-right: 30px;
+	position: relative;
+	cursor: pointer;
+	user-select: none;
+	list-style: none;
+	text-box-trim: trim-start;
+	text-box-edge: cap;
 }
 summary:hover::before {
-	background-color: theme(colors.gray.200);
+	background-color: var(--color-gray-200);
 }
 
 summary:focus-visible::before {
-	background-color: theme(colors.gray.200);
-	outline: 1px solid theme(colors.gray.500);
+	background-color: var(--color-gray-200);
+	outline: 1px solid var(--color-gray-500);
 	outline-offset: 2px;
 }
 
@@ -83,7 +145,7 @@ summary::before {
 	top: -2px;
 	right: 0;
 	border-radius: 50%;
-	background-color: theme(colors.gray.100);
+	background-color: var(--color-gray-100);
 	width: var(--bg-size);
 	height: var(--bg-size);
 	transition: var(--outline-offset-transition);
@@ -92,16 +154,20 @@ summary::after {
 	--arrow-size: 8px;
 	top: 7px;
 	right: calc((var(--bg-size) - var(--arrow-size)) / 2);
-	transition: transform 100ms ease-out;
+	transition: transform 200ms ease-out;
 	transform: rotate(45deg);
-	border-right: 2px solid theme(colors.gray.500);
-	border-bottom: 2px solid theme(colors.gray.500);
+	border-right: 2px solid var(--color-gray-500);
+	border-bottom: 2px solid var(--color-gray-500);
 	width: var(--arrow-size);
 	height: var(--arrow-size);
 }
 
-.btn-primary {
-	@apply text-white;
+.btn {
+	text-decoration: none;
+}
+
+.btn-neutral {
+	color: var(--color-white);
 }
 
 .scrollbar {
@@ -109,11 +175,11 @@ summary::after {
 	--thumb: var(--scrollbar-thumb, white);
 
 	overflow: auto;
-	/* Firefox */
+	/* Chrome, Edge, Firefox */
 	scrollbar-color: var(--thumb) var(--track);
 	scrollbar-width: thin;
 }
-/* Chrome, Edge, Safari */
+/* Safari */
 .scrollbar::-webkit-scrollbar {
 	width: 10px;
 	height: 10px;
@@ -123,8 +189,13 @@ summary::after {
 }
 .scrollbar::-webkit-scrollbar-thumb {
 	background-color: var(--thumb);
-	border-radius: theme("borderRadius.md");
+	border-radius: var(--radius-md);
 	border: 2px solid var(--track);
+}
+
+.text-trim {
+	text-box-trim: trim-start;
+	text-box-edge: cap;
 }
 
 .layout-prose {

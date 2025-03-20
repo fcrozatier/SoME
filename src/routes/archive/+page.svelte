@@ -5,7 +5,8 @@
 	import Pagination from "$lib/components/Pagination.svelte";
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
-	import { categories, type Category } from "$lib/config.js";
+	import { categories } from "$lib/config.js";
+	import { YOUTUBE_EMBED } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 
@@ -13,11 +14,11 @@
 
 	let pages = $derived(data.pages);
 
-	let category: Category = $state("video");
-	let year: string = $state("2023");
-	let pageNumber = $state(page.url.searchParams.get("page") ?? "1");
+	let category = $state(data.category);
+	let year = $state(data.year);
+	let pageNumber = $state(data.page);
 
-	const years = ["2023", "2022", "2021"];
+	const years = ["2024", "2023", "2022", "2021"];
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
 	let entry: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();
@@ -96,7 +97,7 @@
 			<Pagination
 				{pages}
 				bind:pageNumber
-				onChange={() => {
+				onchange={() => {
 					page.url.searchParams.set("page", pageNumber);
 					goto(`?${page.url.searchParams.toString()}`, {
 						invalidateAll: true,
@@ -109,54 +110,45 @@
 	</div>
 </section>
 
-<table class="table max-w-3xl mx-auto hidden sm:block">
-	<thead>
-		<tr>
-			<th>Entry</th>
-			<th class="hidden sm:block">Title</th>
-			<th>Rank</th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each data.entries as { uid, title, category, thumbnail, url, rank }}
-			<tr class="py-2">
-				<td>
-					{#if category === "video"}
-						<Youtube width={240} src={url}></Youtube>
-					{:else if thumbnail}
-						<a href={url} target="_blank" class="w-[240px]">
-							<Thumbnail uid={thumbnail} width={240}></Thumbnail>
-						</a>
-					{/if}
-				</td>
-				<td>
-					<a href={`/entries/${uid}`} onclick={loadData}>
-						<h3 class="max-w-sm text-base m-0">{title}</h3>
-					</a>
-				</td>
-				<td>#{rank}</td>
+<div class="overflow-x-scroll sm:px-4">
+	<table class="table min-w-xl max-w-3xl mx-auto">
+		<thead>
+			<tr>
+				<th>Entry</th>
+				<th>Title</th>
+				<th class="text-center">Rank</th>
 			</tr>
-		{/each}
-	</tbody>
-</table>
-
-<div class="sm:hidden grid justify-center gap-8">
-	{#each data.entries as { uid, title, category, thumbnail, url, rank }}
-		<div>
-			{#if category === "video"}
-				<Youtube width={320} src={url}></Youtube>
-			{:else if thumbnail}
-				<a href={url} target="_blank" class="w-[320px]">
-					<Thumbnail uid={thumbnail} width={320}></Thumbnail>
-				</a>
-			{/if}
-			<div>
-				<span>#{rank}</span><a href={`/entries/${uid}`} onclick={loadData}
-					><h3 class="max-w-xs text-base m-0">{title}</h3>
-				</a>
-			</div>
-		</div>
-	{/each}
+		</thead>
+		<tbody>
+			{#each data.entries as { uid, title, description, category, thumbnail, url, rank }}
+				<tr>
+					<td>
+						{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
+							{#key url}
+								<Youtube src={url} {title}></Youtube>
+							{/key}
+						{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
+							<a href={url} target="_blank">
+								<Thumbnail uid={thumbnail} width={256}></Thumbnail>
+							</a>
+						{:else}
+							<a href={url} class="line-clamp-1" target="_blank">{url}</a>
+						{/if}
+					</td>
+					<td>
+						<h3 class="text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
+						{#if description}
+							<p class="line-clamp-3">{description}</p>
+						{/if}
+					</td>
+					<td class="items-center flex flex-col gap-4">
+						<span class="text-trim">{rank ? `#${rank}` : "-"}</span>
+						<a class="btn btn-sm" href={`/entries/${uid}`} onclick={loadData}> details </a>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
 </div>
 
 <div class="mt-10 mx-auto flex justify-center">
@@ -164,7 +156,7 @@
 		<Pagination
 			{pages}
 			bind:pageNumber
-			onChange={() => {
+			onchange={() => {
 				page.url.searchParams.set("page", pageNumber);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
@@ -182,29 +174,41 @@
 		entry = undefined;
 	}}
 >
-	<article use:clickOutside={() => displayDialog?.close()}>
+	<div use:clickOutside={() => displayDialog?.close()}>
 		{#if entry}
-			<EntriesPage data={entry}></EntriesPage>
-			<p class="flex gap-2 mt-12">
+			<div class="-mx-8">
+				<EntriesPage data={entry}></EntriesPage>
+			</div>
+			<div class="flex justify-end mt-12">
 				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
-			</p>
+			</div>
 		{/if}
-	</article>
+	</div>
 </dialog>
 
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: 240px 1fr auto;
-		gap: 2rem;
+		grid-template-columns: 256px 1fr auto;
+		gap: calc(var(--spacing) * 6);
 		align-items: start;
+		padding-inline: calc(var(--spacing) * 2);
 
-		@media (max-width: 640px) {
-			grid-template-columns: 1fr auto;
-		}
+		content-visibility: auto;
+		contain-intrinsic-size: auto 200px;
 	}
 
-	tr:nth-child(even) {
-		background-color: rgb(242, 242, 242);
+	thead > tr {
+		padding-inline-end: calc(var(--spacing) * 4);
+		padding-block-end: calc(var(--spacing) * 2);
+	}
+
+	tbody > tr {
+		padding-block: calc(var(--spacing) * 6);
+	}
+
+	th,
+	td {
+		padding: 0;
 	}
 </style>

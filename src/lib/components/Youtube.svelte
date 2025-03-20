@@ -1,13 +1,16 @@
 <script lang="ts">
 	interface Props {
 		src: string;
-		width?: number;
+		title?: string;
 	}
 
-	let { src, width = 420 }: Props = $props();
+	let { src, title }: Props = $props();
+
+	let videoid = src.split("/").at(-1);
 </script>
 
-<iframe
+<!-- TODO remove -->
+<!-- <iframe
 	{width}
 	class="aspect-video rounded-lg"
 	{src}
@@ -17,4 +20,12 @@
 	referrerpolicy="strict-origin-when-cross-origin"
 	allowfullscreen
 	loading="lazy"
-></iframe>
+></iframe> -->
+
+<lite-youtube {videoid} videotitle={title} autoload></lite-youtube>
+
+<style>
+	lite-youtube {
+		border-radius: var(--radius-lg);
+	}
+</style>

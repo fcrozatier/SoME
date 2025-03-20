@@ -253,7 +253,7 @@
 			<label for="rules" class="label justify-normal gap-4">
 				<input id="rules" type="checkbox" name="rules" class="checkbox" required />
 				<span class="label-text">
-					I've read the <a href="/#rules">rules</a> of the competition
+					I've read the <a href="/rules">rules</a> of the competition
 				</span>
 			</label>
 			{#if form?.fieldErrors?.rules}
@@ -288,7 +288,7 @@
 			</p>
 		{/if}
 		<p>
-			<button class="btn-primary btn block"> Submit </button>
+			<button class="btn-neutral btn block"> Submit </button>
 		</p>
 		<p class="text-sm">
 			<a href="/gdpr">Privacy policy</a>
@@ -298,6 +298,6 @@
 
 <style>
 	label {
-		margin-top: theme("margin.2");
+		margin-top: calc(var(--spacing) * 2);
 	}
 </style>

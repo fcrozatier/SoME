@@ -33,8 +33,8 @@ For the third edition of the competition, we decided to redesign the algorithm f
 
 The new algorithm aimed to optimize fairness by building a regular graph with desirable properties (connected, regular, with a small diameter) called an [expander graph](https://en.wikipedia.org/wiki/Expander_graph). This theoretically allowed all entries to receive equal attention and ensured robust flow of information in the graph. I even made an [explainer video](https://www.youtube.com/watch?v=XSDBbCaO-kc) about this algorithm as part of the competition itself.
 
-<div class="flex justify-center">
-	<Youtube width="560" src={"https://www.youtube.com/embed/XSDBbCaO-kc?si=NpEx4j0NVqwwftCG"}></Youtube>
+<div class="max-w-xl mx-auto">
+	<Youtube src={"https://www.youtube.com/embed/XSDBbCaO-kc"}></Youtube>
 </div>
 
 Once we have a directed graph with these properties and arrows systematically pointing to the better entries, we can apply a flow of points to find the best entries using the [PageRank](https://en.wikipedia.org/wiki/PageRank) algorithm.

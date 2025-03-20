@@ -26,11 +26,11 @@
 <section class="layout-prose pb-4">
 	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->
 
-	<p class=" mb-16 text-center text-3xl font-light">SoMEπ community edition, summer 2024.</p>
+	<p class=" mb-16 text-center text-3xl font-light">SoME4, summer 2025, coming soon...</p>
 	<p>
 		The {COMPETITION_FULL_NAME} ({COMPETITION_SHORT_NAME}) is an annual competition to foster the
 		creation of excellent math content online. You can participate as either a creator or judge.
-		<a href="/rules">Learn more</a>
+		<a href="/rules" rel="terms-of-service">Learn more</a>
 	</p>
 	<form
 		class="grid justify-center"
@@ -52,15 +52,15 @@
 			};
 		}}
 	>
-		<h3 class="">Receive News on Upcoming Editions</h3>
-		<label for="newsletter" class="label pb-1 label-text"> Email </label>
+		<h3 id="stay-tuned">Receive News on Upcoming Editions</h3>
 		<div class="flex gap-2">
 			<input
-				id="newsletter"
 				type="email"
 				name="email"
 				class="input input-bordered"
-				placeholder="your email"
+				placeholder="Email"
+				aria-label="Email"
+				aria-describedby="stay-tuned"
 				maxlength="128"
 				required
 			/>
@@ -77,22 +77,22 @@
 <ResultsPage {data}></ResultsPage>
 
 <!-- Last year -->
-<!-- <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
+<!-- <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--color-light-gold)">
 	<div class="mx-auto max-w-prose">
-		<h2 class="my-0 text-5xl font-black" style:color="var(--light-gold)">
+		<h2 class="my-0 text-5xl font-black" style:color="var(--color-light-gold)">
 			Last year's competition
 		</h2>
 		<p class="mt-8 font-light tracking-wider">
 			Discover the 5 winners of the last edition. <br />
 
 			The 20 honorable mentions as well as the full list of entries is available
-			<a class="font-light" style:color="var(--light-gold)" href="/previous">here</a>
+			<a class="font-light" style:color="var(--color-light-gold)" href="/previous">here</a>
 		</p>
 	</div>
 	<div class="mx-4">
 		<div
 			class="scrollbar mx-auto flex max-w-5xl snap-x snap-proximity snap-always items-center gap-10 overflow-x-scroll pb-2"
-			style:--scrollbar-thumb="var(--light-gold)"
+			style:--scrollbar-thumb="var(--color-light-gold)"
 		>
 			{#each winners as winner}
 				<div class="snap-center">
@@ -122,11 +122,11 @@
 		action="?/resend_link"
 		use:clickOutside={closeDialog}
 		use:enhance={({ submitter }) => {
-			submitter?.setAttribute('disabled', 'on');
+			submitter?.setAttribute("disabled", "on");
 			return async ({ update, result }) => {
-				submitter?.removeAttribute('disabled');
-				if (result.type === 'success') {
-					newToast({ type: 'success', content: 'Email sent!' });
+				submitter?.removeAttribute("disabled");
+				if (result.type === "success") {
+					newToast({ type: "success", content: "Email sent!" });
 					personalLinkDialog.close();
 				}
 				await update();

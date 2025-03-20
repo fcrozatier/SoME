@@ -11,7 +11,7 @@
 
 {#if displayCategories !== "others-only"}
 	<p>
-		<button class="btn-primary btn-lg btn">New vote</button>
+		<button class="btn-neutral btn-lg btn">New vote</button>
 	</p>
 	<p>Or change category:</p>
 {/if}

@@ -52,7 +52,7 @@
 				required
 			/>
 			<div class="mt-4">
-				<button type="submit" class="btn-primary btn ml-1">Login </button>
+				<button type="submit" class="btn-neutral btn ml-1">Login </button>
 			</div>
 			{#if form?.invalid}
 				<p class="block text-error">something went wrong.</p>

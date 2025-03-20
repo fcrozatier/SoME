@@ -1,7 +1,7 @@
 import { dev } from "$app/environment";
 import { db } from "$lib/server/db/client";
 import { type SelectEntry, users } from "$lib/server/db/schema";
-import { addToMailingList, sendEmail } from "$lib/server/email";
+import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
 import { FGEmailSchema } from "$lib/validation";
 import { type Actions, fail } from "@sveltejs/kit";
 import { eq, sql } from "drizzle-orm";
@@ -37,15 +37,15 @@ export const actions: Actions = {
 		}
 
 		if (!dev) {
-			// Commented: 13/11/24
+			// Last: 06/03/24
 			// Validate email
-			// const emailValidation = await validateEmail(email);
-			// if (!emailValidation || emailValidation.result !== 'deliverable') {
-			// 	return fail(400, {
-			// 		error: true,
-			// 		message: 'Undeliverable email',
-			// 	});
-			// }
+			const emailValidation = await validateEmail(email);
+			if (!emailValidation || emailValidation.result !== "deliverable") {
+				return fail(400, {
+					error: true,
+					message: "Undeliverable email",
+				});
+			}
 		}
 
 		const token = crypto.randomUUID();

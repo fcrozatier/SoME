@@ -18,9 +18,11 @@ export const load = async ({ params, locals, url }) => {
 	}
 
 	const { category } = params;
-	const entries: Pick<SelectEntry, "uid" | "title" | "category" | "thumbnail" | "url" | "rank">[] =
-		await db.execute(sql`
-		 select uid, title, category, thumbnail, url, rank from entries
+	const entries: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank"
+	>[] = await db.execute(sql`
+		 select uid, title, description, category, thumbnail, url, rank from entries
 		 where active='t'
 		 and date_part('year', entries.created_at)='2024'
 		 and category=${category}
@@ -38,5 +40,5 @@ export const load = async ({ params, locals, url }) => {
 		`)
 	)[0] as { count: number };
 
-	return { entries, pages: Math.ceil(total.count / limit) };
+	return { entries, page, pages: Math.ceil(total.count / limit) };
 };

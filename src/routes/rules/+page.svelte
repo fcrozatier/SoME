@@ -40,7 +40,7 @@
 		},
 		{
 			title: "Results and feedback",
-			description: "The top entries are revealed with the complete ranking of entries.",
+			description: "The top entries and the complete ranking are revealed.",
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE],
 		},
@@ -74,26 +74,26 @@
 								<span class="badge badge-success">current</span>
 							{/if}
 						</span>
-						<span class="text-sm text-gray-500"
+						<!-- <span class="text-sm text-gray-500"
 							>{#if phase.dates.length > 1}
 								From <Time datetime={phase.dates[0]} options={dateFormat} /> to
 								<Time datetime={phase.dates[1]} options={dateFormat} />
 							{:else}
 								<Time datetime={phase.dates[0]} options={dateFormat} />
 							{/if}</span
-						>
+						> -->
 					</div>
 
 					<p class="text-sm">{@html phase.description}</p>
 					{#if phase.isOpen}
 						<p class="mt-6">
 							{#if i === 0}
-								<a class="btn-primary btn" href="/register"
+								<a class="btn-neutral btn" href="/register"
 									>Join in <span class="ml-2 inline-block">&rarr;</span></a
 								>
 								<!-- {:else if i === 1}
 								{#if data.token}
-									<a class="btn-primary btn" href="/vote/{data.token}">Vote</a>
+									<a class="btn-neutral btn" href="/vote/{data.token}">Vote</a>
 								{:else}
 									<button
 										type="button"
@@ -105,9 +105,9 @@
 									</button>
 								{/if}
 							{:else if i === 2}
-								<a class="btn-primary btn mr-4" href="/results">Results</a>
+								<a class="btn-neutral btn mr-4" href="/results">Results</a>
 								{#if data.token}
-									<a class="btn-primary btn" href="/feedback/{data.token}">Your feedbacks</a>
+									<a class="btn-neutral btn" href="/feedback/{data.token}">Your feedbacks</a>
 								{/if} -->
 							{/if}
 						</p>
