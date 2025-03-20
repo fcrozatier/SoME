@@ -143,7 +143,7 @@
 		{@render children?.()}
 	</main>
 
-	<footer class="mt-auto p-4 mx-4">
+	<footer class="mt-auto mx-4">
 		<!-- Sponsor -->
 		<section class="mt-10 mb-40 pt-10">
 			<h2 class="text-center mb-4 text-2xl font-light">
@@ -156,7 +156,9 @@
 			</div>
 		</section>
 		<!-- Links -->
-		<section class="flex flex-wrap content-center justify-center gap-x-20 gap-y-10">
+		<section
+			class="bg-black text-sm px-8 text-light-gold py-4 flex flex-wrap justify-center gap-x-20 -mx-4 gap-y-10"
+		>
 			<a href="/algorithm" rel="about"> Algorithm </a>
 			<a href="/contact"> Contact </a>
 			<a href="/content-policy"> Content Policy </a>
