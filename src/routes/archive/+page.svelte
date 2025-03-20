@@ -18,7 +18,7 @@
 	let year = $state(data.year);
 	let pageNumber = $state(data.page);
 
-	const years = ["2023", "2022", "2021"];
+	const years = ["2024", "2023", "2022", "2021"];
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
 	let entry: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();

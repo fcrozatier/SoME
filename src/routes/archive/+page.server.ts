@@ -10,8 +10,8 @@ export const load = async ({ url }) => {
 	const limit = 50;
 
 	if (!year) {
-		url.searchParams.set("year", "2023");
-		year = "2023";
+		url.searchParams.set("year", "2024");
+		year = "2024";
 	}
 
 	if (!category) {
