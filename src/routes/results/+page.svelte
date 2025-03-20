@@ -80,7 +80,10 @@
 				</div>
 				<div class="px-2">
 					<h4 class="mt-0 line-clamp-2 text-balance">
-						<a class="hover:underline text-light-gold no-underline" href={`/entries/${honorable.uid}`}>
+						<a
+							class="hover:underline text-light-gold no-underline"
+							href={`/entries/${honorable.uid}`}
+						>
 							{honorable.title}
 						</a>
 					</h4>
