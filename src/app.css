@@ -2,6 +2,12 @@
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
 
+@theme {
+	--color-light-gold: #fffaf4;
+
+	--color-base-900: #242321;
+}
+
 :root {
 	--color-primary: #2b3440;
 	--color-secondary: #f000b8;
@@ -15,8 +21,6 @@
 
 	--color-base-100: #ffffff;
 	--color-base-200: #f2f2f2;
-
-	--light-gold: #fffaf4;
 
 	interpolate-size: allow-keywords;
 }

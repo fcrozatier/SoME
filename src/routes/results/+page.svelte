@@ -60,11 +60,9 @@
 	</div>
 </section>
 
-<section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
+<section class="text-ligh bg-black/95 pb-32 pt-24 text-center">
 	<div class="mx-auto max-w-prose">
-		<h2 class="mt-0 mb-20 text-5xl font-black" style:color="var(--light-gold)">
-			The 20 honorable mentions
-		</h2>
+		<h2 class="mt-0 mb-20 text-5xl font-black text-light-gold">The 20 honorable mentions</h2>
 	</div>
 	<div class="custom-grid px-4">
 		{#each data.top.slice(0) as honorable}
@@ -81,8 +79,8 @@
 					{/if}
 				</div>
 				<div class="px-2">
-					<h4 class="mt-0 line-clamp-2 text-balance" style:color="var(--light-gold)">
-						<a class="text-white hover:underline no-underline" href={`/entries/${honorable.uid}`}>
+					<h4 class="mt-0 line-clamp-2 text-balance">
+						<a class="hover:underline text-light-gold no-underline" href={`/entries/${honorable.uid}`}>
 							{honorable.title}
 						</a>
 					</h4>
