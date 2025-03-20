@@ -24,7 +24,7 @@
 
 <section class="layout-prose pb-10 text-center">
 	<p class=" mb-8 text-center text-4xl font-black">Results</p>
-	<p>You can find the winners for the 2024 edition below.</p>
+	<p>Find the winners of the 2024 edition</p>
 	<div class="flex gap-2 justify-center">
 		<a class="btn btn-neutral" href="/results/video">All videos</a>
 		<a class="btn btn-neutral" href="/results/non-video">All non-videos</a>
@@ -35,10 +35,10 @@
 	<h2 class="mb-20 text-5xl font-black text-center">The top 5 entries are</h2>
 
 	<div
-		class="grid lg:grid-cols-2 max-w-3/4 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 lg:gap-y-20"
+		class="grid lg:grid-cols-2 max-w-4/5 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
 	>
 		{#each data.top.slice(0, 5) as winner}
-			<div class="grid grid-cols-subgrid col-span-full max-w-3xl">
+			<div class="grid grid-cols-subgrid col-span-full max-w-3xl hover:bg-base-200 rounded-3xl p-6">
 				{#if winner.category === "video"}
 					<Youtube title={winner.title} src={winner.url}></Youtube>
 				{:else if winner.thumbnail}
@@ -47,8 +47,12 @@
 					</a>
 				{/if}
 
-				<div class="md:mx-4 mb-10 mt-4 lg:my-0">
-					<h3 class="mt-0 text-trim text-balance leading-snu mb-3">{winner.title}</h3>
+				<div class="md:mx-4 mt-4 lg:my-0">
+					<a class="no-underline hover:underline" href={`/entries/${winner.uid}`}>
+						<h3 class="mt-0 text-trim text-balance leading-snug mb-3">
+							{winner.title}
+						</h3>
+					</a>
 					<p class="line-clamp-4 lg:line-clamp-6 mb-0 leading-snug">{winner.description}</p>
 				</div>
 			</div>
@@ -78,7 +82,9 @@
 				</div>
 				<div class="px-2">
 					<h4 class="mt-0 line-clamp-2 text-balance" style:color="var(--light-gold)">
-						{honorable.title}
+						<a class="text-white hover:underline no-underline" href={`/entries/${honorable.uid}`}>
+							{honorable.title}
+						</a>
 					</h4>
 				</div>
 			</div>
