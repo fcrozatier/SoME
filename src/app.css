@@ -27,7 +27,7 @@
 
 html,
 body {
-	background-color: var(--light-gold);
+	background-color: var(--color-light-gold);
 	-webkit-font-smoothing: antialiased;
 }
 

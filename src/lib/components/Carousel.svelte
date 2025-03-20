@@ -11,7 +11,7 @@
 
 <div
 	class="scrollbar mx-auto flex max-w-5xl snap-x snap-proximity snap-always items-center gap-10 overflow-x-scroll pb-2"
-	style:--scrollbar-thumb="var(--light-gold)"
+	style:--scrollbar-thumb="var(--color-light-gold)"
 >
 	{#each entries as entry}
 		<div class="snap-center">
