@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Bento from "$lib/components/Bento.svelte";
 	import { COMPETITION_SHORT_NAME } from "$lib/config";
 	import { round } from "@fcrozatier/ts-helpers";
 
@@ -42,50 +43,21 @@
 			{:else}
 				{@const median = round(group?.[0].median, 0)}
 				{@const comments = group.filter((f) => f.feedback && f.feedback !== "" && !f.maybe_rude)}
-				<div class="flex flex-wrap justify-start justify-items-center mx-4 gap-x-8 gap-y-8 my-10">
-					<div
-						class="rounded-[2rem] bg-opacity-10 border-2 aspect-square w-40 grid place-items-center"
-						class:bg-error={median <= 3}
-						class:bg-success={median > 7}
-						class:bg-warning={median > 3 && median <= 7}
-						class:border-error={median <= 3}
-						class:border-success={median > 7}
-						class:border-warning={median > 3 && median <= 7}
-					>
-						<div class="flex flex-col items-center gap-2">
-							<span
-								class="text-5xl"
-								class:text-error={median <= 3}
-								class:text-success={median > 7}
-								class:text-warning={median > 3 && median <= 7}
-							>
-								{median || "-"}
-							</span>
-							<span
-								>Overall <a
-									href="/algorithm"
-									target="_blank"
-									class="no-underline hover:underline font-semibold">score*</a
-								></span
-							>
-						</div>
-					</div>
-					<div class="rounded-3xl border-2 aspect-square w-40 max-w-sm grid place-items-center">
-						<div class="flex flex-col items-center gap-2">
-							<span class="text-5xl">
-								{group.length}
-							</span>
-							<span>Votes</span>
-						</div>
-					</div>
-					<div class="rounded-3xl border-2 aspect-square w-40 grid place-items-center">
-						<div class="flex flex-col items-center gap-2">
-							<span class="text-5xl">
-								{comments.length}
-							</span>
-							<span>Comments</span>
-						</div>
-					</div>
+
+				<div class="flex flex-wrap justify-center gap-x-8 gap-y-8 mb-10">
+					<Bento count={median} color={median <= 3 ? "danger" : median < 7 ? "warning" : "success"}>
+						Overall <a
+							href="/algorithm"
+							target="_blank"
+							class="no-underline hover:underline font-semibold">score*</a
+						>
+					</Bento>
+					<Bento count={group.length}>
+						Vote{group.length === 1 ? "" : "s"}
+					</Bento>
+					<Bento count={comments.length}>
+						Comment{comments.length === 1 ? "" : "s"}
+					</Bento>
 				</div>
 
 				<div
@@ -101,14 +73,14 @@
 						<div class="grid grid-cols-[1fr_2rem] gap-x-4 items-start border-b first:border-t py-4">
 							<p class="my-0 leading-loose whitespace-pre-wrap">{feedback}</p>
 							<span
-								class="ml-auto w-full bg-opacity-10 border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center"
-								class:bg-error={+score <= 3}
-								class:bg-success={+score > 7}
-								class:bg-warning={+score > 3 && +score <= 7}
-								class:border-error={+score <= 3}
-								class:border-success={+score > 7}
-								class:border-warning={+score > 3 && +score <= 7}>{round(score, 1)}</span
+								class={`ml-auto w-full border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center
+								${+score <= 3 ? "bg-error/10 border-error" : ""}
+								${+score > 3 && +score <= 7 ? "bg-warning/10 border-warning" : ""}
+								${+score > 7 ? "bg-success border-success" : ""}
+							`}
 							>
+								{round(score, 1)}
+							</span>
 						</div>
 					{/each}
 				{/if}
