@@ -75,7 +75,7 @@
 						class={`ml-auto w-full border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center
 							${+score <= 3 ? "bg-error/10 border-error" : ""}
 							${+score > 3 && +score <= 7 ? "bg-warning/10 border-warning" : ""}
-							${+score > 7 ? "bg-success border-success" : ""}
+							${+score > 7 ? "bg-success/10 border-success" : ""}
 						`}
 					>
 						{round(+score, 1)}
