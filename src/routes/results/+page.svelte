@@ -65,7 +65,7 @@
 		<h2 class="mt-0 mb-20 text-5xl font-black text-light-gold">The 20 honorable mentions</h2>
 	</div>
 	<div class="custom-grid px-4">
-		{#each data.top.slice(0) as honorable}
+		{#each data.top.slice(5) as honorable}
 			<div class="flex flex-col gap-3">
 				<div>
 					{#if honorable.category === "video" && honorable.url && YOUTUBE_EMBED.test(honorable.url)}
