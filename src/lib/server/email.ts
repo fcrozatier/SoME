@@ -1,9 +1,14 @@
 import formData from "form-data";
-import Mailgun, { type MailgunMessageData } from "mailgun.js";
+import Mailgun from "mailgun.js";
+import type { MailgunMessageData } from "mailgun.js/definitions";
 import { DOMAIN, MAILGUN_API_KEY } from "$env/static/private";
 import { emailTemplates, type TemplateName } from "$lib/config";
 
 const from = "SoME <some@3blue1brown.com>";
+
+/**
+ * https://github.com/mailgun/mailgun.js
+ */
 const mailgun = new Mailgun(formData);
 
 export const mg = mailgun.client({ username: "api", key: MAILGUN_API_KEY });
@@ -15,7 +20,12 @@ type Validation = {
 	is_disposable_address: boolean;
 	is_role_address: boolean;
 	reason: string[];
-	result: "deliverable" | "undeliverable" | "do_not_send" | "catch_all" | "unknown";
+	result:
+		| "deliverable"
+		| "undeliverable"
+		| "do_not_send"
+		| "catch_all"
+		| "unknown";
 	risk: "high" | "medium" | "low" | "unknown";
 	root_address?: string;
 };

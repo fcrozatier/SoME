@@ -27,7 +27,8 @@ export const actions: Actions = {
 		const email = data.email;
 
 		// Find user
-		const user = (await db.select().from(users).where(eq(users.email, email)))[0];
+		const user =
+			(await db.select().from(users).where(eq(users.email, email)))[0];
 
 		if (user) {
 			return fail(400, {
@@ -37,10 +38,9 @@ export const actions: Actions = {
 		}
 
 		if (!dev) {
-			// Last: 06/03/24
 			// Validate email
 			const emailValidation = await validateEmail(email);
-			if (!emailValidation || emailValidation.result !== "deliverable") {
+			if (emailValidation?.result !== "deliverable") {
 				return fail(400, {
 					error: true,
 					message: "Undeliverable email",
@@ -65,7 +65,8 @@ export const actions: Actions = {
 	resend_link: formgate({ email: FGEmailSchema }, async (data) => {
 		try {
 			// Find user
-			const user = (await db.select().from(users).where(eq(users.email, data.email)))[0];
+			const user =
+				(await db.select().from(users).where(eq(users.email, data.email)))[0];
 
 			if (!user) {
 				return fail(400, {
