@@ -1,7 +1,7 @@
 import { dev } from "$app/environment";
 import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from "$env/static/public";
 import { db } from "$lib/server/db/client.js";
-import { postgresErrorCode } from "$lib/server/db/errors.js";
+import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import {
 	entries,
 	users as usersTable,
