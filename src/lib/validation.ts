@@ -2,11 +2,17 @@ import { categories, templateNames } from "$lib/config";
 import { z } from "zod";
 import * as fg from "formgator";
 
-const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const uuid4 =
+	/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export const uuid = (str: string | null) => !!str && uuid4.test(str);
 
-const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const SHARP_IMAGE_INPUT_TYPES = [
+	"image/jpeg",
+	"image/png",
+	"image/webp",
+	"image/gif",
+];
 const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
 export const CategorySchema = z.enum(categories);
@@ -20,7 +26,8 @@ export const TokenSchema = z.string().uuid();
 const UrlSchema = z
 	.string()
 	.url({
-		message: "Invalid url, please provide the full url with the https:// prefix",
+		message:
+			"Invalid url, please provide the full url with the https:// prefix",
 	})
 	.refine((str) => !str.includes("playlist"), {
 		message: "Playlists are not allowed",
@@ -43,7 +50,9 @@ export const FlagForm = z.object({
 export const FeedbackForm = z.object({
 	selection: z.string().transform((val, ctx) => {
 		try {
-			return z.array(z.tuple([TokenSchema, TokenSchema])).parse(JSON.parse(val));
+			return z.array(z.tuple([TokenSchema, TokenSchema])).parse(
+				JSON.parse(val),
+			);
 		} catch {
 			ctx.addIssue({
 				code: z.ZodIssueCode.custom,
@@ -57,10 +66,6 @@ export const FeedbackForm = z.object({
 export const PasswordForm = z.object({
 	email: z.string(),
 	password: z.string(),
-});
-
-export const JWTPayloadSchema = z.object({
-	isAdmin: z.boolean(),
 });
 
 const CheckboxSchema = z.literal("on", {
@@ -121,7 +126,10 @@ export const CreatorSchema = z.object({
 	copyright: CheckboxSchema,
 });
 
-export const RegistrationSchema = z.discriminatedUnion("userType", [JudgeSchema, CreatorSchema]);
+export const RegistrationSchema = z.discriminatedUnion("userType", [
+	JudgeSchema,
+	CreatorSchema,
+]);
 
 export const FeedbackSchema = z
 	.string()
