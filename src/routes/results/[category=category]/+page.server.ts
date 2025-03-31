@@ -5,7 +5,7 @@ import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ params, locals, url }) => {
-	if (!resultsAvailable() && !locals.isAdmin) {
+	if (!resultsAvailable() && !locals.user?.isAdmin) {
 		error(400, { message: "Results not available" });
 	}
 

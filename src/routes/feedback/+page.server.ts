@@ -1,8 +1,9 @@
 import { redirect } from "@sveltejs/kit";
 
 export const load = async ({ locals }) => {
-	if (locals.token) {
-		redirect(302, `/feedback/${locals.token}`);
+	const uid = locals.user?.uid;
+	if (uid) {
+		redirect(302, `/feedback/${uid}`);
 	} else {
 		redirect(302, `/`);
 	}

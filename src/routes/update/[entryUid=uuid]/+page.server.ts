@@ -18,7 +18,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import postgres from "postgres";
 
 export const load = async ({ params, locals }) => {
-	if (!locals.isAdmin) {
+	if (!locals.user?.isAdmin) {
 		return error(400, { message: "The competition is closed" });
 	}
 

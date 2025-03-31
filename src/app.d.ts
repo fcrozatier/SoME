@@ -1,10 +1,9 @@
 declare namespace App {
 	// interface Error {}
 	interface Locals {
-		token?: string;
-		isAdmin?: boolean;
+		user: import("$lib/server/auth").SessionValidationResult["user"];
+		session: import("$lib/server/auth").SessionValidationResult["session"];
 		isCreator?: boolean;
-		surveyTaken?: boolean;
 	}
 	// interface PageData {}
 	// interface Platform {}
