@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { type SelectEntry, users } from "$lib/server/db/schema";
 import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
 import { FGEmailSchema } from "$lib/validation";

@@ -1,7 +1,7 @@
 import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from "$env/static/private";
 import type { Category } from "$lib/config";
 import { query3 } from "$lib/server/algo/queries";
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { cache, flags, skips, votes, type SelectEntry } from "$lib/server/db/schema";
 import { decrypt, encrypt } from "$lib/server/encryption";
 import { FlagSchema, SkipSchema, validateForm, VoteSchema } from "$lib/validation";

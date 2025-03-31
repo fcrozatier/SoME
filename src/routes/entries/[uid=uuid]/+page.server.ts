@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectVote } from "$lib/server/db/schema.js";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";

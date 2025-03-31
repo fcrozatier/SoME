@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { entries } from "$lib/server/db/schema";
 import { fail } from "@sveltejs/kit";
 import { non_videos as n2021 } from "./2021_non_videos";

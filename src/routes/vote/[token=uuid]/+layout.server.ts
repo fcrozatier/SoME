@@ -1,5 +1,5 @@
 import { MAX_AGE } from "$lib/server/config";
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { users } from "$lib/server/db/schema";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";

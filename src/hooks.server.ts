@@ -1,6 +1,6 @@
 import { JWT_SECRET } from "$env/static/private";
 import { MAX_AGE } from "$lib/server/config";
-import { client, db } from "$lib/server/db/client";
+import { client, db } from "$lib/server/db";
 import { usersToEntries } from "$lib/server/db/schema";
 import { JWTPayloadSchema, TokenSchema } from "$lib/validation";
 import { redirect, type Handle } from "@sveltejs/kit";

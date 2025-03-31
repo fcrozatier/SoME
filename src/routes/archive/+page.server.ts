@@ -1,5 +1,5 @@
 import type { Category } from "$lib/config.js";
-import { db } from "$lib/server/db/client.js";
+import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { sql } from "drizzle-orm";
 

@@ -1,5 +1,5 @@
 import { queryFeedbacks } from "$lib/server/algo/queries";
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { surveys } from "$lib/server/db/schema.js";
 import { eq } from "drizzle-orm";
 
