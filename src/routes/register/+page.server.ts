@@ -6,7 +6,7 @@ import {
 	entries,
 	users as usersTable,
 	usersToEntries,
-	type NewUser,
+	type InsertUser,
 } from "$lib/server/db/schema.js";
 import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
 import { saveThumbnail } from "$lib/server/s3";
@@ -91,7 +91,7 @@ export const actions = {
 					await saveThumbnail(thumbnail, thumbnailKey);
 				}
 
-				const values: NewUser[] = users.map((u) => {
+				const values: InsertUser[] = users.map((u) => {
 					return { email: u.email, uid: u.token };
 				});
 

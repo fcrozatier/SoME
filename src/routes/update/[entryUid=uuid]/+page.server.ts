@@ -7,7 +7,7 @@ import {
 	users as usersTable,
 	usersToEntries,
 	votes,
-	type NewUser,
+	type InsertUser,
 } from "$lib/server/db/schema.js";
 import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
 import { saveThumbnail } from "$lib/server/s3";
@@ -106,7 +106,7 @@ export const actions = {
 			}
 
 			if (newCreators.length > 0) {
-				const values: NewUser[] = newCreators.map((u) => {
+				const values: InsertUser[] = newCreators.map((u) => {
 					return { email: u, uid: crypto.randomUUID() };
 				});
 
