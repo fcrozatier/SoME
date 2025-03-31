@@ -3,7 +3,7 @@
 	import { goto } from "$app/navigation";
 	import { newToast } from "$lib/components/Toasts.svelte";
 
-	let { data, form } = $props();
+	let { form } = $props();
 
 	let someValue = $state(5);
 	let siteValue = $state(5);
