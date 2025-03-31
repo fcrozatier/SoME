@@ -19,7 +19,7 @@
 </script>
 
 <article class="layout-prose">
-	{#if !data.surveyTaken && !form?.surveySuccess}
+	{#if !form?.surveySuccess}
 		<h2>Survey</h2>
 
 		<form
@@ -151,7 +151,5 @@
 				</p>
 			{/if}
 		</form>
-	{:else if data.surveyTaken}
-		<p>You already did the survey. Thank you</p>
 	{/if}
 </article>

@@ -30,7 +30,7 @@
 <Toasts />
 
 {#snippet menu()}
-	{#if voteOpen() && data.token}
+	{#if voteOpen() && data.user?.uid}
 		<li>
 			<a
 				href="/vote"
@@ -135,7 +135,7 @@
 		</ul>
 	</dialog>
 
-	<Banner display={false && !!data.token && !data.surveyTaken} />
+	<Banner display={false && !!data.user?.uid} />
 	<Timer display={registrationOpen()}></Timer>
 
 	<main class="prose mt-8 max-w-full">
