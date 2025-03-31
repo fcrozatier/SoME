@@ -40,15 +40,6 @@
 		</li>
 	{/if}
 	{#if resultsAvailable()}
-		{#if data.isCreator}
-			<li>
-				<a
-					href="/feedback"
-					class="menu-item"
-					aria-current={page.url.pathname.includes("/feedback") ? "page" : null}>Feedback</a
-				>
-			</li>
-		{/if}
 		<li>
 			<a
 				href="/results"
