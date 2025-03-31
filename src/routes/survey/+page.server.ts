@@ -6,7 +6,7 @@ import { type Actions, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 
 export const load = async () => {
-	return redirect(302, "/");
+	redirect(302, "/");
 };
 
 const SurveySchema = z.object({
