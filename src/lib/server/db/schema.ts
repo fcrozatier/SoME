@@ -20,7 +20,9 @@ export const users = pgTable("users", {
 	passwordHash: text("password_hash"),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	isAdmin: boolean("is_admin").default(false),
-});
+}, ({ username }) => [
+	index("username_idx").on(username),
+]);
 
 export const sessions = pgTable("sessions", {
 	id: text("id").primaryKey(),
