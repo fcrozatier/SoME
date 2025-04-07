@@ -1,4 +1,18 @@
-export function clickOutside(node: Element, callback: (node?: Element) => void) {
+import type { SubmitFunction } from "@sveltejs/kit";
+
+export const disableSubmitter: SubmitFunction = ({ submitter }) => {
+	submitter?.setAttribute("disabled", "on");
+
+	return async ({ update }) => {
+		await update();
+		submitter?.removeAttribute("disabled");
+	};
+};
+
+export function clickOutside(
+	node: Element,
+	callback: (node?: Element) => void,
+) {
 	const handleClick = (e: Event) => {
 		if (node && !node.contains(e.target as Element)) {
 			callback(node);

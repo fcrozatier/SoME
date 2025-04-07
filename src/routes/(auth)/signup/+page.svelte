@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
+	import { disableSubmitter } from "$lib/actions.js";
 	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from "$lib/config";
 
 	let { form } = $props();
@@ -33,17 +34,7 @@
 		<h2>Join the competition</h2>
 		<p>By creating an account you'll be able to participate as either a creator or a judge</p>
 
-		<form
-			method="post"
-			use:enhance={({ submitter }) => {
-				submitter?.setAttribute("disabled", "on");
-
-				return async ({ update }) => {
-					await update();
-					submitter?.removeAttribute("disabled");
-				};
-			}}
-		>
+		<form method="post" use:enhance={disableSubmitter}>
 			<div class="form-control max-w-md">
 				<label for="username" class="label">
 					<span class="label-text"> Username </span>
