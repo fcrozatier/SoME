@@ -53,6 +53,7 @@
 					type="text"
 					name="username"
 					class="input-bordered input w-full"
+					placeholder="Choose your username"
 					bind:value={username}
 					aria-errormessage="username-error"
 					aria-invalid={!!form?.issues?.username}
@@ -75,6 +76,7 @@
 					type="email"
 					name="email"
 					class="input-bordered input w-full"
+					placeholder="Enter your email address"
 					bind:value={email}
 					aria-errormessage="email-error"
 					aria-invalid={!!form?.issues?.email}
@@ -97,6 +99,7 @@
 					type="password"
 					name="password"
 					class="input-bordered input w-full"
+					placeholder="Choose your password"
 					autocomplete="new-password"
 					aria-describedby="password-format"
 					minlength="8"
