@@ -28,7 +28,7 @@
 
 	<p class=" mb-16 text-center text-3xl font-light">SoME4, summer 2025, coming soon...</p>
 	<p>
-		The {FULL_NAME} ({SHORT_NAME}) is an annual competition to foster the
+		The {FULL_NAME} ({SHORT_NAME}) is an annual competition fostering the
 		creation of excellent math content online. You can participate as either a creator or judge.
 		<a href="/rules" rel="terms-of-service">Learn more</a>
 	</p>
