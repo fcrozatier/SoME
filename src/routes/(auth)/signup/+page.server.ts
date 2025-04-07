@@ -12,7 +12,7 @@ import postgres from "postgres";
 
 export const load = ({ locals }) => {
 	if (locals.user) {
-		redirect(302, "/");
+		return redirect(302, "/");
 	}
 };
 
