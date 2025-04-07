@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import ResultsPage from "./results/+page.svelte";
@@ -20,7 +21,7 @@
 </script>
 
 <svelte:head>
-	<title>{SHORT_NAME}</title>
+	{@render titleSnippet(SHORT_NAME)}
 </svelte:head>
 
 <section class="layout-prose pb-4">

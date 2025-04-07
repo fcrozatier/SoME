@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SHORT_NAME } from "$lib/config";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Admin &middot; {SHORT_NAME}</title>
+	{@render titleSnippet("Admin")}
 </svelte:head>
 
 {@render children?.()}

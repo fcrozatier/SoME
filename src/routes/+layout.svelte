@@ -7,7 +7,7 @@
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
-	import { FULL_NAME, SHORT_NAME } from "$lib/config";
+	import { FULL_NAME } from "$lib/config";
 	import { registrationOpen, resultsAvailable, voteOpen } from "$lib/utils";
 	import "../app.css";
 	import "../math.css";

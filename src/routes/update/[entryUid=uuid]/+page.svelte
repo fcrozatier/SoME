@@ -6,7 +6,7 @@
 	import { FULL_NAME, SHORT_NAME, categories } from "$lib/config";
 	import { YOUTUBE_EMBEDDABLE, registrationOpen } from "$lib/utils";
 	import { tick } from "svelte";
-	import { titleSnippet } from "../../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	let { data, form } = $props();
 
