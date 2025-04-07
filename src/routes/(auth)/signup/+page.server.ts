@@ -36,13 +36,7 @@ export const actions = {
 		let user: InsertUser = {
 			uid: crypto.randomUUID(),
 			username: validation.data.username,
-			passwordHash: await hash(validation.data.password, {
-				// recommended minimum parameters
-				memoryCost: 19456,
-				timeCost: 2,
-				outputLen: 32,
-				parallelism: 1,
-			}),
+			passwordHash: await hash(validation.data.password, auth.ARGON2_OPTIONS),
 			email: validation.data.email,
 		};
 
@@ -97,7 +91,9 @@ export const actions = {
 				console.log(error);
 
 				if (error.constraint_name === "users_email_unique") {
-					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
+					const [targetUser] = await db.select().from(users).where(
+						eq(users.email, user.email),
+					);
 
 					// Check whether it's a legacy profile (no pwd) and update
 					if (targetUser && !targetUser.passwordHash) {

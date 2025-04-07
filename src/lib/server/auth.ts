@@ -1,9 +1,17 @@
+import { type Options } from "@node-rs/argon2";
 import type { Cookies, RequestEvent } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { db } from "$lib/server/db";
 import * as table from "$lib/server/db/schema";
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+export const ARGON2_OPTIONS: Options = {
+	memoryCost: 19456,
+	timeCost: 2,
+	outputLen: 32,
+	parallelism: 1,
+};
 
 const sha256 = async (input: string) => {
 	const data = new TextEncoder().encode(input);
@@ -60,7 +68,8 @@ export async function validateSessionToken(token: string) {
 		return { session: null, user: null };
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
+	const renewSession =
+		Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
 	if (renewSession) {
 		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
 		await db
@@ -72,13 +81,19 @@ export async function validateSessionToken(token: string) {
 	return { session, user };
 }
 
-export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
+export type SessionValidationResult = Awaited<
+	ReturnType<typeof validateSessionToken>
+>;
 
 export async function invalidateSession(sessionId: string) {
 	await db.delete(table.sessions).where(eq(table.sessions.id, sessionId));
 }
 
-export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt: Date) {
+export function setSessionTokenCookie(
+	cookies: Cookies,
+	token: string,
+	expiresAt: Date,
+) {
 	cookies.set(sessionCookieName, token, {
 		expires: expiresAt,
 		path: "/",
