@@ -3,7 +3,7 @@
 	import { round } from "@fcrozatier/ts-helpers";
 
 	import * as Plot from "@observablehq/plot";
-	import { titleSnippet } from "../../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(
@@ -41,7 +41,7 @@
 			{#if !group || group?.length === 0}
 				<p>No feedback received on this entry yet</p>
 			{:else}
-				{@const median = round(group?.[0].median, 0)}
+				{@const median = round(group?.[0]?.median, 0)}
 				{@const comments = group.filter((f) => f.feedback && f.feedback !== "" && !f.maybe_rude)}
 
 				<div class="flex flex-wrap justify-center gap-x-8 gap-y-8 mb-10">

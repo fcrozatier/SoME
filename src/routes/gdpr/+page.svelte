@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { titleSnippet } from "../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 </script>
 
 <svelte:head>

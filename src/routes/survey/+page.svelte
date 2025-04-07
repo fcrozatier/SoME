@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { titleSnippet } from "../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	let { form } = $props();
 

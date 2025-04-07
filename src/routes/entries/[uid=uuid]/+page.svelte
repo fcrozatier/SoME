@@ -4,7 +4,7 @@
 	import { round } from "@fcrozatier/ts-helpers";
 
 	import * as Plot from "@observablehq/plot";
-	import { titleSnippet } from "../../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(

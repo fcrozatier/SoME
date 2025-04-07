@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import { disableSubmitter } from "$lib/actions.js";
-	import { titleSnippet } from "../../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	let { form } = $props();
 

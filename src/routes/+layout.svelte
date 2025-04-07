@@ -1,7 +1,3 @@
-<script module>
-	export { titleSnippet };
-</script>
-
 <script lang="ts">
 	import { beforeNavigate } from "$app/navigation";
 	import { page } from "$app/state";
@@ -22,10 +18,6 @@
 
 	beforeNavigate(() => dialog?.close());
 </script>
-
-{#snippet titleSnippet(t: string)}
-	<title>{t} &middot; {SHORT_NAME}</title>
-{/snippet}
 
 <svelte:head>
 	<script

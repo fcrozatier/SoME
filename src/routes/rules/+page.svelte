@@ -8,7 +8,7 @@
 	} from "$env/static/public";
 	import { FULL_NAME } from "$lib/config";
 	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils";
-	import { titleSnippet } from "../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	// let remaining = timeLeft();
 

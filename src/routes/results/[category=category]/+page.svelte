@@ -7,7 +7,7 @@
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { YOUTUBE_EMBED } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
-	import { titleSnippet } from "../../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 	import EntriesPage from "../../entries/[uid=uuid]/+page.svelte";
 
 	let { data } = $props();

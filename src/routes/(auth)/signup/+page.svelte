@@ -3,7 +3,7 @@
 	import { page } from "$app/state";
 	import { disableSubmitter } from "$lib/actions.js";
 	import { FULL_NAME } from "$lib/config";
-	import { titleSnippet } from "../../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	let { form } = $props();
 

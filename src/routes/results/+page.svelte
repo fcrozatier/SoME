@@ -3,7 +3,7 @@
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { YOUTUBE_EMBED } from "$lib/utils.js";
-	import { titleSnippet } from "../+layout.svelte";
+	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	let { data } = $props();
 
