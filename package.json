@@ -13,7 +13,6 @@
 		"preview": "vite preview",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
@@ -51,6 +50,7 @@
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.782.0",
 		"@fcrozatier/ts-helpers": "^2.10.0",
+		"@node-rs/argon2": "^2.0.2",
 		"@observablehq/plot": "^0.6.17",
 		"drizzle-orm": "^0.41.0",
 		"form-data": "^4.0.2",
