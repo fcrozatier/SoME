@@ -1,4 +1,8 @@
-import { type Options } from "@node-rs/argon2";
+import {
+	hash as argon2Hash,
+	type Options,
+	verify as argon2Verify,
+} from "@node-rs/argon2";
 import type { Cookies, RequestEvent } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { db } from "$lib/server/db";
@@ -12,6 +16,9 @@ export const ARGON2_OPTIONS: Options = {
 	outputLen: 32,
 	parallelism: 1,
 };
+
+export const hash = argon2Hash;
+export const verify = argon2Verify;
 
 const sha256 = async (input: string) => {
 	const data = new TextEncoder().encode(input);

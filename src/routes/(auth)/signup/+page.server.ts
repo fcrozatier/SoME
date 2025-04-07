@@ -5,7 +5,6 @@ import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { type InsertUser, users } from "$lib/server/db/schema.js";
 import { addToMailingList, validateEmail } from "$lib/server/email";
 import { InsertUserSchema } from "$lib/validation";
-import { hash } from "@node-rs/argon2";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { type ValidationIssue } from "formgator";
@@ -36,7 +35,10 @@ export const actions = {
 		let user: InsertUser = {
 			uid: crypto.randomUUID(),
 			username: validation.data.username,
-			passwordHash: await hash(validation.data.password, auth.ARGON2_OPTIONS),
+			passwordHash: await auth.hash(
+				validation.data.password,
+				auth.ARGON2_OPTIONS,
+			),
 			email: validation.data.email,
 		};
 
