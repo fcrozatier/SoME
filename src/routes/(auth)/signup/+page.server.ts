@@ -35,10 +35,7 @@ export const actions = {
 		let user: InsertUser = {
 			uid: crypto.randomUUID(),
 			username: validation.data.username,
-			passwordHash: await auth.hash(
-				validation.data.password,
-				auth.ARGON2_OPTIONS,
-			),
+			passwordHash: await auth.hash(validation.data.password),
 			email: validation.data.email,
 		};
 

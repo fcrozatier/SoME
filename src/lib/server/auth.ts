@@ -10,15 +10,20 @@ import * as table from "$lib/server/db/schema";
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-export const ARGON2_OPTIONS: Options = {
+const ARGON2_OPTIONS: Options = {
 	memoryCost: 19456,
 	timeCost: 2,
 	outputLen: 32,
 	parallelism: 1,
 };
 
-export const hash = argon2Hash;
-export const verify = argon2Verify;
+export const hash = (password: string | Uint8Array) =>
+	argon2Hash(password, ARGON2_OPTIONS);
+
+export const verify = (
+	hashed: string | Uint8Array,
+	password: string | Uint8Array,
+) => argon2Verify(hashed, password, ARGON2_OPTIONS);
 
 const sha256 = async (input: string) => {
 	const data = new TextEncoder().encode(input);
