@@ -80,6 +80,14 @@ const JudgeSchema = z.object({
 	rules: CheckboxSchema,
 });
 
+export const InsertUserSchema = fg.form({
+	username: fg.text({ maxlength: 32, required: true }),
+	// Add pattern
+	password: fg.password({ minlength: 8, required: true }),
+	email: FGEmailSchema,
+	rules: fg.checkbox({ required: true }),
+});
+
 const TitleSchema = z
 	.string()
 	.trim()
