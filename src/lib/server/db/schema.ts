@@ -15,9 +15,19 @@ import { categories } from "../../config";
 
 export const users = pgTable("users", {
 	uid: uuid("uid").primaryKey(),
+	username: varchar("username", { length: 32 }),
 	email: varchar("email", { length: 128 }).unique().notNull(),
+	passwordHash: text("password_hash"),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	isAdmin: boolean("is_admin").default(false),
+});
+
+export const sessions = pgTable("sessions", {
+	id: text("id").primaryKey(),
+	userUid: uuid("user_uid").notNull().references(() => users.uid, {
+		onDelete: "cascade",
+	}),
+	expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
 });
 
 export const entries = pgTable("entries", {
@@ -36,14 +46,16 @@ export const entries = pgTable("entries", {
 export const usersToEntries = pgTable(
 	"user_to_entry",
 	{
-		userUid: uuid("user_uid").references(() => users.uid, { onDelete: "cascade" }),
-		entryUid: uuid("entry_uid").references(() => entries.uid, { onDelete: "cascade" }),
+		userUid: uuid("user_uid").references(() => users.uid, {
+			onDelete: "cascade",
+		}),
+		entryUid: uuid("entry_uid").references(() => entries.uid, {
+			onDelete: "cascade",
+		}),
 	},
-	({ userUid, entryUid }) => {
-		return {
-			pk: primaryKey({ columns: [userUid, entryUid] }),
-		};
-	},
+	({ entryUid, userUid }) => [
+		primaryKey({ columns: [userUid, entryUid] }),
+	],
 );
 
 export const votes = pgTable(
@@ -61,12 +73,10 @@ export const votes = pgTable(
 			.references(() => entries.uid, { onDelete: "cascade" })
 			.notNull(),
 	},
-	({ userUid, entryUid }) => {
-		return {
-			pk: primaryKey({ columns: [userUid, entryUid] }),
-			entryIdx: index("entry_idx").on(entryUid),
-		};
-	},
+	({ userUid, entryUid }) => [
+		primaryKey({ columns: [userUid, entryUid] }),
+		index("entry_idx").on(entryUid),
+	],
 );
 
 export const flags = pgTable(
@@ -81,12 +91,10 @@ export const flags = pgTable(
 		reason: text("reason").notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => {
-		return {
-			pk: primaryKey({ columns: [userUid, entryUid] }),
-			entryIdx: index().on(entryUid),
-		};
-	},
+	({ userUid, entryUid }) => [
+		primaryKey({ columns: [userUid, entryUid] }),
+		index().on(entryUid),
+	],
 );
 
 export const skips = pgTable(
@@ -100,12 +108,10 @@ export const skips = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => {
-		return {
-			pk: primaryKey({ columns: [userUid, entryUid] }),
-			entryIdx: index().on(entryUid),
-		};
-	},
+	({ userUid, entryUid }) => [
+		primaryKey({ columns: [userUid, entryUid] }),
+		index().on(entryUid),
+	],
 );
 
 export const cache = pgTable(
@@ -120,31 +126,33 @@ export const cache = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, category, entryUid }) => {
-		return {
-			pk: primaryKey({ columns: [userUid, category] }),
-			entryIdx: index().on(entryUid),
-		};
-	},
+	({ userUid, category, entryUid }) => [
+		primaryKey({ columns: [userUid, category] }),
+		index().on(entryUid),
+	],
 );
 
 export const surveys = pgTable(
 	"surveys",
 	{
 		id: serial("id").primaryKey(),
-		userUid: uuid("user_uid").references(() => users.uid, { onDelete: "cascade" }),
+		userUid: uuid("user_uid").references(() => users.uid, {
+			onDelete: "cascade",
+		}),
 		some: decimal("some", { precision: 4, scale: 2 }).notNull(),
 		site: decimal("site", { precision: 4, scale: 2 }).notNull(),
 		feedback: text("feedback"),
 		offSeason: boolean("off_season"),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid }) => ({
-		userIdx: index().on(userUid),
-	}),
+	({ userUid }) => [
+		index().on(userUid),
+	],
 );
 
-export type NewUser = typeof users.$inferInsert;
+export type InsertUser = typeof users.$inferInsert;
+export type User = typeof users.$inferSelect;
+export type Session = typeof sessions.$inferSelect;
 export type SelectEntry = typeof entries.$inferSelect;
 export type SelectVote = typeof votes.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;
