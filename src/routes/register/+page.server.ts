@@ -1,161 +1,125 @@
 import { dev } from "$app/environment";
-import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from "$env/static/public";
+import * as auth from "$lib/server/auth.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import {
-	entries,
-	users as usersTable,
-	usersToEntries,
-	type InsertUser,
-} from "$lib/server/db/schema.js";
-import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
-import { saveThumbnail } from "$lib/server/s3";
-import { RegistrationSchema, validateForm } from "$lib/validation";
-import { normalizeYoutubeLink, phaseOpen, registrationOpen, YOUTUBE_EMBEDDABLE } from "$lib/utils";
-import { error, fail } from "@sveltejs/kit";
-import { inArray } from "drizzle-orm";
+import { type InsertUser, users } from "$lib/server/db/schema.js";
+import { addToMailingList, validateEmail } from "$lib/server/email";
+import { InsertUserSchema } from "$lib/validation";
+import { hash } from "@node-rs/argon2";
+import { fail, redirect } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
+import { type ValidationIssue } from "formgator";
 import postgres from "postgres";
 
 export const load = ({ locals }) => {
-	if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END) && !locals.isAdmin) {
-		throw error(403, "The registration phase is not open");
+	if (locals.user) {
+		redirect(302, "/");
 	}
-	return { isAdmin: locals.isAdmin };
 };
 
 export const actions = {
-	default: async ({ request, locals }) => {
-		if (!phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END) && !locals.isAdmin) {
-			return fail(422, { invalid: true });
-		}
+	default: async ({ request, cookies }) => {
+		const formData = await request.formData();
+		const validation = InsertUserSchema.safeParse(formData);
 
-		const validation = await validateForm(request, RegistrationSchema);
+		const issues = {
+			username: undefined as ValidationIssue | undefined,
+			password: undefined as ValidationIssue | undefined,
+			email: undefined as ValidationIssue | undefined,
+			rules: undefined as ValidationIssue | undefined,
+		};
 
 		if (!validation.success) {
-			return fail(400, validation.error.flatten());
+			return fail(400, validation.error);
 		}
 
-		let entryUid = "";
-		let users: { token: string; email: string }[] = [
-			{ email: validation.data.email, token: crypto.randomUUID() },
-		];
-		if (validation.data.userType === "creator") {
-			validation.data.others.forEach((x) => users.push({ email: x, token: crypto.randomUUID() }));
-		}
+		let user: InsertUser = {
+			uid: crypto.randomUUID(),
+			username: validation.data.username,
+			passwordHash: await hash(validation.data.password, {
+				// recommended minimum parameters
+				memoryCost: 19456,
+				timeCost: 2,
+				outputLen: 32,
+				parallelism: 1,
+			}),
+			email: validation.data.email,
+		};
 
 		// Email deliverability validation
 		if (!dev) {
-			const emailValidation = await Promise.all(
-				[...users].map(async ({ email }) => await validateEmail(email)),
-			);
-			if (emailValidation.some((x) => x === null)) {
-				return fail(400, { invalid: true });
+			const emailValidation = await validateEmail(user.email);
+
+			if (emailValidation?.result !== "deliverable") {
+				issues.email = {
+					code: "custom",
+					message: "Undeliverable email",
+				};
+
+				return fail(400, { issues });
 			}
-			const undeliverable = emailValidation.find((x) => x?.result !== "deliverable");
-			if (undeliverable) {
-				return fail(400, { undeliverable: undeliverable.address });
-			}
+		}
+
+		// Unique username
+		const [other] = await db.select().from(users).where(
+			eq(users.username, validation.data.username),
+		);
+
+		if (other) {
+			issues.username = { code: "custom", message: "Username already taken" };
+			return fail(400, { issues });
 		}
 
 		// Save data
 		try {
-			if (validation.data.userType === "creator") {
-				if (!registrationOpen() && !locals.isAdmin) {
-					return fail(422, { closedForCreators: true });
-				}
-				const { thumbnail, link } = validation.data;
-				let thumbnailKey = null;
-				let normalizedLink = link;
-				if (!YOUTUBE_EMBEDDABLE.test(link)) {
-					if (!thumbnail) return fail(400, { thumbnailRequired: true });
+			await db.insert(users).values(user);
 
-					thumbnailKey = crypto.randomUUID() + ".webp";
-				} else {
-					// Normalize youtube links
-					normalizedLink = normalizeYoutubeLink(link);
-				}
-
-				entryUid = crypto.randomUUID();
-
-				await db.insert(entries).values({
-					category: validation.data.category,
-					title: validation.data.title,
-					url: normalizedLink,
-					description: validation.data.description,
-					thumbnail: thumbnailKey,
-					uid: entryUid,
-				});
-
-				// Save thumbnail after the entry: we know it's not a duplicate
-				if (!dev && thumbnail && thumbnailKey) {
-					await saveThumbnail(thumbnail, thumbnailKey);
-				}
-
-				const values: InsertUser[] = users.map((u) => {
-					return { email: u.email, uid: u.token };
-				});
-
-				// Maybe not all users are inserted if they are in other groups
-				await db.insert(usersTable).values(values).onConflictDoNothing();
-
-				// Update all users token with the real uids
-				users = await db
-					.select({ token: usersTable.uid, email: usersTable.email })
-					.from(usersTable)
-					.where(
-						inArray(
-							usersTable.email,
-							values.map((v) => v.email),
-						),
-					);
-
-				await db.insert(usersToEntries).values(users.map((a) => ({ userUid: a.token, entryUid })));
-			} else {
-				await db.insert(usersTable).values({
-					uid: users[0].token,
-					email: users[0].email,
-				});
-			}
+			const sessionToken = auth.generateSessionToken();
+			const session = await auth.createSession(sessionToken, user.uid);
+			auth.setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
 
 			if (!dev) {
 				try {
-					for (const user of users) {
-						await addToMailingList(user.email, user.token);
-						await sendEmail(user.email, "registration", { token: user.token });
-
-						if (validation.data.userType === "creator") {
-							await sendEmail(user.email, "update", { token: entryUid });
-						}
-					}
+					await addToMailingList(user.email, user.uid);
 				} catch (e) {
-					console.error("Cannot send email", e);
+					console.error("[Registration]: couldn't add to mailing list", e);
 				}
 			}
-			return {
-				success: true,
-				user: users.length === 1 ? users[0] : { email: "", token: "" },
-				entryUid,
-			};
+			return { success: true };
 		} catch (error) {
-			console.log("something went wrong", error);
+			console.log("[Registration]:", error);
+
 			if (
 				error instanceof postgres.PostgresError &&
 				error.code === postgresErrorCode.unique_violation
 			) {
-				console.log(error.message);
-				if (error.constraint_name === "users_email_unique") {
-					// Only the judges flow can arrive here as we do not block the creator flow on duplicates emails. Example detail
-					// Key (email)=(alice@gmail.com) already exists.
-					const match = error.detail?.match(/\(email\)=\((.*)\)/);
-					const email = match ? match[1] : "";
+				console.log(error);
 
-					return fail(422, { emailExists: email });
-				} else if (error.constraint_name === "entries_url_unique") {
-					return fail(422, { linkExists: true });
+				if (error.constraint_name === "users_email_unique") {
+					const [targetUser] = await db.select().from(users).where(
+						eq(users.email, user.email),
+					);
+
+					// Check whether it's a legacy profile (no pwd) and update
+					if (targetUser && !targetUser.passwordHash) {
+						await db.update(users).set({
+							username: user.username,
+							passwordHash: user.passwordHash,
+						}).where(eq(users.email, user.email));
+
+						return { success: true };
+					}
+
+					issues.email = {
+						code: "custom",
+						message: "Profile already exists",
+					};
+
+					return fail(400, { issues });
 				}
 			}
-			console.log(error);
-			return fail(500, { network: true });
+
+			return fail(500);
 		}
 	},
 };
