@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	{@render titleSnippet("Algorithm")}
+{@render titleSnippet("Algorithm")}
 </svelte:head>
 
 ## Algorithm

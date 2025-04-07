@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	{@render titleSnippet("Content Policy")}
+{@render titleSnippet("Content Policy")}
 </svelte:head>
 
 ## Content Policy

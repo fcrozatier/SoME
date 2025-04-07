@@ -61,9 +61,10 @@ export const actions = {
 		}
 
 		// Unique username
-		const [other] = await db.select().from(users).where(
-			eq(users.username, validation.data.username),
-		);
+		const [other] = await db
+			.select()
+			.from(users)
+			.where(eq(users.username, validation.data.username));
 
 		if (other) {
 			issues.username = { code: "custom", message: "Username already taken" };
@@ -96,16 +97,17 @@ export const actions = {
 				console.log(error);
 
 				if (error.constraint_name === "users_email_unique") {
-					const [targetUser] = await db.select().from(users).where(
-						eq(users.email, user.email),
-					);
+					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
 
 					// Check whether it's a legacy profile (no pwd) and update
 					if (targetUser && !targetUser.passwordHash) {
-						await db.update(users).set({
-							username: user.username,
-							passwordHash: user.passwordHash,
-						}).where(eq(users.email, user.email));
+						await db
+							.update(users)
+							.set({
+								username: user.username,
+								passwordHash: user.passwordHash,
+							})
+							.where(eq(users.email, user.email));
 
 						return { success: true };
 					}

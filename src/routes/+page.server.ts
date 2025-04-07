@@ -27,8 +27,7 @@ export const actions: Actions = {
 		const email = data.email;
 
 		// Find user
-		const user =
-			(await db.select().from(users).where(eq(users.email, email)))[0];
+		const user = (await db.select().from(users).where(eq(users.email, email)))[0];
 
 		if (user) {
 			return fail(400, {
@@ -65,8 +64,7 @@ export const actions: Actions = {
 	resend_link: formgate({ email: FGEmailSchema }, async (data) => {
 		try {
 			// Find user
-			const user =
-				(await db.select().from(users).where(eq(users.email, data.email)))[0];
+			const user = (await db.select().from(users).where(eq(users.email, data.email)))[0];
 
 			if (!user) {
 				return fail(400, {
