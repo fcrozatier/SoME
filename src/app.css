@@ -198,6 +198,10 @@ summary::after {
 	text-box-edge: cap;
 }
 
+.error-message {
+	@apply block text-sm text-red-600
+}
+
 .layout-prose {
 	@apply mx-auto max-w-prose px-8;
 }
