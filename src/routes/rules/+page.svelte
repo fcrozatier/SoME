@@ -7,7 +7,7 @@
 		PUBLIC_VOTE_START,
 	} from "$env/static/public";
 	import Time from "$lib/components/Time.svelte";
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from "$lib/config";
+	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils";
 
 	// let remaining = timeLeft();
@@ -55,7 +55,7 @@
 </script>
 
 <svelte:head>
-	<title>Rules &middot; {COMPETITION_SHORT_NAME}</title>
+	<title>Rules &middot; {SHORT_NAME}</title>
 </svelte:head>
 
 <article class="layout-prose">
@@ -238,7 +238,7 @@
 			</summary>
 			<p>By registering as a creator you agree to the following copyright notice:</p>
 			<p class="indent-8 italic">
-				I have permission to use all material contained in my submission for the {COMPETITION_FULL_NAME}.
+				I have permission to use all material contained in my submission for the {FULL_NAME}.
 			</p>
 			<ul>
 				<li>

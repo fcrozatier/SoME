@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { COMPETITION_SHORT_NAME } from "$lib/config";
+	import { SHORT_NAME } from "$lib/config";
 </script>
 
 <svelte:head>
-	<title>Contact &middot; {COMPETITION_SHORT_NAME}</title>
+	<title>Contact &middot; {SHORT_NAME}</title>
 </svelte:head>
 
 <article class="layout-prose">

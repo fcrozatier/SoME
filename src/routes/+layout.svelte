@@ -7,7 +7,7 @@
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
-	import { COMPETITION_FULL_NAME } from "$lib/config";
+	import { FULL_NAME } from "$lib/config";
 	import { registrationOpen, resultsAvailable, voteOpen } from "$lib/utils";
 	import "../app.css";
 	import "../math.css";
@@ -130,7 +130,7 @@
 	<Timer display={registrationOpen()}></Timer>
 
 	<main class="prose mt-8 max-w-full">
-		<h1 class="text-center">{COMPETITION_FULL_NAME}</h1>
+		<h1 class="text-center">{FULL_NAME}</h1>
 		{@render children?.()}
 	</main>
 

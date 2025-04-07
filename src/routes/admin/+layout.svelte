@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { COMPETITION_SHORT_NAME } from "$lib/config";
+	import { SHORT_NAME } from "$lib/config";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Admin &middot; {COMPETITION_SHORT_NAME}</title>
+	<title>Admin &middot; {SHORT_NAME}</title>
 </svelte:head>
 
 {@render children?.()}

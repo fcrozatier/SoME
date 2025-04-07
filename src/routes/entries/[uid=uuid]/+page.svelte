@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Display from "$lib/components/Display.svelte";
 	import Bento from "$lib/components/Bento.svelte";
-	import { COMPETITION_SHORT_NAME } from "$lib/config";
+	import { SHORT_NAME } from "$lib/config";
 	import { round } from "@fcrozatier/ts-helpers";
 
 	import * as Plot from "@observablehq/plot";
@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-	<title>Feedback &middot; {COMPETITION_SHORT_NAME}</title>
+	<title>Feedback &middot; {SHORT_NAME}</title>
 </svelte:head>
 
 <article class="layout-prose">

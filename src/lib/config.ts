@@ -1,6 +1,6 @@
 // The competition name
-export const COMPETITION_FULL_NAME = "Summer of Math Exposition";
-export const COMPETITION_SHORT_NAME = "SoME";
+export const FULL_NAME = "Summer of Math Exposition";
+export const SHORT_NAME = "SoME";
 
 // The different possible categories for entries
 // No space as the strings are used in vote url
@@ -25,7 +25,7 @@ export const templateNames = [
  */
 export const emailTemplates = {
 	"end of peer review": {
-		subject: `The ${COMPETITION_FULL_NAME} Peer Review is now over!`,
+		subject: `The ${FULL_NAME} Peer Review is now over!`,
 		variables: ["token"],
 	},
 	"top 100": {
@@ -33,12 +33,12 @@ export const emailTemplates = {
 		variables: ["token"],
 	},
 	token_reminder: {
-		subject: `${COMPETITION_FULL_NAME} vote is starting soon`,
+		subject: `${FULL_NAME} vote is starting soon`,
 		variables: ["token"],
 	},
-	registration: { subject: `${COMPETITION_FULL_NAME} registration`, variables: ["token"] },
+	registration: { subject: `${FULL_NAME} registration`, variables: ["token"] },
 	update: { subject: `How to update your entry`, variables: ["token"] },
-	resend_token: { subject: `Your link for the ${COMPETITION_FULL_NAME}`, variables: ["token"] },
+	resend_token: { subject: `Your link for the ${FULL_NAME}`, variables: ["token"] },
 } as const;
 
 export type TemplateName = keyof typeof emailTemplates;

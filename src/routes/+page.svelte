@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from "$lib/config";
+	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import ResultsPage from "./results/+page.svelte";
 
 	let { data, form } = $props();
@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>{COMPETITION_SHORT_NAME}</title>
+	<title>{SHORT_NAME}</title>
 </svelte:head>
 
 <section class="layout-prose pb-4">
@@ -28,7 +28,7 @@
 
 	<p class=" mb-16 text-center text-3xl font-light">SoME4, summer 2025, coming soon...</p>
 	<p>
-		The {COMPETITION_FULL_NAME} ({COMPETITION_SHORT_NAME}) is an annual competition to foster the
+		The {FULL_NAME} ({SHORT_NAME}) is an annual competition to foster the
 		creation of excellent math content online. You can participate as either a creator or judge.
 		<a href="/rules" rel="terms-of-service">Learn more</a>
 	</p>

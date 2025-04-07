@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import { disableSubmitter } from "$lib/actions.js";
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from "$lib/config";
+	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 
 	let { form } = $props();
 
@@ -24,12 +24,12 @@
 </script>
 
 <svelte:head>
-	<title>Join &middot; {COMPETITION_SHORT_NAME}</title>
+	<title>Join &middot; {SHORT_NAME}</title>
 </svelte:head>
 
 <article class="layout-prose">
 	{#if form?.success}
-		<h2>Welcome to the {COMPETITION_FULL_NAME} community!</h2>
+		<h2>Welcome to the {FULL_NAME} community!</h2>
 	{:else}
 		<h2>Join the competition</h2>
 		<p>By creating an account you'll be able to participate as either a creator or a judge</p>
