@@ -21,19 +21,14 @@ export const actions = {
 			return fail(400, { issues });
 		}
 
-		const [user] = await db.select().from(users).where(
-			eq(users.email, validation.data.email),
-		);
+		const [user] = await db.select().from(users).where(eq(users.email, validation.data.email));
 
 		if (!user?.passwordHash) {
 			return fail(400, { issues });
 		}
 
 		// Verify password
-		const validPassword = await auth.verify(
-			user.passwordHash,
-			validation.data.password,
-		);
+		const validPassword = await auth.verify(user.passwordHash, validation.data.password);
 
 		if (!validPassword) {
 			return fail(400, { issues });

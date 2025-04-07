@@ -18,6 +18,5 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	logout: async (event) => {
-	},
+	logout: async (event) => {},
 };
