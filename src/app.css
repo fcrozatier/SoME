@@ -199,7 +199,7 @@ summary::after {
 }
 
 .error-message {
-	@apply block text-sm text-red-600
+	@apply block text-sm text-red-600;
 }
 
 .layout-prose {
