@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { SHORT_NAME } from "$lib/config";
+	import { titleSnippet } from "../+layout.svelte";
 </script>
 
 <svelte:head>
-	<title>Privacy policy &middot; {SHORT_NAME}</title>
+	{@render titleSnippet("Privacy Policy")}
 </svelte:head>
 
 <article class="layout-prose">

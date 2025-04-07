@@ -3,9 +3,10 @@
 	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from "$lib/config";
+	import { FULL_NAME, SHORT_NAME, categories } from "$lib/config";
 	import { YOUTUBE_EMBEDDABLE, registrationOpen } from "$lib/utils";
 	import { tick } from "svelte";
+	import { titleSnippet } from "../../+layout.svelte";
 
 	let { data, form } = $props();
 
@@ -46,7 +47,7 @@
 </script>
 
 <svelte:head>
-	<title>Update &middot; {COMPETITION_SHORT_NAME}</title>
+	{@render titleSnippet("Update")}
 </svelte:head>
 
 <article class="layout-prose">
@@ -265,7 +266,7 @@
 			<label for="copyright" class="label items-start justify-normal gap-4">
 				<input id="copyright" type="checkbox" name="copyright" class="checkbox" required />
 				<span class="label-text">
-					I have permission to use all material contained in my submission for the {COMPETITION_FULL_NAME}.
+					I have permission to use all material contained in my submission for the {FULL_NAME}.
 					<ul class="relative right-6 list-outside">
 						<li>
 							<a href="/content-policy#fair-use"

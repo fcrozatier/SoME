@@ -1,3 +1,7 @@
+<script module>
+	export { titleSnippet };
+</script>
+
 <script lang="ts">
 	import { beforeNavigate } from "$app/navigation";
 	import { page } from "$app/state";
@@ -7,7 +11,7 @@
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
-	import { FULL_NAME } from "$lib/config";
+	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { registrationOpen, resultsAvailable, voteOpen } from "$lib/utils";
 	import "../app.css";
 	import "../math.css";
@@ -18,6 +22,10 @@
 
 	beforeNavigate(() => dialog?.close());
 </script>
+
+{#snippet titleSnippet(t: string)}
+	<title>{t} &middot; {SHORT_NAME}</title>
+{/snippet}
 
 <svelte:head>
 	<script

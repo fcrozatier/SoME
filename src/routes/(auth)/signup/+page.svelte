@@ -2,7 +2,8 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import { disableSubmitter } from "$lib/actions.js";
-	import { FULL_NAME, SHORT_NAME } from "$lib/config";
+	import { FULL_NAME } from "$lib/config";
+	import { titleSnippet } from "../../+layout.svelte";
 
 	let { form } = $props();
 
@@ -24,7 +25,7 @@
 </script>
 
 <svelte:head>
-	<title>Join &middot; {SHORT_NAME}</title>
+	{@render titleSnippet("Join")}
 </svelte:head>
 
 <article class="layout-prose">

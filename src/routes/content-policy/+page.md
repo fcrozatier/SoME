@@ -1,16 +1,16 @@
 <script>
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
+	import { FULL_NAME } from '$lib/config';
+  import { titleSnippet } from '../+layout.svelte';
 </script>
 
 <svelte:head>
-
-<title>Content Policy &middot; {COMPETITION_SHORT_NAME}</title>
+	{@render titleSnippet("Content Policy")}
 </svelte:head>
 
 ## Content Policy
 
 Please note that this page does not contain legal advice. Rather, it is a set of guidelines to
-follow to make sure that your submission to the {COMPETITION_FULL_NAME} abides by proper copyright law.
+follow to make sure that your submission to the {FULL_NAME} abides by proper copyright law.
 
 In general, as long as you double-check to make sure you have permission to use all material
 (music, video, imagery, text, etc.) contained in your submission to the Summer of Math

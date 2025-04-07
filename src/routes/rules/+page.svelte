@@ -6,9 +6,9 @@
 		PUBLIC_VOTE_END,
 		PUBLIC_VOTE_START,
 	} from "$env/static/public";
-	import Time from "$lib/components/Time.svelte";
-	import { FULL_NAME, SHORT_NAME } from "$lib/config";
+	import { FULL_NAME } from "$lib/config";
 	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils";
+	import { titleSnippet } from "../+layout.svelte";
 
 	// let remaining = timeLeft();
 
@@ -55,7 +55,7 @@
 </script>
 
 <svelte:head>
-	<title>Rules &middot; {SHORT_NAME}</title>
+	{@render titleSnippet("Rules")}
 </svelte:head>
 
 <article class="layout-prose">

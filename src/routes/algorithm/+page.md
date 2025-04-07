@@ -1,19 +1,19 @@
 <script>
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME } from '$lib/config';
+	import { FULL_NAME } from '$lib/config';
 	import K from '$lib/components/K.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
+	import { titleSnippet } from '../+layout.svelte';
 </script>
 
 <svelte:head>
-
-<title>Algorithm &middot; {COMPETITION_SHORT_NAME}</title>
+	{@render titleSnippet("Algorithm")}
 </svelte:head>
 
 ## Algorithm
 
 There are numerous [voting systems](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems#Comparison_of_single-winner_voting_methods) for single or multi-winner evaluations, but none are designed for massive competitions with hundreds of candidates and partial information, where voters only know a fraction of the candidates.
 
-This article details the algorithm currently in use by the {COMPETITION_FULL_NAME}, along with its explanation and history.
+This article details the algorithm currently in use by the {FULL_NAME}, along with its explanation and history.
 
 ### History
 

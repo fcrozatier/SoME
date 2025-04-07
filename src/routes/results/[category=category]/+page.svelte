@@ -7,6 +7,7 @@
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { YOUTUBE_EMBED } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
+	import { titleSnippet } from "../../+layout.svelte";
 	import EntriesPage from "../../entries/[uid=uuid]/+page.svelte";
 
 	let { data } = $props();
@@ -45,7 +46,7 @@
 </script>
 
 <svelte:head>
-	<title>Ranking &middot; SoME</title>
+	{@render titleSnippet("Ranking")}
 </svelte:head>
 
 <section class="layout-prose">

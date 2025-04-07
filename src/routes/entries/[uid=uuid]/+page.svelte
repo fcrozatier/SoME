@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Display from "$lib/components/Display.svelte";
 	import Bento from "$lib/components/Bento.svelte";
-	import { SHORT_NAME } from "$lib/config";
+	import Display from "$lib/components/Display.svelte";
 	import { round } from "@fcrozatier/ts-helpers";
 
 	import * as Plot from "@observablehq/plot";
+	import { titleSnippet } from "../../+layout.svelte";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(
@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-	<title>Feedback &middot; {SHORT_NAME}</title>
+	{@render titleSnippet("Feedback")}
 </svelte:head>
 
 <article class="layout-prose">

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { SHORT_NAME } from "$lib/config";
 	import type { Snippet } from "svelte";
+	import { titleSnippet } from "../../+layout.svelte";
 
 	interface Props {
 		children?: Snippet;
@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Vote &middot; {SHORT_NAME}</title>
+	{@render titleSnippet("Vote")}
 </svelte:head>
 
 {@render children?.()}

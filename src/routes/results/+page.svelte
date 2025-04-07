@@ -3,6 +3,7 @@
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { YOUTUBE_EMBED } from "$lib/utils.js";
+	import { titleSnippet } from "../+layout.svelte";
 
 	let { data } = $props();
 
@@ -19,7 +20,7 @@
 />
 
 <svelte:head>
-	<title>Results &middot; SoME</title>
+	{@render titleSnippet("Results")}
 </svelte:head>
 
 <section class="layout-prose pb-10 text-center">

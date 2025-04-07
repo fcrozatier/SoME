@@ -8,6 +8,7 @@
 	import { categories } from "$lib/config.js";
 	import { YOUTUBE_EMBED } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
+	import { titleSnippet } from "../+layout.svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 
 	let { data } = $props();
@@ -50,7 +51,7 @@
 </script>
 
 <svelte:head>
-	<title>Archive &middot; SoME</title>
+	{@render titleSnippet("Archive")}
 </svelte:head>
 
 <section class="layout-prose pb-10">
