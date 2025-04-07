@@ -74,12 +74,6 @@ const CheckboxSchema = z.literal("on", {
 	},
 });
 
-const JudgeSchema = z.object({
-	userType: z.literal("judge"),
-	email: EmailSchema,
-	rules: CheckboxSchema,
-});
-
 export const InsertUserSchema = fg.form({
 	username: fg.text({ maxlength: 32, required: true }),
 	// Add pattern
@@ -133,11 +127,6 @@ export const CreatorSchema = z.object({
 	rules: CheckboxSchema,
 	copyright: CheckboxSchema,
 });
-
-export const RegistrationSchema = z.discriminatedUnion("userType", [
-	JudgeSchema,
-	CreatorSchema,
-]);
 
 export const FeedbackSchema = z
 	.string()
