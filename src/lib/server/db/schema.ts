@@ -20,10 +20,17 @@ export const users = pgTable(
 		username: varchar("username", { length: 32 }),
 		email: varchar("email", { length: 128 }).unique().notNull(),
 		passwordHash: text("password_hash"),
+		newPasswordHash: text("new_password_hash"),
+		newPasswordValidationToken: uuid("new_password_validation_token"),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 		isAdmin: boolean("is_admin").default(false),
 	},
-	({ username }) => [index("username_idx").on(username)],
+	(
+		{ username, newPasswordValidationToken },
+	) => [
+		index("username_idx").on(username),
+		index("new_password_validation_token_idx").on(newPasswordValidationToken),
+	],
 );
 
 export const sessions = pgTable("sessions", {
@@ -95,7 +102,9 @@ export const flags = pgTable(
 		reason: text("reason").notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const skips = pgTable(
@@ -109,7 +118,9 @@ export const skips = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const cache = pgTable(
