@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
-	import { disableSubmitter } from "$lib/actions.js";
+	import { reportValidity } from "$lib/actions.js";
 	import { FULL_NAME } from "$lib/config";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
+	import { setTitle } from "$lib/utils.js";
 
 	let { form } = $props();
 
@@ -11,22 +11,17 @@
 		capture: () => {
 			return {
 				username,
-				email,
 			};
 		},
 		restore: (v) => {
 			username = v.username;
-			email = v.email;
 		},
 	};
 
 	let username = $state("");
-	let email = $state("");
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Join")}
-</svelte:head>
+	setTitle("Signup");
+</script>
 
 <article class="layout-prose">
 	{#if form?.success}
@@ -35,7 +30,7 @@
 		<h2>Join the competition</h2>
 		<p>By creating an account you'll be able to participate as either a creator or a judge</p>
 
-		<form method="post" use:enhance={disableSubmitter}>
+		<form method="post" use:enhance={reportValidity}>
 			<div class="form-control max-w-md">
 				<label for="username" class="label">
 					<span class="label-text"> Username </span>
@@ -69,7 +64,6 @@
 					name="email"
 					class="input-bordered input w-full"
 					placeholder="Enter your email address"
-					bind:value={email}
 					aria-errormessage="email-error"
 					aria-invalid={!!form?.issues?.email}
 					autocomplete="email"
@@ -93,12 +87,14 @@
 					class="input-bordered input w-full"
 					placeholder="Choose your password"
 					autocomplete="new-password"
+					aria-errormessage="password-error"
+					aria-invalid={!!form?.issues?.password}
 					aria-describedby="password-format"
 					minlength="8"
 					required
 				/>
 				{#if form?.issues?.password}
-					<span class="error-message">{form.issues.password.message}</span>
+					<span id="password-error" class="error-message">{form.issues.password.message}</span>
 				{/if}
 				<span id="password-format" class={`text-sm text-gray-500`}>
 					8 characters minimum, with lowercase, uppercase and number

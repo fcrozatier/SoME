@@ -4,10 +4,10 @@ import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { type InsertUser, users } from "$lib/server/db/schema.js";
 import { addToMailingList, validateEmail } from "$lib/server/email";
-import { InsertUserSchema } from "$lib/validation";
+import { InsertUserSchema } from "$lib/validation.js";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
-import { type ValidationIssue } from "formgator";
+import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
 export const load = ({ locals }) => {
@@ -17,39 +17,20 @@ export const load = ({ locals }) => {
 };
 
 export const actions = {
-	default: async ({ request, cookies }) => {
-		const formData = await request.formData();
-		const validation = InsertUserSchema.safeParse(formData);
-
-		const issues = {
-			username: undefined as ValidationIssue | undefined,
-			password: undefined as ValidationIssue | undefined,
-			email: undefined as ValidationIssue | undefined,
-			rules: undefined as ValidationIssue | undefined,
-		};
-
-		if (!validation.success) {
-			return fail(400, validation.error);
-		}
-
-		let user: InsertUser = {
+	default: formgate(InsertUserSchema, async (data, { cookies }) => {
+		const user: InsertUser = {
 			uid: crypto.randomUUID(),
-			username: validation.data.username,
-			passwordHash: await auth.hash(validation.data.password),
-			email: validation.data.email,
+			username: data.username,
+			passwordHash: await auth.hash(data.password),
+			email: data.email,
 		};
 
-		// Email deliverability validation
+		// Email deliverability
 		if (!dev) {
 			const emailValidation = await validateEmail(user.email);
 
 			if (emailValidation?.result !== "deliverable") {
-				issues.email = {
-					code: "custom",
-					message: "Undeliverable email",
-				};
-
-				return fail(400, { issues });
+				return formfail({ email: "Undeliverable email" });
 			}
 		}
 
@@ -57,11 +38,10 @@ export const actions = {
 		const [other] = await db
 			.select()
 			.from(users)
-			.where(eq(users.username, validation.data.username));
+			.where(eq(users.username, data.username));
 
 		if (other) {
-			issues.username = { code: "custom", message: "Username already taken" };
-			return fail(400, { issues });
+			return formfail({ username: "This username is already taken" });
 		}
 
 		// Save data
@@ -76,12 +56,12 @@ export const actions = {
 				try {
 					await addToMailingList(user.email, user.uid);
 				} catch (e) {
-					console.error("[Registration]: couldn't add to mailing list", e);
+					console.error("[signup]: couldn't add to mailing list", e);
 				}
 			}
 			return { success: true };
 		} catch (error) {
-			console.log("[Registration]:", error);
+			console.log("[signup]:", error);
 
 			if (
 				error instanceof postgres.PostgresError &&
@@ -90,7 +70,9 @@ export const actions = {
 				console.log(error);
 
 				if (error.constraint_name === "users_email_unique") {
-					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
+					const [targetUser] = await db.select().from(users).where(
+						eq(users.email, user.email),
+					);
 
 					// Check whether it's a legacy profile (no pwd) and update
 					if (targetUser && !targetUser.passwordHash) {
@@ -105,16 +87,11 @@ export const actions = {
 						return { success: true };
 					}
 
-					issues.email = {
-						code: "custom",
-						message: "Profile already exists",
-					};
-
-					return fail(400, { issues });
+					return formfail({ email: "Profile already exists" });
 				}
 			}
 
 			return fail(500);
 		}
-	},
+	}),
 };
