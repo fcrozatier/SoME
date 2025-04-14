@@ -53,23 +53,28 @@ export const EmailSchema = fg.email(
 	validationMessages,
 );
 
+export const PasswordSchema = fg.password(
+	{ minlength: 8, required: true },
+	validationMessages,
+);
+
 export const NewUserSchema = {
 	username: fg.text({ maxlength: 32, required: true }, validationMessages),
-	// Add pattern
-	password: fg.password({ minlength: 8, required: true }, validationMessages),
 	email: EmailSchema,
+	// Add pattern
+	password: PasswordSchema,
 	rules: fg.checkbox({ required: true }, validationMessages),
 };
 
 export const LoginSchema = {
-	email: fg.email({ required: true }, validationMessages),
-	password: fg.password({ required: true }, validationMessages),
+	email: EmailSchema,
+	password: PasswordSchema,
 };
 
 export const ChangePasswordSchema = {
-	email: fg.email({ required: true }, validationMessages),
-	password: fg.password({ required: true }, validationMessages),
-	password2: fg.password({ required: true }, validationMessages),
+	email: EmailSchema,
+	password: PasswordSchema,
+	password2: PasswordSchema,
 };
 
 export const CategorySchema = z.enum(categories);
