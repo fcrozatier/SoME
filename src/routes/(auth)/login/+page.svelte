@@ -1,33 +1,19 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { page } from "$app/state";
-	import { disableSubmitter } from "$lib/actions.js";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
+	import { reportValidity } from "$lib/actions.js";
+	import { setTitle } from "$lib/utils.js";
+	import { LoginSchema } from "$lib/validation";
+	import * as fg from "formgator";
 
 	let { form } = $props();
 
-	export const snapshot = {
-		capture: () => {
-			return {
-				email,
-			};
-		},
-		restore: (v) => {
-			email = v.email;
-		},
-	};
-
-	let email = $state("");
+	setTitle("Login");
 </script>
-
-<svelte:head>
-	{@render titleSnippet("Login")}
-</svelte:head>
 
 <article class="layout-prose">
 	<h2>Login</h2>
 
-	<form method="post" use:enhance={disableSubmitter}>
+	<form method="post" use:enhance={reportValidity}>
 		<div class="form-control max-w-md">
 			<label for="email" class="label">
 				<span class="label-text"> Email </span>
@@ -38,14 +24,13 @@
 				name="email"
 				class="input-bordered input w-full"
 				placeholder="Your email address"
-				bind:value={email}
+				{...fg.splat(LoginSchema["email"].attributes)}
 				aria-errormessage="credentials-error"
-				aria-invalid={!!form?.issues?.credentials}
+				aria-invalid={!!form?.issues?.email}
 				autocomplete="email"
-				required
 			/>
-			{#if form?.issues?.credentials}
-				<span id="credentials-error" class="error-message">{form.issues.credentials.message}</span>
+			{#if form?.issues?.email}
+				<span id="credentials-error" class="error-message">{form.issues.email.message}</span>
 			{/if}
 		</div>
 
@@ -59,11 +44,14 @@
 				name="password"
 				class="input-bordered input w-full"
 				placeholder=" "
+				{...fg.splat(LoginSchema["password"].attributes)}
 				autocomplete="current-password"
 				aria-errormessage="credentials-error"
-				aria-invalid={!!form?.issues?.credentials}
-				required
+				aria-invalid={!!form?.issues?.password}
 			/>
+			{#if form?.issues?.password}
+				<span id="credentials-error" class="error-message">{form.issues.password.message}</span>
+			{/if}
 		</div>
 
 		<p>
