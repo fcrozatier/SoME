@@ -1,11 +1,6 @@
-import { JWT_SECRET } from "$env/static/private";
-import { MAX_AGE } from "$lib/server/config";
-import { client, db } from "$lib/server/db";
-import { usersToEntries } from "$lib/server/db/schema";
-import { JWTPayloadSchema, TokenSchema } from "$lib/validation";
-import { redirect, type Handle } from "@sveltejs/kit";
-import { eq, sql } from "drizzle-orm";
-import jsonwebtoken from "jsonwebtoken";
+import * as auth from "$lib/server/auth.js";
+import { client } from "$lib/server/db";
+import { type Handle, redirect } from "@sveltejs/kit";
 
 process.on("sveltekit:shutdown", (reason) => {
 	console.log("\nclosing db connections, reason", reason);
@@ -20,74 +15,28 @@ export const handle = async function ({ event, resolve }) {
 		return new Response(null, { status: 418 });
 	}
 
-	const token = event.cookies.get("token");
-	const is_creator = event.cookies.get("is_creator");
-	const jwt = event.cookies.get("jwt");
-	const survey = event.cookies.get("survey");
+	const sessionToken = event.cookies.get(auth.sessionCookieName);
 
-	let surveyTaken = survey === "true";
-
-	if (!survey && token) {
-		surveyTaken =
-			(
-				await db.execute(sql`
-					select from surveys
-					where user_uid=${token}
-					and date_part('year', created_at)='2024';
-				`)
-			).length > 0;
-
-		event.cookies.set("survey", surveyTaken.toString(), {
-			path: "/",
-			maxAge: MAX_AGE,
-		});
+	if (!sessionToken) {
+		event.locals.user = null;
+		event.locals.session = null;
+		return resolve(event);
 	}
 
-	event.locals.surveyTaken = surveyTaken;
+	const { session, user } = await auth.validateSessionToken(sessionToken);
 
-	let isCreator = is_creator;
-
-	if (is_creator === undefined && token) {
-		isCreator = (
-			(await db.select().from(usersToEntries).where(eq(usersToEntries.userUid, token))).length > 0
-		).toString();
-
-		event.cookies.set("is_creator", isCreator, {
-			path: "/",
-			maxAge: MAX_AGE,
-		});
-	}
-
-	event.locals.isCreator = isCreator === "true";
-
-	if (jwt) {
-		try {
-			const payload = jsonwebtoken.verify(jwt, JWT_SECRET, { algorithms: ["HS256"] });
-			const { data, success } = JWTPayloadSchema.safeParse(payload);
-
-			event.locals.isAdmin = success && data.isAdmin;
-		} catch (error) {
-			event.cookies.delete("jwt", { path: "/" });
-			event.locals.isAdmin = false;
-		}
+	if (session) {
+		auth.setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
 	} else {
-		event.locals.isAdmin = false;
+		auth.deleteSessionTokenCookie(event);
 	}
 
-	if (token) {
-		const validation = TokenSchema.safeParse(token);
-		if (!validation.success) {
-			event.cookies.delete("token", { path: "/" });
-			redirect(303, "/");
-		}
+	event.locals.user = user;
+	event.locals.session = session;
 
-		event.locals.token = validation.data;
+	if (event.url.pathname.includes("/admin/") && !event.locals.user?.isAdmin) {
+		return redirect(302, "/admin");
 	}
 
-	if (event.url.pathname.includes("admin/") && !event.locals.isAdmin) {
-		throw redirect(303, "/admin");
-	}
-
-	const response = await resolve(event);
-	return response;
+	return await resolve(event);
 } satisfies Handle;
