@@ -3,10 +3,9 @@
 	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { FULL_NAME, SHORT_NAME, categories } from "$lib/config";
-	import { YOUTUBE_EMBEDDABLE, registrationOpen } from "$lib/utils";
+	import { FULL_NAME, categories } from "$lib/config";
+	import { YOUTUBE_EMBEDDABLE, registrationOpen, setTitle } from "$lib/utils";
 	import { tick } from "svelte";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	let { data, form } = $props();
 
@@ -44,11 +43,9 @@
 		const lastEmail = document.getElementById(`email-${otherContributors.length - 1}`);
 		(lastEmail as HTMLInputElement)?.focus();
 	}
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Update")}
-</svelte:head>
+	setTitle("Update");
+</script>
 
 <article class="layout-prose">
 	<h2>Update your entry</h2>

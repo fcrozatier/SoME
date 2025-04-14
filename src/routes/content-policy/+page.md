@@ -1,11 +1,11 @@
 <script>
 	import { FULL_NAME } from '$lib/config';
-  import { titleSnippet } from '../+layout.svelte';
+  import { setTitle } from "$lib/utils";
+
+  setTitle("Content Policy")
 </script>
 
-<svelte:head>
-{@render titleSnippet("Content Policy")}
-</svelte:head>
+
 
 ## Content Policy
 

@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
+	import { setTitle } from "$lib/utils.js";
 
 	let { form } = $props();
 
@@ -17,11 +17,9 @@
 			errorSummary?.scrollIntoView();
 		}
 	});
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Survey")}
-</svelte:head>
+	setTitle("Survey");
+</script>
 
 <article class="layout-prose">
 	{#if !form?.surveySuccess}

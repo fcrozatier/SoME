@@ -2,8 +2,7 @@
 	import { browser } from "$app/environment";
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
-	import { YOUTUBE_EMBED } from "$lib/utils.js";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
+	import { setTitle, YOUTUBE_EMBED } from "$lib/utils.js";
 
 	let { data } = $props();
 
@@ -11,6 +10,8 @@
 		return window.innerWidth < 500 ? (window.innerWidth < 400 ? window.innerWidth - 40 : 360) : 420;
 	}
 	let width = $state(browser ? w() : 0);
+
+	setTitle("Results");
 </script>
 
 <svelte:window
@@ -18,10 +19,6 @@
 		width = w();
 	}}
 />
-
-<svelte:head>
-	{@render titleSnippet("Results")}
-</svelte:head>
 
 <section class="layout-prose pb-10 text-center">
 	<p class=" mb-8 text-center text-4xl font-black">Results</p>

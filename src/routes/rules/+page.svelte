@@ -7,8 +7,7 @@
 		PUBLIC_VOTE_START,
 	} from "$env/static/public";
 	import { FULL_NAME } from "$lib/config";
-	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
+	import { phaseOpen, resultsAvailable, setTitle, voteOpen } from "$lib/utils";
 
 	// let remaining = timeLeft();
 
@@ -52,11 +51,9 @@
 		hour: "numeric",
 		minute: "numeric",
 	} as const;
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Rules")}
-</svelte:head>
+	setTitle("Rules");
+</script>
 
 <article class="layout-prose">
 	<!-- Timeline -->

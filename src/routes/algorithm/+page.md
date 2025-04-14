@@ -2,12 +2,10 @@
 	import { FULL_NAME } from '$lib/config';
 	import K from '$lib/components/K.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
-	import { titleSnippet } from '../+layout.svelte';
-</script>
+	import { setTitle } from "$lib/utils";
 
-<svelte:head>
-{@render titleSnippet("Algorithm")}
-</svelte:head>
+	setTitle("Algorithm")
+</script>
 
 ## Algorithm
 

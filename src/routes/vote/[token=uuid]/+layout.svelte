@@ -1,16 +1,14 @@
 <script lang="ts">
+	import { setTitle } from "$lib/utils";
 	import type { Snippet } from "svelte";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	interface Props {
 		children?: Snippet;
 	}
 
 	let { children }: Props = $props();
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Vote")}
-</svelte:head>
+	setTitle("Vote");
+</script>
 
 {@render children?.()}

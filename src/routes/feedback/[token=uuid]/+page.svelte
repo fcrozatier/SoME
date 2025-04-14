@@ -2,8 +2,8 @@
 	import Bento from "$lib/components/Bento.svelte";
 	import { round } from "@fcrozatier/ts-helpers";
 
+	import { setTitle } from "$lib/utils.js";
 	import * as Plot from "@observablehq/plot";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(
@@ -26,11 +26,9 @@
 	}
 
 	let { data } = $props();
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Feedback")}
-</svelte:head>
+	setTitle("Feedback");
+</script>
 
 <article class="layout-prose">
 	<h2>Feedbacks</h2>
@@ -41,7 +39,7 @@
 			{#if !group || group?.length === 0}
 				<p>No feedback received on this entry yet</p>
 			{:else}
-				{@const median = round(group?.[0]?.median, 0)}
+				{@const median = round(group?.[0]?.median!, 0)}
 				{@const comments = group.filter((f) => f.feedback && f.feedback !== "" && !f.maybe_rude)}
 
 				<div class="flex flex-wrap justify-center gap-x-8 gap-y-8 mb-10">

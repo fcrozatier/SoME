@@ -5,9 +5,8 @@
 	import Pagination from "$lib/components/Pagination.svelte";
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
-	import { YOUTUBE_EMBED } from "$lib/utils";
+	import { setTitle, YOUTUBE_EMBED } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
 	import EntriesPage from "../../entries/[uid=uuid]/+page.svelte";
 
 	let { data } = $props();
@@ -43,11 +42,9 @@
 			goto(href);
 		}
 	}
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Ranking")}
-</svelte:head>
+	setTitle("Ranking");
+</script>
 
 <section class="layout-prose">
 	<div class="text-center">

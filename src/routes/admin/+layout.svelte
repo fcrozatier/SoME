@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { titleSnippet } from "$lib/components/snippets.svelte";
+	import { setTitle } from "$lib/utils";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -7,10 +7,8 @@
 	}
 
 	let { children }: Props = $props();
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Admin")}
-</svelte:head>
+	setTitle("Admin");
+</script>
 
 {@render children?.()}

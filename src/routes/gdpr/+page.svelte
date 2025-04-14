@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { titleSnippet } from "$lib/components/snippets.svelte";
-</script>
+	import { setTitle } from "$lib/utils";
 
-<svelte:head>
-	{@render titleSnippet("Privacy Policy")}
-</svelte:head>
+	setTitle("Privacy Policy");
+</script>
 
 <article class="layout-prose">
 	<h2>Data protection</h2>

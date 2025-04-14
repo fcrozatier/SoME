@@ -3,8 +3,8 @@
 	import Display from "$lib/components/Display.svelte";
 	import { round } from "@fcrozatier/ts-helpers";
 
+	import { setTitle } from "$lib/utils.js";
 	import * as Plot from "@observablehq/plot";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(
@@ -27,11 +27,9 @@
 	}
 
 	let { data } = $props();
-</script>
 
-<svelte:head>
-	{@render titleSnippet("Feedback")}
-</svelte:head>
+	setTitle("Feedback");
+</script>
 
 <article class="layout-prose">
 	<Display data={data.entry}></Display>

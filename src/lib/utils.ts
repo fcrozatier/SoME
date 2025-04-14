@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import {
 	PUBLIC_REGISTRATION_END,
 	PUBLIC_REGISTRATION_START,
@@ -5,6 +6,13 @@ import {
 	PUBLIC_VOTE_END,
 	PUBLIC_VOTE_START,
 } from "$env/static/public";
+import { SHORT_NAME } from "./config";
+
+export const setTitle = (title: string) => {
+	if (browser) {
+		document.title = `${title} – ${SHORT_NAME}`;
+	}
+};
 
 export function competitionStarted() {
 	if (!PUBLIC_REGISTRATION_START) return false;

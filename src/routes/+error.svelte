@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
-</script>
+	import { setTitle } from "$lib/utils";
 
-<svelte:head>
-	{@render titleSnippet("Error")}
-</svelte:head>
+	setTitle("Error");
+</script>
 
 <article class="layout-prose min-h-[100vh]">
 	<h2>{page.status}</h2>

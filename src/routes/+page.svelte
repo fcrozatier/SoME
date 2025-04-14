@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { titleSnippet } from "$lib/components/snippets.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { FULL_NAME, SHORT_NAME } from "$lib/config";
+	import { setTitle } from "$lib/utils";
 	import ResultsPage from "./results/+page.svelte";
 
 	let { data, form } = $props();
@@ -18,11 +18,9 @@
 	// 		form.success = undefined;
 	// 	}
 	// }
-</script>
 
-<svelte:head>
-	{@render titleSnippet(SHORT_NAME)}
-</svelte:head>
+	setTitle("Home");
+</script>
 
 <section class="layout-prose pb-4">
 	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->
