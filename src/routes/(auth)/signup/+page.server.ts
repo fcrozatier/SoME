@@ -4,7 +4,7 @@ import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { type InsertUser, users } from "$lib/server/db/schema.js";
 import { addToMailingList, validateEmail } from "$lib/server/email";
-import { InsertUserSchema } from "$lib/validation.js";
+import { NewUserSchema } from "$lib/validation.js";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -17,7 +17,7 @@ export const load = ({ locals }) => {
 };
 
 export const actions = {
-	default: formgate(InsertUserSchema, async (data, { cookies }) => {
+	default: formgate(NewUserSchema, async (data, { cookies }) => {
 		const user: InsertUser = {
 			uid: crypto.randomUUID(),
 			username: data.username,
