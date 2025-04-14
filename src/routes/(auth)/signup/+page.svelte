@@ -4,6 +4,8 @@
 	import { reportValidity } from "$lib/actions.js";
 	import { FULL_NAME } from "$lib/config";
 	import { setTitle } from "$lib/utils.js";
+	import { NewUserSchema } from "$lib/validation.js";
+	import * as fg from "formgator";
 
 	let { form } = $props();
 
@@ -42,12 +44,11 @@
 					class="input-bordered input w-full"
 					placeholder="Choose your username"
 					bind:value={username}
+					{...fg.splat(NewUserSchema["username"].attributes)}
 					aria-errormessage="username-error"
 					aria-invalid={!!form?.issues?.username}
 					autocomplete="username"
 					spellcheck="false"
-					maxlength="32"
-					required
 				/>
 				{#if form?.issues?.username}
 					<span id="username-error" class="error-message">{form.issues.username.message}</span>
@@ -66,10 +67,9 @@
 					placeholder="Enter your email address"
 					aria-errormessage="email-error"
 					aria-invalid={!!form?.issues?.email}
+					{...fg.splat(NewUserSchema["email"].attributes)}
 					autocomplete="email"
 					spellcheck="false"
-					maxlength="128"
-					required
 				/>
 				{#if form?.issues?.email}
 					<span id="email-error" class="error-message">{form.issues.email.message}</span>
@@ -90,8 +90,7 @@
 					aria-errormessage="password-error"
 					aria-invalid={!!form?.issues?.password}
 					aria-describedby="password-format"
-					minlength="8"
-					required
+					{...fg.splat(NewUserSchema["password"].attributes)}
 				/>
 				{#if form?.issues?.password}
 					<span id="password-error" class="error-message">{form.issues.password.message}</span>
@@ -103,7 +102,13 @@
 
 			<div class="form-control max-w-md">
 				<label for="rules" class="label justify-normal gap-4">
-					<input id="rules" type="checkbox" name="rules" class="checkbox" required />
+					<input
+						id="rules"
+						type="checkbox"
+						name="rules"
+						class="checkbox"
+						{...fg.splat(NewUserSchema["rules"].attributes)}
+					/>
 					<span class="label-text">
 						I've read the <a href="/rules">rules</a> of the competition
 					</span>
