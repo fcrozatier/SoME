@@ -2,25 +2,85 @@ import { categories, templateNames } from "$lib/config";
 import { z } from "zod";
 import * as fg from "formgator";
 
-const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const uuid4 =
+	/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export const uuid = (str: string | null) => !!str && uuid4.test(str);
 
-const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const SHARP_IMAGE_INPUT_TYPES = [
+	"image/jpeg",
+	"image/png",
+	"image/webp",
+	"image/gif",
+];
 const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
+export type Failures<
+	K extends fg.ValidationIssue["code"] = fg.ValidationIssue["code"],
+> = Pick<
+	{
+		[K in fg.ValidationIssue["code"]]?: Omit<
+			fg.ValidationIssue & { code: K },
+			"code" | "message"
+		> extends Record<string, never> ? string
+			:
+				| string
+				| ((
+					data: Omit<fg.ValidationIssue & { code: K }, "code" | "message">,
+				) => string);
+	},
+	K
+>;
+
+const validationMessages: Failures = {
+	accept: "Invalid file type",
+	custom: "Invalid value",
+	invalid: "Invalid value",
+	max: ({ max }) => `Value must be less than or equal to ${max}.`,
+	maxlength: ({ maxlength }) =>
+		`Please shorten this text to ${maxlength} characters or less`,
+	min: ({ min }) => `Value must be greater than or equal to ${min}.`,
+	minlength: ({ minlength }) =>
+		`Please lengthen this text to ${minlength} characters or more`,
+	pattern: "Please match the requested format",
+	required: "Please fill out this field.",
+	step: ({ step }) => `Please enter a value in steps of ${step}`,
+	type: "Invalid type",
+};
+
+export const EmailSchema = fg.email(
+	{ required: true, maxlength: 128 },
+	validationMessages,
+);
+
+export const InsertUserSchema = {
+	username: fg.text({ maxlength: 32, required: true }, validationMessages),
+	// Add pattern
+	password: fg.password({ minlength: 8, required: true }, validationMessages),
+	email: EmailSchema,
+	rules: fg.checkbox({ required: true }, validationMessages),
+};
+
+export const LoginSchema = {
+	email: fg.email({ required: true }, validationMessages),
+	password: fg.password({ required: true }, validationMessages),
+};
+
+export const ChangePasswordSchema = {
+	email: fg.email({ required: true }, validationMessages),
+	password: fg.password({ required: true }, validationMessages),
+	password2: fg.password({ required: true }, validationMessages),
+};
+
 export const CategorySchema = z.enum(categories);
-
-const EmailSchema = z.string().email().max(128);
-
-export const FGEmailSchema = fg.email({ required: true, maxlength: 128 });
 
 export const TokenSchema = z.string().uuid();
 
 const UrlSchema = z
 	.string()
 	.url({
-		message: "Invalid url, please provide the full url with the https:// prefix",
+		message:
+			"Invalid url, please provide the full url with the https:// prefix",
 	})
 	.refine((str) => !str.includes("playlist"), {
 		message: "Playlists are not allowed",
@@ -43,7 +103,9 @@ export const FlagForm = z.object({
 export const FeedbackForm = z.object({
 	selection: z.string().transform((val, ctx) => {
 		try {
-			return z.array(z.tuple([TokenSchema, TokenSchema])).parse(JSON.parse(val));
+			return z.array(z.tuple([TokenSchema, TokenSchema])).parse(
+				JSON.parse(val),
+			);
 		} catch {
 			ctx.addIssue({
 				code: z.ZodIssueCode.custom,
@@ -63,19 +125,6 @@ const CheckboxSchema = z.literal("on", {
 	errorMap: () => {
 		return { message: "Must be checked" };
 	},
-});
-
-export const InsertUserSchema = fg.form({
-	username: fg.text({ maxlength: 32, required: true }),
-	// Add pattern
-	password: fg.password({ minlength: 8, required: true }),
-	email: FGEmailSchema,
-	rules: fg.checkbox({ required: true }),
-});
-
-export const LoginSchema = fg.form({
-	email: fg.email({ required: true }),
-	password: fg.password({ required: true }),
 });
 
 const TitleSchema = z
@@ -100,9 +149,11 @@ const ThumbnailSchema = z
 	})
 	.optional();
 
+const ZodEmailSchema = z.string().email().max(128);
+
 export const CreatorSchema = z.object({
 	userType: z.literal("creator"),
-	email: EmailSchema,
+	email: ZodEmailSchema,
 	others: z.string().transform((val, ctx) => {
 		try {
 			return z.array(z.string().email()).parse(JSON.parse(val));
