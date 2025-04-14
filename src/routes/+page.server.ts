@@ -2,10 +2,10 @@ import { dev } from "$app/environment";
 import { db } from "$lib/server/db";
 import { type SelectEntry, users } from "$lib/server/db/schema";
 import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
-import { FGEmailSchema } from "$lib/validation";
+import { EmailSchema } from "$lib/validation";
 import { type Actions, fail } from "@sveltejs/kit";
 import { eq, sql } from "drizzle-orm";
-import { formgate } from "formgator/sveltekit";
+import { formfail, formgate } from "formgator/sveltekit";
 
 export const load = async () => {
 	const top: Pick<
@@ -23,36 +23,27 @@ export const load = async () => {
 };
 
 export const actions: Actions = {
-	newsletter: formgate({ email: FGEmailSchema }, async (data) => {
+	newsletter: formgate({ email: EmailSchema }, async (data) => {
 		const email = data.email;
 
 		// Find user
-		const user = (await db.select().from(users).where(eq(users.email, email)))[0];
+		const [user] = await db.select().from(users).where(eq(users.email, email));
 
 		if (user) {
-			return fail(400, {
-				error: true,
-				message: "Email already registered",
-			});
+			return formfail({ email: "Email already registered" });
 		}
 
 		if (!dev) {
 			// Validate email
 			const emailValidation = await validateEmail(email);
 			if (emailValidation?.result !== "deliverable") {
-				return fail(400, {
-					error: true,
-					message: "Undeliverable email",
-				});
+				return formfail({ email: "Undeliverable email" });
 			}
 		}
 
 		const token = crypto.randomUUID();
 
-		await db.insert(users).values({
-			uid: token,
-			email,
-		});
+		await db.insert(users).values({ uid: token, email });
 
 		if (!dev) {
 			await addToMailingList(email, token);
@@ -61,17 +52,19 @@ export const actions: Actions = {
 		return { success: true };
 	}),
 
-	resend_link: formgate({ email: FGEmailSchema }, async (data) => {
+	resend_link: formgate({ email: EmailSchema }, async (data) => {
 		try {
 			// Find user
-			const user = (await db.select().from(users).where(eq(users.email, data.email)))[0];
+			const [user] = await db.select().from(users).where(
+				eq(users.email, data.email),
+			);
 
 			if (!user) {
-				return fail(400, {
-					error: true,
-					message: "email not found. Did you register to this year's event?",
+				return formfail({
+					email: "email not found. Did you register to this year's event?",
 				});
 			}
+
 			const token = user.uid;
 
 			console.log(`Your personal link is /vote/${token}`);
