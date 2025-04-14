@@ -53,7 +53,7 @@ export const EmailSchema = fg.email(
 	validationMessages,
 );
 
-export const InsertUserSchema = {
+export const NewUserSchema = {
 	username: fg.text({ maxlength: 32, required: true }, validationMessages),
 	// Add pattern
 	password: fg.password({ minlength: 8, required: true }, validationMessages),
