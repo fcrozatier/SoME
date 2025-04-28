@@ -119,9 +119,7 @@
 
 		<!-- Deadline -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">When is the registration deadline?</div>
-			</summary>
+			<summary>When is the registration deadline?</summary>
 			<p>The competition is closed. Stay tuned for the next edition!</p>
 			<!-- <p>
 				Creators or group of Creators can submit an entry until <span class=""
@@ -148,9 +146,7 @@
 		</details>
 		<!-- Not a creator -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">I'm not a creator, can I participate?</div>
-			</summary>
+			<summary>I'm not a creator, can I participate? </summary>
 			<p>Sure, you can participate in the peer review phase by registering as a judge.</p>
 			<p>
 				You'll discover new Science content creators, will be able vote for the best ones and leave
@@ -159,9 +155,7 @@
 		</details>
 		<!-- Topic -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">Is there a topic constraint?</div>
-			</summary>
+			<summary>Is there a topic constraint? </summary>
 			<p>It has to be about math or something related.</p>
 			<p>
 				Here we mean &laquo; math &raquo; very broadly, and more applied topics like physics or
@@ -176,9 +170,7 @@
 		</details>
 		<!-- Software -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">What software should I use?</div>
-			</summary>
+			<summary>What software should I use? </summary>
 			<p>
 				You can use any software you're familiar with, there's no constraint. You can even use no
 				visualization software at all!
@@ -194,9 +186,7 @@
 		</details>
 		<!-- How many entries -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">How many entries can I submit?</div>
-			</summary>
+			<summary>How many entries can I submit? </summary>
 			<p>One entry per person / group</p>
 			<p>
 				We hope you make more, but we only have the capacity to judge participants based on a single
@@ -205,9 +195,7 @@
 		</details>
 		<!-- Can I use old material? -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">Can I use an old entry?</div>
-			</summary>
+			<summary>Can I use an old entry? </summary>
 			<p>It has to be something new you make this summer</p>
 			<p>
 				The spirit of this is to encourage people who've never put stuff online before. If you want
@@ -218,9 +206,7 @@
 		</details>
 		<!-- Language -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">Does it have to be in English?</div>
-			</summary>
+			<summary>Does it have to be in English? </summary>
 			<p>It has to be available in English: subtitles or translation are needed.</p>
 			<p>
 				If you want to put out an explainer in another language, wonderful! Please do! But the
@@ -230,9 +216,7 @@
 		</details>
 		<!-- Copyright -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">Can I use copyrighted material?</div>
-			</summary>
+			<summary>Can I use copyrighted material? </summary>
 			<p>By registering as a creator you agree to the following copyright notice:</p>
 			<p class="indent-8 italic">
 				I have permission to use all material contained in my submission for the {FULL_NAME}.
@@ -245,45 +229,60 @@
 				<li><a href="/content-policy#ai">AI policy</a></li>
 			</ul>
 		</details>
+		<!-- Ads -->
+		<details>
+			<summary>Can my content include ads?</summary>
+			<p>
+				Your entry can include ads or sponsorships within the content itself. However ads are not
+				allowed in your entry's title or description, as the SoME website and archive do not endorse
+				the promoted products.
+			</p>
+		</details>
 		<!-- Winners -->
 		<details>
-			<summary>
-				<div class="text-xl font-medium">How will winners be selected?</div>
-			</summary>
+			<summary>How will winners be selected?</summary>
 			<p>
-				This year's competition is run by the community, and as such, there will not be manual peer
-				review nor prize money for winners as in previous editions.
+				Winners will be chosen through a peer review phase, with final results announced at the end
+				of the competition. Curious about how the voting works? You can learn more about it <a
+					href="/voting-system">here</a
+				>.
 			</p>
 			<p>
-				However the voting process will sift through the entries and give greater visibility to the
-				better ones. The winning entries of this edition will be determined by the vote and will be
-				revealed at the end of the competition.
+				Peer review basics: Judges will review entries one by one, scoring each on a continuous
+				scale from 1 to 9. The guiding question is: "How valuable is this entry to the space of
+				online math exposition, compared to the typical math video/post you've seen?"
 			</p>
-			<p>Here's what we're looking for:</p>
+			<p>
+				Think of it like a more thoughtful version of a thumbs-up or thumbs-down. Voting should feel
+				natural: you can round to whole numbers, half-points, go to the first decimal place or even
+				to the second decimal place if you want finer control. And if you change your mind later? No
+				problem, you're free to update earlier votes anytime.
+			</p>
+			<p>
+				To help you with the review process, here are some broad guidelines for what we're hoping to
+				see:
+			</p>
 			<ul>
 				<li>
-					<b>Motivation:</b> It should be clear by the end of the introduction why one should care.
+					<b>Motivation:</b> By the end of the introduction it should be clear why the topic matters
+					and why someone should be excited to learn about it.
 				</li>
 				<li>
-					<b> Clarity: </b>
-					Jargon should be explained, the goals of the lesson should be understandable with minimal background,
-					and the submission should generally display empathy for people unfamiliar with the topic.
+					<b> Clarity: </b> Jargon should be explained, the goals of the lesson should be easy to understand
+					with minimal background knowledge, and the presentation should show care for people who might
+					be new to the topic.
 				</li>
 				<li>
-					<b>Novelty:</b> It doesn't necessarily have to be an original idea or original topic, but it
-					should offer someone an experience they might otherwise not have by searching around online.
-					Some of the greatest value comes from covering common topics in better ways. Other times there's
-					value in surfacing otherwise obscure ideas which more people should know about.
+					<b>Novelty:</b> The idea doesn't have to be brand new, but the presentation should feel fresh,
+					either by breathing new life into a familiar topic, or shining a light on a hidden gem, overlooked,
+					or obscure idea that deserves more attention.
 				</li>
 				<li>
-					<b>Memorability:</b> Something should make the piece easy to remember even several months later.
-					Maybe it's the beauty of the presentation, the enthusiasm of the presenter, or the mind-blowingness
-					of an aha moment.
+					<b>Memorability:</b> Something should make the piece stick with the audience, even months later,
+					whether that's the beauty of the presentation, the enthusiasm of the presenter, or a mind-blowing
+					"aha!" moment.
 				</li>
 			</ul>
-			You can learn more about the algorithm and voting system we use&nbsp;<a href="/algorithm"
-				>here</a
-			>
 		</details>
 	</section>
 </article>
