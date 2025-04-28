@@ -75,6 +75,18 @@
 
 <ResultsPage {data}></ResultsPage>
 
+<!-- Sponsor -->
+<section class="mt-10 pt-10">
+	<h2 class="text-center mb-4 text-2xl font-light">
+		Operations for this contest have been generously funded by
+	</h2>
+	<div class="flex justify-center">
+		<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
+			<img class="opacity-20" src="/jane-street-logo.webp" alt="Jane Street" width="200" />
+		</a>
+	</div>
+</section>
+
 <!-- Last year -->
 <!-- <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--color-light-gold)">
 	<div class="mx-auto max-w-prose">

@@ -127,21 +127,9 @@
 			</div>
 		</nav>
 
-		<main class="lg:col-start-2 prose lg:pt-10 max-w-full">
+		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
 			<h1 class="text-center">{FULL_NAME}</h1>
 			{@render children()}
-
-			<!-- Sponsor -->
-			<section class="mt-10 mb-40 pt-10">
-				<h2 class="text-center mb-4 text-2xl font-light">
-					Operations for this contest have been generously funded by
-				</h2>
-				<div class="flex justify-center">
-					<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
-						<img class="opacity-20" src="/jane-street-logo.webp" alt="Jane Street" width="200" />
-					</a>
-				</div>
-			</section>
 		</main>
 	</div>
 
