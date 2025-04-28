@@ -33,17 +33,16 @@ const openai = new OpenAI({
 });
 
 export const load = async ({ locals, params }) => {
-	const { category } = params;
-
 	if (!locals.user) {
 		return redirect(302, "/login");
 	}
 
-	const token = locals.user.uid;
-
 	if (!voteOpen()) {
-		return redirect(302, `/vote/${token}`);
+		return redirect(302, `/vote/`);
 	}
+
+	const { category } = params;
+	const token = locals.user.uid;
 
 	const result: postgres.RowList<(SelectEntry & { total_votes: number })[]> =
 		await db.execute(
