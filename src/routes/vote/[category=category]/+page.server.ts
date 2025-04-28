@@ -1,10 +1,25 @@
-import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from "$env/static/private";
+import {
+	MODERATION_PROMPT,
+	OPENAI_API_KEY,
+	OPENAI_PROJECT,
+} from "$env/static/private";
 import type { Category } from "$lib/config";
 import { query3 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
-import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
+import {
+	cache,
+	flags,
+	type SelectEntry,
+	skips,
+	votes,
+} from "$lib/server/db/schema";
 import { decrypt, encrypt } from "$lib/server/encryption";
-import { FlagSchema, SkipSchema, validateForm, VoteSchema } from "$lib/validation";
+import {
+	FlagSchema,
+	SkipSchema,
+	validateForm,
+	VoteSchema,
+} from "$lib/validation";
 import { voteOpen } from "$lib/utils";
 import { fail, redirect } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
@@ -17,16 +32,23 @@ const openai = new OpenAI({
 	project: OPENAI_PROJECT,
 });
 
-export const load = async (event) => {
-	const { token, category } = event.params;
+export const load = async ({ locals, params }) => {
+	const { category } = params;
+
+	if (!locals.user) {
+		return redirect(302, "/login");
+	}
+
+	const token = locals.user.uid;
 
 	if (!voteOpen()) {
 		return redirect(302, `/vote/${token}`);
 	}
 
-	const result: postgres.RowList<(SelectEntry & { total_votes: number })[]> = await db.execute(
-		query3(token, category),
-	);
+	const result: postgres.RowList<(SelectEntry & { total_votes: number })[]> =
+		await db.execute(
+			query3(token, category),
+		);
 
 	if (!result) return { stopVote: true };
 
@@ -65,9 +87,13 @@ export const load = async (event) => {
 let id: "FLAG" | "VOTE" | "SKIP" | "HARD_SKIP";
 
 export const actions = {
-	flag: async ({ request, params }) => {
+	flag: async ({ request, params, locals }) => {
 		id = "FLAG";
-		const { token, category } = params;
+		if (!locals.user) {
+			return redirect(302, "/login");
+		}
+		const token = locals.user.uid;
+		const { category } = params;
 
 		const validation = await validateForm(request, FlagSchema);
 		if (!validation.success) {
@@ -89,7 +115,12 @@ export const actions = {
 
 			await db
 				.delete(cache)
-				.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+				.where(
+					and(
+						eq(cache.userUid, token),
+						eq(cache.category, category as Category),
+					),
+				);
 
 			return { id, flagSuccess: true };
 		} catch (error) {
@@ -97,9 +128,13 @@ export const actions = {
 			return fail(400, { id, flagFail: true });
 		}
 	},
-	vote: async ({ request, params }) => {
+	vote: async ({ request, params, locals }) => {
 		id = "VOTE";
-		const { token, category } = params;
+		if (!locals.user) {
+			return redirect(302, "/login");
+		}
+		const token = locals.user.uid;
+		const { category } = params;
 		const validation = await validateForm(request, VoteSchema);
 
 		if (!validation.success) {
@@ -125,7 +160,9 @@ export const actions = {
 				],
 			});
 
-			maybe_rude = completion.choices[0]?.message.content?.match(/OK|REVIEW/g)?.at(-1) === "REVIEW";
+			maybe_rude =
+				completion.choices[0]?.message.content?.match(/OK|REVIEW/g)?.at(-1) ===
+					"REVIEW";
 		}
 
 		try {
@@ -150,7 +187,12 @@ export const actions = {
 
 			await db
 				.delete(cache)
-				.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+				.where(
+					and(
+						eq(cache.userUid, token),
+						eq(cache.category, category as Category),
+					),
+				);
 
 			return { id, voteSuccess: true };
 		} catch (error) {
@@ -158,9 +200,13 @@ export const actions = {
 			return fail(400, { id, voteFail: true });
 		}
 	},
-	[action.hard_skip]: async ({ request, params }) => {
+	[action.hard_skip]: async ({ request, params, locals }) => {
 		id = "HARD_SKIP";
-		const { token, category } = params;
+		if (!locals.user) {
+			return redirect(302, "/login");
+		}
+		const token = locals.user.uid;
+		const { category } = params;
 		const validation = await validateForm(request, SkipSchema);
 
 		if (!validation.success) {
@@ -181,7 +227,12 @@ export const actions = {
 
 			await db
 				.delete(cache)
-				.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+				.where(
+					and(
+						eq(cache.userUid, token),
+						eq(cache.category, category as Category),
+					),
+				);
 
 			return { id, skipSuccess: true };
 		} catch (error) {
@@ -189,13 +240,19 @@ export const actions = {
 			return fail(400, { id, skipFail: true });
 		}
 	},
-	[action.skip]: async ({ params }) => {
+	[action.skip]: async ({ params, locals }) => {
 		id = "SKIP";
-		const { token, category } = params;
+		if (!locals.user) {
+			return redirect(302, "/login");
+		}
+		const token = locals.user.uid;
+		const { category } = params;
 
 		await db
 			.delete(cache)
-			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+			.where(
+				and(eq(cache.userUid, token), eq(cache.category, category as Category)),
+			);
 
 		return { id, skipSuccess: true };
 	},

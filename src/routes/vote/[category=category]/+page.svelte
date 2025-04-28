@@ -9,6 +9,7 @@
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { onMount } from "svelte";
 	import { formAction } from "./config";
+	import { setTitle } from "$lib/utils";
 
 	let { data, form } = $props();
 
@@ -76,6 +77,8 @@
 			feedback = v.feedback;
 		},
 	};
+
+	setTitle("Vote");
 </script>
 
 <article class="layout-prose">
