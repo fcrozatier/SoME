@@ -30,14 +30,42 @@
 <Toasts />
 
 {#snippet menu()}
-	<ul class="space-y-4 text-center">
+	<ul class="grid gap-4">
 		<li>
-			<a
-				href="/archive"
-				aria-current={page.url.pathname.includes("/archive") ? "page" : null}>Archive</a
+			<a href="/archive" aria-current={page.url.pathname.includes("/archive") ? "page" : null}
+				>Archive</a
 			>
 		</li>
-		{#if !data.user}
+		{#if data.user}
+			{#if data.user?.isAdmin}
+				<li>
+					<a href="/admin" aria-current={page.url.pathname.includes("/admin") ? "page" : null}
+						>Admin</a
+					>
+				</li>
+			{/if}
+			<li>
+				<a
+					href="/user/entries"
+					class="text-nowrap"
+					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>My Entries</a
+				>
+			</li>
+			<li>
+				<a
+					href="/user/votes"
+					class="text-nowrap"
+					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>My Votes</a
+				>
+			</li>
+			<li class="mt-2 ml-1">
+				<a
+					href="/vote"
+					class={`btn btn-neutral ${voteOpen() ? "" : "btn-disabled"}`}
+					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>Vote</a
+				>
+			</li>
+		{:else}
 			<li>
 				<a href="/signup" class="btn btn-neutral text-nowrap w-[10ch]">Sign up</a>
 			</li>
@@ -45,23 +73,7 @@
 				<a href="/login" class="btn text-nowrap w-[10ch]">Sign in</a>
 			</li>
 		{/if}
-		{#if voteOpen() && data.user}
-			<li>
-				<a
-					href="/vote"
-					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>Vote</a
-				>
-			</li>
-		{/if}
-		{#if data.user?.isAdmin}
-			<li>
-				<a
-					href="/admin"
-					aria-current={page.url.pathname.includes("/admin") ? "page" : null}>Admin</a
-				>
-			</li>
-		{/if}
-		<li class="mt-8 grid grid-cols-2 justify-between sm:justify-end items-center flex-1 gap-2">
+		<li class="mt-8 relative -translate-2 grid grid-cols-2 justify-between sm:justify-end items-center gap-2">
 			<a
 				title="BlueSky"
 				rel="author"
@@ -108,9 +120,9 @@
 	<Banner display={false && !!data.user?.uid} />
 	<Timer display={registrationOpen()}></Timer>
 
-	<div class="grid lg:grid-cols-[10rem_1fr]">
+	<div class="grid lg:grid-cols-[9rem_1fr]">
 		<nav class="flex col-span-full lg:block lg:col-span-1 lg:fixed lg:min-h-full p-8 space-y-8">
-			<div class="flex justify-center">
+			<div class="flex pl-1">
 				<a href="/" rel="home">
 					<Icon class="rounded-full size-14" name="logo" />
 				</a>
