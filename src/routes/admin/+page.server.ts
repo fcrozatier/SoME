@@ -22,12 +22,10 @@ export const actions = {
 			return fail(400, { invalid: true });
 		}
 
-		const r = (
-			await db
-				.select({ isAdmin: users.isAdmin })
-				.from(users)
-				.where(eq(users.email, validation.data.email))
-		)[0];
+		const [r] = await db
+			.select({ isAdmin: users.isAdmin })
+			.from(users)
+			.where(eq(users.email, validation.data.email));
 
 		if (!r?.isAdmin) {
 			return fail(400, { invalid: true });

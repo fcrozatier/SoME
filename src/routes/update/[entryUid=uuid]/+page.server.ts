@@ -29,8 +29,9 @@ export const load = async ({ params, locals }) => {
 
 	const entryUid = params.entryUid;
 
-	const entry =
-		(await db.select().from(entries).where(eq(entries.uid, entryUid)))[0];
+	const [entry] = await db.select().from(entries).where(
+		eq(entries.uid, entryUid),
+	);
 	console.log("entry:", entry);
 	const emails = (
 		await db
