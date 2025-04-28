@@ -13,7 +13,7 @@
 <article class="layout-prose">
 	<h2>Login</h2>
 
-	<form method="post" use:enhance={reportValidity}>
+	<form class="space-y-2" method="post" use:enhance={reportValidity}>
 		<div class="form-control max-w-md">
 			<label for="email" class="label">
 				<span class="label-text"> Email </span>

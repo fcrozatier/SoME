@@ -19,7 +19,7 @@
 			You're about to receive an email containing a validation link to confirm your password reset
 		</p>
 	{:else}
-		<form class="space-y-4" method="POST" use:enhance={reportValidity}>
+		<form class="space-y-2" method="POST" use:enhance={reportValidity}>
 			<h2>Change your password</h2>
 
 			<div class="form-control max-w-md">

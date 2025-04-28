@@ -32,7 +32,7 @@
 		<h2>Join the competition</h2>
 		<p>By creating an account you'll be able to participate as either a creator or a judge</p>
 
-		<form method="post" use:enhance={reportValidity}>
+		<form class="space-y-2" method="post" use:enhance={reportValidity}>
 			<div class="form-control max-w-md">
 				<label for="username" class="label">
 					<span class="label-text"> Username </span>
