@@ -7,9 +7,10 @@ export const SHORT_NAME = "SoME";
 export const categories = ["video", "non-video"] as const;
 export type Category = (typeof categories)[number];
 
-export const userTypes = ["creator", "judge"] as const;
-
-export const listFormatter = new Intl.ListFormat("en", { type: "disjunction", style: "short" });
+export const listFormatter = new Intl.ListFormat("en", {
+	type: "disjunction",
+	style: "short",
+});
 
 /**
  * Batch sending templates only
@@ -38,7 +39,10 @@ export const emailTemplates = {
 	},
 	registration: { subject: `${FULL_NAME} registration`, variables: ["token"] },
 	update: { subject: `How to update your entry`, variables: ["token"] },
-	resend_token: { subject: `Your link for the ${FULL_NAME}`, variables: ["token"] },
+	resend_token: {
+		subject: `Your link for the ${FULL_NAME}`,
+		variables: ["token"],
+	},
 } as const;
 
 export type TemplateName = keyof typeof emailTemplates;
