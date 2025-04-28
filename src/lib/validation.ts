@@ -11,7 +11,6 @@ const SHARP_IMAGE_INPUT_TYPES = [
 	"image/jpeg",
 	"image/png",
 	"image/webp",
-	"image/gif",
 ];
 const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
@@ -77,19 +76,7 @@ export const ChangePasswordSchema = {
 	password2: PasswordSchema,
 };
 
-export const CategorySchema = z.enum(categories);
-
 export const TokenSchema = z.string().uuid();
-
-const UrlSchema = z
-	.string()
-	.url({
-		message:
-			"Invalid url, please provide the full url with the https:// prefix",
-	})
-	.refine((str) => !str.includes("playlist"), {
-		message: "Playlists are not allowed",
-	});
 
 export const FlagForm = z.object({
 	selection: z.string().transform((val, ctx) => {
@@ -126,39 +113,36 @@ export const PasswordForm = z.object({
 	password: z.string(),
 });
 
-const CheckboxSchema = z.literal("on", {
-	errorMap: () => {
-		return { message: "Must be checked" };
-	},
+const TitleSchema = fg.text({ required: true, minlength: 1, maxlength: 128 }, {
+	...validationMessages,
+	minlength: "Title too short",
+	maxlength: "Title too long",
+}).refine((value) => value.trim());
+
+const DescriptionSchema = fg.text({
+	required: true,
+	minlength: 10,
+	maxlength: 5000,
+}, {
+	...validationMessages,
+	minlength: "Description too short",
+	maxlength: "Description too long",
 });
 
-const TitleSchema = z
-	.string()
-	.trim()
-	.min(1, { message: "Title cannot be empty" })
-	.max(128, { message: "Title too long" });
+const UrlSchema = fg.url({ required: true }, {
+	invalid: "Invalid url, please provide the full url with the https:// prefix",
+}).refine((str) => !str.includes("playlist"), "Playlists are not allowed");
 
-const DescriptionSchema = z
-	.string()
-	.trim()
-	.min(10, { message: "Description too short" })
-	.max(5000, { message: "Description too long" });
-
-const ThumbnailSchema = z
-	.instanceof(File)
-	.refine((file) => file.size < MAX_IMG_SIZE, {
-		message: "Image too big: 1MB max",
-	})
-	.refine((file) => SHARP_IMAGE_INPUT_TYPES.includes(file.type), {
-		message: "Must be a jpeg, png, webp or gif image",
-	})
-	.optional();
-
-const ZodEmailSchema = z.string().email().max(128);
+const ThumbnailSchema = fg.file({
+	required: false,
+	multiple: false,
+	accept: SHARP_IMAGE_INPUT_TYPES,
+}).refine(
+	(file) => !file || file.size < MAX_IMG_SIZE,
+	"Image too big: 1MB max",
+);
 
 export const CreatorSchema = z.object({
-	userType: z.literal("creator"),
-	email: ZodEmailSchema,
 	others: z.string().transform((val, ctx) => {
 		try {
 			return z.array(z.string().email()).parse(JSON.parse(val));
@@ -171,14 +155,18 @@ export const CreatorSchema = z.object({
 			return z.NEVER;
 		}
 	}),
-	category: CategorySchema,
+});
+
+export const NewEntrySchema = {
+	usernames: fg.multi({ min: 0 }),
+	category: fg.radio(["video", "non-video"], { required: true }),
 	title: TitleSchema,
 	description: DescriptionSchema,
 	link: UrlSchema,
 	thumbnail: ThumbnailSchema,
-	rules: CheckboxSchema,
-	copyright: CheckboxSchema,
-});
+	rules: fg.checkbox({ required: true }),
+	copyright: fg.checkbox({ required: true }),
+};
 
 export const FeedbackSchema = z
 	.string()
