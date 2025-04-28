@@ -34,6 +34,10 @@ export const handle = async function ({ event, resolve }) {
 	event.locals.user = user;
 	event.locals.session = session;
 
+	if (event.url.pathname.includes("/user/") && !event.locals.user) {
+		return redirect(302, "/login");
+	}
+
 	if (event.url.pathname.includes("/admin/") && !event.locals.user?.isAdmin) {
 		return redirect(302, "/admin");
 	}
