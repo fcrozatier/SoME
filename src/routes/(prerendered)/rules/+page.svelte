@@ -233,9 +233,13 @@
 		<details>
 			<summary>Can my content include ads?</summary>
 			<p>
-				Your entry can include ads or sponsorships within the content itself. However ads are not
-				allowed in your entry's title or description, as the SoME website and archive do not endorse
-				the promoted products.
+				Your entry can optionally include ads or sponsorships within the content itself. However ads
+				are not allowed in your entry's title or description, as the SoME website and archive do not
+				endorse the promoted products.
+			</p>
+			<p>
+				Also keep in mind that reviewers might get turned away by too long or too aggressive
+				ads and sponsor segments
 			</p>
 		</details>
 		<!-- Winners -->
