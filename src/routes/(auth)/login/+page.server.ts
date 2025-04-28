@@ -19,7 +19,7 @@ export const actions = {
 		);
 
 		if (!user?.passwordHash) {
-			return formfail({ username: "Invalid email or password" });
+			return formfail({ email: "Invalid email or password" });
 		}
 
 		// Verify password
@@ -29,7 +29,7 @@ export const actions = {
 		);
 
 		if (!validPassword) {
-			return formfail({ username: "Invalid email or password" });
+			return formfail({ email: "Invalid email or password" });
 		}
 
 		const sessionId = auth.generateSessionToken();
