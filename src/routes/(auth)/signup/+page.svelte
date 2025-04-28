@@ -128,9 +128,15 @@
 					</span>
 				{/if}
 			</p>
-			<p class="text-sm">
-				<a href="/gdpr" rel="privacy-policy">Privacy policy</a>
-			</p>
+
+			<div class="grid gap-2 text-sm">
+				<span class="text-sm">
+					Already have an account? <a href="/login">Login</a>
+				</span>
+				<span class="text-sm">
+					<a href="/gdpr" rel="privacy-policy">Privacy policy</a>
+				</span>
+			</div>
 		</form>
 	{/if}
 </article>

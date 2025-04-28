@@ -54,12 +54,19 @@
 			{/if}
 		</div>
 
-		<p>
-			<button class="btn-neutral btn block">Login</button>
-		</p>
-		<p class="text-sm">
-			Not registered? <a href="/signup">Create account</a>
-		</p>
+		<div>
+			<p>
+				<button class="btn-neutral btn block">Login</button>
+			</p>
+			<div class="text-sm grid gap-2">
+				<span>
+					Not registered yet? <a href="/signup">Create an account</a>
+				</span>
+				<span>
+					Forgot your password? <a href="/change-password">Change password</a>
+				</span>
+			</div>
+		</div>
 	</form>
 </article>
 

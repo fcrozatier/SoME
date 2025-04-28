@@ -39,10 +39,10 @@
 		</li>
 		{#if !data.user}
 			<li>
-				<button class="btn text-nowrap w-[10ch]">Sign up</button>
+				<a href="/signup" class="btn btn-neutral text-nowrap w-[10ch]">Sign up</a>
 			</li>
 			<li>
-				<button class="btn text-nowrap w-[10ch]">Sign in</button>
+				<a href="/login" class="btn text-nowrap w-[10ch]">Sign in</a>
 			</li>
 		{/if}
 		{#if voteOpen() && data.user}
