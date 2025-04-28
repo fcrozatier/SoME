@@ -119,6 +119,8 @@ summary {
 	cursor: pointer;
 	user-select: none;
 	list-style: none;
+	font-size: var(--text-xl);
+	font-weight: var(--font-weight-medium);
 	text-box-trim: trim-start;
 	text-box-edge: cap;
 }
