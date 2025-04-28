@@ -150,11 +150,11 @@
 		<section
 			class="bg-black text-sm px-8 text-light-gold py-4 flex flex-wrap justify-center gap-x-20 -mx-4 gap-y-10"
 		>
-			<a href="/algorithm" rel="about"> Algorithm </a>
-			<a href="/contact"> Contact </a>
-			<a href="/content-policy"> Content Policy </a>
-			<a href="/gdpr" rel="privacy-policy"> GDPR </a>
-			<a href="/rules" rel="terms-of-service">Rules</a>
+			<a class="text-trim" href="/algorithm" rel="about"> Algorithm </a>
+			<a class="text-trim" href="/contact"> Contact </a>
+			<a class="text-trim" href="/content-policy"> Content Policy </a>
+			<a class="text-trim" href="/gdpr" rel="privacy-policy"> GDPR </a>
+			<a class="text-trim" href="/rules" rel="terms-of-service">Rules</a>
 		</section>
 	</footer>
 </div>
