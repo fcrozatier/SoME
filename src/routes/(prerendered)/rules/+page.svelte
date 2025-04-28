@@ -244,7 +244,7 @@
 			<p>
 				Winners will be chosen through a peer review phase, with final results announced at the end
 				of the competition. Curious about how the voting works? You can learn more about it <a
-					href="/voting-system">here</a
+					href="/algorithm">here</a
 				>.
 			</p>
 			<p>
