@@ -1,8 +1,9 @@
 <script lang="ts">
+	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
+	import Youtube from "$lib/components/Youtube.svelte";
 	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { setTitle } from "$lib/utils";
-	import ResultsPage from "./results/+page.svelte";
 
 	let { data } = $props();
 
@@ -21,7 +22,47 @@
 </section>
 
 <Timeline></Timeline>
-<ResultsPage {data}></ResultsPage>
+
+<!-- Last year -->
+<section>
+	<h2 class="mb-20 text-4xl font-black text-center">Discover the top 5 of the last edition</h2>
+
+	<div
+		class="grid lg:grid-cols-2 max-w-4/5 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
+	>
+		{#each data.top.slice(0, 5) as winner}
+			<div class="grid grid-cols-subgrid col-span-full max-w-3xl hover:bg-base-200 rounded-3xl p-6">
+				{#if winner.category === "video"}
+					<Youtube title={winner.title} src={winner.url}></Youtube>
+				{:else if winner.thumbnail}
+					<a href={winner.url} target="_blank">
+						<Thumbnail uid={winner.thumbnail}></Thumbnail>
+					</a>
+				{/if}
+
+				<div class="md:mx-4 mt-4 lg:my-0">
+					<a class="no-underline hover:underline" href={`/entries/${winner.uid}`}>
+						<h3 class="mt-0 text-trim text-balance leading-snug mb-3">
+							{winner.title}
+						</h3>
+					</a>
+					<p class="line-clamp-4 lg:line-clamp-6 mb-0 leading-snug">{winner.description}</p>
+				</div>
+			</div>
+		{/each}
+	</div>
+</section>
+
+<section>
+	<div class="text-center">
+		<h2 class="mb-10 text-4xl font-black">All entries</h2>
+		<p>You can find the whole ranking of entries here:</p>
+		<div class="flex gap-2 justify-center">
+			<a class="btn btn-neutral" href="/results/video">All videos</a>
+			<a class="btn btn-neutral" href="/results/non-video">All non-videos</a>
+		</div>
+	</div>
+</section>
 
 <!-- Sponsor -->
 <section class="mt-10 pt-10">
@@ -34,42 +75,3 @@
 		</a>
 	</div>
 </section>
-
-<!-- Last year -->
-<!-- <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--color-light-gold)">
-	<div class="mx-auto max-w-prose">
-		<h2 class="my-0 text-5xl font-black" style:color="var(--color-light-gold)">
-			Last year's competition
-		</h2>
-		<p class="mt-8 font-light tracking-wider">
-			Discover the 5 winners of the last edition. <br />
-
-			The 20 honorable mentions as well as the full list of entries is available
-			<a class="font-light" style:color="var(--color-light-gold)" href="/previous">here</a>
-		</p>
-	</div>
-	<div class="mx-4">
-		<div
-			class="scrollbar mx-auto flex max-w-5xl snap-x snap-proximity snap-always items-center gap-10 overflow-x-scroll pb-2"
-			style:--scrollbar-thumb="var(--color-light-gold)"
-		>
-			{#each winners as winner}
-				<div class="snap-center">
-					{#if winner.video}
-						<Youtube src={winner.link}></Youtube>
-					{:else}
-						<a href={winner.link} target="_blank" class="inline-block w-[420px]">
-							<img
-								src={winner.thumbnail}
-								alt="Winner thumbnail"
-								width="420"
-								class="aspect-video rounded-lg"
-								loading="lazy"
-							/>
-						</a>
-					{/if}
-				</div>
-			{/each}
-		</div>
-	</div>
-</section> -->
