@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "is_teacher" boolean DEFAULT false;

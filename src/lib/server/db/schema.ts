@@ -24,6 +24,7 @@ export const users = pgTable(
 		newPasswordValidationToken: uuid("new_password_validation_token"),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 		isAdmin: boolean("is_admin").default(false),
+		isTeacher: boolean("is_teacher").default(false),
 	},
 	(
 		{ username, newPasswordValidationToken },

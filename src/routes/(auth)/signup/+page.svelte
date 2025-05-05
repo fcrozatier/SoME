@@ -101,6 +101,36 @@
 			</div>
 
 			<div class="form-control max-w-md">
+				<span class="label label-text"> Are you a math teacher? </span>
+
+				<span class="inline-flex gap-x-3 ml-2">
+					<label>
+						<input
+							type="radio"
+							name="isTeacher"
+							class="radio"
+							value="true"
+							{...fg.splat(NewUserSchema["isTeacher"].attributes)}
+						/>
+						<span> Yes </span>
+					</label>
+					<label>
+						<input
+							type="radio"
+							name="isTeacher"
+							class="radio"
+							value="false"
+							{...fg.splat(NewUserSchema["isTeacher"].attributes)}
+						/>
+						<span> No </span>
+					</label>
+				</span>
+				{#if form?.issues?.isTeacher}
+					<span class="error-message">{form.issues.isTeacher.message}</span>
+				{/if}
+			</div>
+
+			<div class="form-control max-w-md">
 				<label for="rules" class="label justify-normal gap-4">
 					<input
 						id="rules"

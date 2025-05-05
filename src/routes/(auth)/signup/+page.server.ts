@@ -23,6 +23,7 @@ export const actions = {
 			username: data.username,
 			passwordHash: await auth.hash(data.password),
 			email: data.email,
+			isTeacher: data.isTeacher,
 		};
 
 		// Email deliverability
@@ -40,9 +41,7 @@ export const actions = {
 			.from(users)
 			.where(eq(users.username, data.username));
 
-		if (other) {
-			return formfail({ username: "This username is already taken" });
-		}
+		if (other) return formfail({ username: "This username is already taken" });
 
 		// Save data
 		try {

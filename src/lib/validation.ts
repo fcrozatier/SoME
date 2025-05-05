@@ -62,6 +62,8 @@ export const NewUserSchema = {
 	email: EmailSchema,
 	// Add pattern
 	password: PasswordSchema,
+	isTeacher: fg.radio(["true", "false"], { required: true })
+		.transform((value) => value === "true"),
 	rules: fg.checkbox({ required: true }, validationMessages),
 };
 
