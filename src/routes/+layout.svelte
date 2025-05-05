@@ -32,7 +32,7 @@
 
 {#snippet menu()}
 	<ul class="grid gap-4">
-		<li>
+		<li class={data.user ? "" : "translate-x-2"}>
 			<a href="/archive" aria-current={page.url.pathname === "/archive" ? "page" : null}>Archive</a>
 		</li>
 		{#if data.user}
@@ -71,15 +71,15 @@
 				>
 			</li>
 		{:else}
-			<li>
+			<li class="relative -translate-x-2">
 				<a href="/signup" class="btn btn-neutral text-nowrap w-[10ch]">Sign up</a>
 			</li>
-			<li>
+			<li class="relative -translate-x-2">
 				<a href="/login" class="btn text-nowrap w-[10ch]">Sign in</a>
 			</li>
 		{/if}
 		<li
-			class="mt-8 relative -translate-2 grid grid-cols-2 justify-between sm:justify-end items-center gap-2"
+			class="mt-4 relative -translate-x-2 grid grid-cols-2 justify-between sm:justify-end items-center gap-2"
 		>
 			<a
 				title="BlueSky"
