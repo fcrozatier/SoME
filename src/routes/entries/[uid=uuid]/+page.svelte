@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Display from "$lib/components/Display.svelte";
 	import Bento from "$lib/components/Bento.svelte";
-	import { COMPETITION_SHORT_NAME } from "$lib/config";
+	import Display from "$lib/components/Display.svelte";
 	import { round } from "@fcrozatier/ts-helpers";
 
+	import { setTitle } from "$lib/utils.js";
 	import * as Plot from "@observablehq/plot";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
@@ -27,11 +27,9 @@
 	}
 
 	let { data } = $props();
-</script>
 
-<svelte:head>
-	<title>Feedback &middot; {COMPETITION_SHORT_NAME}</title>
-</svelte:head>
+	setTitle("Feedback");
+</script>
 
 <article class="layout-prose">
 	<Display data={data.entry}></Display>

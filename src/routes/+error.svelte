@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import { setTitle } from "$lib/utils";
+
+	setTitle("Error");
 </script>
 
 <article class="layout-prose min-h-[100vh]">

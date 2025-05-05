@@ -1,11 +1,11 @@
-import { db } from "$lib/server/db/client.js";
+import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { resultsAvailable } from "$lib/utils.js";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ params, locals, url }) => {
-	if (!resultsAvailable() && !locals.isAdmin) {
+	if (!resultsAvailable() && !locals.user?.isAdmin) {
 		error(400, { message: "Results not available" });
 	}
 
@@ -31,14 +31,14 @@ export const load = async ({ params, locals, url }) => {
      offset ${(+page - 1) * limit}
 		`);
 
-	const total = (
+	const [total] = (
 		await db.execute(sql`
 		 select count(*) from entries
 		 where active='t'
 		 and date_part('year', entries.created_at)='2024'
 		 and category=${category}
 		`)
-	)[0] as { count: number };
+	) as { count: number }[];
 
-	return { entries, page, pages: Math.ceil(total.count / limit) };
+	return { entries, page, pages: Math.ceil(total?.count ?? 0 / limit) };
 };

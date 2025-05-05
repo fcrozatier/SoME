@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { fail } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -22,15 +22,15 @@ export const load = async ({ url }) => {
 			offset ${(+page - 1) * limit};
 		`);
 
-	const total = (
+	const [total] = (
 		await db.execute(sql`
 		 select count(*) from entries
 		 where entries.active='true'
 		 and date_part('year', entries.created_at)='2024';
 		`)
-	)[0] as { count: number };
+	) as { count: number }[];
 
-	return { entries, pages: Math.ceil(total.count / limit) };
+	return { entries, pages: Math.ceil(total?.count ?? 0 / limit) };
 };
 
 export const actions = {
@@ -39,7 +39,7 @@ export const actions = {
 
 		if (!uid) return fail(400);
 
-		const entry: Pick<
+		const [entry]: Pick<
 			SelectEntry,
 			"uid" | "title" | "url" | "description" | "category" | "thumbnail"
 		>[] = await db.execute(sql`
@@ -47,6 +47,6 @@ export const actions = {
 			from entries where uid=${uid}
 			`);
 
-		return { success: true, entry: entry[0] };
+		return { success: true, entry };
 	},
 };

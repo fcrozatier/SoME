@@ -6,7 +6,7 @@
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { categories } from "$lib/config.js";
-	import { YOUTUBE_EMBED } from "$lib/utils";
+	import { setTitle, YOUTUBE_EMBED } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 
@@ -47,11 +47,9 @@
 			goto(href);
 		}
 	}
-</script>
 
-<svelte:head>
-	<title>Archive &middot; SoME</title>
-</svelte:head>
+	setTitle("Archive");
+</script>
 
 <section class="layout-prose pb-10">
 	<p class=" mb-16 text-center text-3xl font-light">Archive</p>

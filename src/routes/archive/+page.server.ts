@@ -1,5 +1,5 @@
 import type { Category } from "$lib/config.js";
-import { db } from "$lib/server/db/client.js";
+import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { sql } from "drizzle-orm";
 
@@ -36,19 +36,19 @@ export const load = async ({ url }) => {
      offset ${(+page - 1) * limit}
 		`);
 
-	const total = (
+	const [total] = (
 		await db.execute(sql`
 		 select count(*) from entries
 		 where date_part('year', entries.created_at)=${year}
 		 and category=${category}
 		`)
-	)[0] as { count: number };
+	) as { count: number }[];
 
 	return {
 		entries,
 		year,
 		category,
 		page,
-		pages: Math.ceil(total.count / limit),
+		pages: Math.ceil(total?.count ?? 0 / limit),
 	};
 };

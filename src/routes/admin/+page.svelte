@@ -6,7 +6,7 @@
 
 <article class="layout-prose">
 	<h2>Admin area</h2>
-	{#if data.isAdmin}
+	{#if data.user?.isAdmin}
 		<h3>Review</h3>
 		<ul>
 			<li><a href="/admin/entries">Entries</a></li>

@@ -82,31 +82,29 @@ details {
 	padding-block: --spacing(8);
 	border-block: 1px solid var(--color-gray-200);
 
-	& > p:first-of-type {
-		margin-top: 0;
-	}
-
-	& > p:last-of-type {
+	& p {
 		margin-bottom: 0;
 	}
-}
 
-details::details-content {
-	block-size: 0;
-	overflow-y: clip;
-	transition:
-		content-visibility 250ms allow-discrete,
-		block-size 250ms;
-}
-
-details[open]::details-content {
-	block-size: auto;
+	&::details-content {
+		display: grid;
+		gap: 0;
+		block-size: 0;
+		overflow-y: clip;
+		transition:
+			content-visibility 250ms allow-discrete,
+			block-size 250ms;
+	}
 }
 
 details[open] {
 	& > summary::after {
 		transform: rotate(-135deg);
 		top: 10px;
+	}
+
+	&::details-content {
+		block-size: auto;
 	}
 }
 
@@ -116,12 +114,13 @@ details + details {
 
 summary {
 	--outline-width: 0;
-	margin-bottom: --spacing(4);
 	padding-right: 30px;
 	position: relative;
 	cursor: pointer;
 	user-select: none;
 	list-style: none;
+	font-size: var(--text-xl);
+	font-weight: var(--font-weight-medium);
 	text-box-trim: trim-start;
 	text-box-edge: cap;
 }
@@ -195,7 +194,11 @@ summary::after {
 
 .text-trim {
 	text-box-trim: trim-start;
-	text-box-edge: cap;
+	text-box-edge: cap alphabetic;
+}
+
+.error-message {
+	@apply block text-sm text-red-600;
 }
 
 .layout-prose {

@@ -2,8 +2,9 @@
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import { newToast } from "$lib/components/Toasts.svelte";
+	import { setTitle } from "$lib/utils.js";
 
-	let { data, form } = $props();
+	let { form } = $props();
 
 	let someValue = $state(5);
 	let siteValue = $state(5);
@@ -16,10 +17,12 @@
 			errorSummary?.scrollIntoView();
 		}
 	});
+
+	setTitle("Survey");
 </script>
 
 <article class="layout-prose">
-	{#if !data.surveyTaken && !form?.surveySuccess}
+	{#if !form?.surveySuccess}
 		<h2>Survey</h2>
 
 		<form
@@ -151,7 +154,5 @@
 				</p>
 			{/if}
 		</form>
-	{:else if data.surveyTaken}
-		<p>You already did the survey. Thank you</p>
 	{/if}
 </article>

@@ -20,12 +20,7 @@ type Validation = {
 	is_disposable_address: boolean;
 	is_role_address: boolean;
 	reason: string[];
-	result:
-		| "deliverable"
-		| "undeliverable"
-		| "do_not_send"
-		| "catch_all"
-		| "unknown";
+	result: "deliverable" | "undeliverable" | "do_not_send" | "catch_all" | "unknown";
 	risk: "high" | "medium" | "low" | "unknown";
 	root_address?: string;
 };

@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
 import { FlagForm, validateForm } from "$lib/validation";
 import { fail, type Actions } from "@sveltejs/kit";

@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db/client";
+import { db } from "$lib/server/db";
 import { type SelectSurveys } from "$lib/server/db/schema";
 import { sql } from "drizzle-orm";
 

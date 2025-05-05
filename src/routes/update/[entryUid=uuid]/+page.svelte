@@ -3,8 +3,8 @@
 	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { COMPETITION_FULL_NAME, COMPETITION_SHORT_NAME, categories } from "$lib/config";
-	import { YOUTUBE_EMBEDDABLE, registrationOpen } from "$lib/utils";
+	import { FULL_NAME, categories } from "$lib/config";
+	import { YOUTUBE_EMBEDDABLE, registrationOpen, setTitle } from "$lib/utils";
 	import { tick } from "svelte";
 
 	let { data, form } = $props();
@@ -43,11 +43,9 @@
 		const lastEmail = document.getElementById(`email-${otherContributors.length - 1}`);
 		(lastEmail as HTMLInputElement)?.focus();
 	}
-</script>
 
-<svelte:head>
-	<title>Update &middot; {COMPETITION_SHORT_NAME}</title>
-</svelte:head>
+	setTitle("Update");
+</script>
 
 <article class="layout-prose">
 	<h2>Update your entry</h2>
@@ -265,7 +263,7 @@
 			<label for="copyright" class="label items-start justify-normal gap-4">
 				<input id="copyright" type="checkbox" name="copyright" class="checkbox" required />
 				<span class="label-text">
-					I have permission to use all material contained in my submission for the {COMPETITION_FULL_NAME}.
+					I have permission to use all material contained in my submission for the {FULL_NAME}.
 					<ul class="relative right-6 list-outside">
 						<li>
 							<a href="/content-policy#fair-use"
