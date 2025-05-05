@@ -1,4 +1,4 @@
-import { categories, templateNames } from "$lib/config";
+import { templateNames } from "$lib/config";
 import { z } from "zod";
 import * as fg from "formgator";
 
@@ -116,24 +116,28 @@ export const PasswordForm = z.object({
 });
 
 const TitleSchema = fg.text({ required: true, minlength: 1, maxlength: 128 }, {
-	...validationMessages,
+	required: "Title required",
 	minlength: "Title too short",
 	maxlength: "Title too long",
-}).refine((value) => value.trim());
+}).transform((value) => value.trim());
 
 const DescriptionSchema = fg.text({
 	required: true,
 	minlength: 10,
 	maxlength: 5000,
 }, {
-	...validationMessages,
+	required: "Description required",
 	minlength: "Description too short",
 	maxlength: "Description too long",
 });
 
 const UrlSchema = fg.url({ required: true }, {
+	required: "A link to your entry is required",
 	invalid: "Invalid url, please provide the full url with the https:// prefix",
-}).refine((str) => !str.includes("playlist"), "Playlists are not allowed");
+}).refine(
+	(str) => !str.includes("playlist"),
+	"Playlists are not allowed",
+);
 
 const ThumbnailSchema = fg.file({
 	required: false,
@@ -161,7 +165,7 @@ export const CreatorSchema = z.object({
 
 export const NewEntrySchema = {
 	usernames: fg.multi({ min: 0 }),
-	category: fg.radio(["video", "non-video"], { required: true }),
+	category: fg.select(["video", "non-video"], { required: true }),
 	title: TitleSchema,
 	description: DescriptionSchema,
 	link: UrlSchema,
