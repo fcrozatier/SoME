@@ -40,5 +40,5 @@ export const load = async ({ params, locals, url }) => {
 		`)
 	) as { count: number }[];
 
-	return { entries, page, pages: Math.ceil(total?.count ?? 0 / limit) };
+	return { entries, page, pages: Math.ceil((total?.count ?? 0) / limit) };
 };

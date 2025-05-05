@@ -30,7 +30,7 @@ export const load = async ({ url }) => {
 		`)
 	) as { count: number }[];
 
-	return { entries, pages: Math.ceil(total?.count ?? 0 / limit) };
+	return { entries, pages: Math.ceil((total?.count ?? 0) / limit) };
 };
 
 export const actions = {
