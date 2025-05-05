@@ -49,6 +49,6 @@ export const load = async ({ url }) => {
 		year,
 		category,
 		page,
-		pages: Math.ceil(total?.count ?? 0 / limit),
+		pages: Math.ceil((total?.count ?? 0) / limit),
 	};
 };
