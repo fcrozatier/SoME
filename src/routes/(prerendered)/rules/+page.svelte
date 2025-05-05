@@ -1,129 +1,37 @@
 <script lang="ts">
-	import {
-		PUBLIC_REGISTRATION_END,
-		PUBLIC_REGISTRATION_START,
-		PUBLIC_RESULTS_AVAILABLE,
-		PUBLIC_VOTE_END,
-		PUBLIC_VOTE_START,
-	} from "$env/static/public";
+	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
+	import Time from "$lib/components/Time.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { phaseOpen, resultsAvailable, setTitle, voteOpen } from "$lib/utils";
+	import { registrationOpen, setTitle, timeLeft } from "$lib/utils";
+	import { onMount } from "svelte";
 
-	// let remaining = timeLeft();
+	let remaining = timeLeft();
 
-	// let interval: NodeJS.Timeout | undefined;
-	// onMount(() => {
-	// 	interval = setInterval(() => {
-	// 		remaining = timeLeft();
-	// 	}, 1000);
+	let interval: NodeJS.Timeout | undefined;
+	onMount(() => {
+		interval = setInterval(() => {
+			remaining = timeLeft();
+		}, 1000);
 
-	// 	return () => {
-	// 		clearInterval(interval);
-	// 	};
-	// });
-
-	const phases = [
-		{
-			title: "Join the competition as a participant or judge",
-			description:
-				'Participants all work on their projects and the <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a> server allows creators to share partial progress, find collaborators and ask for help.',
-			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
-			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END],
-		},
-		{
-			title: "Vote for the best contributions",
-			description:
-				"Peer review! You'll be successively shown entries to review and optionally provide feedback. This is the heart of the event and in past years this phase has been what jump-started meaningful exposure for many entries.",
-			isOpen: voteOpen(),
-			dates: [PUBLIC_VOTE_START, PUBLIC_VOTE_END],
-		},
-		{
-			title: "Results and feedback",
-			description: "The top entries and the complete ranking are revealed.",
-			isOpen: resultsAvailable(),
-			dates: [PUBLIC_RESULTS_AVAILABLE],
-		},
-	];
-
-	const dateFormat = {
-		month: "short",
-		day: "2-digit",
-		hour: "numeric",
-		minute: "numeric",
-	} as const;
+		return () => {
+			clearInterval(interval);
+		};
+	});
 
 	setTitle("Rules");
 </script>
 
 <article class="layout-prose">
-	<!-- Timeline -->
-	<section class="layout-prose pb-4">
-		<h2 class="mb-6 text-4xl font-black">Timeline</h2>
-		<p>The competition has three phases:</p>
-		<ul class="-ml-7 list-outside">
-			{#each phases as phase, i}
-				<li class={phase.isOpen ? "marker:text-green-500" : ""}>
-					<div class="mb-4 mt-8">
-						<span class="flex items-center gap-2 text-xl font-semibold">
-							Phase {i + 1}:
-							{phase.title}
-							{#if phase.isOpen}
-								<span class="badge badge-success">current</span>
-							{/if}
-						</span>
-						<!-- <span class="text-sm text-gray-500"
-							>{#if phase.dates.length > 1}
-								From <Time datetime={phase.dates[0]} options={dateFormat} /> to
-								<Time datetime={phase.dates[1]} options={dateFormat} />
-							{:else}
-								<Time datetime={phase.dates[0]} options={dateFormat} />
-							{/if}</span
-						> -->
-					</div>
-
-					<p class="text-sm">{@html phase.description}</p>
-					{#if phase.isOpen}
-						<p class="mt-6">
-							{#if i === 0}
-								<a class="btn-neutral btn" href="/register"
-									>Join in <span class="ml-2 inline-block">&rarr;</span></a
-								>
-								<!-- {:else if i === 1}
-								{#if data.token}
-									<a class="btn-neutral btn" href="/vote/{data.token}">Vote</a>
-								{:else}
-									<button
-										type="button"
-										class="btn-outline btn"
-										on:click={() => {
-											personalLinkDialog.showModal();
-										}}
-										>Resend me my personal link
-									</button>
-								{/if}
-							{:else if i === 2}
-								<a class="btn-neutral btn mr-4" href="/results">Results</a>
-								{#if data.token}
-									<a class="btn-neutral btn" href="/feedback/{data.token}">Your feedbacks</a>
-								{/if} -->
-							{/if}
-						</p>
-					{/if}
-				</li>
-			{/each}
-		</ul>
-	</section>
-
 	<section id="rules" class="layout-prose pb-32">
 		<h2 class="mb-16 text-4xl font-black">How does it work?</h2>
 
 		<!-- Deadline -->
 		<details>
-			<summary>When is the registration deadline?</summary>
-			<p>The competition is closed. Stay tuned for the next edition!</p>
-			<!-- <p>
+			<summary>When is the submission deadline?</summary>
+			<!-- <p>The competition is closed. Stay tuned for the next edition!</p> -->
+			<p>
 				Creators or group of Creators can submit an entry until <span class=""
-					>August 18th at 11:59 PM (UTC-12)</span
+					>August 31th at 11:59 PM (UTC-12)</span
 				>.
 			</p>
 			<p>
@@ -142,7 +50,7 @@
 			<p>
 				If you want to participate as a judge you can register at any time, even after the vote has
 				open.
-			</p> -->
+			</p>
 		</details>
 		<!-- Not a creator -->
 		<details>
@@ -238,8 +146,8 @@
 				endorse the promoted products.
 			</p>
 			<p>
-				Also keep in mind that reviewers might get turned away by too long or too aggressive
-				ads and sponsor segments
+				Also keep in mind that reviewers might get turned away by too long or too aggressive ads and
+				sponsor segments
 			</p>
 		</details>
 		<!-- Winners -->
