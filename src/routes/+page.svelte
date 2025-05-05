@@ -69,9 +69,31 @@
 	<h2 class="text-center mb-4 text-2xl font-light">
 		Operations for this contest have been generously funded by
 	</h2>
-	<div class="flex justify-center">
+	<div class="flex items-center justify-center gap-20">
 		<a href="https://www.janestreet.com/" rel="nofollow sponsored" target="_blank">
-			<img class="opacity-20" src="/jane-street-logo.webp" alt="Jane Street" width="200" />
+			<img
+				class="opacity-20 hover:opacity-100 transition-opacity duration-200"
+				src="/sponsors/jane-street-logo.webp"
+				alt="Jane Street"
+				width="180"
+			/>
+		</a>
+		<a href="https://brilliant.org/" rel="nofollow sponsored" target="_blank">
+			<img
+				class="opacity-20 hover:opacity-100 transition-opacity duration-200"
+				src="/sponsors/brilliant-logo.png"
+				alt="Brilliant"
+				title="Brilliant, Learn by doing"
+				width="60"
+			/>
+		</a>
+		<a href="https://www.3blue1brown.com/" rel="nofollow sponsored" target="_blank">
+			<img
+				class="opacity-20 hover:opacity-100 transition-opacity duration-200"
+				src="/sponsors/3b1b-logo.svg"
+				alt="3Blue1Brown"
+				width="50"
+			/>
 		</a>
 	</div>
 </section>
