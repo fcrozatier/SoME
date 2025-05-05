@@ -1,9 +1,9 @@
 import { dev } from "$app/environment";
 import { db } from "$lib/server/db";
 import { type SelectEntry, users } from "$lib/server/db/schema";
-import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
+import { addToMailingList, validateEmail } from "$lib/server/email";
 import { EmailSchema } from "$lib/validation";
-import { type Actions, fail } from "@sveltejs/kit";
+import { type Actions } from "@sveltejs/kit";
 import { eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 
@@ -50,31 +50,5 @@ export const actions: Actions = {
 		}
 
 		return { success: true };
-	}),
-
-	resend_link: formgate({ email: EmailSchema }, async (data) => {
-		try {
-			// Find user
-			const [user] = await db.select().from(users).where(
-				eq(users.email, data.email),
-			);
-
-			if (!user) {
-				return formfail({
-					email: "email not found. Did you register to this year's event?",
-				});
-			}
-
-			const token = user.uid;
-
-			console.log(`Your personal link is /vote/${token}`);
-			if (!dev) {
-				await sendEmail(data.email, "resend_token", { token });
-			}
-			return { success: true };
-		} catch (error) {
-			console.log(error);
-			return fail(400, { error: true, message: "Something went wrong" });
-		}
 	}),
 };
