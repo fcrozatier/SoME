@@ -8,6 +8,7 @@
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
+	import { PUBLIC_VOTE_START } from "$env/static/public";
 	import { registrationOpen, voteOpen } from "$lib/utils";
 	import "../app.css";
 	import "../math.css";
@@ -32,37 +33,41 @@
 {#snippet menu()}
 	<ul class="grid gap-4">
 		<li>
-			<a href="/archive" aria-current={page.url.pathname.includes("/archive") ? "page" : null}
-				>Archive</a
-			>
+			<a href="/archive" aria-current={page.url.pathname === "/archive" ? "page" : null}>Archive</a>
 		</li>
 		{#if data.user}
 			{#if data.user?.isAdmin}
 				<li>
-					<a href="/admin" aria-current={page.url.pathname.includes("/admin") ? "page" : null}
-						>Admin</a
-					>
+					<a href="/admin" aria-current={page.url.pathname === "/admin" ? "page" : null}>Admin</a>
 				</li>
 			{/if}
+			<li>
+				<a href="/user/profile" aria-current={page.url.pathname === "/user/profile" ? "page" : null}
+					>Profile</a
+				>
+			</li>
 			<li>
 				<a
 					href="/user/entries"
 					class="text-nowrap"
-					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>My Entries</a
+					aria-current={page.url.pathname === "/user/entries" ? "page" : null}>My Entries</a
 				>
 			</li>
 			<li>
 				<a
 					href="/user/votes"
 					class="text-nowrap"
-					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>My Votes</a
+					aria-current={page.url.pathname === "/user/votes" ? "page" : null}>My Votes</a
 				>
 			</li>
 			<li class="mt-2 ml-1">
 				<a
 					href="/vote"
 					class={`btn btn-neutral ${voteOpen() ? "" : "btn-disabled"}`}
-					aria-current={page.url.pathname.includes("/vote") ? "page" : null}>Vote</a
+					aria-current={page.url.pathname === "/vote" ? "page" : null}>Vote</a
+				>
+				<span class="text-xs block text-nowrap relative text-gray-700 -left-3 mt-1"
+					>Starts {new Intl.DateTimeFormat("en").format(Date.parse(PUBLIC_VOTE_START))}</span
 				>
 			</li>
 		{:else}
@@ -73,7 +78,9 @@
 				<a href="/login" class="btn text-nowrap w-[10ch]">Sign in</a>
 			</li>
 		{/if}
-		<li class="mt-8 relative -translate-2 grid grid-cols-2 justify-between sm:justify-end items-center gap-2">
+		<li
+			class="mt-8 relative -translate-2 grid grid-cols-2 justify-between sm:justify-end items-center gap-2"
+		>
 			<a
 				title="BlueSky"
 				rel="author"
