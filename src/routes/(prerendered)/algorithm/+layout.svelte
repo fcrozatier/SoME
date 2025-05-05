@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LayoutProse from "$lib/components/LayoutProse.svelte";
+	import LayoutProse from "$lib/components/layouts/LayoutProse.svelte";
 	import type { Snippet } from "svelte";
 
 	interface Props {
