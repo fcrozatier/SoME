@@ -36,6 +36,6 @@ export const actions = {
 		const session = await auth.createSession(sessionId, user.uid);
 		auth.setSessionTokenCookie(cookies, sessionId, session.expiresAt);
 
-		return redirect(303, "/archive");
+		return redirect(303, "/user/entries");
 	}),
 };
