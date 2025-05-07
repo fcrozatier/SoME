@@ -37,7 +37,7 @@ export const emailTemplates = {
 		subject: `${FULL_NAME} vote is starting soon`,
 		variables: ["token"],
 	},
-	registration: { subject: `${FULL_NAME} registration`, variables: ["token"] },
+	registration: { subject: `Confirm your new password`, variables: ["token"] },
 	update: { subject: `How to update your entry`, variables: ["token"] },
 	resend_token: {
 		subject: `Your link for the ${FULL_NAME}`,
