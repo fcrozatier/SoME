@@ -58,8 +58,10 @@
 		<h2 class="mb-10 text-4xl font-black">All entries</h2>
 		<p>You can find the whole ranking of entries here:</p>
 		<div class="flex gap-2 justify-center">
-			<a class="btn btn-neutral" href="/results/video">All videos</a>
-			<a class="btn btn-neutral" href="/results/non-video">All non-videos</a>
+			<a class="btn btn-neutral" href="/archive?category=video&year=2024&page=1">All videos</a>
+			<a class="btn btn-neutral" href="/archive?category=non-video&year=2024&page=1"
+				>All non-videos</a
+			>
 		</div>
 	</div>
 </section>
