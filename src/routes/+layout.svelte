@@ -84,7 +84,7 @@
 			<a
 				title="BlueSky"
 				rel="author"
-				href="https://bsky.app/profile/fcrozatier.bsky.social"
+				href="https://bsky.app/profile/fred-crozatier.dev"
 				class="fill-gray-800 p-2 hover:opacity-100 hover:fill-[#0085ff]"
 				target="_blank"
 				><Icon name="bluesky" class="size-6" />
