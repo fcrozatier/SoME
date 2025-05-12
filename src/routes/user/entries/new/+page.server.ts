@@ -7,7 +7,7 @@ import { saveThumbnail } from "$lib/server/s3";
 import {
   normalizeYoutubeLink,
   phaseOpen,
-  registrationOpen,
+  submissionsOpen,
   YOUTUBE_EMBEDDABLE,
 } from "$lib/utils";
 import { NewEntrySchema } from "$lib/validation";
@@ -31,7 +31,7 @@ export const actions = {
       throw error(401, "You must be logged in");
     }
 
-    if (!registrationOpen() && !locals.user.isAdmin) {
+    if (!submissionsOpen() && !locals.user.isAdmin) {
       throw error(403, "Submissions are closed");
     }
 

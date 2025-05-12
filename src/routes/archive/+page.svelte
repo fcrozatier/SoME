@@ -2,13 +2,13 @@
 	import { goto, preloadData, pushState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { clickOutside } from "$lib/actions.js";
+	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
-	import Thumbnail from "$lib/components/Thumbnail.svelte";
-	import Youtube from "$lib/components/Youtube.svelte";
 	import { categories } from "$lib/config.js";
-	import { setTitle, YOUTUBE_EMBED } from "$lib/utils";
+	import { setTitle } from "$lib/utils";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
+	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 
 	let { data } = $props();
 
@@ -51,7 +51,7 @@
 	setTitle("Archive");
 </script>
 
-<section class="layout-prose pb-10">
+<section class="layout-prose">
 	<p class=" mb-16 text-center text-3xl font-light">Archive</p>
 	<form
 		class="flex gap-3 justify-center"
@@ -108,45 +108,54 @@
 	</div>
 </section>
 
-<div class="overflow-x-scroll sm:px-4">
-	<table class="table min-w-xl max-w-3xl mx-auto">
-		<thead>
-			<tr>
-				<th>Entry</th>
-				<th>Title</th>
-				<th class="text-center">Rank</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.entries as { uid, title, description, category, thumbnail, url, rank }}
-				<tr>
-					<td>
-						{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
-							{#key url}
-								<Youtube src={url} {title}></Youtube>
-							{/key}
-						{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-							<a href={url} target="_blank">
-								<Thumbnail uid={thumbnail} width={256}></Thumbnail>
-							</a>
-						{:else}
-							<a href={url} class="line-clamp-1" target="_blank">{url}</a>
-						{/if}
-					</td>
-					<td>
-						<h3 class="text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
-						{#if description}
-							<p class="line-clamp-3">{description}</p>
-						{/if}
-					</td>
-					<td class="items-center flex flex-col gap-4">
-						<span class="text-trim">{rank ? `#${rank}` : "-"}</span>
-						<a class="btn btn-sm" href={`/entries/${uid}`} onclick={loadData}> details </a>
-					</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+<div class="px-4 mt-10">
+	<div class="max-w-3xl mx-auto">
+		<hr class="my-8!" />
+		{#each data.entries as { uid, title, description, category, thumbnail, url, rank }}
+			<div>
+				<LayoutSideBySide side="right" contentMinSize="85%" sideWidth="64px">
+					{#snippet mainPanel()}
+						<Media
+							{uid}
+							{category}
+							{title}
+							{description}
+							{url}
+							{thumbnail}
+							thumbnailWidth="256px"
+							gap={6}
+						></Media>
+					{/snippet}
+					{#snippet sidePanel()}
+						<LayoutSideBySide
+							side="left"
+							gap={2}
+							class="text-xs"
+							contentMinSize="60%"
+							alignment="center"
+							sideWidth="8ch"
+						>
+							{#snippet mainPanel()}
+								<div class="flex">
+									<a
+										class="btn btn-sm ml-auto w-[8ch] sm:ml-0"
+										href={`/entries/${uid}`}
+										onclick={loadData}
+									>
+										details
+									</a>
+								</div>
+							{/snippet}
+							{#snippet sidePanel()}
+								<span class="text-trim text-center w-[8ch] inline-block">Rank {rank ?? "-"}</span>
+							{/snippet}
+						</LayoutSideBySide>
+					{/snippet}
+				</LayoutSideBySide>
+				<hr class="my-8!" />
+			</div>
+		{/each}
+	</div>
 </div>
 
 <div class="mt-10 mx-auto flex justify-center">
@@ -183,30 +192,3 @@
 		{/if}
 	</div>
 </dialog>
-
-<style>
-	tr {
-		display: grid;
-		grid-template-columns: 256px 1fr auto;
-		gap: calc(var(--spacing) * 6);
-		align-items: start;
-		padding-inline: calc(var(--spacing) * 2);
-
-		content-visibility: auto;
-		contain-intrinsic-size: auto 200px;
-	}
-
-	thead > tr {
-		padding-inline-end: calc(var(--spacing) * 4);
-		padding-block-end: calc(var(--spacing) * 2);
-	}
-
-	tbody > tr {
-		padding-block: calc(var(--spacing) * 6);
-	}
-
-	th,
-	td {
-		padding: 0;
-	}
-</style>

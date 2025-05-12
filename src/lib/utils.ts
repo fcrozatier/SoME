@@ -31,7 +31,7 @@ export function phaseOpen(startDate: string, endDate: string) {
 	return now > openingDate && now < closingDate;
 }
 
-export function registrationOpen() {
+export function submissionsOpen() {
 	return phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END);
 }
 

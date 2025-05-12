@@ -1,7 +1,6 @@
 <script lang="ts">
-	import Thumbnail from "$lib/components/Thumbnail.svelte";
+	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
-	import Youtube from "$lib/components/Youtube.svelte";
 	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { setTitle } from "$lib/utils";
 
@@ -25,29 +24,14 @@
 
 <!-- Last year -->
 <section>
-	<h2 class="mb-20 text-4xl font-black text-center">Discover the top 5 of the last edition</h2>
+	<h2 class="mb-10 text-4xl font-black text-center">Discover the top 5 of the last edition</h2>
 
 	<div
-		class="grid lg:grid-cols-2 max-w-4/5 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
+		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
 	>
 		{#each data.top.slice(0, 5) as winner}
-			<div class="grid grid-cols-subgrid col-span-full max-w-3xl hover:bg-base-200 rounded-3xl p-6">
-				{#if winner.category === "video"}
-					<Youtube title={winner.title} src={winner.url}></Youtube>
-				{:else if winner.thumbnail}
-					<a href={winner.url} target="_blank">
-						<Thumbnail uid={winner.thumbnail}></Thumbnail>
-					</a>
-				{/if}
-
-				<div class="md:mx-4 mt-4 lg:my-0">
-					<a class="no-underline hover:underline" href={`/entries/${winner.uid}`}>
-						<h3 class="mt-0 text-trim text-balance leading-snug mb-3">
-							{winner.title}
-						</h3>
-					</a>
-					<p class="line-clamp-4 lg:line-clamp-6 mb-0 leading-snug">{winner.description}</p>
-				</div>
+			<div class="max-w-3xl hover:bg-base-200 rounded-3xl p-6">
+				<Media {...winner} thumbnailWidth="360px" gap={8}></Media>
 			</div>
 		{/each}
 	</div>
@@ -66,8 +50,8 @@
 	</div>
 </section>
 
-<!-- Sponsor -->
-<section class="mt-10 pt-10">
+<!-- Sponsors -->
+<section class="mt-10 pt-10 px-4">
 	<h2 class="text-center mb-4 text-2xl font-light">
 		Operations for this contest have been generously funded by
 	</h2>

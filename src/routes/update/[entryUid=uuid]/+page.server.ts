@@ -15,7 +15,7 @@ import { CreatorSchema, validateForm } from "$lib/validation";
 import {
 	normalizeYoutubeLink,
 	phaseOpen,
-	registrationOpen,
+	submissionsOpen,
 	YOUTUBE_EMBEDDABLE,
 } from "$lib/utils";
 import { error, fail } from "@sveltejs/kit";
@@ -188,7 +188,7 @@ export const actions = {
 			}
 
 			if (oldUrl !== normalizedLink) {
-				if (!registrationOpen()) {
+				if (!submissionsOpen()) {
 					return fail(422, {
 						message: "You can't update the link once the vote is open",
 					});

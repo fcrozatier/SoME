@@ -74,7 +74,7 @@
 						{:else if i === 1}
 							<a class="btn-neutral btn" href="/vote">Vote</a>
 						{:else if i === 2}
-							<a class="btn-neutral btn mr-4" href="/results">Results</a>
+							<a class="btn-neutral btn mr-4" href="/archive">Results</a>
 						{/if}
 					</p>
 				{/if}
