@@ -8,7 +8,13 @@ export const load = async ({ locals }) => {
 
   const userEntries: Pick<
     SelectEntry,
-    "uid" | "title" | "description" | "category" | "thumbnail" | "url"
+    | "uid"
+    | "title"
+    | "description"
+    | "category"
+    | "thumbnail"
+    | "url"
+    | "createdAt"
   >[] = await db.execute(sql`
       select uid, title, description, category, thumbnail, url, created_at from entries
       inner join user_to_entry
@@ -17,5 +23,8 @@ export const load = async ({ locals }) => {
       order by entries.created_at desc
     `);
 
-  return { userEntries };
+  return {
+    // @ts-ignore add createdAt prop
+    userEntries: userEntries.map((e) => ({ ...e, createdAt: e.created_at })),
+  };
 };

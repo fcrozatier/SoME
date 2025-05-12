@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { PUBLIC_REGISTRATION_END, PUBLIC_REGISTRATION_START } from "$env/static/public";
-	import Thumbnail from "$lib/components/Thumbnail.svelte";
+	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
+	import Media from "$lib/components/Media.svelte";
 	import Time from "$lib/components/Time.svelte";
-	import Youtube from "$lib/components/Youtube.svelte";
-	import { submissionsOpen, YOUTUBE_EMBED } from "$lib/utils";
+	import { submissionsOpen } from "$lib/utils";
 
 	const { data } = $props();
 </script>
@@ -23,48 +23,53 @@
 	<p>
 		<button class="btn btn-neutral" disabled={!submissionsOpen()}>New entry</button>
 	</p>
-
-	{#if data.userEntries.length > 0}
-		<div class="overflow-x-scroll sm:px-4">
-			<table class="table min-w-xl max-w-3xl mx-auto">
-				<thead>
-					<tr>
-						<th>Entry</th>
-						<th>Title</th>
-						<th class="text-center">Rank</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each data.userEntries as { uid, title, description, category, thumbnail, url }}
-						<tr>
-							<td>
-								{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
-									{#key url}
-										<Youtube src={url} {title}></Youtube>
-									{/key}
-								{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-									<a href={url} target="_blank">
-										<Thumbnail uid={thumbnail} width={256}></Thumbnail>
-									</a>
-								{:else}
-									<a href={url} class="line-clamp-1" target="_blank">{url}</a>
-								{/if}
-							</td>
-							<td>
-								<h3 class="text-base text-balance line-clamp-2 text-trim mt-0">{title}</h3>
-								{#if description}
-									<p class="line-clamp-3">{description}</p>
-								{/if}
-							</td>
-							<td class="items-center flex flex-col gap-4">
-								<a class="btn btn-sm" href={`/entries/${uid}`}> details </a>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
-	{:else}
-		<p>No entry submitted</p>
-	{/if}
 </article>
+
+{#if data.userEntries.length > 0}
+	<div class="px-4 mt-10">
+		<div class="max-w-3xl mx-auto">
+			<hr class="my-8!" />
+			{#each data.userEntries as { uid, title, description, category, thumbnail, url, createdAt }}
+				<div class="entry">
+					<LayoutSideBySide side="right" contentMinSize="85%" sideWidth="64px">
+						{#snippet mainPanel()}
+							<Media
+								{uid}
+								{category}
+								{title}
+								{description}
+								{url}
+								{thumbnail}
+								thumbnailWidth="256px"
+								gap={6}
+							></Media>
+						{/snippet}
+						{#snippet sidePanel()}
+							<div class="flex items-center text-xs flex-wrap gap-4">
+								<span class="text-center text-trim">
+									<Time
+										datetime={createdAt}
+										options={{
+											month: "2-digit",
+											day: "2-digit",
+											year: "numeric",
+										}}
+									/>
+								</span>
+								<a class="btn btn-sm ml-auto sm:ml-0" href={`/entries/${uid}`}> details </a>
+								{#if new Date(createdAt) > new Date(PUBLIC_REGISTRATION_START) && new Date(createdAt) < new Date(PUBLIC_REGISTRATION_END)}
+									<a class="btn btn-sm" href={`/entries/${uid}`}> update </a>
+								{/if}
+							</div>
+						{/snippet}
+					</LayoutSideBySide>
+					<hr class="my-8!" />
+				</div>
+			{/each}
+		</div>
+	</div>
+{:else}
+	<div class="layout-prose">
+		<p>No entry submitted</p>
+	</div>
+{/if}
