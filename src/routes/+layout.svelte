@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { beforeNavigate } from "$app/navigation";
 	import { page } from "$app/state";
+	import { PUBLIC_VOTE_START } from "$env/static/public";
 	import { clickOutside } from "$lib/actions";
 	import Banner from "$lib/components/Banner.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import Icons from "$lib/components/icons/Icons.svelte";
+	import Time from "$lib/components/Time.svelte";
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { PUBLIC_VOTE_START } from "$env/static/public";
 	import { submissionsOpen, voteOpen } from "$lib/utils";
 	import "../app.css";
 	import "../math.css";
@@ -67,8 +68,11 @@
 					aria-current={page.url.pathname === "/vote" ? "page" : null}>Vote</a
 				>
 				<span class="text-xs block text-nowrap relative text-gray-700 -left-3 mt-1"
-					>Starts {new Intl.DateTimeFormat("en").format(Date.parse(PUBLIC_VOTE_START))}</span
-				>
+					>Starts <Time
+						datetime={PUBLIC_VOTE_START}
+						options={{ day: "2-digit", month: "2-digit", year: "2-digit" }}
+					></Time>
+				</span>
 			</li>
 		{:else}
 			<li class="relative -translate-x-2">
