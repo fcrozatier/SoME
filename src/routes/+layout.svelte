@@ -9,7 +9,7 @@
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
 	import { PUBLIC_VOTE_START } from "$env/static/public";
-	import { registrationOpen, voteOpen } from "$lib/utils";
+	import { submissionsOpen, voteOpen } from "$lib/utils";
 	import "../app.css";
 	import "../math.css";
 
@@ -125,7 +125,7 @@
 	</dialog>
 
 	<Banner display={false && !!data.user?.uid} />
-	<Timer display={registrationOpen()}></Timer>
+	<Timer display={submissionsOpen()}></Timer>
 
 	<div class="grid lg:grid-cols-[9rem_1fr]">
 		<nav class="flex col-span-full lg:block lg:col-span-1 lg:fixed lg:min-h-full p-8 space-y-8">
@@ -168,8 +168,6 @@
 
 <style>
 	li > a {
-		font-weight: 500;
-
 		&[aria-current="page"] {
 			font-weight: 700;
 		}

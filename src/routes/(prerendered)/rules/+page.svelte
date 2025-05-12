@@ -2,7 +2,7 @@
 	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
 	import Time from "$lib/components/Time.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { registrationOpen, setTitle, timeLeft } from "$lib/utils";
+	import { submissionsOpen, setTitle, timeLeft } from "$lib/utils";
 	import { onMount } from "svelte";
 
 	let remaining = timeLeft();
@@ -41,7 +41,7 @@
 					<Time datetime={PUBLIC_REGISTRATION_END} />
 				</span>.
 			</p>
-			{#if registrationOpen()}
+			{#if submissionsOpen()}
 				<p>
 					Which means you still have <span class="tabular-nums">{remaining.formatted}</span> left to
 					submit an entry!
@@ -92,13 +92,26 @@
 				original, so go have fun!
 			</p>
 		</details>
-		<!-- How many entries -->
+		<!-- How many entries? -->
 		<details>
 			<summary>How many entries can I submit? </summary>
 			<p>One entry per person / group</p>
 			<p>
 				We hope you make more, but we only have the capacity to judge participants based on a single
 				entry.
+			</p>
+		</details>
+		<!-- Can I submit a part of a series? -->
+		<details>
+			<summary>Can I submit a part of a series?</summary>
+			<p>
+				Each entry should be self-contained, not part of a series, playlist, or larger project: something one can dive into without needing extra context.
+			</p>
+
+			<p>
+				This helps judges focus on your work as a complete piece, and give it the attention it
+				deserves, with no ambiguity about what is actually part of the entry and what should be
+				reviewed.
 			</p>
 		</details>
 		<!-- Can I use old material? -->

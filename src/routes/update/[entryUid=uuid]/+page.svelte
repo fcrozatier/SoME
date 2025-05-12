@@ -4,7 +4,7 @@
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { FULL_NAME, categories } from "$lib/config";
-	import { YOUTUBE_EMBEDDABLE, registrationOpen, setTitle } from "$lib/utils";
+	import { YOUTUBE_EMBEDDABLE, submissionsOpen, setTitle } from "$lib/utils";
 	import { tick } from "svelte";
 
 	let { data, form } = $props();
@@ -193,7 +193,7 @@
 			<label for="link" class="label">
 				<span class="label-text"> Link </span>
 			</label>
-			{#if !registrationOpen()}
+			{#if !submissionsOpen()}
 				<input type="hidden" name="link" value={link} />
 			{/if}
 			<input
@@ -203,7 +203,7 @@
 				placeholder="https://"
 				class="input-bordered input w-full"
 				bind:value={link}
-				disabled={!registrationOpen()}
+				disabled={!submissionsOpen()}
 			/>
 			{#if form?.fieldErrors?.link}
 				<span class="block text-error">{form.fieldErrors.link.join(", ")} </span>
