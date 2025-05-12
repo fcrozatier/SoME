@@ -8,7 +8,7 @@
 	let { datetime, time = true, options = undefined }: Props = $props();
 
 	const intl = new Intl.DateTimeFormat(
-		"en",
+		navigator.language,
 		options ?? {
 			// weekday: 'long',
 			year: "numeric",
