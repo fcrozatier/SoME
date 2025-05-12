@@ -3,7 +3,7 @@
 
 	interface Props {
 		uid: string;
-		width?: number;
+		width?: string | number;
 	}
 
 	let { uid, width = 480 }: Props = $props();
