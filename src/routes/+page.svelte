@@ -24,7 +24,7 @@
 
 <!-- Last year -->
 <section>
-	<h2 class="mb-20 text-4xl font-black text-center">Discover the top 5 of the last edition</h2>
+	<h2 class="mb-10 text-4xl font-black text-center">Discover the top 5 of the last edition</h2>
 
 	<div
 		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
@@ -50,8 +50,8 @@
 	</div>
 </section>
 
-<!-- Sponsor -->
-<section class="mt-10 pt-10">
+<!-- Sponsors -->
+<section class="mt-10 pt-10 px-4">
 	<h2 class="text-center mb-4 text-2xl font-light">
 		Operations for this contest have been generously funded by
 	</h2>
