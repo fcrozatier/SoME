@@ -31,7 +31,7 @@
 			<!-- <p>The competition is closed. Stay tuned for the next edition!</p> -->
 			<p>
 				Creators or group of Creators can submit an entry until <span class=""
-					>August 31th at 11:59 PM (UTC-12)</span
+					>September 1st at 11:59 PM (UTC-12)</span
 				>.
 			</p>
 			<p>
