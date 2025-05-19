@@ -62,6 +62,13 @@ export function normalizeYoutubeLink(link: string) {
 }
 
 /**
+ * Pads a number with a leading zero if needed to ensure it is two characters long
+ */
+const padStartZero = (number: number) => {
+	return String(number).padStart(2, "0");
+};
+
+/**
  * Remaining time to submit an entry
  */
 export function timeLeft() {
@@ -72,5 +79,8 @@ export function timeLeft() {
 	const sec = Math.floor((ms % (1000 * 60)) / 1000);
 
 	const days = `${d > 0 ? d.toString() + ` day${d > 1 ? "s" : ""} ` : ""}`;
-	return { ms, formatted: `${days}${h}h ${min}min ${sec}s` };
+	return {
+		ms,
+		formatted: `${days}${h}h ${padStartZero(min)}min ${padStartZero(sec)}s`,
+	};
 }
