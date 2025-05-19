@@ -90,15 +90,16 @@ const wordSegmenter = new Intl.Segmenter("en", { granularity: "word" });
 /**
  * Strip non ascii characters
  */
-const NON_ASCII = /\P{ASCII}/gu;
+export const NON_ASCII = /\P{ASCII}/gu;
+export const NON_ASCII_LETTER = /[^a-z]/gu;
 
 /**
  * Slugifies an input string
  *
  * @param input Input string to slugify
- * @param strip The character set to strip from the slug. By default non ascii characters are stripped out
+ * @param strip The character set to strip from the slug. By default non letter characters are stripped out
  */
-export const slugify = (input: string, strip: RegExp = NON_ASCII) => {
+export const slugify = (input: string, strip: RegExp = NON_ASCII_LETTER) => {
 	const normalized = input.trim().toLowerCase().normalize("NFKD");
 	const words: string[] = [];
 
