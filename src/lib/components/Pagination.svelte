@@ -12,25 +12,16 @@
 	const makeArray = (current: number) => {
 		const array: number[] = [];
 
-		if (width < 500) {
-			for (const num of [
-				1,
-				Math.max(1, current - 1),
-				current,
-				Math.min(current + 1, pages),
-				pages,
-			]) {
-				const last = array.at(-1);
-				if (last && !Number.isNaN(last) && last < num - 1) {
-					array.push(NaN);
-				}
-				if (!array.includes(num)) {
-					array.push(num);
-				}
+		for (const num of [1, Math.max(1, current - 1), current, Math.min(current + 1, pages), pages]) {
+			const last = array.at(-1);
+			if (last && !Number.isNaN(last) && last < num - 1) {
+				array.push(NaN);
 			}
-			return array;
+			if (!array.includes(num)) {
+				array.push(num);
+			}
 		}
-		return Array.from({ length: pages }, (_, i) => i + 1);
+		return array;
 	};
 
 	let width = $state(browser ? window.innerWidth : Infinity);
@@ -44,7 +35,7 @@
 		<form class="join" {onchange}>
 			{#each array as n}
 				{#if Number.isNaN(n)}
-					<span class="px-2"> ... </span>
+					<button class="join-item btn btn-square pointer-events-none "> ... </button>
 				{:else}
 					<input
 						id={`radio${n}`}
