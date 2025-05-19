@@ -7,9 +7,9 @@ export const SHORT_NAME = "SoME";
 export const categories = ["video", "non-video"] as const;
 export type Category = (typeof categories)[number];
 
-export const listFormatter = new Intl.ListFormat("en", {
-	type: "disjunction",
-	style: "short",
+export const conjunctionFormatter = new Intl.ListFormat("en", {
+	style: "long",
+	type: "conjunction",
 });
 
 /**
