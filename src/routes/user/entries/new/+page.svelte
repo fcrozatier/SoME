@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import { categories, FULL_NAME } from "$lib/config";
-	import { setTitle, YOUTUBE_EMBEDDABLE } from "$lib/utils";
+	import { setTitle, slugify, YOUTUBE_EMBEDDABLE } from "$lib/utils";
 	import { NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
@@ -32,7 +32,18 @@
 	let category = $state("");
 	let title = $state("");
 	let description = $state("");
+	let tag = $state("");
+	let tags: string[] = $state([]);
 	let link = $state("");
+
+	const levels = [
+		"k-level",
+		"middle-school",
+		"high-school",
+		"undergraduate",
+		"masters",
+		"doctoral",
+	];
 
 	async function addContributor() {
 		usernames = [...usernames, ""];
@@ -52,7 +63,6 @@
 		method="post"
 		enctype="multipart/form-data"
 		use:enhance={({ submitter, formData }) => {
-			formData.append("others", JSON.stringify(usernames));
 			submitter?.setAttribute("disabled", "on");
 
 			return async ({ update }) => {
@@ -70,7 +80,7 @@
 					<input
 						id="username-{i}"
 						type="text"
-						name="username_{i}"
+						name="usernames"
 						placeholder="The SoME username of a member of your team"
 						class="input-bordered input w-full"
 						bind:value={usernames[i]}
@@ -122,9 +132,7 @@
 		</div>
 
 		<div class="form-control max-w-md">
-			<label for="title" class="label">
-				<span class="label-text">Title</span>
-			</label>
+			<label for="title" class="label">Title</label>
 			<input
 				id="title"
 				type="text"
@@ -164,6 +172,71 @@
 			<div class="label">
 				<span class="label-text-alt">{description.length}/5000</span>
 			</div>
+		</div>
+
+		<div class="form-control max-w-md">
+			<label for="new-tag" class="label"> Tags </label>
+
+			<p class="mt-2 mb-4">
+				Add tags to your entry for simple categorization, such as topic and level. For the topic,
+				choose a relevant theme, concept or chapter if applicable. For the level, you can pick from
+				the following list:
+			</p>
+			<div class="flex flex-wrap gap-2 mb-6">
+				{#each levels as level}
+					<button
+						class={`btn btn-xs badge badge-sm badge-neutral badge-outline  ${tags.includes(level) ? "bg-black text-white" : ""}`}
+						type="button"
+						onclick={() => {
+							if (tags.includes(level)) {
+								tags = tags.filter((t) => t !== level);
+							} else {
+								tags.push(level);
+							}
+						}}
+					>
+						{level}
+					</button>
+				{/each}
+			</div>
+			<input
+				id="new-tag"
+				type="text"
+				name="new-tag"
+				placeholder="Comma separated tags"
+				class="input-bordered input w-full"
+				aria-errormessage="title-error"
+				aria-invalid={!!form?.issues?.newTag}
+				bind:value={tag}
+				onkeydown={(event) => {
+					if (event.key === "Enter" || event.key === ",") {
+						if (event.currentTarget.value.length) {
+							tags.push(slugify(event.currentTarget.value));
+							tag = "";
+							event.preventDefault();
+						}
+					}
+				}}
+				{...fg.splat(NewEntrySchema["newTag"].attributes)}
+			/>
+
+			{#if form?.issues?.description}
+				<span id="title-error" class="error-message">{form.issues.description.message}</span>
+			{/if}
+		</div>
+		<div class="flex gap-2">
+			{#each tags as tag, i}
+				<span class="badge badge-sm badge-neutral badge-outline">
+					{tag}
+					<button
+						type="button"
+						class="cursor-pointer"
+						onclick={() => {
+							tags.splice(i, 1);
+						}}>&cross;</button
+					>
+				</span>
+			{/each}
 		</div>
 
 		<div class="form-control max-w-md">
@@ -217,21 +290,17 @@
 		</div>
 
 		<div class="form-control max-w-md">
-			<label for="copyright" class="label items-start justify-normal gap-4">
-				<input id="copyright" type="checkbox" name="copyright" class="checkbox" required />
-				<span class="label-text">
-					I have permission to use all material contained in my submission for the {FULL_NAME}.
-					<ul class="relative right-6 list-outside">
-						<li>
-							<a href="/content-policy#fair-use"
-								>Copyrighted material policy and fair use guidelines</a
-							>
-						</li>
-						<li><a href="/content-policy#cc">Creative Commons guidelines</a></li>
-						<li><a href="/content-policy#ai">AI policy</a></li>
-					</ul>
-				</span>
+			<label class="label items-start justify-normal gap-4">
+				<input type="checkbox" name="copyright" class="checkbox" required />
 			</label>
+			I have permission to use all material contained in my submission for the {FULL_NAME}.
+			<ul class="relative right-6 list-outside">
+				<li>
+					<a href="/content-policy#fair-use">Copyrighted material policy and fair use guidelines</a>
+				</li>
+				<li><a href="/content-policy#cc">Creative Commons guidelines</a></li>
+				<li><a href="/content-policy#ai">AI policy</a></li>
+			</ul>
 			{#if form?.issues?.copyright}
 				<span class="error-message">{form.issues.copyright.message} </span>
 			{/if}
