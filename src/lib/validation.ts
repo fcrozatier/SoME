@@ -168,6 +168,7 @@ export const NewEntrySchema = {
 	category: fg.select(["video", "non-video"], { required: true }),
 	title: TitleSchema,
 	description: DescriptionSchema,
+	newTag: fg.text({ minlength: 1, required: false }),
 	link: UrlSchema,
 	thumbnail: ThumbnailSchema,
 	rules: fg.checkbox({ required: true }),
