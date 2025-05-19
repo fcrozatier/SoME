@@ -72,8 +72,7 @@
 			</p>
 			<p>
 				The topic could be at any level, whether that's basic math for young children or
-				higher-level math. If you're assuming a certain background level for the target audience,
-				kindly mention it below.
+				higher-level math.
 			</p>
 		</details>
 		<!-- Software -->
@@ -105,7 +104,8 @@
 		<details>
 			<summary>Can I submit a part of a series?</summary>
 			<p>
-				Each entry should be self-contained, not part of a series, playlist, or larger project: something one can dive into without needing extra context.
+				Each entry should be self-contained, not part of a series, playlist, or larger project:
+				something one can dive into without needing extra context.
 			</p>
 
 			<p>
@@ -161,6 +161,23 @@
 			<p>
 				Also keep in mind that reviewers might get turned away by too long or too aggressive ads and
 				sponsor segments
+			</p>
+		</details>
+		<!-- No paywall, login, download -->
+		<details>
+			<summary>Can my entry be behind a paywall or require an account?</summary>
+			<p>
+				No. All SoME entries must be freely accessible to anyone with a web browser. This means your
+				content must not be behind a paywall, require a login, or force users to create an account
+				on a third-party platform.
+			</p>
+			<p>
+				Additionally, your entry should not require viewers to download or install anything to
+				access the content. It should work directly in a modern web browser without extra steps.
+			</p>
+			<p>
+				Reviewers may skip over entries that are gated, difficult to access, or require special
+				software.
 			</p>
 		</details>
 		<!-- Winners -->
