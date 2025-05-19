@@ -21,7 +21,11 @@
 		{/if}
 	</p>
 	<p>
-		<button class="btn btn-neutral" disabled={!submissionsOpen()}>New entry</button>
+		<a
+			href="/user/entries/new"
+			class={`btn btn-neutral ${!submissionsOpen() ? "btn-disabled pointer-events-none" : ""}`}
+			>New entry</a
+		>
 	</p>
 </article>
 
