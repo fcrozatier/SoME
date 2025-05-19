@@ -32,7 +32,7 @@
 				<Thumbnail uid={thumbnail} width={thumbnailWidth.replace("px", "")}></Thumbnail>
 			</a>
 		{:else}
-			<a href={url} class="line-clamp-1 wrap-anywhere" target="_blank">{url}</a>
+			<a href={url} class="line-clamp-1 text-trim wrap-anywhere" target="_blank">{url}</a>
 		{/if}
 	{/snippet}
 	{#snippet mainPanel()}
