@@ -23,7 +23,7 @@
 </script>
 
 {#if display}
-	<a href="/register" class="alert alert-error mx-auto max-w-prose sticky top-0 z-10">
+	<a href="/user/entries/new" class="alert alert-error mx-auto max-w-prose sticky top-0 z-10">
 		{#if remaining.ms > 0}
 			<strong class="countdown font-mono text-xl">
 				{remaining.formatted}
