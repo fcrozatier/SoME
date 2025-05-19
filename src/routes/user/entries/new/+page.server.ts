@@ -16,11 +16,8 @@ import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
-export const load = ({ locals }) => {
-  if (
-    !phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END) &&
-    !locals.user?.isAdmin
-  ) {
+export const load = () => {
+  if (!submissionsOpen()) {
     throw error(403, "Submissions are closed");
   }
 };
