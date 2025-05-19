@@ -1,30 +1,46 @@
 import { dev } from "$app/environment";
-import { PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END } from "$env/static/public";
+import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { entries, users, usersToEntries } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import {
   normalizeYoutubeLink,
-  phaseOpen,
   submissionsOpen,
   YOUTUBE_EMBEDDABLE,
 } from "$lib/utils";
 import { NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
-import { inArray } from "drizzle-orm";
+import { inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
-export const load = () => {
-  if (!submissionsOpen()) {
+export const load = async ({ locals }) => {
+  if (!submissionsOpen() && !locals?.user?.isAdmin) {
     throw error(403, "Submissions are closed");
+  }
+
+  if (!locals?.user?.uid) {
+    throw redirect(302, "/login");
+  }
+
+  const year = (new Date()).getFullYear();
+  const [submitted] = await db.execute<{ count: string }>(sql`
+    select count(*)
+    from user_to_entry
+    inner join entries on entry_uid=uid
+    where user_uid=${locals.user.uid}
+    and date_part('year', created_at)=${year};
+    `);
+
+  if (Number(submitted?.count)) {
+    throw error(403, `You already submitted an entry for the ${year} edition`);
   }
 };
 
 export const actions = {
   default: formgate(NewEntrySchema, async (data, { locals }) => {
-    if (!locals.user) {
+    if (!locals.user || !locals.user.username) {
       throw error(401, "You must be logged in");
     }
 
@@ -32,18 +48,24 @@ export const actions = {
       throw error(403, "Submissions are closed");
     }
 
+    const teamSize = data.usernames.includes(locals.user.username)
+      ? data.usernames.length
+      : data.usernames.length + 1;
+
     // The distinct team members
     const team = await db.select({
       uid: users.uid,
       username: users.username,
-    }).from(users).where(
-      inArray(
-        users.username,
-        Array.from(new Set(...data.usernames, locals.user.username)),
-      ),
-    );
+    }).from(users)
+      .where(
+        inArray(
+          users.username,
+          Array.from(new Set(...data.usernames, locals.user.username)),
+        ),
+      );
 
-    if (team.length !== data.usernames.length) {
+    // Validate team members
+    if (team.length !== teamSize) {
       const usernames = team.map((u) => u.username);
       const not_found = data.usernames.filter((username) =>
         !usernames.includes(username)
@@ -52,6 +74,32 @@ export const actions = {
         usernames: `Username${not_found.length > 0 ? "s" : ""} not found: ${
           not_found.join(", ")
         }`,
+      });
+    }
+
+    // Ensure users didn't already submit
+    const year = (new Date()).getFullYear();
+    const teamMembersWithSubmissions = await db.execute<
+      { username: string; count: string }
+    >(sql`
+      select username, count(*)
+      from user_to_entry
+      inner join entries on entry_uid=entries.uid
+      inner join users on user_uid=users.uid
+      where user_uid in (${team.map((u) => u.uid).join(",")})
+      and date_part('year', entries.created_at)=${year}
+      group by users.username;
+      `);
+
+    if (teamMembersWithSubmissions.length > 0) {
+      const usernames = teamMembersWithSubmissions
+        .filter((u) => Number(u?.count) > 0)
+        .map((u) => u.username);
+
+      return formfail({
+        usernames: `${
+          conjunctionFormatter.format(usernames)
+        } already have submitted an entry for the ${year} edition`,
       });
     }
 
@@ -82,17 +130,16 @@ export const actions = {
         thumbnail: thumbnailKey,
       });
 
-      // Save thumbnail after the entry: we know it's not a duplicate
+      // Save the thumbnail after the entry: we know it's not a duplicate
       if (!dev && thumbnail && thumbnailKey) {
         await saveThumbnail(thumbnail, thumbnailKey);
       }
 
-      // Update all users token with the real uids
-      await db.insert(usersToEntries).values(
-        team.map((user) => ({ userUid: user.uid, entryUid })),
-      );
+      // Connect the creators and the entry
+      await db.insert(usersToEntries)
+        .values(team.map((user) => ({ userUid: user.uid, entryUid })));
 
-      return redirect(303, "/user");
+      return redirect(303, "/user/entries");
     } catch (error) {
       if (
         error instanceof postgres.PostgresError &&
