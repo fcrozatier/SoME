@@ -25,6 +25,16 @@
 	<section id="rules" class="layout-prose pb-32">
 		<h2 class="mb-16 text-4xl font-black">How does it work?</h2>
 
+		<!-- Age -->
+		<details>
+			<summary>Is there a minimum age to participate?</summary>
+			<p>You must be at least 13 years old to create an account on the SoME platform.</p>
+			<p>For creators under 18, participation implies you have obtained parental or guardian consent.</p>
+			<p>
+				If you are under 18 and win prize money, disbursement of funds may require parental
+				involvement, in compliance with applicable laws.
+			</p>
+		</details>
 		<!-- Deadline -->
 		<details>
 			<summary>When is the submission deadline?</summary>
