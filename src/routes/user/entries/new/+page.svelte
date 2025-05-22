@@ -36,14 +36,7 @@
 	let tags: string[] = $state([]);
 	let link = $state("");
 
-	const levels = [
-		"k-level",
-		"middle-school",
-		"high-school",
-		"undergraduate",
-		"masters",
-		"doctoral",
-	];
+	const levels = ["elementary-school", "middle-school", "high-school", "undergraduate", "graduate"];
 
 	async function addContributor() {
 		usernames = [...usernames, ""];
