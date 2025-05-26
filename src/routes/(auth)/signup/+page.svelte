@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
-	import { reportValidity } from "$lib/actions.js";
+	import { newToast } from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
 	import { setTitle } from "$lib/utils.js";
 	import { NewUserSchema } from "$lib/validation.js";
@@ -32,7 +33,42 @@
 		<h2>Join the competition</h2>
 		<p>By creating an account you'll be able to participate as either a creator or a judge</p>
 
-		<form class="space-y-2" method="post" use:enhance={reportValidity}>
+		<form
+			class="space-y-2"
+			method="post"
+			use:enhance={({ submitter }) => {
+				submitter?.setAttribute("disabled", "on");
+
+				return async ({ update, result, formElement, formData }) => {
+					await update();
+					submitter?.removeAttribute("disabled");
+
+					if (result.type === "failure" && typeof result.data?.issues === "object") {
+						const issues = result.data.issues as Record<string, fg.ValidationIssue>;
+
+						for (const element of formElement.elements) {
+							if (!(element instanceof HTMLInputElement)) continue;
+
+							const customMessage = issues[element.name]?.message;
+							if (customMessage) element.setCustomValidity(customMessage);
+							element.reportValidity();
+
+							element.addEventListener("input", () => element.setCustomValidity(""), {
+								once: true,
+							});
+						}
+					}
+
+					if (result.type === "success") {
+						const username = formData.get("username");
+						if (username) {
+							newToast({ type: "success", content: `You're now logged in as ${username}.` });
+						}
+						await goto("/user/entries");
+					}
+				};
+			}}
+		>
 			<div class="form-control max-w-md">
 				<label for="username" class="label">
 					<span class="label-text"> Username </span>
