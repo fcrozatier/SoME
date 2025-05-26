@@ -27,9 +27,13 @@
 
 		<!-- Age -->
 		<details>
-			<summary>Is there a minimum age to participate?</summary>
+			<summary id="minimum-age"
+				><a href="/rules#minimum-age">Is there a minimum age to participate?</a></summary
+			>
 			<p>You must be at least 13 years old to create an account on the SoME platform.</p>
-			<p>For creators under 18, participation implies you have obtained parental or guardian consent.</p>
+			<p>
+				For creators under 18, participation implies you have obtained parental or guardian consent.
+			</p>
 			<p>
 				If you are under 18 and win prize money, disbursement of funds may require parental
 				involvement, in compliance with applicable laws.
@@ -37,7 +41,8 @@
 		</details>
 		<!-- Deadline -->
 		<details>
-			<summary>When is the submission deadline?</summary>
+			<summary id="deadline"><a href="/rules#deadline">When is the submission deadline?</a></summary
+			>
 			<!-- <p>The competition is closed. Stay tuned for the next edition!</p> -->
 			<p>
 				Creators or group of Creators can submit an entry until <span class=""
@@ -64,7 +69,11 @@
 		</details>
 		<!-- Not a creator -->
 		<details>
-			<summary>I'm not a creator, can I participate? </summary>
+			<summary id="non-creators-are-welcome"
+				><a href="/rules#non-creators-are-welcome"
+					>I'm not a creator, can I participate?
+				</a></summary
+			>
 			<p>Sure, you can participate in the peer review phase by registering as a judge.</p>
 			<p>
 				You'll discover new Science content creators, will be able vote for the best ones and leave
@@ -73,7 +82,9 @@
 		</details>
 		<!-- Topic -->
 		<details>
-			<summary>Is there a topic constraint? </summary>
+			<summary id="topic-constraint"
+				><a href="/rules#topic-constraint">Is there a topic constraint? </a></summary
+			>
 			<p>It has to be about math or something related.</p>
 			<p>
 				Here we mean &laquo; math &raquo; very broadly, and more applied topics like physics or
@@ -87,7 +98,7 @@
 		</details>
 		<!-- Software -->
 		<details>
-			<summary>What software should I use? </summary>
+			<summary id="software"><a href="/rules#software">What software should I use? </a></summary>
 			<p>
 				You can use any software you're familiar with, there's no constraint. You can even use no
 				visualization software at all!
@@ -103,7 +114,9 @@
 		</details>
 		<!-- How many entries? -->
 		<details>
-			<summary>How many entries can I submit? </summary>
+			<summary id="how-many-entries"
+				><a href="/rules#how-many-entries">How many entries can I submit? </a></summary
+			>
 			<p>One entry per person / group</p>
 			<p>
 				We hope you make more, but we only have the capacity to judge participants based on a single
@@ -112,7 +125,9 @@
 		</details>
 		<!-- Can I submit a part of a series? -->
 		<details>
-			<summary>Can I submit a part of a series?</summary>
+			<summary id="no-series"
+				><a href="/rules#no-series">Can I submit a part of a series?</a></summary
+			>
 			<p>
 				Each entry should be self-contained, not part of a series, playlist, or larger project:
 				something one can dive into without needing extra context.
@@ -126,7 +141,9 @@
 		</details>
 		<!-- Can I use old material? -->
 		<details>
-			<summary>Can I use an old entry? </summary>
+			<summary id="only-new-content"
+				><a href="/rules#only-new-content">Can I use an old entry? </a></summary
+			>
 			<p>It has to be something new you make this summer</p>
 			<p>
 				The spirit of this is to encourage people who've never put stuff online before. If you want
@@ -137,7 +154,11 @@
 		</details>
 		<!-- Language -->
 		<details>
-			<summary>Does it have to be in English? </summary>
+			<summary id="in-english-or-with-translation"
+				><a href="/rules#in-english-or-with-translation"
+					>Does it have to be in English?
+				</a></summary
+			>
 			<p>It has to be available in English: subtitles or translation are needed.</p>
 			<p>
 				If you want to put out an explainer in another language, wonderful! Please do! But the
@@ -147,7 +168,9 @@
 		</details>
 		<!-- Copyright -->
 		<details>
-			<summary>Can I use copyrighted material? </summary>
+			<summary id="copyrighted-material"
+				><a href="/rules#copyrighted-material">Can I use copyrighted material? </a></summary
+			>
 			<p>By registering as a creator you agree to the following copyright notice:</p>
 			<p class="indent-8 italic">
 				I have permission to use all material contained in my submission for the {FULL_NAME}.
@@ -162,7 +185,7 @@
 		</details>
 		<!-- Ads -->
 		<details>
-			<summary>Can my content include ads?</summary>
+			<summary id="ads"><a href="/rules#ads">Can my content include ads?</a></summary>
 			<p>
 				Your entry can optionally include ads or sponsorships within the content itself. However ads
 				are not allowed in your entry's title or description, as the SoME website and archive do not
@@ -175,7 +198,10 @@
 		</details>
 		<!-- No paywall, login, download -->
 		<details>
-			<summary>Can my entry be behind a paywall or require an account?</summary>
+			<summary id="no-paywall"
+				><a href="/rules#no-paywall">Can my entry be behind a paywall or require an account?</a
+				></summary
+			>
 			<p>
 				No. All SoME entries must be freely accessible to anyone with a web browser. This means your
 				content must not be behind a paywall, require a login, or force users to create an account
@@ -192,7 +218,9 @@
 		</details>
 		<!-- Winners -->
 		<details>
-			<summary>How will winners be selected?</summary>
+			<summary id="winners-selection"
+				><a href="/rules#winners-selection">How will winners be selected?</a></summary
+			>
 			<p>
 				Winners will be chosen through a peer review phase, with final results announced at the end
 				of the competition. Curious about how the voting works? You can learn more about it <a
