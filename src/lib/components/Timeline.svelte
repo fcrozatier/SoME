@@ -6,7 +6,7 @@
 		PUBLIC_VOTE_END,
 		PUBLIC_VOTE_START,
 	} from "$env/static/public";
-	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils";
+	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils/time";
 	import Time from "./Time.svelte";
 
 	const phases = [

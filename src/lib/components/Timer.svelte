@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { timeLeft } from "$lib/utils";
+	import { timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
 
 	interface Props {
@@ -23,9 +23,12 @@
 </script>
 
 {#if display}
-	<a href="/register" class="alert alert-error mx-auto max-w-prose sticky top-0 z-10">
+	<a
+		href="/user/entries/new"
+		class="alert alert-error mx-auto max-w-prose sticky top-0 z-10 mb-8 text-xs sm:text-base"
+	>
 		{#if remaining.ms > 0}
-			<strong class="countdown font-mono text-xl">
+			<strong class="countdown font-mono text-sm sm:text-lg">
 				{remaining.formatted}
 			</strong>
 			remaining to submit an entry <span class="text-xl">&rarr;</span>
@@ -34,3 +37,9 @@
 		{/if}
 	</a>
 {/if}
+
+<style>
+	a {
+		text-decoration: none;
+	}
+</style>

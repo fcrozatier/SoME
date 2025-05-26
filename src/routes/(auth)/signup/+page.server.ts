@@ -58,7 +58,8 @@ export const actions = {
 					console.error("[signup]: couldn't add to mailing list", e);
 				}
 			}
-			return redirect(302, "/user/my-entries");
+
+			return { success: true };
 		} catch (error) {
 			console.log("[signup]:", error);
 

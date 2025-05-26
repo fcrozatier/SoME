@@ -1,4 +1,3 @@
-import { browser } from "$app/environment";
 import {
 	PUBLIC_REGISTRATION_END,
 	PUBLIC_REGISTRATION_START,
@@ -6,13 +5,6 @@ import {
 	PUBLIC_VOTE_END,
 	PUBLIC_VOTE_START,
 } from "$env/static/public";
-import { SHORT_NAME } from "./config";
-
-export const setTitle = (title: string) => {
-	if (browser) {
-		document.title = `${title} – ${SHORT_NAME}`;
-	}
-};
 
 export function competitionStarted() {
 	if (!PUBLIC_REGISTRATION_START) return false;
@@ -43,23 +35,12 @@ export function resultsAvailable() {
 	return new Date() > new Date(PUBLIC_RESULTS_AVAILABLE);
 }
 
-export const YOUTUBE_EMBEDDABLE =
-	/youtube\.com\/watch\?.*v=([^&]+)|youtu\.be\/([^?]+)|youtube\.com\/embed\/([^?]+)/;
-
-export const YOUTUBE_EMBED = /^https:\/\/youtube\.com\/embed/;
-
 /**
- * Normalizes youtube links to improve uniqueness and make sure the embed link is correct
- * @param link a Youtube embeddable link
- * @returns the normalized link
+ * Pads a number with a leading zero if needed to ensure it is two characters long
  */
-export function normalizeYoutubeLink(link: string) {
-	const m = link.match(YOUTUBE_EMBEDDABLE);
-
-	const id = m?.[1] || m?.[2] || m?.[3];
-
-	return `https://youtube.com/embed/${id}`;
-}
+const padStartZero = (number: number) => {
+	return String(number).padStart(2, "0");
+};
 
 /**
  * Remaining time to submit an entry
@@ -72,5 +53,8 @@ export function timeLeft() {
 	const sec = Math.floor((ms % (1000 * 60)) / 1000);
 
 	const days = `${d > 0 ? d.toString() + ` day${d > 1 ? "s" : ""} ` : ""}`;
-	return { ms, formatted: `${days}${h}h ${min}min ${sec}s` };
+	return {
+		ms,
+		formatted: `${days}${h}h ${padStartZero(min)}min ${padStartZero(sec)}s`,
+	};
 }

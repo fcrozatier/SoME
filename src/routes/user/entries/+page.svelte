@@ -3,7 +3,7 @@
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Time from "$lib/components/Time.svelte";
-	import { submissionsOpen } from "$lib/utils";
+	import { submissionsOpen } from "$lib/utils/time.js";
 
 	const { data } = $props();
 </script>
@@ -21,7 +21,11 @@
 		{/if}
 	</p>
 	<p>
-		<button class="btn btn-neutral" disabled={!submissionsOpen()}>New entry</button>
+		<a
+			href="/user/entries/new"
+			class={`btn btn-neutral ${!submissionsOpen() ? "btn-disabled pointer-events-none" : ""}`}
+			>New entry</a
+		>
 	</p>
 </article>
 

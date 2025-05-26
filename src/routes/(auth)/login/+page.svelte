@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { reportValidity } from "$lib/actions.js";
-	import { setTitle } from "$lib/utils.js";
+		import { setTitle } from "$lib/utils/setTitle.js";
 	import { LoginSchema } from "$lib/validation";
 	import * as fg from "formgator";
 

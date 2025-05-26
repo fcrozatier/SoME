@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
-	import { categories, FULL_NAME } from "$lib/config";
-	import { setTitle, YOUTUBE_EMBEDDABLE } from "$lib/utils";
+	import { newToast } from "$lib/components/Toasts.svelte";
+	import { categories } from "$lib/config";
+	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
+	import { setTitle } from "$lib/utils/setTitle.js";
+	import { slugify } from "$lib/utils/slugify.js";
 	import { NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
@@ -32,7 +36,11 @@
 	let category = $state("");
 	let title = $state("");
 	let description = $state("");
+	let tag = $state("");
+	let tags: string[] = $state([]);
 	let link = $state("");
+
+	const levels = ["elementary-school", "middle-school", "high-school", "undergraduate", "graduate"];
 
 	async function addContributor() {
 		usernames = [...usernames, ""];
@@ -51,13 +59,33 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter, formData }) => {
-			formData.append("others", JSON.stringify(usernames));
+		use:enhance={({ submitter }) => {
 			submitter?.setAttribute("disabled", "on");
 
-			return async ({ update }) => {
+			return async ({ update, result, formElement }) => {
 				await update();
 				submitter?.removeAttribute("disabled");
+
+				if (result.type === "failure" && typeof result.data?.issues === "object") {
+					const issues = result.data.issues as Record<string, fg.ValidationIssue>;
+
+					for (const element of formElement.elements) {
+						if (!(element instanceof HTMLInputElement)) continue;
+
+						const customMessage = issues[element.name]?.message;
+						if (customMessage) element.setCustomValidity(customMessage);
+						element.reportValidity();
+
+						element.addEventListener("input", () => element.setCustomValidity(""), {
+							once: true,
+						});
+					}
+				}
+
+				if (result.type === "success") {
+					newToast({ type: "success", content: `Entry submitted!` });
+					await goto("/user/entries");
+				}
 			};
 		}}
 	>
@@ -70,8 +98,8 @@
 					<input
 						id="username-{i}"
 						type="text"
-						name="username_{i}"
-						placeholder="The SoME username of a member of your team"
+						name="usernames"
+						placeholder="The SoME username of a coauthor"
 						class="input-bordered input w-full"
 						bind:value={usernames[i]}
 						required
@@ -122,9 +150,7 @@
 		</div>
 
 		<div class="form-control max-w-md">
-			<label for="title" class="label">
-				<span class="label-text">Title</span>
-			</label>
+			<label for="title" class="label">Title</label>
 			<input
 				id="title"
 				type="text"
@@ -167,6 +193,73 @@
 		</div>
 
 		<div class="form-control max-w-md">
+			<label for="new-tag" class="label"> Tags </label>
+
+			<p class="mt-2 mb-4">
+				Add tags to your entry for simple categorization, such as topic and level. For the topic,
+				choose a relevant theme, concept or chapter if applicable. For the level, you can pick from
+				the following list:
+			</p>
+			<div class="flex flex-wrap gap-2 mb-6">
+				{#each levels as level}
+					<button
+						class={`tag cursor-pointer  ${tags.includes(level) ? "bg-gray-900 border-gray-900 text-white" : ""}`}
+						type="button"
+						onclick={() => {
+							if (tags.includes(level)) {
+								tags = tags.filter((t) => t !== level);
+							} else {
+								tags.push(level);
+							}
+						}}
+					>
+						{level}
+					</button>
+				{/each}
+			</div>
+			<input
+				id="new-tag"
+				type="text"
+				name="new-tag"
+				placeholder="Comma separated tags"
+				class="input-bordered input w-full"
+				aria-errormessage="new-tag-error"
+				bind:value={tag}
+				onkeydown={(event) => {
+					if (event.key === "Enter" || event.key === ",") {
+						if (event.currentTarget.value.length) {
+							tags.push(slugify(event.currentTarget.value));
+							tag = "";
+							event.preventDefault();
+						}
+					}
+				}}
+			/>
+
+			{#if form?.issues?.["new-tag"]}
+				<span id="new-tag-error" class="error-message">{form.issues["new-tag"].message}</span>
+			{/if}
+		</div>
+		<div class="flex gap-2">
+			{#each tags as tag, i}
+				<input type="hidden" value={tag} name="tag" />
+				<span class="tag">
+					{tag}
+					<button
+						type="button"
+						class="cursor-pointer"
+						onclick={() => {
+							tags.splice(i, 1);
+						}}>&cross;</button
+					>
+				</span>
+			{/each}
+		</div>
+		{#if form?.issues?.tag}
+			<span class="error-message">{form.issues.tag.message}</span>
+		{/if}
+
+		<div class="form-control max-w-md">
 			<label for="link" class="label">
 				<span class="label-text"> Link </span>
 			</label>
@@ -205,7 +298,7 @@
 		{/if}
 
 		<div class="form-control max-w-md">
-			<label for="rules" class="label justify-normal gap-4">
+			<label for="rules" class="label gap-4">
 				<input id="rules" type="checkbox" name="rules" class="checkbox" required />
 				<span class="label-text">
 					I've read the <a href="/rules">rules</a> of the competition
@@ -217,28 +310,24 @@
 		</div>
 
 		<div class="form-control max-w-md">
-			<label for="copyright" class="label items-start justify-normal gap-4">
-				<input id="copyright" type="checkbox" name="copyright" class="checkbox" required />
-				<span class="label-text">
-					I have permission to use all material contained in my submission for the {FULL_NAME}.
-					<ul class="relative right-6 list-outside">
-						<li>
-							<a href="/content-policy#fair-use"
-								>Copyrighted material policy and fair use guidelines</a
-							>
-						</li>
-						<li><a href="/content-policy#cc">Creative Commons guidelines</a></li>
-						<li><a href="/content-policy#ai">AI policy</a></li>
-					</ul>
-				</span>
+			<label class="label gap-4">
+				<input type="checkbox" name="copyright" class="checkbox" required />
+				I agree with the following policies:
 			</label>
+			<ul class="list-outside ml-2 mt-0">
+				<li>
+					<a href="/content-policy#fair-use">Copyrighted material policy and fair use guidelines</a>
+				</li>
+				<li><a href="/content-policy#cc">Creative Commons guidelines</a></li>
+				<li><a href="/content-policy#ai">AI policy</a></li>
+			</ul>
 			{#if form?.issues?.copyright}
 				<span class="error-message">{form.issues.copyright.message} </span>
 			{/if}
 		</div>
 
 		<p>
-			<button class="btn-neutral btn block"> Submit </button>
+			<button class="btn-neutral btn block"> Submit Entry</button>
 			{#if form?.issues || page.status !== 200}
 				<span class="error-message mt-2">
 					Something went wrong. {form?.issues

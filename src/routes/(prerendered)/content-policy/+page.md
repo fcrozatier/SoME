@@ -1,6 +1,6 @@
 <script>
 	import { FULL_NAME } from '$lib/config';
-  import { setTitle } from "$lib/utils";
+  import { setTitle } from "$lib/utils/setTitle";
 
   setTitle("Content Policy")
 </script>

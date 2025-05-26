@@ -6,6 +6,8 @@
 	--color-light-gold: #fffaf4;
 
 	--color-base-900: #242321;
+
+	--w-prose: 80ch;
 }
 
 :root {
@@ -29,6 +31,9 @@ html,
 body {
 	background-color: var(--color-light-gold);
 	-webkit-font-smoothing: antialiased;
+	scrollbar-gutter: stable;
+	scroll-behavior: smooth;
+	scroll-padding-top: 5rem;
 }
 
 /* Remove all animations, transitions and smooth scroll for people who prefer not to see them */
@@ -123,6 +128,10 @@ summary {
 	font-weight: var(--font-weight-medium);
 	text-box-trim: trim-start;
 	text-box-edge: cap;
+
+	& > a {
+		text-decoration: none;
+	}
 }
 summary:hover::before {
 	background-color: var(--color-gray-200);
@@ -169,6 +178,10 @@ summary::after {
 	color: var(--color-white);
 }
 
+.tag {
+	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2
+}
+
 .scrollbar {
 	--track: var(--scrollbar-track, black);
 	--thumb: var(--scrollbar-thumb, white);
@@ -202,7 +215,8 @@ summary::after {
 }
 
 .layout-prose {
-	@apply mx-auto max-w-prose px-8;
+	@apply mx-auto px-8;
+	max-width: var(--w-prose);
 }
 
 @keyframes scale-up {

@@ -1,6 +1,4 @@
 <script lang="ts" module>
-	import { writable } from "svelte/store";
-
 	interface ToastConfig {
 		/**
 		 * The innerHTML or innerText string
@@ -14,7 +12,7 @@
 		id: number;
 	}
 
-	const toasts = writable<Toast[]>([]);
+	let toasts: Toast[] = $state([]);
 
 	let id = 0;
 	/**
@@ -27,12 +25,8 @@
 	 */
 	export function newToast(config: ToastConfig) {
 		id = (id + 1) % Number.MAX_SAFE_INTEGER;
-		toasts.update((state) => {
-			return [
-				...state,
-				{ ...config, id, duration: config.duration ?? 3000, type: config.type ?? "info" },
-			];
-		});
+
+		toasts.push({ ...config, id, duration: config.duration ?? 3000, type: config.type ?? "info" });
 	}
 </script>
 
@@ -57,13 +51,13 @@
 
 	function willRemove(toast: Toast) {
 		setTimeout(() => {
-			toasts.update((state) => state.filter((t) => t.id !== toast.id));
+			toasts = toasts.filter((t) => t.id !== toast.id);
 		}, toast.duration);
 	}
 </script>
 
 <section class="toasts-container">
-	{#each $toasts as toast (toast.id)}
+	{#each toasts as toast (toast.id)}
 		<!-- output is announced to screen readers with implicit role status -->
 		<output
 			class="toast text-sm text-white rounded-md py-3 px-4 shadow-sm"
