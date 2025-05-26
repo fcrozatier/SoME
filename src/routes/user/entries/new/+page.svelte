@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
+	import { newToast } from "$lib/components/Toasts.svelte";
 	import { categories } from "$lib/config";
-		import { setTitle } from "$lib/utils/setTitle.js";
-	import { slugify } from "$lib/utils/slugify.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
+	import { setTitle } from "$lib/utils/setTitle.js";
+	import { slugify } from "$lib/utils/slugify.js";
 	import { NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
@@ -57,12 +59,33 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter, formData }) => {
+		use:enhance={({ submitter }) => {
 			submitter?.setAttribute("disabled", "on");
 
-			return async ({ update }) => {
+			return async ({ update, result, formElement }) => {
 				await update();
 				submitter?.removeAttribute("disabled");
+
+				if (result.type === "failure" && typeof result.data?.issues === "object") {
+					const issues = result.data.issues as Record<string, fg.ValidationIssue>;
+
+					for (const element of formElement.elements) {
+						if (!(element instanceof HTMLInputElement)) continue;
+
+						const customMessage = issues[element.name]?.message;
+						if (customMessage) element.setCustomValidity(customMessage);
+						element.reportValidity();
+
+						element.addEventListener("input", () => element.setCustomValidity(""), {
+							once: true,
+						});
+					}
+				}
+
+				if (result.type === "success") {
+					newToast({ type: "success", content: `Entry submitted!` });
+					await goto("/user/entries");
+				}
 			};
 		}}
 	>
@@ -215,8 +238,8 @@
 				{...fg.splat(NewEntrySchema["newTag"].attributes)}
 			/>
 
-			{#if form?.issues?.description}
-				<span id="new-tag-error" class="error-message">{form.issues.description.message}</span>
+			{#if form?.issues?.newTag}
+				<span id="new-tag-error" class="error-message">{form.issues.newTag.message}</span>
 			{/if}
 		</div>
 		<div class="flex gap-2">
@@ -234,8 +257,8 @@
 				</span>
 			{/each}
 		</div>
-		{#if form?.issues?.description}
-			<span id="new-tag-error" class="error-message">{form.issues.description.message}</span>
+		{#if form?.issues?.tag}
+			<span class="error-message">{form.issues.tag.message}</span>
 		{/if}
 
 		<div class="form-control max-w-md">

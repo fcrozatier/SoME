@@ -2,13 +2,18 @@ import { dev } from "$app/environment";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import { entries, users, usersToEntries } from "$lib/server/db/schema.js";
-import { saveThumbnail } from "$lib/server/s3";
 import {
-  normalizeYoutubeLink,
-  submissionsOpen,
-  YOUTUBE_EMBEDDABLE,
-} from "$lib/utils";
+  entries,
+  entriesToTags,
+  tags,
+  users,
+  usersToEntries,
+} from "$lib/server/db/schema.js";
+import { saveThumbnail } from "$lib/server/s3";
+import { dictionary } from "$lib/utils/dictionary.server.js";
+import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
+import { slugify } from "$lib/utils/slugify.js";
+import { submissionsOpen } from "$lib/utils/time.js";
 import { NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { inArray, sql } from "drizzle-orm";
@@ -77,8 +82,34 @@ export const actions = {
       });
     }
 
+    // Validate tags
+    const tagSet = new Set(data.tag);
+    if (data.newTag?.length) tagSet.add(data.newTag);
+    const entryTags = Array.from(tagSet).map((tag) => slugify(tag));
+
+    const unknownTags = entryTags.filter((t) =>
+      !t.split("-").every((part) => dictionary.has(part))
+    );
+
+    if (unknownTags.length) {
+      return formfail({
+        tag: `Unknown word${unknownTags.length === 1 ? "" : "s"}: ${
+          conjunctionFormatter.format(unknownTags)
+        }`,
+      });
+    }
+
     // Save data
     try {
+      // Save tags and retrieve ids whether newly inserted or existing
+      await db.insert(tags)
+        .values(entryTags.map((tag) => ({ name: tag })))
+        .onConflictDoNothing();
+
+      const tagIds: { id: number }[] = await db.select({ id: tags.id })
+        .from(tags)
+        .where(inArray(tags.name, entryTags));
+
       const entryUid = crypto.randomUUID();
       const { thumbnail, link } = data;
       let thumbnailKey = null;
@@ -95,6 +126,7 @@ export const actions = {
         normalizedLink = normalizeYoutubeLink(link);
       }
 
+      // Save entry
       await db.insert(entries).values({
         uid: entryUid,
         category: data.category,
@@ -103,6 +135,10 @@ export const actions = {
         url: normalizedLink,
         thumbnail: thumbnailKey,
       });
+
+      // Add tags
+      await db.insert(entriesToTags)
+        .values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
 
       // Save the thumbnail after the entry: we know it's not a duplicate
       if (!dev && thumbnail && thumbnailKey) {
@@ -113,7 +149,7 @@ export const actions = {
       await db.insert(usersToEntries)
         .values(team.map((user) => ({ userUid: user.uid, entryUid })));
 
-      return redirect(303, "/user/entries");
+      return { success: true };
     } catch (error) {
       if (
         error instanceof postgres.PostgresError &&

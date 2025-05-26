@@ -169,6 +169,7 @@ export const NewEntrySchema = {
 	title: TitleSchema,
 	description: DescriptionSchema,
 	newTag: fg.text({ minlength: 1, required: false }),
+	tag: fg.multi({ min: 0 }),
 	link: UrlSchema,
 	thumbnail: ThumbnailSchema,
 	rules: fg.checkbox({ required: true }),
