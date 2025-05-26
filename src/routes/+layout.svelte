@@ -128,8 +128,6 @@
 		</div>
 	</dialog>
 
-	<Banner display={false && !!data.user?.uid} />
-
 	<div class="grid lg:grid-cols-[9rem_1fr]">
 		<nav class="flex col-span-full lg:block lg:col-span-1 lg:fixed lg:min-h-full p-8 space-y-8">
 			<div class="flex pl-1">
@@ -150,7 +148,9 @@
 		</nav>
 
 		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
+			<Banner display={false && !!data.user?.uid} />
 			<Timer display={submissionsOpen()}></Timer>
+
 			<h1 class="text-center">{FULL_NAME}</h1>
 			{@render children()}
 		</main>
