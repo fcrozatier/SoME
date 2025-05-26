@@ -31,6 +31,7 @@ html,
 body {
 	background-color: var(--color-light-gold);
 	-webkit-font-smoothing: antialiased;
+	scrollbar-gutter: stable;
 	scroll-padding-top: 5rem;
 }
 
