@@ -178,6 +178,10 @@ summary::after {
 	color: var(--color-white);
 }
 
+.tag {
+	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2
+}
+
 .scrollbar {
 	--track: var(--scrollbar-track, black);
 	--thumb: var(--scrollbar-thumb, white);
