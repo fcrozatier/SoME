@@ -2,7 +2,7 @@
 	import { FULL_NAME } from '$lib/config';
 	import K from '$lib/components/K.svelte';
 	import Youtube from '$lib/components/Youtube.svelte';
-	import { setTitle } from "$lib/utils";
+	import { setTitle } from "$lib/utils/setTitle";
 
 	setTitle("Algorithm")
 </script>
