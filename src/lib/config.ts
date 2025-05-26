@@ -7,6 +7,15 @@ export const SHORT_NAME = "SoME";
 export const categories = ["video", "non-video"] as const;
 export type Category = (typeof categories)[number];
 
+/**
+ * Formats a list into a string
+ *
+ * @example
+ *
+ * ```ts
+ * conjunctionFormatter.format(list)
+ * ```
+ */
 export const conjunctionFormatter = new Intl.ListFormat("en", {
 	style: "long",
 	type: "conjunction",
