@@ -1,7 +1,5 @@
-import { readFile } from "fs/promises";
+import dictText from "./dictionary.txt?raw";
 
 export const dictionary = new Set(
-  (await readFile("./dictionary", "utf-8"))
-    .split("\n")
-    .map((w) => w.toLowerCase()),
+  dictText.split("\n").map((w) => w.toLowerCase()),
 );
