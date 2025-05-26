@@ -32,6 +32,7 @@ body {
 	background-color: var(--color-light-gold);
 	-webkit-font-smoothing: antialiased;
 	scrollbar-gutter: stable;
+	scroll-behavior: smooth;
 	scroll-padding-top: 5rem;
 }
 
