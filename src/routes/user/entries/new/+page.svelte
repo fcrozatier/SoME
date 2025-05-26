@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
-	import { categories, FULL_NAME } from "$lib/config";
-	import { setTitle, slugify, YOUTUBE_EMBEDDABLE } from "$lib/utils";
+	import { categories } from "$lib/config";
+		import { setTitle } from "$lib/utils/setTitle.js";
+	import { slugify } from "$lib/utils/slugify.js";
+	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
@@ -198,7 +200,7 @@
 				name="new-tag"
 				placeholder="Comma separated tags"
 				class="input-bordered input w-full"
-				aria-errormessage="title-error"
+				aria-errormessage="new-tag-error"
 				aria-invalid={!!form?.issues?.newTag}
 				bind:value={tag}
 				onkeydown={(event) => {
@@ -214,11 +216,12 @@
 			/>
 
 			{#if form?.issues?.description}
-				<span id="title-error" class="error-message">{form.issues.description.message}</span>
+				<span id="new-tag-error" class="error-message">{form.issues.description.message}</span>
 			{/if}
 		</div>
 		<div class="flex gap-2">
 			{#each tags as tag, i}
+				<input type="hidden" value={tag} name="tag" />
 				<span class="tag">
 					{tag}
 					<button
@@ -231,6 +234,9 @@
 				</span>
 			{/each}
 		</div>
+		{#if form?.issues?.description}
+			<span id="new-tag-error" class="error-message">{form.issues.description.message}</span>
+		{/if}
 
 		<div class="form-control max-w-md">
 			<label for="link" class="label">
@@ -287,7 +293,7 @@
 				<input type="checkbox" name="copyright" class="checkbox" required />
 				I agree with the following policies:
 			</label>
-			<ul class="list-outside ml-2 mt-0 ">
+			<ul class="list-outside ml-2 mt-0">
 				<li>
 					<a href="/content-policy#fair-use">Copyrighted material policy and fair use guidelines</a>
 				</li>

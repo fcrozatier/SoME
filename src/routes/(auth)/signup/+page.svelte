@@ -4,7 +4,7 @@
 	import { page } from "$app/state";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { setTitle } from "$lib/utils.js";
+		import { setTitle } from "$lib/utils/setTitle.js";
 	import { NewUserSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 

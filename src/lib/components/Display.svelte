@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
-	import { YOUTUBE_EMBED } from "$lib/utils";
+		import { YOUTUBE_EMBED } from "$lib/utils/regex";
 
 	interface Props {
 		data: {

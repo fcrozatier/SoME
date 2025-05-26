@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { timeLeft } from "$lib/utils";
+	import { timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
 
 	interface Props {

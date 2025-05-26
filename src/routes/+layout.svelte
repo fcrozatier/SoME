@@ -10,7 +10,7 @@
 	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { submissionsOpen, voteOpen } from "$lib/utils";
+	import { submissionsOpen, voteOpen } from "$lib/utils/time";
 	import "../app.css";
 	import "../math.css";
 

@@ -3,7 +3,7 @@
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Time from "$lib/components/Time.svelte";
-	import { submissionsOpen } from "$lib/utils";
+	import { submissionsOpen } from "$lib/utils/time.js";
 
 	const { data } = $props();
 </script>

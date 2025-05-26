@@ -2,7 +2,7 @@
 	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
 	import { FULL_NAME, SHORT_NAME } from "$lib/config";
-	import { setTitle } from "$lib/utils";
+		import { setTitle } from "$lib/utils/setTitle.js";
 
 	let { data } = $props();
 

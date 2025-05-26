@@ -4,7 +4,9 @@
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { FULL_NAME, categories } from "$lib/config";
-	import { YOUTUBE_EMBEDDABLE, submissionsOpen, setTitle } from "$lib/utils";
+	import { submissionsOpen } from "$lib/utils/time.js";
+	import { setTitle } from "$lib/utils/setTitle.js";
+	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { tick } from "svelte";
 
 	let { data, form } = $props();

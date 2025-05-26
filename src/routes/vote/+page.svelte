@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { categories } from "$lib/config";
-	import { setTitle, voteOpen } from "$lib/utils";
+	import { voteOpen } from "$lib/utils/time";
+	import { setTitle } from "$lib/utils/setTitle";
 
 	setTitle("Vote");
 </script>

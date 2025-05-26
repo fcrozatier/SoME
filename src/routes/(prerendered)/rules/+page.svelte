@@ -2,7 +2,8 @@
 	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
 	import Time from "$lib/components/Time.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { submissionsOpen, setTitle, timeLeft } from "$lib/utils";
+	import { submissionsOpen, timeLeft } from "$lib/utils/time";
+	import { setTitle } from "$lib/utils/setTitle";
 	import { onMount } from "svelte";
 
 	let remaining = timeLeft();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setTitle } from "$lib/utils";
+		import { setTitle } from "$lib/utils/setTitle";
 
 	setTitle("Change Password");
 </script>
