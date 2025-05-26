@@ -32,10 +32,16 @@ The SoME3 legacy website with its custom voting system based on [expander graphs
 
 ## Sponsors
 
-Operations for this contest have been generously funded by
+Operations for this contest have been generously funded by:
 
-<div align=center>
-  <a href="https://www.janestreet.com/">
-      <img src="static/jane-street-logo.webp" width="300px" alt="Jane Street">
+<p align="center">
+  <a href="https://brilliant.org/" style="margin: 0 16px;">
+    <img src="static/sponsors/brilliant-logo.png" width="90" alt="Brilliant">
   </a>
-</div>
+  <a href="https://www.janestreet.com/" style="margin: 0 16px;">
+    <img src="static/sponsors/jane-street-logo.webp" width="300" alt="Jane Street">
+  </a>
+  <a href="https://www.3blue1brown.com/" style="margin: 0 16px;">
+    <img src="static/sponsors/3b1b-logo.svg" width="85" alt="3b1b">
+  </a>
+</p>
