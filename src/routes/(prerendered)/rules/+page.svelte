@@ -276,7 +276,7 @@
 			left: calc(-4 * var(--spacing));
 			top: 0;
 			content: "#";
-			opacity: 0.3;
+			opacity: 0.25;
 			font-size: 1rem;
 			transition: 200ms ease-out opacity;
 		}
