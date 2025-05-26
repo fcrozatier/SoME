@@ -74,7 +74,7 @@
 						id="username-{i}"
 						type="text"
 						name="usernames"
-						placeholder="The SoME username of a member of your team"
+						placeholder="The SoME username of a coauthor"
 						class="input-bordered input w-full"
 						bind:value={usernames[i]}
 						required
