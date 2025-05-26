@@ -266,3 +266,23 @@
 		</details>
 	</section>
 </article>
+
+<style>
+	summary > a {
+		position: relative;
+
+		&::before {
+			position: absolute;
+			left: calc(-4 * var(--spacing));
+			top: 0;
+			content: "#";
+			opacity: 0.3;
+			font-size: 1rem;
+			transition: 200ms ease-out opacity;
+		}
+
+		&:hover::before {
+			opacity: 0.6;
+		}
+	}
+</style>
