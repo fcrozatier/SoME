@@ -20,7 +20,7 @@ import {
 	validateForm,
 	VoteSchema,
 } from "$lib/validation";
-import { voteOpen } from "$lib/utils";
+import { voteOpen } from "$lib/utils/time";
 import { fail, redirect } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 import { OpenAI } from "openai";

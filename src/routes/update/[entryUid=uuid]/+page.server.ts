@@ -12,15 +12,11 @@ import {
 import { addToMailingList, sendEmail, validateEmail } from "$lib/server/email";
 import { saveThumbnail } from "$lib/server/s3";
 import { CreatorSchema, validateForm } from "$lib/validation";
-import {
-	normalizeYoutubeLink,
-	phaseOpen,
-	submissionsOpen,
-	YOUTUBE_EMBEDDABLE,
-} from "$lib/utils";
+import { phaseOpen, submissionsOpen } from "$lib/utils/time";
 import { error, fail } from "@sveltejs/kit";
 import { and, eq, inArray } from "drizzle-orm";
 import postgres from "postgres";
+import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 
 export const load = async ({ params, locals }) => {
 	if (!locals.user?.isAdmin) {
