@@ -118,10 +118,21 @@
 			<summary id="how-many-entries"
 				><a href="/rules#how-many-entries">How many entries can I submit? </a></summary
 			>
-			<p>One entry per person / group</p>
 			<p>
-				We hope you make more, but we only have the capacity to judge participants based on a single
-				entry.
+				Only one entry is allowed per creator identity. This means one video per YouTube channel,
+				one post per blog, one page per itch.io account etc.
+			</p>
+
+			<p>
+				However, you’re welcome to collaborate on additional entries submitted under someone else's
+				channel, blog, or account.
+			</p>
+
+			<p>
+				<em
+					>For example: you could submit a solo video on your own YouTube channel, and also
+					co-author a blog post that's submitted under a friend’s website.</em
+				>
 			</p>
 		</details>
 		<!-- Can I submit a part of a series? -->
