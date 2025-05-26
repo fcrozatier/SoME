@@ -70,6 +70,28 @@ export const usersToEntries = pgTable(
 	({ entryUid, userUid }) => [primaryKey({ columns: [userUid, entryUid] })],
 );
 
+export const tags = pgTable(
+	"tags",
+	{
+		id: serial("id").primaryKey(),
+		name: text("name").unique().notNull(),
+		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+	},
+);
+
+export const entriesToTags = pgTable(
+	"entry_to_tag",
+	{
+		entryUid: uuid("entry_uid").references(() => entries.uid, {
+			onDelete: "cascade",
+		}),
+		tagId: integer("tag_id").references(() => tags.id, {
+			onDelete: "cascade",
+		}),
+	},
+	({ tagId, entryUid }) => [primaryKey({ columns: [tagId, entryUid] })],
+);
+
 export const votes = pgTable(
 	"votes",
 	{
