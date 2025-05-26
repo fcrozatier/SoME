@@ -8,6 +8,6 @@
 	let { children }: Props = $props();
 </script>
 
-<article class="prose max-w-4xl mx-auto px-8">
+<article class="prose max-w-[var(--w-prose)] mx-auto px-8">
 	{@render children?.()}
 </article>
