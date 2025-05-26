@@ -178,7 +178,7 @@
 			<div class="flex flex-wrap gap-2 mb-6">
 				{#each levels as level}
 					<button
-						class={`btn btn-xs badge badge-sm badge-neutral badge-outline  ${tags.includes(level) ? "bg-black text-white" : ""}`}
+						class={`tag cursor-pointer  ${tags.includes(level) ? "bg-gray-900 border-gray-900 text-white" : ""}`}
 						type="button"
 						onclick={() => {
 							if (tags.includes(level)) {
@@ -219,7 +219,7 @@
 		</div>
 		<div class="flex gap-2">
 			{#each tags as tag, i}
-				<span class="badge badge-sm badge-neutral badge-outline">
+				<span class="tag">
 					{tag}
 					<button
 						type="button"
@@ -271,7 +271,7 @@
 		{/if}
 
 		<div class="form-control max-w-md">
-			<label for="rules" class="label justify-normal gap-4">
+			<label for="rules" class="label gap-4">
 				<input id="rules" type="checkbox" name="rules" class="checkbox" required />
 				<span class="label-text">
 					I've read the <a href="/rules">rules</a> of the competition
@@ -283,11 +283,11 @@
 		</div>
 
 		<div class="form-control max-w-md">
-			<label class="label items-start justify-normal gap-4">
+			<label class="label gap-4">
 				<input type="checkbox" name="copyright" class="checkbox" required />
+				I agree with the following policies:
 			</label>
-			I have permission to use all material contained in my submission for the {FULL_NAME}.
-			<ul class="relative right-6 list-outside">
+			<ul class="list-outside ml-2 mt-0 ">
 				<li>
 					<a href="/content-policy#fair-use">Copyrighted material policy and fair use guidelines</a>
 				</li>
@@ -300,7 +300,7 @@
 		</div>
 
 		<p>
-			<button class="btn-neutral btn block"> Submit </button>
+			<button class="btn-neutral btn block"> Submit Entry</button>
 			{#if form?.issues || page.status !== 200}
 				<span class="error-message mt-2">
 					Something went wrong. {form?.issues
