@@ -77,32 +77,6 @@ export const actions = {
       });
     }
 
-    // Ensure users didn't already submit
-    const year = (new Date()).getFullYear();
-    const teamMembersWithSubmissions = await db.execute<
-      { username: string; count: string }
-    >(sql`
-      select username, count(*)
-      from user_to_entry
-      inner join entries on entry_uid=entries.uid
-      inner join users on user_uid=users.uid
-      where user_uid in (${team.map((u) => u.uid).join(",")})
-      and date_part('year', entries.created_at)=${year}
-      group by users.username;
-      `);
-
-    if (teamMembersWithSubmissions.length > 0) {
-      const usernames = teamMembersWithSubmissions
-        .filter((u) => Number(u?.count) > 0)
-        .map((u) => u.username);
-
-      return formfail({
-        usernames: `${
-          conjunctionFormatter.format(usernames)
-        } already have submitted an entry for the ${year} edition`,
-      });
-    }
-
     // Save data
     try {
       const entryUid = crypto.randomUUID();
