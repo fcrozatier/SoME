@@ -224,7 +224,6 @@
 				placeholder="Comma separated tags"
 				class="input-bordered input w-full"
 				aria-errormessage="new-tag-error"
-				aria-invalid={!!form?.issues?.newTag}
 				bind:value={tag}
 				onkeydown={(event) => {
 					if (event.key === "Enter" || event.key === ",") {
@@ -235,11 +234,10 @@
 						}
 					}
 				}}
-				{...fg.splat(NewEntrySchema["newTag"].attributes)}
 			/>
 
-			{#if form?.issues?.newTag}
-				<span id="new-tag-error" class="error-message">{form.issues.newTag.message}</span>
+			{#if form?.issues?.["new-tag"]}
+				<span id="new-tag-error" class="error-message">{form.issues["new-tag"].message}</span>
 			{/if}
 		</div>
 		<div class="flex gap-2">

@@ -16,7 +16,7 @@ import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
 import { NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
-import { inArray, sql } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
@@ -27,19 +27,6 @@ export const load = async ({ locals }) => {
 
   if (!locals?.user?.uid) {
     throw redirect(302, "/login");
-  }
-
-  const year = (new Date()).getFullYear();
-  const [submitted] = await db.execute<{ count: string }>(sql`
-    select count(*)
-    from user_to_entry
-    inner join entries on entry_uid=uid
-    where user_uid=${locals.user.uid}
-    and date_part('year', created_at)=${year};
-    `);
-
-  if (Number(submitted?.count)) {
-    throw error(403, `You already submitted an entry for the ${year} edition`);
   }
 };
 
@@ -53,38 +40,33 @@ export const actions = {
       throw error(403, "Submissions are closed");
     }
 
-    const teamSize = data.usernames.includes(locals.user.username)
-      ? data.usernames.length
-      : data.usernames.length + 1;
+    const usernames = [...new Set([...data.usernames, locals.user.username])];
+    const teamSize = usernames.length;
 
     // The distinct team members
     const team = await db.select({
       uid: users.uid,
       username: users.username,
     }).from(users)
-      .where(
-        inArray(
-          users.username,
-          Array.from(new Set(...data.usernames, locals.user.username)),
-        ),
-      );
+      .where(inArray(users.username, usernames));
 
     // Validate team members
     if (team.length !== teamSize) {
-      const usernames = team.map((u) => u.username);
-      const not_found = data.usernames.filter((username) =>
-        !usernames.includes(username)
+      const foundUsernames = team.map((u) => u.username);
+      const notFoundUsernames = usernames.filter((username) =>
+        !foundUsernames.includes(username)
       );
+
       return formfail({
-        usernames: `Username${not_found.length > 0 ? "s" : ""} not found: ${
-          not_found.join(", ")
-        }`,
+        usernames: `Username${
+          notFoundUsernames.length > 0 ? "s" : ""
+        } not found: ${notFoundUsernames.join(", ")}`,
       });
     }
 
     // Validate tags
     const tagSet = new Set(data.tag);
-    if (data.newTag?.length) tagSet.add(data.newTag);
+    if (data["new-tag"]?.length) tagSet.add(data["new-tag"]);
     const entryTags = Array.from(tagSet).map((tag) => slugify(tag));
 
     const unknownTags = entryTags.filter((t) =>
@@ -101,17 +83,9 @@ export const actions = {
 
     // Save data
     try {
-      // Save tags and retrieve ids whether newly inserted or existing
-      await db.insert(tags)
-        .values(entryTags.map((tag) => ({ name: tag })))
-        .onConflictDoNothing();
-
-      const tagIds: { id: number }[] = await db.select({ id: tags.id })
-        .from(tags)
-        .where(inArray(tags.name, entryTags));
-
       const entryUid = crypto.randomUUID();
       const { thumbnail, link } = data;
+
       let thumbnailKey = null;
       let normalizedLink = link;
 
@@ -136,10 +110,6 @@ export const actions = {
         thumbnail: thumbnailKey,
       });
 
-      // Add tags
-      await db.insert(entriesToTags)
-        .values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
-
       // Save the thumbnail after the entry: we know it's not a duplicate
       if (!dev && thumbnail && thumbnailKey) {
         await saveThumbnail(thumbnail, thumbnailKey);
@@ -148,6 +118,20 @@ export const actions = {
       // Connect the creators and the entry
       await db.insert(usersToEntries)
         .values(team.map((user) => ({ userUid: user.uid, entryUid })));
+
+      // Save tags and retrieve ids whether newly inserted or existing
+      if (tagSet.size) {
+        await db.insert(tags)
+          .values(entryTags.map((tag) => ({ name: tag })))
+          .onConflictDoNothing();
+
+        const tagIds: { id: number }[] = await db.select({ id: tags.id })
+          .from(tags)
+          .where(inArray(tags.name, entryTags));
+
+        await db.insert(entriesToTags)
+          .values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
+      }
 
       return { success: true };
     } catch (error) {
