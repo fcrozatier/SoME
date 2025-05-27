@@ -5,8 +5,6 @@
   setTitle("Content Policy")
 </script>
 
-
-
 ## Content Policy
 
 Please note that this page does not contain legal advice. Rather, it is a set of guidelines to

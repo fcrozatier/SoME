@@ -2,8 +2,8 @@
 	import Bento from "$lib/components/Bento.svelte";
 	import Display from "$lib/components/Display.svelte";
 	import { round } from "@fcrozatier/ts-helpers";
-		import { setTitle } from "$lib/utils/setTitle.js";
-		import * as Plot from "@observablehq/plot";
+	import { setTitle } from "$lib/utils/setTitle.js";
+	import * as Plot from "@observablehq/plot";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(

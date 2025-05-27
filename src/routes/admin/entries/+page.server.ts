@@ -22,13 +22,11 @@ export const load = async ({ url }) => {
 			offset ${(+page - 1) * limit};
 		`);
 
-	const [total] = (
-		await db.execute(sql`
+	const [total] = (await db.execute(sql`
 		 select count(*) from entries
 		 where entries.active='true'
 		 and date_part('year', entries.created_at)='2024';
-		`)
-	) as { count: number }[];
+		`)) as { count: number }[];
 
 	return { entries, pages: Math.ceil((total?.count ?? 0) / limit) };
 };

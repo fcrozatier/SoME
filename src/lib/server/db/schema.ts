@@ -26,9 +26,7 @@ export const users = pgTable(
 		isAdmin: boolean("is_admin").default(false),
 		isTeacher: boolean("is_teacher").default(false),
 	},
-	(
-		{ username, newPasswordValidationToken },
-	) => [
+	({ username, newPasswordValidationToken }) => [
 		index("username_idx").on(username),
 		index("new_password_validation_token_idx").on(newPasswordValidationToken),
 	],
@@ -70,14 +68,11 @@ export const usersToEntries = pgTable(
 	({ entryUid, userUid }) => [primaryKey({ columns: [userUid, entryUid] })],
 );
 
-export const tags = pgTable(
-	"tags",
-	{
-		id: serial("id").primaryKey(),
-		name: text("name").unique().notNull(),
-		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
-	},
-);
+export const tags = pgTable("tags", {
+	id: serial("id").primaryKey(),
+	name: text("name").unique().notNull(),
+	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+});
 
 export const entriesToTags = pgTable(
 	"entry_to_tag",
@@ -125,9 +120,7 @@ export const flags = pgTable(
 		reason: text("reason").notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	(
-		{ userUid, entryUid },
-	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const skips = pgTable(
@@ -141,9 +134,7 @@ export const skips = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	(
-		{ userUid, entryUid },
-	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const cache = pgTable(

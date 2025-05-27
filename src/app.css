@@ -61,7 +61,7 @@ a:not(:where(.btn)) {
 /* Inputs */
 
 textarea {
-	@apply text-sm
+	@apply text-sm;
 }
 
 /* Dialog */
@@ -196,7 +196,7 @@ summary::after {
 }
 
 .tag {
-	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2
+	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2;
 }
 
 .scrollbar {

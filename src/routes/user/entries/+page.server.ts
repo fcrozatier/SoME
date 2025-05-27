@@ -4,18 +4,12 @@ import { redirect } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ locals }) => {
-  if (!locals.user) return redirect(302, "/login");
+	if (!locals.user) return redirect(302, "/login");
 
-  const userEntries: Pick<
-    SelectEntry,
-    | "uid"
-    | "title"
-    | "description"
-    | "category"
-    | "thumbnail"
-    | "url"
-    | "createdAt"
-  >[] = await db.execute(sql`
+	const userEntries: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "createdAt"
+	>[] = await db.execute(sql`
       select uid, title, description, category, thumbnail, url, created_at from entries
       inner join user_to_entry
       on entries.uid=user_to_entry.entry_uid
@@ -23,8 +17,8 @@ export const load = async ({ locals }) => {
       order by entries.created_at desc
     `);
 
-  return {
-    // @ts-ignore add createdAt prop
-    userEntries: userEntries.map((e) => ({ ...e, createdAt: e.created_at })),
-  };
+	return {
+		// @ts-ignore add createdAt prop
+		userEntries: userEntries.map((e) => ({ ...e, createdAt: e.created_at })),
+	};
 };

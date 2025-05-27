@@ -35,7 +35,7 @@
 		<form class="join" {onchange}>
 			{#each array as n}
 				{#if Number.isNaN(n)}
-					<button class="join-item btn btn-square pointer-events-none "> ... </button>
+					<button class="join-item btn btn-square pointer-events-none"> ... </button>
 				{:else}
 					<input
 						id={`radio${n}`}

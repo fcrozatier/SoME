@@ -5,7 +5,7 @@
 	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
 	import { categories } from "$lib/config.js";
-		import { setTitle } from "$lib/utils/setTitle";
+	import { setTitle } from "$lib/utils/setTitle";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
