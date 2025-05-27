@@ -1,5 +1,5 @@
 <script lang="ts">
-		import { setTitle } from "$lib/utils/setTitle";
+	import { setTitle } from "$lib/utils/setTitle";
 
 	setTitle("Contact");
 </script>

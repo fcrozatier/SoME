@@ -2,6 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
+	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { categories } from "$lib/config";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
@@ -11,7 +12,7 @@
 	import * as fg from "formgator";
 	import { tick } from "svelte";
 
-	let { form } = $props();
+	let { form, data } = $props();
 
 	export const snapshot = {
 		capture: () => {
@@ -32,18 +33,20 @@
 		},
 	};
 
-	let usernames: string[] = $state([]);
-	let category = $state("");
-	let title = $state("");
-	let description = $state("");
+	const entry = data.entry;
+
+	let usernames: string[] = $state(data.coauthors);
+	let category = $state(entry.category);
+	let title = $state(entry.title);
+	let description = $state(entry.description);
+	let url = $state(entry.url);
 	let tag = $state("");
-	let tags: string[] = $state([]);
-	let url = $state("");
+	let tags: string[] = $state(data.tags);
 
 	const levels = ["elementary-school", "middle-school", "high-school", "undergraduate", "graduate"];
 
 	async function addContributor() {
-		usernames = [...usernames, ""];
+		usernames.push("");
 		await tick();
 		const lastUsername = document.getElementById(`username-${usernames.length - 1}`);
 		(lastUsername as HTMLInputElement)?.focus();
@@ -53,7 +56,7 @@
 </script>
 
 <article class="layout-prose max-w-2xl!">
-	<h2>Submit a new entry</h2>
+	<h2>Update an entry</h2>
 
 	<form
 		class="space-y-2"
@@ -83,7 +86,7 @@
 				}
 
 				if (result.type === "success") {
-					newToast({ type: "success", content: `Entry submitted!` });
+					newToast({ type: "success", content: `Entry updated!` });
 					await goto("/user/entries");
 				}
 			};
@@ -117,7 +120,7 @@
 		{/each}
 		<div>
 			<label class="inline-flex items-center gap-2 text-sm text-gray-500">
-				Add coauthors
+				Add coauthor
 				<button
 					type="button"
 					class="btn-outline btn-sm btn-circle btn opacity-80"
@@ -263,15 +266,6 @@
 			<label for="url" class="label">
 				<span class="label-text"> Link </span>
 			</label>
-			<p class="mt-2 mb-4">
-				Ensure your submission is publicly accessible via the link provided: it should not be
-				private or restricted.
-			</p>
-			<p>
-				<em
-					>For example, if it's a pre-published YouTube video, now's the time to make it public.</em
-				>
-			</p>
 			<input
 				id="url"
 				type="url"
@@ -287,6 +281,17 @@
 		</div>
 
 		{#if url && !YOUTUBE_EMBEDDABLE.test(url)}
+			<div>
+				<p>Current thumbnail</p>
+				<img
+					class="my-0 max-w-full rounded-lg"
+					src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace("https://", "")}/${entry.thumbnail}`}
+					alt="thumbnail"
+					width="480"
+					height="270"
+				/>
+			</div>
+
 			<div class="form-control">
 				<label for="thumbnail" class="label flex justify-between">
 					<span class="label-text">Thumbnail</span>
@@ -298,7 +303,6 @@
 					accept="image/*"
 					name="thumbnail"
 					class="file-input w-full input-bordered"
-					required
 				/>
 				{#if form?.issues?.thumbnail}
 					<span class="error-message">{form.issues.thumbnail.message} </span>
@@ -335,8 +339,8 @@
 			{/if}
 		</div>
 
-		<p class="mt-8">
-			<button class="btn-neutral btn block"> Submit Entry</button>
+		<p>
+			<button class="btn-neutral btn block"> Update Entry</button>
 			{#if form?.issues || page.status !== 200}
 				<span class="error-message mt-2">
 					Something went wrong. {form?.issues

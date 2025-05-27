@@ -48,6 +48,8 @@ body {
 	}
 }
 
+/* Links */
+
 a:not(:where(.btn)) {
 	border-radius: 2px;
 
@@ -55,6 +57,14 @@ a:not(:where(.btn)) {
 		outline: 2px solid currentColor;
 	}
 }
+
+/* Inputs */
+
+textarea {
+	@apply text-sm;
+}
+
+/* Dialog */
 
 dialog {
 	@apply shadow-2xl;
@@ -82,6 +92,8 @@ dialog[open] {
 dialog::backdrop {
 	backdrop-filter: blur(3px);
 }
+
+/* Details */
 
 details {
 	padding-block: --spacing(8);
@@ -117,6 +129,8 @@ details + details {
 	border-top: none;
 }
 
+/* Summary */
+
 summary {
 	--outline-width: 0;
 	padding-right: 30px;
@@ -128,6 +142,7 @@ summary {
 	font-weight: var(--font-weight-medium);
 	text-box-trim: trim-start;
 	text-box-edge: cap;
+	outline: none;
 
 	& > a {
 		text-decoration: none;
@@ -170,6 +185,8 @@ summary::after {
 	height: var(--arrow-size);
 }
 
+/* Button */
+
 .btn {
 	text-decoration: none;
 }
@@ -179,7 +196,7 @@ summary::after {
 }
 
 .tag {
-	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2
+	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2;
 }
 
 .scrollbar {

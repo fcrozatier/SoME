@@ -4,7 +4,7 @@
 	import { page } from "$app/state";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
-		import { setTitle } from "$lib/utils/setTitle.js";
+	import { setTitle } from "$lib/utils/setTitle.js";
 	import { NewUserSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 
@@ -26,7 +26,7 @@
 	setTitle("Signup");
 </script>
 
-<article class="layout-prose">
+<article class="layout-prose max-w-2xl!">
 	{#if form?.success}
 		<h2>Welcome to the {FULL_NAME} community!</h2>
 	{:else}
@@ -69,7 +69,7 @@
 				};
 			}}
 		>
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="username" class="label">
 					<span class="label-text"> Username </span>
 				</label>
@@ -91,7 +91,7 @@
 				{/if}
 			</div>
 
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="email" class="label">
 					<span class="label-text"> Email </span>
 				</label>
@@ -112,7 +112,7 @@
 				{/if}
 			</div>
 
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="password" class="label">
 					<span class="label-text"> Password </span>
 				</label>
@@ -136,7 +136,7 @@
 				</span>
 			</div>
 
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<span class="label label-text"> Are you a math teacher? </span>
 
 				<span class="inline-flex gap-x-3 ml-2">
@@ -166,7 +166,7 @@
 				{/if}
 			</div>
 
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="rules" class="label justify-normal gap-4">
 					<input
 						id="rules"

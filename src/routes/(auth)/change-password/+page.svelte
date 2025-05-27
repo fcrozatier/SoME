@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { reportValidity } from "$lib/actions";
-		import { setTitle } from "$lib/utils/setTitle.js";
+	import { setTitle } from "$lib/utils/setTitle.js";
 	import { ChangePasswordSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 
@@ -12,7 +12,7 @@
 	setTitle("Change Password");
 </script>
 
-<article class="layout-prose">
+<article class="layout-prose max-w-2xl!">
 	{#if form?.success}
 		<h2>Change your password</h2>
 		<p>
@@ -22,7 +22,7 @@
 		<form class="space-y-2" method="POST" use:enhance={reportValidity}>
 			<h2>Change your password</h2>
 
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="email" class="label">
 					<span class="label-text"> Email </span>
 				</label>
@@ -42,7 +42,7 @@
 				{/if}
 			</div>
 
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="password" class="label">
 					<span class="label-text">New Password </span>
 				</label>
@@ -67,7 +67,7 @@
 				</span>
 			</div>
 
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="password" class="label">
 					<span class="label-text">Confirm Password </span>
 				</label>

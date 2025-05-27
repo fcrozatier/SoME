@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-		import { setTitle } from "$lib/utils/setTitle";
+	import { setTitle } from "$lib/utils/setTitle";
 
 	setTitle("Error");
 </script>

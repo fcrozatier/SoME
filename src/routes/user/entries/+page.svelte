@@ -62,7 +62,7 @@
 								</span>
 								<a class="btn btn-sm ml-auto sm:ml-0" href={`/entries/${uid}`}> details </a>
 								{#if new Date(createdAt) > new Date(PUBLIC_REGISTRATION_START) && new Date(createdAt) < new Date(PUBLIC_REGISTRATION_END)}
-									<a class="btn btn-sm" href={`/entries/${uid}`}> update </a>
+									<a class="btn btn-sm" href={`/user/entries/update/${uid}`}> update </a>
 								{/if}
 							</div>
 						{/snippet}

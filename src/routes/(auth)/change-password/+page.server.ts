@@ -17,10 +17,13 @@ export const actions: Actions = {
 			return formfail({ password2: "Passwords must match" });
 		}
 
-		await db.update(users).set({
-			newPasswordHash: await auth.hash(data.password),
-			newPasswordValidationToken: emailToken,
-		}).where(eq(users.email, email));
+		await db
+			.update(users)
+			.set({
+				newPasswordHash: await auth.hash(data.password),
+				newPasswordValidationToken: emailToken,
+			})
+			.where(eq(users.email, email));
 
 		if (dev) {
 			console.log("validate your password reset here:");

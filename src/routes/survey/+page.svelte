@@ -2,7 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import { newToast } from "$lib/components/Toasts.svelte";
-		import { setTitle } from "$lib/utils/setTitle.js";
+	import { setTitle } from "$lib/utils/setTitle.js";
 
 	let { form } = $props();
 

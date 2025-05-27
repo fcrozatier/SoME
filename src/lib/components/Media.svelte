@@ -1,5 +1,5 @@
 <script lang="ts">
-		import { YOUTUBE_EMBED } from "$lib/utils/regex";
+	import { YOUTUBE_EMBED } from "$lib/utils/regex";
 	import LayoutSideBySide from "./layouts/LayoutSideBySide.svelte";
 	import Thumbnail from "./Thumbnail.svelte";
 	import Youtube from "./Youtube.svelte";

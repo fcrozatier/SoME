@@ -14,19 +14,14 @@ export const load = ({ locals }) => {
 
 export const actions = {
 	default: formgate(LoginSchema, async (data, { cookies }) => {
-		const [user] = await db.select().from(users).where(
-			eq(users.email, data.email),
-		);
+		const [user] = await db.select().from(users).where(eq(users.email, data.email));
 
 		if (!user?.passwordHash) {
 			return formfail({ email: "Invalid email or password" });
 		}
 
 		// Verify password
-		const validPassword = await auth.verify(
-			user.passwordHash,
-			data.password,
-		);
+		const validPassword = await auth.verify(user.passwordHash, data.password);
 
 		if (!validPassword) {
 			return formfail({ email: "Invalid email or password" });
