@@ -84,12 +84,12 @@ export const actions = {
     // Save data
     try {
       const entryUid = crypto.randomUUID();
-      const { thumbnail, link } = data;
+      const { thumbnail, url } = data;
 
       let thumbnailKey = null;
-      let normalizedLink = link;
+      let normalizedURL = url;
 
-      if (!YOUTUBE_EMBEDDABLE.test(link)) {
+      if (!YOUTUBE_EMBEDDABLE.test(url)) {
         if (!thumbnail) {
           return formfail({ thumbnail: `Thumbnail required` });
         }
@@ -97,7 +97,7 @@ export const actions = {
         thumbnailKey = crypto.randomUUID() + ".webp";
       } else {
         // Normalize youtube links
-        normalizedLink = normalizeYoutubeLink(link);
+        normalizedURL = normalizeYoutubeLink(url);
       }
 
       // Save entry
@@ -106,7 +106,7 @@ export const actions = {
         category: data.category,
         title: data.title,
         description: data.description,
-        url: normalizedLink,
+        url: normalizedURL,
         thumbnail: thumbnailKey,
       });
 

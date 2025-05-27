@@ -20,7 +20,7 @@
 				category,
 				title,
 				description,
-				link,
+				url,
 			};
 		},
 		restore: (v) => {
@@ -28,7 +28,7 @@
 			category = v.category;
 			title = v.title;
 			description = v.description;
-			link = v.link;
+			url = v.url;
 		},
 	};
 
@@ -38,7 +38,7 @@
 	let description = $state("");
 	let tag = $state("");
 	let tags: string[] = $state([]);
-	let link = $state("");
+	let url = $state("");
 
 	const levels = ["elementary-school", "middle-school", "high-school", "undergraduate", "graduate"];
 
@@ -260,24 +260,24 @@
 		{/if}
 
 		<div class="form-control max-w-md">
-			<label for="link" class="label">
+			<label for="url" class="label">
 				<span class="label-text"> Link </span>
 			</label>
 			<input
-				id="link"
+				id="url"
 				type="url"
-				name="link"
+				name="url"
 				placeholder="https://"
 				class="input-bordered input w-full"
-				bind:value={link}
-				{...fg.splat(NewEntrySchema["link"].attributes)}
+				bind:value={url}
+				{...fg.splat(NewEntrySchema["url"].attributes)}
 			/>
-			{#if form?.issues?.link}
-				<span class="error-message">{form.issues.link.message}</span>
+			{#if form?.issues?.url}
+				<span class="error-message">{form.issues.url.message}</span>
 			{/if}
 		</div>
 
-		{#if link && !YOUTUBE_EMBEDDABLE.test(link)}
+		{#if url && !YOUTUBE_EMBEDDABLE.test(url)}
 			<div class="form-control max-w-md">
 				<label for="thumbnail" class="label flex justify-between">
 					<span class="label-text">Thumbnail</span>
@@ -312,7 +312,7 @@
 		<div class="form-control max-w-md">
 			<label class="label gap-4">
 				<input type="checkbox" name="copyright" class="checkbox" required />
-				I agree with the following policies:
+				I agree to the following policies:
 			</label>
 			<ul class="list-outside ml-2 mt-0">
 				<li>

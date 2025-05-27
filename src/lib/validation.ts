@@ -170,7 +170,7 @@ export const NewEntrySchema = {
 	description: DescriptionSchema,
 	"new-tag": fg.text({ required: false }),
 	tag: fg.multi({ min: 0 }),
-	link: UrlSchema,
+	url: UrlSchema,
 	thumbnail: ThumbnailSchema,
 	rules: fg.checkbox({ required: true }),
 	copyright: fg.checkbox({ required: true }),
