@@ -184,6 +184,7 @@ export type InsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type SelectEntry = typeof entries.$inferSelect;
+export type SelectTag = typeof tags.$inferSelect;
 export type SelectVote = typeof votes.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;
 export type SelectSurveys = typeof surveys.$inferSelect;
