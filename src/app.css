@@ -128,6 +128,7 @@ summary {
 	font-weight: var(--font-weight-medium);
 	text-box-trim: trim-start;
 	text-box-edge: cap;
+	outline: none;
 
 	& > a {
 		text-decoration: none;
