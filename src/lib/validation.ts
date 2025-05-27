@@ -148,21 +148,6 @@ const ThumbnailSchema = fg.file({
 	"Image too big: 1MB max",
 );
 
-export const CreatorSchema = z.object({
-	others: z.string().transform((val, ctx) => {
-		try {
-			return z.array(z.string().email()).parse(JSON.parse(val));
-		} catch {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: "Invalid email",
-			});
-
-			return z.NEVER;
-		}
-	}),
-});
-
 export const NewEntrySchema = {
 	usernames: fg.multi({ min: 0 }),
 	category: fg.select(["video", "non-video"], { required: true }),
