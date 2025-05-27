@@ -263,6 +263,13 @@
 			<label for="url" class="label">
 				<span class="label-text"> Link </span>
 			</label>
+			<p class="mt-2 mb-4">
+				Ensure your submission is publicly accessible via the link provided: it should not be
+				private or restricted.
+			</p>
+			<p>
+				<em>For example, if it's a  pre-published YouTube video, now's the time to make it public.</em>
+			</p>
 			<input
 				id="url"
 				type="url"
@@ -316,10 +323,10 @@
 			</label>
 			<ul class="list-outside ml-2 mt-0">
 				<li>
-					<a href="/content-policy#fair-use">Copyrighted material policy and fair use guidelines</a>
+					<a href="/content-policy#fair-use">Copyrighted Material Policy</a>
 				</li>
-				<li><a href="/content-policy#cc">Creative Commons guidelines</a></li>
-				<li><a href="/content-policy#ai">AI policy</a></li>
+				<li><a href="/content-policy#cc">Creative Commons Guidelines</a></li>
+				<li><a href="/content-policy#ai">AI Content Policy</a></li>
 			</ul>
 			{#if form?.issues?.copyright}
 				<span class="error-message">{form.issues.copyright.message} </span>
