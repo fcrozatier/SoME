@@ -92,7 +92,7 @@
 		{#each usernames as _, i}
 			<div class="form-control max-w-md">
 				<label for="username-{i}" class="label">
-					<span class="label-text">Username {i + 1}</span>
+					<span class="label-text">Coauthor {i + 1}</span>
 				</label>
 				<div class="flex items-center gap-2">
 					<input
@@ -117,7 +117,7 @@
 		{/each}
 		<div>
 			<label class="inline-flex items-center gap-2 text-sm text-gray-500">
-				Add contributor
+				Add coauthors
 				<button
 					type="button"
 					class="btn-outline btn-sm btn-circle btn opacity-80"
