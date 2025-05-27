@@ -52,7 +52,7 @@
 	setTitle("New entry");
 </script>
 
-<article class="layout-prose">
+<article class="layout-prose max-w-2xl!">
 	<h2>Submit a new entry</h2>
 
 	<form
@@ -90,7 +90,7 @@
 		}}
 	>
 		{#each usernames as _, i}
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="username-{i}" class="label">
 					<span class="label-text">Coauthor {i + 1}</span>
 				</label>
@@ -129,7 +129,7 @@
 			<span class="block error-message">{form.issues.usernames.message}</span>
 		{/if}
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="category" class="label">
 				<span class="label-text"> Category </span>
 			</label>
@@ -149,7 +149,7 @@
 			{/if}
 		</div>
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="title" class="label">Title</label>
 			<input
 				id="title"
@@ -167,7 +167,7 @@
 			{/if}
 		</div>
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="description" class="label">
 				<span class="label-text">Description</span>
 			</label>
@@ -192,7 +192,7 @@
 			</div>
 		</div>
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="new-tag" class="label"> Tags </label>
 
 			<p class="mt-2 mb-4">
@@ -259,7 +259,7 @@
 			<span class="error-message">{form.issues.tag.message}</span>
 		{/if}
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="url" class="label">
 				<span class="label-text"> Link </span>
 			</label>
@@ -268,7 +268,9 @@
 				private or restricted.
 			</p>
 			<p>
-				<em>For example, if it's a  pre-published YouTube video, now's the time to make it public.</em>
+				<em
+					>For example, if it's a pre-published YouTube video, now's the time to make it public.</em
+				>
 			</p>
 			<input
 				id="url"
@@ -285,7 +287,7 @@
 		</div>
 
 		{#if url && !YOUTUBE_EMBEDDABLE.test(url)}
-			<div class="form-control max-w-md">
+			<div class="form-control">
 				<label for="thumbnail" class="label flex justify-between">
 					<span class="label-text">Thumbnail</span>
 					<span class="label-text-alt">Recommended ratio 16:9</span>
@@ -304,7 +306,7 @@
 			</div>
 		{/if}
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="rules" class="label gap-4">
 				<input id="rules" type="checkbox" name="rules" class="checkbox" required />
 				<span class="label-text">
@@ -316,7 +318,7 @@
 			{/if}
 		</div>
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label class="label gap-4">
 				<input type="checkbox" name="copyright" class="checkbox" required />
 				I agree to the following policies:
@@ -333,7 +335,7 @@
 			{/if}
 		</div>
 
-		<p>
+		<p class="mt-8">
 			<button class="btn-neutral btn block"> Submit Entry</button>
 			{#if form?.issues || page.status !== 200}
 				<span class="error-message mt-2">

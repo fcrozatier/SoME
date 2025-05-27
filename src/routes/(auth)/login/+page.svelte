@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { reportValidity } from "$lib/actions.js";
-		import { setTitle } from "$lib/utils/setTitle.js";
+	import { setTitle } from "$lib/utils/setTitle.js";
 	import { LoginSchema } from "$lib/validation";
 	import * as fg from "formgator";
 
@@ -10,11 +10,11 @@
 	setTitle("Login");
 </script>
 
-<article class="layout-prose">
+<article class="layout-prose max-w-2xl!">
 	<h2>Login</h2>
 
 	<form class="space-y-2" method="post" use:enhance={reportValidity}>
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="email" class="label">
 				<span class="label-text"> Email </span>
 			</label>
@@ -30,11 +30,11 @@
 				autocomplete="email"
 			/>
 			{#if form?.issues?.email}
-				<span id="credentials-error" class="error-message">{form.issues.email.message}</span>
+				<span id="credentials-error" class="error-message">{form.issues.email.message}</span> max-w-2xl!
 			{/if}
 		</div>
 
-		<div class="form-control max-w-md">
+		<div class="form-control">
 			<label for="password" class="label">
 				<span class="label-text"> Password </span>
 			</label>
