@@ -4,7 +4,7 @@
 	"description": "Summer of Math Exposition",
 	"private": true,
 	"engines": {
-		"node": "23.x",
+		"node": "24.x",
 		"pnpm": "10.x"
 	},
 	"scripts": {
