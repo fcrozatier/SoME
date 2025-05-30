@@ -23,8 +23,5 @@ export const slugify = (input: string, strip: RegExp = NON_ASCII) => {
 		else if (s.segment.length) words.push("-");
 	}
 
-	return words.join("-")
-		.replaceAll(/-{2,}/g, "-")
-		.replaceAll(/^-|-$/g, "")
-		.normalize("NFC");
+	return words.join("-").replaceAll(/-{2,}/g, "-").replaceAll(/^-|-$/g, "").normalize("NFC");
 };
