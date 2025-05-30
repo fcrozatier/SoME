@@ -36,9 +36,7 @@ export const actions = {
 		}
 
 		// Unique username
-		const [other] = await db.select().from(users).where(
-			eq(users.username, data.username),
-		);
+		const [other] = await db.select().from(users).where(eq(users.username, data.username));
 
 		if (other) return formfail({ username: "This username is already taken" });
 
@@ -65,9 +63,7 @@ export const actions = {
 				console.log(error);
 
 				if (error.constraint_name === "users_email_unique") {
-					const [targetUser] = await db.select().from(users).where(
-						eq(users.email, user.email),
-					);
+					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
 
 					// Check whether it's a legacy profile (no pwd) and update
 					if (targetUser && !targetUser.passwordHash) {
