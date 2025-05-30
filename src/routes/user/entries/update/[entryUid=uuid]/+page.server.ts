@@ -15,7 +15,7 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import { NewEntrySchema } from "$lib/validation";
+import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -103,8 +103,9 @@ export const actions = {
 				.from(users)
 				.where(inArray(users.username, usernames));
 
-			const newCoauthors = team.filter((a) => !prevUsernames.includes(a.username!));
-			const formerCoauthors = prevCoauthors.filter((a) => !usernames.includes(a.username!));
+			const formerCoauthors = prevCoauthors.filter((a) =>
+				!usernames.includes(a.username!)
+			);
 
 			// Validate team members
 			if (team.length !== usernames.length) {
@@ -122,8 +123,15 @@ export const actions = {
 
 			// Validate tags
 			const tagSet = new Set(data.tag);
-			if (data["new-tag"]?.length) tagSet.add(data["new-tag"]);
+			if (data.newtag?.length) tagSet.add(data.newtag);
 			const entryTags = Array.from(tagSet).map((tag) => slugify(tag));
+
+			// Should at least contain a level tag
+			if (new Set(entryTags).intersection(new Set(levels)).size === 0) {
+				return formfail({
+					newtag: invalidTagsMessage,
+				});
+			}
 
 			const unknownTags = entryTags.filter(
 				(t) => !t.split("-").every((part) => dictionary.has(part)),
@@ -131,9 +139,11 @@ export const actions = {
 
 			if (unknownTags.length) {
 				return formfail({
-					tag: `Unknown word${unknownTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-						unknownTags,
-					)}`,
+					tag: `Unknown word${unknownTags.length === 1 ? "" : "s"}: ${
+						conjunctionFormatter.format(
+							unknownTags,
+						)
+					}`,
 				});
 			}
 
@@ -220,9 +230,11 @@ export const actions = {
 			await db.execute(sql`
         delete from entry_to_tag
         where entry_uid=${entryUid}
-        and tag_id in ${oldEntryTags
+        and tag_id in ${
+				oldEntryTags
 					.filter((t) => !entryTags.includes(t.name))
-					.map((t) => t.id)};`);
+					.map((t) => t.id)
+			};`);
 
 			if (tagSet.size) {
 				// Save new tags

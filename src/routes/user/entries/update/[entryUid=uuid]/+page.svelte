@@ -8,9 +8,10 @@
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { setTitle } from "$lib/utils/setTitle.js";
 	import { slugify } from "$lib/utils/slugify.js";
-	import { NewEntrySchema } from "$lib/validation";
+	import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
+	import { SvelteSet } from "svelte/reactivity";
 
 	let { form, data } = $props();
 
@@ -42,8 +43,14 @@
 	let url = $state(entry.url);
 	let tag = $state("");
 	let tags: string[] = $state(data.tags);
+	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
+	let newtag: HTMLInputElement | undefined = $state();
 
-	const levels = ["elementary-school", "middle-school", "high-school", "undergraduate", "graduate"];
+	$effect(() => {
+		// The level was not provided
+		if (invalidTags) newtag?.setCustomValidity(invalidTagsMessage);
+		else newtag?.setCustomValidity("");
+	});
 
 	async function addContributor() {
 		usernames.push("");
@@ -62,8 +69,13 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter }) => {
+		use:enhance={({ submitter, cancel }) => {
 			submitter?.setAttribute("disabled", "on");
+
+			if (invalidTags) {
+				newtag?.reportValidity();
+				return cancel();
+			}
 
 			return async ({ update, result, formElement }) => {
 				await update();
@@ -73,7 +85,13 @@
 					const issues = result.data.issues as Record<string, fg.ValidationIssue>;
 
 					for (const element of formElement.elements) {
-						if (!(element instanceof HTMLInputElement)) continue;
+						if (
+							!(element instanceof HTMLInputElement) &&
+							!(element instanceof HTMLTextAreaElement) &&
+							!(element instanceof HTMLSelectElement)
+						) {
+							continue;
+						}
 
 						const customMessage = issues[element.name]?.message;
 						if (customMessage) element.setCustomValidity(customMessage);
@@ -221,26 +239,29 @@
 				{/each}
 			</div>
 			<input
-				id="new-tag"
+				id="newtag"
 				type="text"
-				name="new-tag"
+				name="newtag"
 				placeholder="Comma separated tags"
 				class="input-bordered input w-full"
-				aria-errormessage="new-tag-error"
+				aria-errormessage="newtag-error"
+				aria-invalid={`${invalidTags}`}
 				bind:value={tag}
+				bind:this={newtag}
 				onkeydown={(event) => {
 					if (event.key === "Enter" || event.key === ",") {
-						if (event.currentTarget.value.length) {
-							tags.push(slugify(event.currentTarget.value));
+						if (tag.length) {
+							tags.push(slugify(tag));
 							tag = "";
+
 							event.preventDefault();
 						}
 					}
 				}}
 			/>
 
-			{#if form?.issues?.["new-tag"]}
-				<span id="new-tag-error" class="error-message">{form.issues["new-tag"].message}</span>
+			{#if invalidTags && tags.length > 0}
+				<span id="newtag-error" class="error-message">{invalidTagsMessage}</span>
 			{/if}
 		</div>
 		<div class="flex gap-2">
