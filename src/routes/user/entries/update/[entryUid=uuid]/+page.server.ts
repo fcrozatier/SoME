@@ -131,14 +131,14 @@ export const actions = {
 				});
 			}
 
-			const unknownTags = entryTags.filter(
-				(t) => !t.split("-").every((part) => dictionary.has(part)),
-			);
+			const unknownWords = entryTags
+				.flatMap((tag) => tag.split("-"))
+				.filter((part) => !dictionary.has(part));
 
-			if (unknownTags.length) {
+			if (unknownWords.length) {
 				return formfail({
-					tag: `Unknown word${unknownTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-						unknownTags,
+					tag: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
+						unknownWords,
 					)}`,
 				});
 			}
@@ -261,7 +261,7 @@ export const actions = {
 			}
 
 			console.log("submission error", error);
-			return fail(500, { network: true });
+			throw error;
 		}
 	}),
 };

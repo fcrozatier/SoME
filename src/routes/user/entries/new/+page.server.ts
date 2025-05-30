@@ -2,14 +2,20 @@ import { dev } from "$app/environment";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import { entries, entriesToTags, tags, users, usersToEntries } from "$lib/server/db/schema.js";
+import {
+	entries,
+	entriesToTags,
+	tags,
+	users,
+	usersToEntries,
+} from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
 import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
@@ -49,7 +55,9 @@ export const actions = {
 		// Validate team members
 		if (team.length !== teamSize) {
 			const foundUsernames = team.map((u) => u.username);
-			const notFoundUsernames = usernames.filter((username) => !foundUsernames.includes(username));
+			const notFoundUsernames = usernames.filter((username) =>
+				!foundUsernames.includes(username)
+			);
 
 			return formfail({
 				usernames: `Username${
@@ -70,15 +78,17 @@ export const actions = {
 			});
 		}
 
-		const unknownTags = entryTags.filter(
-			(t) => !t.split("-").every((part) => dictionary.has(part)),
-		);
+		const unknownWords = entryTags
+			.flatMap((tag) => tag.split("-"))
+			.filter((part) => !dictionary.has(part));
 
-		if (unknownTags.length) {
+		if (unknownWords.length) {
 			return formfail({
-				tag: `Unknown word${unknownTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-					unknownTags,
-				)}`,
+				tag: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${
+					conjunctionFormatter.format(
+						unknownWords,
+					)
+				}`,
 			});
 		}
 
@@ -117,7 +127,9 @@ export const actions = {
 			}
 
 			// Connect the creators and the entry
-			await db.insert(usersToEntries).values(team.map((user) => ({ userUid: user.uid, entryUid })));
+			await db.insert(usersToEntries).values(
+				team.map((user) => ({ userUid: user.uid, entryUid })),
+			);
 
 			// Save tags and retrieve ids whether newly inserted or existing
 			if (tagSet.size) {
@@ -131,7 +143,9 @@ export const actions = {
 					.from(tags)
 					.where(inArray(tags.name, entryTags));
 
-				await db.insert(entriesToTags).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
+				await db.insert(entriesToTags).values(
+					tagIds.map(({ id }) => ({ entryUid, tagId: id })),
+				);
 			}
 
 			return { success: true };
@@ -146,7 +160,7 @@ export const actions = {
 			}
 
 			console.log("submission error", error);
-			return fail(500, { network: true });
+			throw error;
 		}
 	}),
 };
