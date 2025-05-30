@@ -2,13 +2,7 @@ import { dev } from "$app/environment";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import {
-	entries,
-	entriesToTags,
-	tags,
-	users,
-	usersToEntries,
-} from "$lib/server/db/schema.js";
+import { entries, entriesToTags, tags, users, usersToEntries } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
@@ -55,9 +49,7 @@ export const actions = {
 		// Validate team members
 		if (team.length !== teamSize) {
 			const foundUsernames = team.map((u) => u.username);
-			const notFoundUsernames = usernames.filter((username) =>
-				!foundUsernames.includes(username)
-			);
+			const notFoundUsernames = usernames.filter((username) => !foundUsernames.includes(username));
 
 			return formfail({
 				usernames: `Username${
@@ -84,11 +76,9 @@ export const actions = {
 
 		if (unknownWords.length) {
 			return formfail({
-				tag: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${
-					conjunctionFormatter.format(
-						unknownWords,
-					)
-				}`,
+				tag: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
+					unknownWords,
+				)}`,
 			});
 		}
 
@@ -127,9 +117,7 @@ export const actions = {
 			}
 
 			// Connect the creators and the entry
-			await db.insert(usersToEntries).values(
-				team.map((user) => ({ userUid: user.uid, entryUid })),
-			);
+			await db.insert(usersToEntries).values(team.map((user) => ({ userUid: user.uid, entryUid })));
 
 			// Save tags and retrieve ids whether newly inserted or existing
 			if (tagSet.size) {
@@ -143,13 +131,13 @@ export const actions = {
 					.from(tags)
 					.where(inArray(tags.name, entryTags));
 
-				await db.insert(entriesToTags).values(
-					tagIds.map(({ id }) => ({ entryUid, tagId: id })),
-				);
+				await db.insert(entriesToTags).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
 			}
 
-			return { success: true };
+			return redirect(303, "/user/entries");
 		} catch (error) {
+			console.log("[new entry]:", error);
+
 			if (
 				error instanceof postgres.PostgresError &&
 				error.code === postgresErrorCode.unique_violation
@@ -159,7 +147,6 @@ export const actions = {
 				}
 			}
 
-			console.log("submission error", error);
 			throw error;
 		}
 	}),

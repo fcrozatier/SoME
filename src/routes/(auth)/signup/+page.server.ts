@@ -49,14 +49,10 @@ export const actions = {
 			auth.setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
 
 			if (!dev) {
-				try {
-					await addToMailingList(user.email, user.uid);
-				} catch (e) {
-					console.error("[signup]: couldn't add to mailing list", e);
-				}
+				await addToMailingList(user.email, user.uid);
 			}
 
-			return { success: true };
+			return redirect(303, "/user/entries");
 		} catch (error) {
 			console.log("[signup]:", error);
 
@@ -86,7 +82,7 @@ export const actions = {
 				}
 			}
 
-			return fail(500);
+			throw error;
 		}
 	}),
 };

@@ -89,7 +89,6 @@ export const actions = {
           where entry_uid=${entryUid};
         `,
 			);
-			const prevUsernames = prevCoauthors.map((u) => u.username);
 
 			// curr = prev + new - former
 			const usernames = [...new Set([...data.usernames, user.username])];
@@ -249,8 +248,10 @@ export const actions = {
 					.onConflictDoNothing();
 			}
 
-			return { success: true };
+			return redirect(303, "/user/entries");
 		} catch (error) {
+			console.log("[entry update]:", error);
+
 			if (
 				error instanceof postgres.PostgresError &&
 				error.code === postgresErrorCode.unique_violation
@@ -260,7 +261,6 @@ export const actions = {
 				}
 			}
 
-			console.log("submission error", error);
 			throw error;
 		}
 	}),
