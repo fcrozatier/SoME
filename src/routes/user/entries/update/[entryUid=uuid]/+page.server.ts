@@ -103,9 +103,7 @@ export const actions = {
 				.from(users)
 				.where(inArray(users.username, usernames));
 
-			const formerCoauthors = prevCoauthors.filter((a) =>
-				!usernames.includes(a.username!)
-			);
+			const formerCoauthors = prevCoauthors.filter((a) => !usernames.includes(a.username!));
 
 			// Validate team members
 			if (team.length !== usernames.length) {
@@ -139,11 +137,9 @@ export const actions = {
 
 			if (unknownTags.length) {
 				return formfail({
-					tag: `Unknown word${unknownTags.length === 1 ? "" : "s"}: ${
-						conjunctionFormatter.format(
-							unknownTags,
-						)
-					}`,
+					tag: `Unknown word${unknownTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
+						unknownTags,
+					)}`,
 				});
 			}
 
@@ -230,11 +226,9 @@ export const actions = {
 			await db.execute(sql`
         delete from entry_to_tag
         where entry_uid=${entryUid}
-        and tag_id in ${
-				oldEntryTags
+        and tag_id in ${oldEntryTags
 					.filter((t) => !entryTags.includes(t.name))
-					.map((t) => t.id)
-			};`);
+					.map((t) => t.id)};`);
 
 			if (tagSet.size) {
 				// Save new tags
