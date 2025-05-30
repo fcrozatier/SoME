@@ -94,6 +94,7 @@
 <dialog
 	class="fixed inset-0 pt-0 m-auto overflow-auto"
 	bind:this={displayDialog}
+	closedby="any"
 	onclose={() => {
 		// Stop playing
 		form = null;

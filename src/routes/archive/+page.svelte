@@ -176,6 +176,7 @@
 <dialog
 	class="fixed inset-0 pt-0 m-auto overflow-auto max-w-3xl overscroll-y-none"
 	bind:this={displayDialog}
+	closedby="any"
 	onclose={() => {
 		history.back();
 		entry = undefined;
