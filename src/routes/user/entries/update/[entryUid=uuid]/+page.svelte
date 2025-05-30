@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { newToast } from "$lib/components/Toasts.svelte";
@@ -103,9 +102,8 @@
 					}
 				}
 
-				if (result.type === "success") {
+				if (result.type === "redirect") {
 					newToast({ type: "success", content: `Entry updated!` });
-					await goto("/user/entries");
 				}
 			};
 		}}

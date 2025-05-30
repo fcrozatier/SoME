@@ -89,7 +89,6 @@ export const actions = {
           where entry_uid=${entryUid};
         `,
 			);
-			const prevUsernames = prevCoauthors.map((u) => u.username);
 
 			// curr = prev + new - former
 			const usernames = [...new Set([...data.usernames, user.username])];
@@ -103,7 +102,9 @@ export const actions = {
 				.from(users)
 				.where(inArray(users.username, usernames));
 
-			const formerCoauthors = prevCoauthors.filter((a) => !usernames.includes(a.username!));
+			const formerCoauthors = prevCoauthors.filter((a) =>
+				!usernames.includes(a.username!)
+			);
 
 			// Validate team members
 			if (team.length !== usernames.length) {
@@ -137,9 +138,11 @@ export const actions = {
 
 			if (unknownWords.length) {
 				return formfail({
-					tag: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-						unknownWords,
-					)}`,
+					tag: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${
+						conjunctionFormatter.format(
+							unknownWords,
+						)
+					}`,
 				});
 			}
 
@@ -226,9 +229,11 @@ export const actions = {
 			await db.execute(sql`
         delete from entry_to_tag
         where entry_uid=${entryUid}
-        and tag_id in ${oldEntryTags
+        and tag_id in ${
+				oldEntryTags
 					.filter((t) => !entryTags.includes(t.name))
-					.map((t) => t.id)};`);
+					.map((t) => t.id)
+			};`);
 
 			if (tagSet.size) {
 				// Save new tags
@@ -249,8 +254,10 @@ export const actions = {
 					.onConflictDoNothing();
 			}
 
-			return { success: true };
+			return redirect(303, "/user/entries");
 		} catch (error) {
+			console.log("[entry update]:", error);
+
 			if (
 				error instanceof postgres.PostgresError &&
 				error.code === postgresErrorCode.unique_violation
@@ -260,7 +267,6 @@ export const actions = {
 				}
 			}
 
-			console.log("submission error", error);
 			throw error;
 		}
 	}),
