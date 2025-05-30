@@ -8,7 +8,7 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import { NewEntrySchema } from "$lib/validation";
+import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -60,8 +60,15 @@ export const actions = {
 
 		// Validate tags
 		const tagSet = new Set(data.tag);
-		if (data["new-tag"]?.length) tagSet.add(data["new-tag"]);
+		if (data.newtag?.length) tagSet.add(data.newtag);
 		const entryTags = Array.from(tagSet).map((tag) => slugify(tag));
+
+		// Should at least contain a level tag
+		if (new Set(entryTags).intersection(new Set(levels)).size === 0) {
+			return formfail({
+				newtag: invalidTagsMessage,
+			});
+		}
 
 		const unknownTags = entryTags.filter(
 			(t) => !t.split("-").every((part) => dictionary.has(part)),

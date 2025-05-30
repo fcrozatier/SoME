@@ -82,7 +82,13 @@
 					const issues = result.data.issues as Record<string, fg.ValidationIssue>;
 
 					for (const element of formElement.elements) {
-						if (!(element instanceof HTMLInputElement)) continue;
+						if (
+							!(element instanceof HTMLInputElement) &&
+							!(element instanceof HTMLTextAreaElement) &&
+							!(element instanceof HTMLSelectElement)
+						) {
+							continue;
+						}
 
 						const customMessage = issues[element.name]?.message;
 						if (customMessage) element.setCustomValidity(customMessage);
@@ -232,7 +238,7 @@
 			<input
 				id="newtag"
 				type="text"
-				name="new-tag"
+				name="newtag"
 				placeholder="Comma separated tags"
 				class="input-bordered input w-full"
 				aria-errormessage="newtag-error"
