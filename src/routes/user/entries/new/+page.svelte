@@ -265,7 +265,7 @@
 					{tag}
 					<button
 						type="button"
-						class="cursor-pointer"
+						class="cursor-pointer rounded-full inline-block outline-offset-2 outline-gray-900 leading-0"
 						onclick={() => {
 							tags.splice(i, 1);
 						}}>&cross;</button
