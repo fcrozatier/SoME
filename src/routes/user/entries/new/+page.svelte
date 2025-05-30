@@ -7,7 +7,7 @@
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { setTitle } from "$lib/utils/setTitle.js";
 	import { slugify } from "$lib/utils/slugify.js";
-	import { NewEntrySchema } from "$lib/validation";
+	import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
@@ -32,9 +32,6 @@
 			url = v.url;
 		},
 	};
-
-	const levels = ["elementary-school", "middle-school", "high-school", "undergraduate", "graduate"];
-	const invalidTagsMessage = "Pick at least one level from the provided list";
 
 	let usernames: string[] = $state([]);
 	let category = $state("");
