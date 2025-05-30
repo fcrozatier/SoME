@@ -148,8 +148,10 @@ export const actions = {
 				);
 			}
 
-			return { success: true };
+			return redirect(303, "/user/entries");
 		} catch (error) {
+			console.log("[new entry]:", error);
+
 			if (
 				error instanceof postgres.PostgresError &&
 				error.code === postgresErrorCode.unique_violation
@@ -159,7 +161,6 @@ export const actions = {
 				}
 			}
 
-			console.log("submission error", error);
 			throw error;
 		}
 	}),

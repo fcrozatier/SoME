@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { categories } from "$lib/config";
@@ -100,9 +99,8 @@
 					}
 				}
 
-				if (result.type === "success") {
+				if (result.type === "redirect") {
 					newToast({ type: "success", content: `Entry submitted!` });
-					await goto("/user/entries");
 				}
 			};
 		}}
