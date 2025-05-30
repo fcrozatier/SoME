@@ -196,7 +196,7 @@ summary::after {
 }
 
 .tag {
-	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2;
+	@apply inline-flex items-center gap-1 border border-gray-600 rounded-full text-xs py-1 px-2 outline-gray-900;
 }
 
 .scrollbar {

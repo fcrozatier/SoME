@@ -1,6 +1,6 @@
 import { templateNames } from "$lib/config";
-import { z } from "zod";
 import * as fg from "formgator";
+import { z } from "zod";
 
 const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -141,13 +141,25 @@ export const NewEntrySchema = {
 	category: fg.select(["video", "non-video"], { required: true }),
 	title: TitleSchema,
 	description: DescriptionSchema,
-	"new-tag": fg.text({ required: false }),
+	newtag: fg.text({ required: false }),
 	tag: fg.multi({ min: 0 }),
 	url: UrlSchema,
 	thumbnail: ThumbnailSchema,
 	rules: fg.checkbox({ required: true }),
 	copyright: fg.checkbox({ required: true }),
 };
+
+/**
+ * Academic math level keywords for tags
+ */
+export const levels = [
+	"elementary-school",
+	"middle-school",
+	"high-school",
+	"undergraduate",
+	"graduate",
+];
+export const invalidTagsMessage = "Pick at least one level from the provided list";
 
 export const FeedbackSchema = z
 	.string()

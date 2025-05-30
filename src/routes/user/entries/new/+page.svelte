@@ -7,9 +7,10 @@
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { setTitle } from "$lib/utils/setTitle.js";
 	import { slugify } from "$lib/utils/slugify.js";
-	import { NewEntrySchema } from "$lib/validation";
+	import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
+	import { SvelteSet } from "svelte/reactivity";
 
 	let { form } = $props();
 
@@ -39,8 +40,14 @@
 	let tag = $state("");
 	let tags: string[] = $state([]);
 	let url = $state("");
+	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
+	let newtag: HTMLInputElement | undefined = $state();
 
-	const levels = ["elementary-school", "middle-school", "high-school", "undergraduate", "graduate"];
+	$effect(() => {
+		// The level was not provided
+		if (invalidTags) newtag?.setCustomValidity(invalidTagsMessage);
+		else newtag?.setCustomValidity("");
+	});
 
 	async function addContributor() {
 		usernames = [...usernames, ""];
@@ -59,8 +66,13 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter }) => {
+		use:enhance={({ submitter, cancel }) => {
 			submitter?.setAttribute("disabled", "on");
+
+			if (invalidTags) {
+				newtag?.reportValidity();
+				return cancel();
+			}
 
 			return async ({ update, result, formElement }) => {
 				await update();
@@ -70,7 +82,13 @@
 					const issues = result.data.issues as Record<string, fg.ValidationIssue>;
 
 					for (const element of formElement.elements) {
-						if (!(element instanceof HTMLInputElement)) continue;
+						if (
+							!(element instanceof HTMLInputElement) &&
+							!(element instanceof HTMLTextAreaElement) &&
+							!(element instanceof HTMLSelectElement)
+						) {
+							continue;
+						}
 
 						const customMessage = issues[element.name]?.message;
 						if (customMessage) element.setCustomValidity(customMessage);
@@ -174,7 +192,7 @@
 			<textarea
 				id="description"
 				name="description"
-				placeholder="Description of your entry, audience..."
+				placeholder="The description of your entry, audience..."
 				class="textarea-bordered block w-full textarea text-base"
 				rows="8"
 				bind:value={description}
@@ -193,7 +211,7 @@
 		</div>
 
 		<div class="form-control">
-			<label for="new-tag" class="label"> Tags </label>
+			<label for="newtag" class="label"> Tags </label>
 
 			<p class="mt-2 mb-4">
 				Add tags to your entry for simple categorization, such as topic and level. For the topic,
@@ -218,26 +236,29 @@
 				{/each}
 			</div>
 			<input
-				id="new-tag"
+				id="newtag"
 				type="text"
-				name="new-tag"
+				name="newtag"
 				placeholder="Comma separated tags"
 				class="input-bordered input w-full"
-				aria-errormessage="new-tag-error"
+				aria-errormessage="newtag-error"
+				aria-invalid={`${invalidTags}`}
 				bind:value={tag}
+				bind:this={newtag}
 				onkeydown={(event) => {
 					if (event.key === "Enter" || event.key === ",") {
-						if (event.currentTarget.value.length) {
-							tags.push(slugify(event.currentTarget.value));
+						if (tag.length) {
+							tags.push(slugify(tag));
 							tag = "";
+
 							event.preventDefault();
 						}
 					}
 				}}
 			/>
 
-			{#if form?.issues?.["new-tag"]}
-				<span id="new-tag-error" class="error-message">{form.issues["new-tag"].message}</span>
+			{#if invalidTags && tags.length > 0}
+				<span id="newtag-error" class="error-message">{invalidTagsMessage}</span>
 			{/if}
 		</div>
 		<div class="flex gap-2">
@@ -247,7 +268,7 @@
 					{tag}
 					<button
 						type="button"
-						class="cursor-pointer"
+						class="cursor-pointer rounded-full inline-block outline-offset-2 outline-gray-900 leading-0"
 						onclick={() => {
 							tags.splice(i, 1);
 						}}>&cross;</button
