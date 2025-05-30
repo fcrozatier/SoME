@@ -36,7 +36,9 @@ export const actions = {
 		}
 
 		// Unique username
-		const [other] = await db.select().from(users).where(eq(users.username, data.username));
+		const [other] = await db.select().from(users).where(
+			eq(users.username, data.username),
+		);
 
 		if (other) return formfail({ username: "This username is already taken" });
 
@@ -49,14 +51,10 @@ export const actions = {
 			auth.setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
 
 			if (!dev) {
-				try {
-					await addToMailingList(user.email, user.uid);
-				} catch (e) {
-					console.error("[signup]: couldn't add to mailing list", e);
-				}
+				await addToMailingList(user.email, user.uid);
 			}
 
-			return { success: true };
+			return redirect(303, "/user/entries");
 		} catch (error) {
 			console.log("[signup]:", error);
 
@@ -67,7 +65,9 @@ export const actions = {
 				console.log(error);
 
 				if (error.constraint_name === "users_email_unique") {
-					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
+					const [targetUser] = await db.select().from(users).where(
+						eq(users.email, user.email),
+					);
 
 					// Check whether it's a legacy profile (no pwd) and update
 					if (targetUser && !targetUser.passwordHash) {
@@ -86,7 +86,7 @@ export const actions = {
 				}
 			}
 
-			return fail(500);
+			throw error;
 		}
 	}),
 };
