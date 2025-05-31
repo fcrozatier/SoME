@@ -65,13 +65,8 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter, cancel }) => {
+		use:enhance={({ submitter }) => {
 			submitter?.setAttribute("disabled", "on");
-
-			if (invalidTags) {
-				newtag?.reportValidity();
-				return cancel();
-			}
 
 			return async ({ update, result, formElement }) => {
 				await update();
