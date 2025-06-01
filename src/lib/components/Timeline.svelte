@@ -8,6 +8,7 @@
 	} from "$env/static/public";
 	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils/time";
 	import Time from "./Time.svelte";
+	import { page } from "$app/state";
 
 	const phases = [
 		{
@@ -68,9 +69,15 @@
 				{#if phase.isOpen}
 					<p class="mt-6">
 						{#if i === 0}
-							<a class="btn-neutral btn" href="/signup"
-								>Join in <span class="ml-2 inline-block">&rarr;</span></a
-							>
+							{#if !page.data.user}
+								<a class="btn-neutral btn" href="/signup">
+									Join in <span class="ml-2 inline-block">&rarr;</span>
+								</a>
+							{:else}
+								<a class="btn-neutral btn" href="/user/entries">
+									Submit an entry <span class="ml-2 inline-block">&rarr;</span>
+								</a>
+							{/if}
 						{:else if i === 1}
 							<a class="btn-neutral btn" href="/vote">Vote</a>
 						{:else if i === 2}
