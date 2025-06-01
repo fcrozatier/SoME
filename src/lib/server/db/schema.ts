@@ -74,6 +74,12 @@ export const tags = pgTable("tags", {
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 });
 
+export const nonTags = pgTable("non_tags", {
+	id: serial("id").primaryKey(),
+	name: text("name").unique().notNull(),
+	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+});
+
 export const entriesToTags = pgTable(
 	"entry_to_tag",
 	{
