@@ -232,7 +232,7 @@
 				id="newtag"
 				type="text"
 				name="newtag"
-				placeholder="Comma separated tags"
+				placeholder="Comma separated tags (letters and dash only)"
 				class="input-bordered input w-full"
 				aria-errormessage="newtag-error"
 				aria-invalid={`${invalidTags}`}
