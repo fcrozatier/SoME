@@ -169,6 +169,13 @@
 			"when": 1748260848224,
 			"tag": "0023_aromatic_roland_deschain",
 			"breakpoints": true
+		},
+		{
+			"idx": 24,
+			"version": "7",
+			"when": 1748764688273,
+			"tag": "0024_exotic_wind_dancer",
+			"breakpoints": true
 		}
 	]
 }

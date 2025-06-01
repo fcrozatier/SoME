@@ -8,7 +8,7 @@ process.on("sveltekit:shutdown", (reason) => {
 });
 
 // I'm a teapot
-const tea = /(\.php$|\.env|\.xml$|\.git|wordpress|wp-admin|credentials)/;
+const tea = /(\.php$|\.env|\.xml$|\.git|wordpress|wp-content|wp-admin|credentials)/;
 
 export const handle = async function ({ event, resolve }) {
 	if (tea.test(event.request.url)) {

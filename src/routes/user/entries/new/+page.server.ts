@@ -2,7 +2,14 @@ import { dev } from "$app/environment";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import { entries, entriesToTags, tags, users, usersToEntries } from "$lib/server/db/schema.js";
+import {
+	entries,
+	entriesToTags,
+	nonTags,
+	tags,
+	users,
+	usersToEntries,
+} from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
@@ -70,14 +77,27 @@ export const actions = {
 			});
 		}
 
-		const unknownWords = entryTags
-			.flatMap((tag) => tag.split("-"))
-			.filter((part) => !dictionary.has(part));
+		const failedTags: { tag: string; unknownWords: string[] }[] = [];
 
-		if (unknownWords.length) {
+		for (const tag of entryTags) {
+			const unknownWords = tag.split("-").filter((part) => !dictionary.has(part));
+
+			if (unknownWords.length > 0) {
+				failedTags.push({ tag, unknownWords });
+			}
+		}
+
+		if (failedTags.length) {
+			// Save attempted tags
+
+			await db
+				.insert(nonTags)
+				.values(failedTags.map(({ tag }) => ({ name: tag })))
+				.onConflictDoNothing();
+
 			return formfail({
-				tag: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-					unknownWords,
+				tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
+					failedTags.flatMap(({ unknownWords }) => unknownWords),
 				)}`,
 			});
 		}

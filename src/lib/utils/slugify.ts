@@ -23,10 +23,7 @@ export const NON_ASCII_ALPHANUMERIC_OR_DASH = /[^a-zA-Z0-9\-]/gu;
  * @param strip The character set to strip from the slug.
  * @default NON_ASCII_ALPHANUMERIC_OR_DASH
  */
-export const slugify = (
-	input: string,
-	strip: RegExp = NON_ASCII_ALPHANUMERIC_OR_DASH,
-) => {
+export const slugify = (input: string, strip: RegExp = NON_ASCII_ALPHANUMERIC_OR_DASH) => {
 	const normalized = input.trim().toLowerCase().normalize("NFKD");
 	const words: string[] = [];
 
@@ -35,6 +32,5 @@ export const slugify = (
 		else if (s.segment.length) words.push("-");
 	}
 
-	return words.join("-").replaceAll(/-{2,}/g, "-").replaceAll(/^-|-$/g, "")
-		.normalize("NFC");
+	return words.join("-").replaceAll(/-{2,}/g, "-").replaceAll(/^-|-$/g, "").normalize("NFC");
 };
