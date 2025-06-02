@@ -44,6 +44,7 @@
 	let tags: string[] = $state(data.tags);
 	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
 	let newtag: HTMLInputElement | undefined = $state();
+	let showInvalidTagsMessage = $state(false);
 
 	$effect(() => {
 		// The level was not provided
@@ -224,6 +225,7 @@
 								tags = tags.filter((t) => t !== level);
 							} else {
 								tags.push(level);
+								showInvalidTagsMessage = true;
 							}
 						}}
 					>
@@ -244,6 +246,7 @@
 				onkeydown={(event) => {
 					if (event.key === "Enter" || event.key === ",") {
 						if (tag.length) {
+							showInvalidTagsMessage = true;
 							tags.push(slugify(tag));
 							tag = "";
 
@@ -253,7 +256,7 @@
 				}}
 			/>
 
-			{#if invalidTags && tags.length > 0}
+			{#if invalidTags && showInvalidTagsMessage}
 				<span id="newtag-error" class="error-message">{invalidTagsMessage}</span>
 			{/if}
 		</div>
