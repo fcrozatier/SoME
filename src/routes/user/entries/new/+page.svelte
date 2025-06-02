@@ -221,9 +221,9 @@
 							if (tags.includes(level)) {
 								tags = tags.filter((t) => t !== level);
 							} else {
-								showInvalidTagsMessage = true;
 								tags.push(level);
 							}
+							showInvalidTagsMessage = true;
 						}}
 					>
 						{level}
@@ -266,6 +266,7 @@
 						type="button"
 						class="cursor-pointer rounded-full inline-block outline-offset-2 outline-gray-900 leading-0"
 						onclick={() => {
+							showInvalidTagsMessage = true;
 							tags = tags.filter((t) => t !== tag);
 						}}>&cross;</button
 					>
