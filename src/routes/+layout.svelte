@@ -120,8 +120,7 @@
 	</ul>
 {/snippet}
 
-<!-- Isolation: isolate from toasts to avoid stacking issues  -->
-<div class="flex isolate min-h-[100vh] flex-col">
+<div class="flex min-h-[100vh] flex-col">
 	<dialog class="mt-0! left-full -translate-x-full" bind:this={dialog} closedby="any">
 		<div use:clickOutside={() => dialog?.close()}>
 			{@render menu()}
