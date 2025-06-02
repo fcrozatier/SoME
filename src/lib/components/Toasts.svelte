@@ -28,16 +28,18 @@
 		const toastId = id;
 		toasts.push({ ...config, id: toastId, type: config.type ?? "info" });
 
-		queueMicrotask(() => {
+		requestAnimationFrame(() => {
 			const toast = document.getElementById(`${toastId}`);
 			if (!toast) throw new Error(`toast id ${toastId} not found`);
 
 			toast.showPopover();
-		});
 
-		setTimeout(() => {
-			toasts = toasts.filter((t) => t.id !== toastId);
-		}, config.duration ?? 3000);
+			setTimeout(() => {
+				const toast = document.getElementById(`${toastId}`);
+				if (!toast) throw new Error(`toast id ${toastId} not found`);
+				toast.hidePopover();
+			}, config.duration ?? 3000);
+		});
 	}
 </script>
 
@@ -47,7 +49,7 @@
 		role="status"
 		class="text-sm text-white rounded-md py-3 px-4 shadow-sm"
 		data-type={toast.type}
-		popover
+		popover="manual"
 	>
 		{@html toast.content}
 	</aside>
@@ -55,12 +57,11 @@
 
 <style>
 	aside {
-		position: fixed;
 		inset: unset;
 		bottom: 1rem;
 		right: 1rem;
-		opacity: 1;
-		transform: scale(1);
+		opacity: 0;
+		transform: scale(0.8);
 		transition:
 			opacity 250ms,
 			transform 200ms,
@@ -69,9 +70,14 @@
 
 		max-width: min(60ch, 90vw);
 
-		@starting-style {
-			opacity: 0;
-			transform: scale(0.8);
+		&:popover-open {
+			opacity: 1;
+			transform: scale(1);
+
+			@starting-style {
+				opacity: 0;
+				transform: scale(0.8);
+			}
 		}
 
 		&[data-type="success"] {
