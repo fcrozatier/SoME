@@ -225,8 +225,8 @@
 								tags = tags.filter((t) => t !== level);
 							} else {
 								tags.push(level);
-								showInvalidTagsMessage = true;
 							}
+							showInvalidTagsMessage = true;
 						}}
 					>
 						{level}
@@ -261,7 +261,7 @@
 			{/if}
 		</div>
 		<div class="flex gap-2">
-			{#each tags as tag, i}
+			{#each tags as tag}
 				<input type="hidden" value={tag} name="tag" />
 				<span class="tag">
 					{tag}
@@ -269,7 +269,8 @@
 						type="button"
 						class="cursor-pointer"
 						onclick={() => {
-							tags.splice(i, 1);
+							showInvalidTagsMessage = true;
+							tags = tags.filter((t) => t !== tag);
 						}}>&cross;</button
 					>
 				</span>
