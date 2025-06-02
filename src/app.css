@@ -27,6 +27,11 @@
 	interpolate-size: allow-keywords;
 }
 
+tw-include {
+	/* hack to force tw to include some classes */
+	@apply bg-green-600; /* toast bg */
+}
+
 html,
 body {
 	background-color: var(--color-light-gold);
