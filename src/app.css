@@ -27,6 +27,11 @@
 	interpolate-size: allow-keywords;
 }
 
+tw-include {
+	/* hack to force tw to include some classes */
+	@apply bg-green-600; /* toast bg */
+}
+
 html,
 body {
 	background-color: var(--color-light-gold);
@@ -74,23 +79,45 @@ dialog {
 	padding-bottom: calc(var(--spacing) * 10);
 	max-height: 80vh;
 	margin-block: auto;
-	visibility: hidden;
-}
+	transition:
+		opacity 50ms ease-out,
+		transform 50ms ease-out,
+		display 50ms allow-discrete,
+		overlay 50ms allow-discrete;
 
-dialog:not([open]) {
-	pointer-events: none;
-}
+		/* animate only the opening of the dialog */
+		visibility: hidden;
+
+		&::backdrop {
+			transition:
+			opacity 50ms ease-out,
+			backdrop-filter 50ms ease-out,
+			background-color 50ms ease-out;
+			transition-behavior: allow-discrete;
+		}
+	}
 
 dialog[open] {
-	--scale-from: 80%;
-	animation:
-		scale-up 50ms ease-out,
-		fade-in 100ms ease-out;
+	transform: scale(1);
+	opacity: 1;
 	visibility: visible;
+
+	&::backdrop {
+		opacity: 1;
+		backdrop-filter: blur(3px);
+	}
 }
 
-dialog::backdrop {
-	backdrop-filter: blur(3px);
+@starting-style {
+	dialog[open] {
+		transform: scale(0.95);
+		opacity: 0.8;
+
+		&::backdrop {
+			opacity: 0;
+			backdrop-filter: blur(0);
+		}
+	}
 }
 
 /* Details */
@@ -234,16 +261,4 @@ summary::after {
 .layout-prose {
 	@apply mx-auto px-8;
 	max-width: var(--w-prose);
-}
-
-@keyframes scale-up {
-	from {
-		transform: scale(var(--scale-from, 0));
-	}
-}
-
-@keyframes fade-in {
-	from {
-		opacity: var(--fade-from, 0);
-	}
 }

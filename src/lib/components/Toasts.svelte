@@ -23,73 +23,71 @@
 	 * @param config.duration defaults to 3000ms
 	 * @param config.variant defaults to 'info'
 	 */
-	export function newToast(config: ToastConfig) {
+	export async function newToast(config: ToastConfig) {
 		id = (id + 1) % Number.MAX_SAFE_INTEGER;
+		const toastId = id;
+		toasts.push({ ...config, id: toastId, type: config.type ?? "info" });
 
-		toasts.push({ ...config, id, duration: config.duration ?? 3000, type: config.type ?? "info" });
+		requestAnimationFrame(() => {
+			const toast = document.getElementById(`${toastId}`);
+			if (!toast) throw new Error(`toast id ${toastId} not found`);
+
+			toast.showPopover();
+
+			setTimeout(() => {
+				const toast = document.getElementById(`${toastId}`);
+				if (!toast) throw new Error(`toast id ${toastId} not found`);
+				toast.hidePopover();
+			}, config.duration ?? 3000);
+		});
 	}
 </script>
 
-<script lang="ts">
-	import { flip } from "svelte/animate";
-	import { quintOut } from "svelte/easing";
-	import { crossfade } from "svelte/transition";
-
-	const [send, receive] = crossfade({
-		fallback(node, params) {
-			const style = getComputedStyle(node);
-			const transform = style.transform === "none" ? "" : style.transform;
-			const duration = params.duration ? +params.duration : 100;
-
-			return {
-				duration,
-				easing: quintOut,
-				css: (t) => `transform: ${transform} scale(min(${0.7 + t},1)); opacity: ${t}`,
-			};
-		},
-	});
-
-	function willRemove(toast: Toast) {
-		setTimeout(() => {
-			toasts = toasts.filter((t) => t.id !== toast.id);
-		}, toast.duration);
-	}
-</script>
-
-<section class="toasts-container">
-	{#each toasts as toast (toast.id)}
-		<!-- output is announced to screen readers with implicit role status -->
-		<output
-			class="toast text-sm text-white rounded-md py-3 px-4 shadow-sm"
-			class:bg-green-600={toast.type === "success"}
-			class:bg-gray-900={toast.type === "info"}
-			class:bg-red-600={toast.type === "error"}
-			in:receive={{ key: toast.id, duration: 300, easing: quintOut }}
-			out:send={{ key: toast.id, duration: 200 }}
-			animate:flip={{ duration: 200, easing: quintOut }}
-			onintroend={() => willRemove(toast)}
-		>
-			{@html toast.content}
-		</output>
-	{/each}
-</section>
+{#each toasts as toast (toast.id)}
+	<aside
+		id={`${toast.id}`}
+		role="status"
+		class="text-sm text-white rounded-md py-3 px-4 shadow-sm"
+		data-type={toast.type}
+		popover="manual"
+	>
+		{@html toast.content}
+	</aside>
+{/each}
 
 <style>
-	.toasts-container {
-		position: fixed;
-		/* non-zero z-index to create a stacking context and isolate from main */
-		z-index: 1;
+	aside {
+		inset: unset;
 		bottom: 1rem;
 		right: 1rem;
-		transform: translateX(-50%);
+		opacity: 0;
+		transform: scale(0.8);
+		transition:
+			opacity 250ms,
+			transform 200ms,
+			display 200ms allow-discrete,
+			overlay 200ms allow-discrete;
 
-		display: grid;
-		justify-content: center;
-		justify-items: center;
-		gap: calc(var(--spacing) * 2);
-	}
-
-	.toast {
 		max-width: min(60ch, 90vw);
+
+		&:popover-open {
+			opacity: 1;
+			transform: scale(1);
+
+			@starting-style {
+				opacity: 0;
+				transform: scale(0.8);
+			}
+		}
+
+		&[data-type="success"] {
+			background-color: var(--color-green-600);
+		}
+		&[data-type="error"] {
+			background-color: var(--color-red-600);
+		}
+		&[data-type="info"] {
+			background-color: var(--color-gray-900);
+		}
 	}
 </style>
