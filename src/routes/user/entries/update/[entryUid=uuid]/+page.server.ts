@@ -1,3 +1,4 @@
+import { dev } from "$app/environment";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
@@ -16,7 +17,7 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
+import { invalidTagsMessage, levels, MAX_IMG_SIZE, NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -156,6 +157,12 @@ export const actions = {
 				});
 			}
 
+			if (data.thumbnail && data.thumbnail.size > MAX_IMG_SIZE) {
+				return formfail({
+					thumbnail: "Image too big: 1MB max",
+				});
+			}
+
 			// Detach former coauthors
 			if (formerCoauthors.length > 0) {
 				await db.execute(sql`
@@ -217,7 +224,7 @@ export const actions = {
 				.where(eq(entries.uid, entryUid));
 
 			// Save the thumbnail after the entry: we know it's not a duplicate
-			if (thumbnail && thumbnailKey) {
+			if (!dev && thumbnail && thumbnailKey) {
 				await saveThumbnail(thumbnail, thumbnailKey);
 			}
 

@@ -7,7 +7,7 @@ const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{
 export const uuid = (str: string | null) => !!str && uuid4.test(str);
 
 const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_IMG_SIZE = 10 ** 6; // 1MB
+export const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
 export type Failures<K extends fg.ValidationIssue["code"] = fg.ValidationIssue["code"]> = Pick<
 	{
@@ -128,13 +128,13 @@ const UrlSchema = fg
 	)
 	.refine((str) => !str.includes("playlist"), "Playlists are not allowed");
 
-const ThumbnailSchema = fg
-	.file({
-		required: false,
-		multiple: false,
-		accept: SHARP_IMAGE_INPUT_TYPES,
-	})
-	.refine((file) => !file || file.size < MAX_IMG_SIZE, "Image too big: 1MB max");
+const ThumbnailSchema = fg.file({
+	required: false,
+	multiple: false,
+	accept: SHARP_IMAGE_INPUT_TYPES,
+});
+// The refinement generates a non serializable error in Kit (02/06/2025)
+// .refine((file) => !file || file.size < MAX_IMG_SIZE, "Image too big: 1MB max");
 
 export const NewEntrySchema = {
 	usernames: fg.multi({ min: 0 }),

@@ -15,7 +15,7 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
+import { invalidTagsMessage, levels, MAX_IMG_SIZE, NewEntrySchema } from "$lib/validation";
 import { error, redirect } from "@sveltejs/kit";
 import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -102,6 +102,12 @@ export const actions = {
 			});
 		}
 
+		if (data.thumbnail && data.thumbnail.size > MAX_IMG_SIZE) {
+			return formfail({
+				thumbnail: "Image too big: 1MB max",
+			});
+		}
+
 		// Save data
 		try {
 			const entryUid = crypto.randomUUID();
@@ -132,7 +138,7 @@ export const actions = {
 			});
 
 			// Save the thumbnail after the entry: we know it's not a duplicate
-			if (!dev && thumbnail && thumbnailKey) {
+			if (thumbnail && thumbnailKey) {
 				await saveThumbnail(thumbnail, thumbnailKey);
 			}
 
