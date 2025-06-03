@@ -196,7 +196,7 @@
 			></textarea>
 
 			{#if form?.issues?.description}
-				<span id="title-error" class="error-message">{form.issues.description.message}</span>
+				<span id="description-error" class="error-message">{form.issues.description.message}</span>
 			{/if}
 
 			<div class="label">
@@ -296,11 +296,13 @@
 				name="url"
 				placeholder="https://"
 				class="input-bordered input w-full"
+				aria-errormessage="url-error"
+				aria-invalid={!!form?.issues?.url}
 				bind:value={url}
 				{...fg.splat(NewEntrySchema["url"].attributes)}
 			/>
 			{#if form?.issues?.url}
-				<span class="error-message">{form.issues.url.message}</span>
+				<span id="url-error" class="error-message">{form.issues.url.message}</span>
 			{/if}
 		</div>
 

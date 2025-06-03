@@ -102,6 +102,14 @@ export const actions = {
 			});
 		}
 
+		// Refinements
+
+		if (data.url.includes("playlist")) {
+			return formfail({
+				url: "Playlists are not allowed",
+			});
+		}
+
 		if (data.thumbnail && data.thumbnail.size > MAX_IMG_SIZE) {
 			return formfail({
 				thumbnail: "Image too big: 1MB max",
