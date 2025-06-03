@@ -105,7 +105,7 @@ const TitleSchema = fg
 	)
 	.transform((value) => value.trim());
 
-const DescriptionSchema = fg.text(
+const DescriptionSchema = fg.textarea(
 	{
 		required: true,
 		minlength: 10,
