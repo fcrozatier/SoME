@@ -191,7 +191,7 @@
 				rows="8"
 				bind:value={description}
 				aria-errormessage="description-error"
-				aria-invalid={!!form?.issues?.title}
+				aria-invalid={!!form?.issues?.description}
 				{...fg.splat(NewEntrySchema["description"].attributes)}
 			></textarea>
 
