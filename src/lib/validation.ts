@@ -105,7 +105,7 @@ const TitleSchema = fg
 	)
 	.transform((value) => value.trim());
 
-const DescriptionSchema = fg.text(
+const DescriptionSchema = fg.textarea(
 	{
 		required: true,
 		minlength: 10,
@@ -118,15 +118,14 @@ const DescriptionSchema = fg.text(
 	},
 );
 
-const UrlSchema = fg
-	.url(
-		{ required: true },
-		{
-			required: "A link to your entry is required",
-			invalid: "Invalid url, please provide the full url with the https:// prefix",
-		},
-	)
-	.refine((str) => !str.includes("playlist"), "Playlists are not allowed");
+const UrlSchema = fg.url(
+	{ required: true },
+	{
+		required: "A link to your entry is required",
+		invalid: "Invalid url, please provide the full url with the https:// prefix",
+	},
+);
+// .refine((str) => !str.includes("playlist"), "Playlists are not allowed");
 
 const ThumbnailSchema = fg.file({
 	required: false,

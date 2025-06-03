@@ -85,17 +85,17 @@ dialog {
 		display 50ms allow-discrete,
 		overlay 50ms allow-discrete;
 
-		/* animate only the opening of the dialog */
-		visibility: hidden;
+	/* animate only the opening of the dialog */
+	visibility: hidden;
 
-		&::backdrop {
-			transition:
+	&::backdrop {
+		transition:
 			opacity 50ms ease-out,
 			backdrop-filter 50ms ease-out,
 			background-color 50ms ease-out;
-			transition-behavior: allow-discrete;
-		}
+		transition-behavior: allow-discrete;
 	}
+}
 
 dialog[open] {
 	transform: scale(1);
