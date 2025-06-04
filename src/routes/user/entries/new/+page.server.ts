@@ -1,4 +1,3 @@
-import { dev } from "$app/environment";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
@@ -15,7 +14,7 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import { invalidTagsMessage, levels, MAX_IMG_SIZE, NewEntrySchema } from "$lib/validation";
+import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 import { error, redirect } from "@sveltejs/kit";
 import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -99,20 +98,6 @@ export const actions = {
 				tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
 					failedTags.flatMap(({ unknownWords }) => unknownWords),
 				)}`,
-			});
-		}
-
-		// Refinements
-
-		if (data.url.includes("playlist")) {
-			return formfail({
-				url: "Playlists are not allowed",
-			});
-		}
-
-		if (data.thumbnail && data.thumbnail.size > MAX_IMG_SIZE) {
-			return formfail({
-				thumbnail: "Image too big: 1MB max",
 			});
 		}
 

@@ -118,22 +118,23 @@ const DescriptionSchema = fg.textarea(
 	},
 );
 
-const UrlSchema = fg.url(
-	{ required: true },
-	{
-		required: "A link to your entry is required",
-		invalid: "Invalid url, please provide the full url with the https:// prefix",
-	},
-);
-// .refine((str) => !str.includes("playlist"), "Playlists are not allowed");
+const UrlSchema = fg
+	.url(
+		{ required: true },
+		{
+			required: "A link to your entry is required",
+			invalid: "Invalid url, please provide the full url with the https:// prefix",
+		},
+	)
+	.refine((str) => !str.includes("playlist"), "Playlists are not allowed");
 
-const ThumbnailSchema = fg.file({
-	required: false,
-	multiple: false,
-	accept: SHARP_IMAGE_INPUT_TYPES,
-});
-// The refinement generates a non serializable error in Kit (02/06/2025)
-// .refine((file) => !file || file.size < MAX_IMG_SIZE, "Image too big: 1MB max");
+const ThumbnailSchema = fg
+	.file({
+		required: false,
+		multiple: false,
+		accept: SHARP_IMAGE_INPUT_TYPES,
+	})
+	.refine((file) => !file || file.size < MAX_IMG_SIZE, "Image too big: 1MB max");
 
 export const NewEntrySchema = {
 	usernames: fg.multi({ min: 0 }),
