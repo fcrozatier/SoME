@@ -57,9 +57,9 @@
 		class="flex gap-3 justify-center"
 		onchange={() => {
 			page.url.searchParams.set("category", category);
-			page.url.searchParams.set("year", year);
+			page.url.searchParams.set("year", `${year}`);
 			page.url.searchParams.set("page", "1");
-			pageNumber = "1";
+			pageNumber = 1;
 			goto(`?${page.url.searchParams.toString()}`, {
 				invalidateAll: true,
 				keepFocus: true,
@@ -96,7 +96,7 @@
 				{pages}
 				bind:pageNumber
 				onchange={() => {
-					page.url.searchParams.set("page", pageNumber);
+					page.url.searchParams.set("page", `${pageNumber}`);
 					goto(`?${page.url.searchParams.toString()}`, {
 						invalidateAll: true,
 						keepFocus: true,
@@ -164,7 +164,7 @@
 			{pages}
 			bind:pageNumber
 			onchange={() => {
-				page.url.searchParams.set("page", pageNumber);
+				page.url.searchParams.set("page", `${pageNumber}`);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 				});

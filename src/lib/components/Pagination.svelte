@@ -3,11 +3,11 @@
 
 	interface Props {
 		pages: number;
-		pageNumber?: string;
+		pageNumber?: number;
 		onchange?: any;
 	}
 
-	let { pages, pageNumber = $bindable("1"), onchange = () => {} }: Props = $props();
+	let { pages, pageNumber = $bindable(1), onchange = () => {} }: Props = $props();
 
 	const makeArray = (current: number) => {
 		const array: number[] = [];
