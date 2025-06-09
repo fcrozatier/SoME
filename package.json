@@ -57,6 +57,7 @@
 		"katex": "^0.16.22",
 		"mailgun.js": "^12.0.2",
 		"openai": "^4.104.0",
+		"pluralize-esm": "^9.0.5",
 		"postgres": "^3.4.7",
 		"sharp": "^0.34.2",
 		"zod": "^3.25.50"
