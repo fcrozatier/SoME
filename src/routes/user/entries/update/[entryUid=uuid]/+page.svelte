@@ -45,6 +45,7 @@
 	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
 	let newtag: HTMLInputElement | undefined = $state();
 	let showInvalidTagsMessage = $state(false);
+	let invalidTagReason = $state("");
 
 	$effect(() => {
 		// The level was not provided
@@ -243,13 +244,26 @@
 				aria-invalid={`${invalidTags}`}
 				bind:value={tag}
 				bind:this={newtag}
-				onkeydown={(event) => {
+				onkeydown={async (event) => {
 					if (event.key === "Enter" || event.key === ",") {
 						if (tag.length) {
-							showInvalidTagsMessage = true;
-							tags.push(slugify(tag));
-							tag = "";
+							const res = await fetch(`/api/check-tag`, {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+								},
+								body: JSON.stringify({ tag }),
+							});
+							const { valid, reason }: { valid: boolean; reason?: string } = await res.json();
 
+							if (valid) {
+								invalidTagReason = "";
+								tags.push(slugify(tag));
+								showInvalidTagsMessage = true;
+								tag = "";
+							} else if (reason) {
+								invalidTagReason = reason;
+							}
 							event.preventDefault();
 						}
 					}
@@ -276,8 +290,8 @@
 				</span>
 			{/each}
 		</div>
-		{#if form?.issues?.tag}
-			<span class="error-message">{form.issues.tag.message}</span>
+		{#if form?.issues?.tag || invalidTagReason}
+			<span class="error-message">{form?.issues?.tag?.message || invalidTagReason}</span>
 		{/if}
 
 		<div class="form-control">
