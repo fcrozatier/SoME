@@ -8,7 +8,8 @@ process.on("sveltekit:shutdown", (reason) => {
 });
 
 // I'm a teapot
-const tea = /(\.php$|\.env|\.xml$|\.git|wordpress|wp-content|wp-admin|credentials)/;
+const tea =
+	/(\.php$|\.env|\.xml$|\.git|wordpress|wp-content|wp-admin|credentials)/;
 
 export const handle = async function ({ event, resolve }) {
 	if (tea.test(event.request.url)) {
@@ -38,8 +39,9 @@ export const handle = async function ({ event, resolve }) {
 		return redirect(302, "/login");
 	}
 
-	if (event.url.pathname.includes("/admin/") && !event.locals.user?.isAdmin) {
-		return redirect(302, "/admin");
+	if (event.url.pathname.includes("/admin") && !event.locals.user?.isAdmin) {
+		console.log("[admin]: redirect");
+		return redirect(302, "/");
 	}
 
 	return await resolve(event);
