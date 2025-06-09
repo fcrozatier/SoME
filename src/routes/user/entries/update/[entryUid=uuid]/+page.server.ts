@@ -19,7 +19,7 @@ import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
 import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
-import { eq, inArray, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
@@ -232,17 +232,20 @@ export const actions = {
 			const oldEntryTags: Pick<SelectTag, "name" | "id">[] = await db.execute(
 				sql`
         select name, id from tags
-        inner join entry_to_tag on tag_id=id
+        inner join entry_to_tag on id=tag_id
         where entry_uid=${entryUid};
       `,
 			);
 
-			await db.execute(sql`
-        delete from entry_to_tag
-        where entry_uid=${entryUid}
-        and tag_id in ${oldEntryTags
-					.filter((t) => !entryTags.includes(t.name))
-					.map((t) => t.id)};`);
+			await db.delete(entriesToTags).where(
+				and(
+					eq(entriesToTags.entryUid, entryUid),
+					inArray(
+						entriesToTags.tagId,
+						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) => t.id),
+					),
+				),
+			);
 
 			if (tagSet.size) {
 				// Save new tags

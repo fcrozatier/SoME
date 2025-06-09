@@ -24,13 +24,13 @@
 	"devDependencies": {
 		"@playwright/test": "^1.52.0",
 		"@sveltejs/adapter-node": "^5.2.12",
-		"@sveltejs/kit": "^2.21.2",
+		"@sveltejs/kit": "^2.21.3",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.1.8",
 		"@types/jsonwebtoken": "^9.0.9",
 		"@types/katex": "^0.16.7",
-		"@types/node": "^22.15.29",
+		"@types/node": "^22.15.30",
 		"daisyui": "^5.0.43",
 		"drizzle-kit": "^0.30.6",
 		"formgator": "^0.2.0",
@@ -38,28 +38,29 @@
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.4.0",
 		"rehype-target-plugin": "^1.0.1",
-		"svelte": "^5.33.14",
+		"svelte": "^5.33.18",
 		"svelte-check": "^4.2.1",
 		"tailwindcss": "^4.1.8",
 		"typescript": "^5.8.3",
 		"vite": "^6.3.5",
-		"vitest": "^3.2.1"
+		"vitest": "^3.2.2"
 	},
 	"type": "module",
 	"dependencies": {
-		"@aws-sdk/client-s3": "^3.823.0",
+		"@aws-sdk/client-s3": "^3.826.0",
 		"@fcrozatier/ts-helpers": "^2.10.0",
 		"@node-rs/argon2": "^2.0.2",
 		"@observablehq/plot": "^0.6.17",
 		"drizzle-orm": "^0.41.0",
-		"form-data": "^4.0.2",
+		"form-data": "^4.0.3",
 		"jsonwebtoken": "^9.0.2",
 		"katex": "^0.16.22",
 		"mailgun.js": "^12.0.2",
 		"openai": "^4.104.0",
+		"pluralize-esm": "^9.0.5",
 		"postgres": "^3.4.7",
 		"sharp": "^0.34.2",
-		"zod": "^3.25.50"
+		"zod": "^3.25.56"
 	},
 	"browserslist": [
 		"cover 95% and last 10 versions and not dead"
