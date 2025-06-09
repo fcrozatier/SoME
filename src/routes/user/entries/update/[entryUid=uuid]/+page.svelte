@@ -45,7 +45,7 @@
 	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
 	let newtag: HTMLInputElement | undefined = $state();
 	let showInvalidTagsMessage = $state(false);
-	let invalidTagReason = $state("")
+	let invalidTagReason = $state("");
 
 	$effect(() => {
 		// The level was not provided
@@ -257,7 +257,7 @@
 							const { valid, reason }: { valid: boolean; reason?: string } = await res.json();
 
 							if (valid) {
-								invalidTagReason = ""
+								invalidTagReason = "";
 								tags.push(slugify(tag));
 								showInvalidTagsMessage = true;
 								tag = "";
@@ -290,8 +290,8 @@
 				</span>
 			{/each}
 		</div>
-		{#if form?.issues?.tag}
-			<span class="error-message">{form.issues.tag.message}</span>
+		{#if form?.issues?.tag || invalidTagReason}
+			<span class="error-message">{form?.issues?.tag?.message || invalidTagReason}</span>
 		{/if}
 
 		<div class="form-control">
