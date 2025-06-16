@@ -30,7 +30,7 @@
 				autocomplete="email"
 			/>
 			{#if form?.issues?.email}
-				<span id="credentials-error" class="error-message">{form.issues.email.message}</span> max-w-2xl!
+				<span id="credentials-error" class="error-message">{form.issues.email.message}</span>
 			{/if}
 		</div>
 

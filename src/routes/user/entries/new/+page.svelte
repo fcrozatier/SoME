@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
+	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { categories } from "$lib/config";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { setTitle } from "$lib/utils/setTitle.js";
 	import { slugify } from "$lib/utils/slugify.js";
@@ -59,6 +59,16 @@
 
 	setTitle("New entry");
 </script>
+
+{#snippet input()}
+	<button><selectedcontent></selectedcontent></button>
+{/snippet}
+{#snippet iconVideo()}
+	<Icon name="video" class="icon size-6" /> video
+{/snippet}
+{#snippet iconNonVideo()}
+	<Icon name="file-text" class="size-6" /> non-video
+{/snippet}
 
 <article class="layout-prose max-w-2xl!">
 	<h2>Submit a new entry</h2>
@@ -153,9 +163,9 @@
 				bind:value={category}
 				{...fg.splat(NewEntrySchema["category"].attributes)}
 			>
-				{#each categories as category}
-					<option value={category}>{category}</option>
-				{/each}
+				{@render input()}
+				<option value={"video"}>{@render iconVideo()}</option>
+				<option value={"non-video"}>{@render iconNonVideo()}</option>
 			</select>
 			{#if form?.issues?.category}
 				<span class="error-message">{form.issues.category.message}</span>

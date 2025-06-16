@@ -26,7 +26,10 @@ export const POST = async ({ request }) => {
 
 	const { tag } = validation.data;
 	const slug = slugify(tag);
-	const unknownWords = slug.split("-").filter((part) => !dictionary.has(part));
+	const unknownWords = slug
+		.split("-")
+		.filter((part) => !dictionary.has(part))
+		.map((word) => `"${word}"`);
 
 	if (unknownWords.length) {
 		// Save attempted tags
@@ -35,9 +38,11 @@ export const POST = async ({ request }) => {
 		return json(
 			{
 				valid: false,
-				reason: `Unknown word${unknownWords.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-					unknownWords,
-				)}`,
+				reason: `Unknown word${unknownWords.length === 1 ? "" : "s"} ${
+					conjunctionFormatter.format(
+						unknownWords,
+					)
+				} in tag "${slug}"`,
 			},
 			{ status: 400 },
 		);
