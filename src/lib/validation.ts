@@ -35,7 +35,7 @@ const validationMessages: Failures = {
 	type: "Invalid type",
 };
 
-export const usernameRegex = /^[\p{Letter}0-9_.-]{3,32}$/v;
+export const usernameRegex = /^[\p{Letter}0-9_.\-]{3,32}$/v;
 
 export const UsernameSchema = fg.text(
 	{ minlength: 3, maxlength: 32, required: true, pattern: usernameRegex },
