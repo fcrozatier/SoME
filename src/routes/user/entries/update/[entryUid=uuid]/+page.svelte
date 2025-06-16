@@ -4,7 +4,6 @@
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { categories } from "$lib/config";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { setTitle } from "$lib/utils/setTitle.js";
 	import { slugify } from "$lib/utils/slugify.js";
