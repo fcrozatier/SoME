@@ -26,7 +26,10 @@ export const POST = async ({ request }) => {
 
 	const { tag } = validation.data;
 	const slug = slugify(tag);
-	const unknownWords = slug.split("-").filter((part) => !dictionary.has(part));
+	const unknownWords = slug
+		.split("-")
+		.filter((part) => !dictionary.has(part))
+		.map((word) => `"${word}"`);
 
 	if (unknownWords.length) {
 		// Save attempted tags
@@ -39,7 +42,7 @@ export const POST = async ({ request }) => {
 					conjunctionFormatter.format(
 						unknownWords,
 					)
-				} in tag ${slug}`,
+				} in tag "${slug}"`,
 			},
 			{ status: 400 },
 		);
