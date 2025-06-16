@@ -96,8 +96,8 @@ export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt
 		expires: expiresAt,
 		path: "/",
 		httpOnly: true,
-		secure: true,
-		sameSite: "lax",
+		// secure: true, (Safari)
+		sameSite: "strict",
 	});
 }
 
