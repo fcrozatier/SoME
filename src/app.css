@@ -317,3 +317,12 @@ option {
 	@apply mx-auto px-8;
 	max-width: var(--w-prose);
 }
+
+.pile {
+	display: grid;
+	grid: [pile] 1fr / [pile] 1fr;
+
+	& > * {
+		grid-area: pile;
+	}
+}

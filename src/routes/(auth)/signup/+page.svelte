@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
+	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
+	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { setTitle } from "$lib/utils/setTitle.js";
 	import { NewUserSchema } from "$lib/validation.js";
+	import { debounce } from "@fcrozatier/ts-helpers/promises";
 	import * as fg from "formgator";
 
 	let { form } = $props();
@@ -20,6 +23,46 @@
 	};
 
 	let username = $state("");
+	let usernameStatus: "pending" | "available" | "taken" | "error" | undefined = $state(undefined);
+	let controller: AbortController | null = null;
+
+	const debouncedCheck = debounce(async () => {
+		controller = new AbortController();
+		const signal = controller.signal;
+
+		try {
+			const r = await fetch("/api/check-username", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ username }),
+				signal,
+			});
+
+			const data = (await r.json()) as { valid: boolean; status: "available" | "taken" };
+
+			if (!data.valid) usernameStatus = "error";
+			else usernameStatus = data.status;
+
+			controller = null;
+		} catch (error) {
+			if (error instanceof DOMException && error.name === "AbortError") {
+				console.log(error.name, error.message);
+			} else {
+				throw error;
+			}
+		}
+	}, 1000);
+
+	async function resetUsernameStatus() {
+		usernameStatus = "pending";
+
+		if (controller) {
+			controller.abort();
+		}
+		debouncedCheck();
+	}
 
 	setTitle("Signup");
 </script>
@@ -67,21 +110,36 @@
 			<label for="username" class="label">
 				<span class="label-text"> Username </span>
 			</label>
-			<input
-				id="username"
-				type="text"
-				name="username"
-				class="input-bordered input w-full"
-				placeholder="Choose your username"
-				bind:value={username}
-				{...fg.splat(NewUserSchema["username"].attributes)}
-				aria-errormessage="username-error"
-				aria-invalid={!!form?.issues?.username}
-				autocomplete="username"
-				spellcheck="false"
-			/>
-			{#if form?.issues?.username}
-				<span id="username-error" class="error-message">{form.issues.username.message}</span>
+			<div class="pile item-center">
+				<input
+					id="username"
+					type="text"
+					name="username"
+					class="input-bordered input w-full"
+					placeholder="Choose your username"
+					bind:value={username}
+					oninput={resetUsernameStatus}
+					{...fg.splat(NewUserSchema["username"].attributes)}
+					aria-errormessage="username-error"
+					aria-invalid={!!form?.issues?.username}
+					autocomplete="username"
+					spellcheck="false"
+				/>
+				{#if username && usernameStatus === "available"}
+					<Icon name="check-circle" class="stroke-green-600 stroke-[1.5] z-10 ml-auto size-10 py-3"
+					></Icon>
+				{:else if username && (usernameStatus === "error" || usernameStatus === "taken")}
+					<Icon name="x-circle" class="stroke-red-600 stroke-[1.5] z-10 ml-auto size-10 py-3"
+					></Icon>
+				{:else if usernameStatus === "pending"}
+					<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-[13px]"
+					></CircularProgress>
+				{/if}
+			</div>
+			{#if form?.issues?.username || (username && usernameStatus === "taken")}
+				<span id="username-error" class="error-message">
+					{form?.issues?.username?.message || "Username already taken"}
+				</span>
 			{/if}
 		</div>
 
