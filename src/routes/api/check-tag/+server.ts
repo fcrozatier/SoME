@@ -38,11 +38,9 @@ export const POST = async ({ request }) => {
 		return json(
 			{
 				valid: false,
-				reason: `Unknown word${unknownWords.length === 1 ? "" : "s"} ${
-					conjunctionFormatter.format(
-						unknownWords,
-					)
-				} in tag "${slug}"`,
+				reason: `Unknown word${unknownWords.length === 1 ? "" : "s"} ${conjunctionFormatter.format(
+					unknownWords,
+				)} in tag "${slug}"`,
 			},
 			{ status: 400 },
 		);

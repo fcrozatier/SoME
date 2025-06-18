@@ -35,12 +35,25 @@ const validationMessages: Failures = {
 	type: "Invalid type",
 };
 
+export const usernameRegex = /^[\p{Letter}0-9_.\-]{3,32}$/v;
+
+export const UsernameSchema = fg
+	.text({ minlength: 3, maxlength: 32, required: true, pattern: usernameRegex }, validationMessages)
+	.enrich({ title: "letters, digits, _-." });
+
 export const EmailSchema = fg.email({ required: true, maxlength: 128 }, validationMessages);
 
-export const PasswordSchema = fg.password({ minlength: 8, required: true }, validationMessages);
+// 8 chars, lower, upper and number
+export const passwordRegex = /^(?=.{8,})(?=.*\p{Lowercase})(?=.*\p{Uppercase})(?=.*\d).*$/v;
+
+export const PasswordSchema = fg
+	.password({ minlength: 8, required: true, pattern: passwordRegex }, validationMessages)
+	.enrich({
+		title: "8 characters minimum, with lowercase, uppercase and number",
+	});
 
 export const NewUserSchema = {
-	username: fg.text({ maxlength: 32, required: true }, validationMessages),
+	username: UsernameSchema,
 	email: EmailSchema,
 	// Add pattern
 	password: PasswordSchema,
