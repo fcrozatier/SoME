@@ -82,7 +82,7 @@
 				min="1"
 				max="9"
 				step=".01"
-				class="range"
+				class="range w-full"
 				bind:value
 				bind:this={input}
 				onchange={() => (ready = true)}

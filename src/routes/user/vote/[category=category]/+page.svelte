@@ -139,13 +139,15 @@
 			<input type="hidden" value={data.uid} name="uid" />
 			<input type="hidden" value={data.tag} name="tag" />
 			<div class="form-control gap-1">
-				<h3 class="mb-0">Vote</h3>
+				<h3 class="">Vote</h3>
 				<p class="mb-4">
 					How valuable is this entry to the space of online math exposition, compared to the typical
 					math {data.category === "video" ? "video" : "article"} you've seen?
 					<button
-						class="font-semibold hover:underline text-sm"
+						class="font-semibold hover:underline cursor-pointer text-sm"
 						type="button"
+						commandfor="guidelines"
+						command="show-modal"
 						onclick={() => {
 							guidelines?.showModal();
 							guidelines?.scrollTo({ top: 0 });
@@ -165,17 +167,17 @@
 			</div>
 
 			<div class="form-control">
-				<h4 class="mb-0 mt-2">Feedback</h4>
 				<label for="feedback" class="label flex gap-2">
-					<span class="flex-1">
-						Do you have general feedback for the author of this entry? If so, please be as
-						constructive as possible in your comments:
-					</span>
+					<h4 class="mb-0 mt-2">Feedback</h4>
 				</label>
+				<p class="flex-1">
+					Do you have general feedback for the author of this entry? <br /> If so, please be as
+					<strong>constructive</strong> as possible in your comments:
+				</p>
 				<textarea
 					name="feedback"
 					id="feedback"
-					class="textarea-bordered textarea text-base"
+					class="block textarea-bordered textarea w-full"
 					cols="50"
 					rows="10"
 					maxlength="5000"
@@ -199,7 +201,7 @@
 				</button>
 				<div class="relative mr-auto inline-flex flex-row-reverse">
 					<button
-						class="btn btn-outline rounded-l-none border-l-0 text-lg shrink-0"
+						class="btn btn-outline hover:btn-neutral rounded-l-none border-l-0 text-lg shrink-0"
 						type="button"
 						aria-expanded={splitButtonOpen}
 						aria-haspopup="true"
@@ -222,12 +224,14 @@
 					<button
 						type="submit"
 						formaction={formAction("skip")}
-						class="btn btn-outline rounded-e-none">Skip</button
+						class="btn btn-outline rounded-e-none hover:btn-neutral">Skip</button
 					>
 				</div>
 				<button
 					type="button"
 					class="btn btn-outline btn-error"
+					commandfor="flag"
+					command="show-modal"
 					onclick={() => flagDialog?.showModal()}>Flag</button
 				>
 			</div>
@@ -247,7 +251,7 @@
 	{/if}
 </article>
 
-<dialog bind:this={guidelines} closedby="any">
+<dialog id="guidelines" class="m-auto" bind:this={guidelines} closedby="any">
 	<article use:clickOutside={() => guidelines?.close()}>
 		<h2 id="guidlines" class="text-center mt-0 mb-8">Guidelines</h2>
 
@@ -276,9 +280,13 @@
 			change in perspective, the beauty of an explanation, or the mind-blowingness of an aha moment.
 		</p>
 
-		<p class="text-center mt-8 mb-2">
-			<button type="button" class="btn-outline btn" onclick={() => guidelines?.close()}
-				>Close</button
+		<p class="flex justify-end mt-8 mb-2">
+			<button
+				type="button"
+				class="btn-outline btn hover:btn-neutral"
+				commandfor="guidelines"
+				command="request-close"
+				onclick={() => guidelines?.close()}>Close</button
 			>
 		</p>
 	</article>
@@ -286,6 +294,7 @@
 
 <dialog bind:this={flagDialog} closedby="any">
 	<form
+		id="flag"
 		method="post"
 		action="?/flag"
 		use:clickOutside={() => flagDialog?.close()}
@@ -326,8 +335,12 @@
 		<input type="hidden" value={data.uid} name="uid" />
 		<input type="hidden" value={data.tag} name="tag" />
 		<p class="mb-0 mt-8 flex items-center gap-2">
-			<button type="button" class="btn-outline btn" onclick={() => flagDialog?.close()}
-				>Cancel</button
+			<button
+				type="button"
+				class="btn-outline btn"
+				commandfor="flag"
+				command="request-close"
+				onclick={() => flagDialog?.close()}>Cancel</button
 			>
 			<button type="submit" class="btn-outline btn-error btn">Report </button>
 			{#if form?.id === "FLAG" && form?.flagFail}

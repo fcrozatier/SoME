@@ -67,6 +67,9 @@ a:not(:where(.btn)) {
 
 textarea {
 	@apply text-sm;
+
+	field-sizing: content;
+	min-height: 6lh
 }
 
 /* Dialog */
