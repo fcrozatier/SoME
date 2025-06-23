@@ -9,6 +9,7 @@
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
+	import Icon from "$lib/components/icons/Icon.svelte";
 
 	let { data } = $props();
 
@@ -51,6 +52,16 @@
 	setTitle("Archive");
 </script>
 
+{#snippet input()}
+	<button><selectedcontent></selectedcontent></button>
+{/snippet}
+{#snippet iconVideo()}
+	<Icon name="video" class="icon size-6" /> video
+{/snippet}
+{#snippet iconNonVideo()}
+	<Icon name="file-text" class="size-6" /> non-video
+{/snippet}
+
 <section class="layout-prose">
 	<p class=" mb-16 text-center text-3xl font-light">Archive</p>
 	<form
@@ -84,11 +95,9 @@
 				<span class="label-text"> Category </span>
 			</label>
 			<select class="select-bordered select" bind:value={category} name="category" id="category">
-				{#each categories as category}
-					<option value={category} selected={page.url.searchParams.get("category") === category}
-						>{category}</option
-					>
-				{/each}
+				{@render input()}
+				<option value={"video"}>{@render iconVideo()}</option>
+				<option value={"non-video"}>{@render iconNonVideo()}</option>
 			</select>
 		</div>
 	</form>
