@@ -2,6 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
+	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
@@ -11,6 +12,10 @@
 	import * as fg from "formgator";
 	import { tick } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
+	import {
+		resetUsernameStatus,
+		type UsernameStatus,
+	} from "../../../../api/check-username/fetch.js";
 
 	let { form, data } = $props();
 
@@ -36,6 +41,7 @@
 	const entry = data.entry;
 
 	let usernames: string[] = $state(data.coauthors);
+	let usernameStatuses: UsernameStatus[] = $state([]);
 	let category = $state(entry.category);
 	let title = $state(entry.title);
 	let description = $state(entry.description);
@@ -55,6 +61,7 @@
 
 	async function addContributor() {
 		usernames.push("");
+		usernameStatuses.push(undefined);
 		await tick();
 		const lastUsername = document.getElementById(`username-${usernames.length - 1}`);
 		(lastUsername as HTMLInputElement)?.focus();
@@ -121,24 +128,47 @@
 					<span class="label-text">Coauthor {i + 1}</span>
 				</label>
 				<div class="flex items-center gap-2">
-					<input
-						id="username-{i}"
-						type="text"
-						name="usernames"
-						placeholder="The SoME username of a coauthor"
-						class="input-bordered input w-full"
-						bind:value={usernames[i]}
-						required
-					/>
+					<div class="pile w-full">
+						<input
+							id="username-{i}"
+							type="text"
+							name="usernames"
+							placeholder="The SoME username of a coauthor"
+							class="input-bordered input w-full"
+							bind:value={usernames[i]}
+							oninput={(e) =>
+								resetUsernameStatus(e.currentTarget.value, (status) => {
+									usernameStatuses[i] = status;
+								})}
+							required
+						/>
+						{#if usernames[i] && usernameStatuses[i] === "taken"}
+							<Icon
+								name="check-circle"
+								class="stroke-green-600 stroke-[1.5] z-10 ml-auto size-10 py-3"
+							></Icon>
+						{:else if usernames[i] && (usernameStatuses[i] === "error" || usernameStatuses[i] === "available")}
+							<Icon name="x-circle" class="stroke-red-600 stroke-[1.5] z-10 ml-auto size-10 py-3"
+							></Icon>
+						{:else if usernameStatuses[i] === "pending"}
+							<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-[13px]"
+							></CircularProgress>
+						{/if}
+					</div>
 					<button
 						type="button"
 						class="btn-outline btn-xs btn-circle btn opacity-80"
 						onclick={() => {
 							usernames.splice(i, 1);
-							usernames = usernames;
+							usernameStatuses.splice(i, 1);
 						}}>&cross;</button
 					>
 				</div>
+				{#if usernames[i] && usernameStatuses[i] === "available"}
+					<span id="username-error" class="error-message">
+						We couldn’t find a coauthor with the username "{usernames[i]}". Please check for typos.
+					</span>
+				{/if}
 			</div>
 		{/each}
 		<div>

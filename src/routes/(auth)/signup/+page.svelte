@@ -6,8 +6,8 @@
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { setTitle } from "$lib/utils/setTitle.js";
 	import { NewUserSchema } from "$lib/validation.js";
-	import { debounce } from "@fcrozatier/ts-helpers/promises";
 	import * as fg from "formgator";
+	import { resetUsernameStatus, type UsernameStatus } from "../../api/check-username/fetch.js";
 
 	let { form } = $props();
 
@@ -23,46 +23,7 @@
 	};
 
 	let username = $state("");
-	let usernameStatus: "pending" | "available" | "taken" | "error" | undefined = $state(undefined);
-	let controller: AbortController | null = null;
-
-	const debouncedCheck = debounce(async () => {
-		controller = new AbortController();
-		const signal = controller.signal;
-
-		try {
-			const r = await fetch("/api/check-username", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ username }),
-				signal,
-			});
-
-			const data = (await r.json()) as { valid: boolean; status: "available" | "taken" };
-
-			if (!data.valid) usernameStatus = "error";
-			else usernameStatus = data.status;
-
-			controller = null;
-		} catch (error) {
-			if (error instanceof DOMException && error.name === "AbortError") {
-				console.log(error.name, error.message);
-			} else {
-				throw error;
-			}
-		}
-	}, 1000);
-
-	async function resetUsernameStatus() {
-		usernameStatus = "pending";
-
-		if (controller) {
-			controller.abort();
-		}
-		debouncedCheck();
-	}
+	let usernameStatus: UsernameStatus = $state(undefined);
 
 	setTitle("Signup");
 </script>
@@ -110,7 +71,7 @@
 			<label for="username" class="label">
 				<span class="label-text"> Username </span>
 			</label>
-			<div class="pile item-center">
+			<div class="pile">
 				<input
 					id="username"
 					type="text"
@@ -118,7 +79,10 @@
 					class="input-bordered input w-full"
 					placeholder="Choose your username"
 					bind:value={username}
-					oninput={resetUsernameStatus}
+					oninput={() =>
+						resetUsernameStatus(username, (status) => {
+							usernameStatus = status;
+						})}
 					{...fg.splat(NewUserSchema["username"].attributes)}
 					aria-errormessage="username-error"
 					aria-invalid={!!form?.issues?.username}
