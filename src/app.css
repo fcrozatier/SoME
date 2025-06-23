@@ -217,8 +217,11 @@ summary::after {
 select,
 ::picker(select) {
 	appearance: base-select;
-	padding: calc(var(--spacing) * 0);
 	cursor: pointer;
+}
+
+select {
+	padding-inline: calc(var(--spacing) * 3);
 }
 
 ::picker(select) {
@@ -233,7 +236,6 @@ selectedcontent {
 	display: inline-flex;
 	align-items: center;
 	gap: calc(var(--spacing) * 2);
-	padding-inline: calc(var(--spacing) * 3);
 }
 
 option {
