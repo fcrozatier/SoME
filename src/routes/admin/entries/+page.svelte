@@ -53,7 +53,7 @@
 									buttons.forEach((b) => b.removeAttribute("disabled"));
 
 									if (result.type === "success" && action.search.includes("display")) {
-										displayDialog?.show();
+										displayDialog?.showModal();
 										displayDialog?.scrollTo({ top: 0 });
 									}
 								};
@@ -92,7 +92,7 @@
 </article>
 
 <dialog
-	class="fixed inset-0 pt-0 m-auto overflow-auto"
+	class=" m-auto "
 	bind:this={displayDialog}
 	closedby="any"
 	onclose={() => {
@@ -104,7 +104,7 @@
 		{#if form?.entry}
 			<Display data={form.entry}></Display>
 
-			<p class="flex gap-2">
+			<p class="flex gap-2 justify-end">
 				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}>Close</button>
 				<a class="btn btn-outline hover:btn-neutral" href={`/admin/update/${form.entry.uid}`}>Update</a>
 			</p>

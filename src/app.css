@@ -73,10 +73,12 @@ textarea {
 
 dialog {
 	@apply shadow-2xl;
-	max-width: var(--container-2xl);
+
+	max-width: var(--container-3xl);
 	border-radius: var(--radius-xl);
 	padding: calc(var(--spacing) * 12);
 	padding-bottom: calc(var(--spacing) * 10);
+	overscroll-behavior-y: none;
 	max-height: 80vh;
 	margin-block: auto;
 	transition:
