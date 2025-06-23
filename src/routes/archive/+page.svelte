@@ -4,7 +4,7 @@
 	import { clickOutside } from "$lib/actions.js";
 	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
-	import { categories } from "$lib/config.js";
+	import { categories, currentYear } from "$lib/config.js";
 	import { setTitle } from "$lib/utils/setTitle";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
@@ -18,7 +18,7 @@
 	let year = $state(data.year);
 	let pageNumber = $state(data.page);
 
-	const years = ["2024", "2023", "2022", "2021"];
+	const years = Array.from({ length: currentYear - 1 - 2021 }, (_, i) => currentYear - 1 - i);
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
 	let entry: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();
@@ -73,7 +73,9 @@
 			</label>
 			<select class="select-bordered select" bind:value={year} name="year" id="year">
 				{#each years as year}
-					<option value={year} selected={page.url.searchParams.get("year") === year}>{year}</option>
+					<option value={year} selected={page.url.searchParams.get("year") === `${year}`}
+						>{year}</option
+					>
 				{/each}
 			</select>
 		</div>

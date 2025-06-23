@@ -1,3 +1,4 @@
+import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { fail } from "@sveltejs/kit";
@@ -16,7 +17,7 @@ export const load = async ({ url }) => {
 			select uid, title
 			from entries
 			where entries.active='true'
-			and date_part('year', entries.created_at)='2024'
+			and date_part('year', entries.created_at)=${currentYear}
 			order by created_at
 			limit ${limit}
 			offset ${(+page - 1) * limit};
@@ -25,7 +26,7 @@ export const load = async ({ url }) => {
 	const [total] = (await db.execute(sql`
 		 select count(*) from entries
 		 where entries.active='true'
-		 and date_part('year', entries.created_at)='2024';
+		 and date_part('year', entries.created_at)=${currentYear};
 		`)) as { count: number }[];
 
 	return { entries, pages: Math.ceil((total?.count ?? 0) / limit) };

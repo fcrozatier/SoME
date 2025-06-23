@@ -1,3 +1,4 @@
+import { currentYear } from "$lib/config";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
 import { FlagForm, validateForm } from "$lib/validation";
@@ -11,7 +12,7 @@ export const load = async () => {
 			from entries join flags
 			on uid=entry_uid
 			where entries.active='true'
-			and date_part('year', entries.created_at)='2024'
+			and date_part('year', entries.created_at)=${currentYear}
 			order by uid
 			limit all
 			offset 0;
