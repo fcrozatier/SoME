@@ -47,12 +47,11 @@
 	</table>
 	<form
 		method="post"
-		use:enhance={({ formData }) => {
+		use:enhance={() => {
 			const buttons = document.querySelectorAll("button");
 			buttons.forEach((b) => b.setAttribute("disabled", "on"));
-			formData.append("selection", JSON.stringify(selected));
 
-			return async ({ update, result, action }) => {
+			return async ({ update, result }) => {
 				buttons.forEach((b) => b.removeAttribute("disabled"));
 				if (result.type === "success") {
 					newToast({ type: "info", content: "Entry reactivated!" });
@@ -61,6 +60,10 @@
 			};
 		}}
 	>
+		{#each selected as uid}
+			<input type="hidden" name="selected" value={uid} />
+		{/each}
+
 		<button formaction="?/reactivate" class="btn" disabled={!selected.length}>Reactivate</button>
 	</form>
 </article>

@@ -5,7 +5,7 @@
 
 	let { data } = $props();
 
-	let selected: [string, string][] = $state([]);
+	let selected: string[] = $state([]);
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl">
@@ -29,7 +29,7 @@
 							type="checkbox"
 							class="checkbox"
 							name="selected"
-							value={[f.user_uid, f.uid]}
+							value={`${f.user_uid},${f.uid}`}
 							bind:group={selected}
 						/></td
 					>
@@ -48,10 +48,9 @@
 
 	<form
 		method="post"
-		use:enhance={({ formData }) => {
+		use:enhance={() => {
 			const buttons = document.querySelectorAll("button");
 			buttons.forEach((b) => b.setAttribute("disabled", "on"));
-			formData.append("selection", JSON.stringify(selected));
 
 			return async ({ update, result, action }) => {
 				buttons.forEach((b) => b.removeAttribute("disabled"));
@@ -68,6 +67,10 @@
 			};
 		}}
 	>
+		{#each selected as value}
+			<input type="hidden" name="selected" {value} />
+		{/each}
+
 		<div class="flex gap-4">
 			<button type="submit" formaction="?/keep" class="btn btn-neutral" disabled={!selected.length}
 				>Keep</button
