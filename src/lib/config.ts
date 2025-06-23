@@ -6,6 +6,7 @@ export const SHORT_NAME = "SoME";
 // No space as the strings are used in vote url
 export const categories = ["video", "non-video"] as const;
 export type Category = (typeof categories)[number];
+export const currentYear = (new Date()).getFullYear();
 
 /**
  * Formats a list into a string

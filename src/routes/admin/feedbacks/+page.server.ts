@@ -1,3 +1,4 @@
+import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { FeedbackForm, validateForm } from "$lib/validation";
@@ -13,7 +14,7 @@ export const load = async () => {
 			from entries join votes
 			on uid=entry_uid
 			where entries.active='true'
-			and date_part('year', entries.created_at)='2024'
+			and date_part('year', entries.created_at)=${currentYear}
 			and votes.reviewed='false'
 			and votes.maybe_rude='true'
 			order by uid

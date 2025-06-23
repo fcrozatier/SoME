@@ -19,7 +19,13 @@ export const load = loadgate(
 
 		const entries: Pick<
 			SelectEntry,
-			"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank"
+			| "uid"
+			| "title"
+			| "description"
+			| "category"
+			| "thumbnail"
+			| "url"
+			| "rank"
 		>[] = await db.execute(sql`
 		 select uid, title, description, category, thumbnail, url, rank from entries
 		 where date_part('year', entries.created_at)=${year}
