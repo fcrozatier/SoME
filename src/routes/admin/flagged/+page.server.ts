@@ -1,9 +1,10 @@
 import { currentYear } from "$lib/config";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
-import { FlagForm, validateForm } from "$lib/validation";
-import { fail, type Actions } from "@sveltejs/kit";
+import { AdminForm } from "$lib/validation";
+import { type Actions } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
+import { formgate } from "formgator/sveltekit";
 
 export const load = async () => {
 	const flagged: (Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">)[] =
@@ -22,38 +23,18 @@ export const load = async () => {
 };
 
 export const actions: Actions = {
-	ignore: async ({ request }) => {
-		const validation = await validateForm(request, FlagForm);
+	ignore: formgate(AdminForm, async (data) => {
+		await db.execute(sql`
+			delete from flags where entry_uid in ${data.selected};
+		`);
 
-		if (!validation.success) {
-			return fail(400, { ignoreError: true });
-		}
+		return { success: true };
+	}),
+	deactivate: formgate(AdminForm, async (data) => {
+		await db.execute(sql`
+			update entries set active='false' where uid in ${data.selected};
+		`);
 
-		try {
-			await db.execute(sql`
-				delete from flags where entry_uid in ${validation.data.selection};
-			`);
-
-			return { success: true };
-		} catch (error) {
-			return fail(400, { ignoreError: true });
-		}
-	},
-	deactivate: async ({ request }) => {
-		const validation = await validateForm(request, FlagForm);
-
-		if (!validation.success) {
-			return fail(400, { unflagError: true });
-		}
-
-		try {
-			await db.execute(sql`
-				update entries set active='false' where uid in ${validation.data.selection};
-			`);
-
-			return { flag: true };
-		} catch (error) {
-			return fail(400, { flagError: true });
-		}
-	},
+		return { flag: true };
+	}),
 };

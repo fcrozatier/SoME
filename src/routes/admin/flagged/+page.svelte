@@ -47,10 +47,9 @@
 	</table>
 	<form
 		method="post"
-		use:enhance={({ formData }) => {
+		use:enhance={() => {
 			const buttons = document.querySelectorAll("button");
 			buttons.forEach((b) => b.setAttribute("disabled", "on"));
-			formData.append("selection", JSON.stringify(selected));
 
 			return async ({ update, result, action }) => {
 				buttons.forEach((b) => b.removeAttribute("disabled"));
@@ -66,6 +65,10 @@
 			};
 		}}
 	>
+		{#each selected as uid}
+			<input type="hidden" name="selected" value={uid} />
+		{/each}
+
 		<div class="flex gap-4">
 			<button type="submit" formaction="?/ignore" class="btn" disabled={!selected.length}
 				>Ignore</button

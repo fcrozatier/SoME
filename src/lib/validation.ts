@@ -23,6 +23,8 @@ const validationMessages: fg.Failures = {
 	type: "Invalid type",
 };
 
+// User flow
+
 export const usernameRegex = /^[\p{Letter}0-9_.\-]{3,32}$/v;
 
 export const UsernameSchema = fg
@@ -60,40 +62,7 @@ export const ChangePasswordSchema = {
 	password2: PasswordSchema,
 };
 
-export const TokenSchema = z.string().uuid();
-
-export const FlagForm = z.object({
-	selection: z.string().transform((val, ctx) => {
-		try {
-			return z.array(TokenSchema).parse(JSON.parse(val));
-		} catch {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-			});
-
-			return z.NEVER;
-		}
-	}),
-});
-
-export const FeedbackForm = z.object({
-	selection: z.string().transform((val, ctx) => {
-		try {
-			return z.array(z.tuple([TokenSchema, TokenSchema])).parse(JSON.parse(val));
-		} catch {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-			});
-
-			return z.NEVER;
-		}
-	}),
-});
-
-export const PasswordForm = z.object({
-	email: z.string(),
-	password: z.string(),
-});
+// Entry flow
 
 const TitleSchema = fg
 	.text(
@@ -160,7 +129,10 @@ export const levels = [
 	"undergraduate",
 	"graduate",
 ];
+
 export const invalidTagsMessage = "Pick at least one level from the provided list";
+
+// Vote flow
 
 export const FeedbackSchema = fg
 	.textarea(
@@ -195,23 +167,18 @@ export const FlagSchema = {
 	uid: UidSchema,
 };
 
-export const EmailTemplateSchema = z.object({
-	template_name: z.enum(templateNames),
-});
+// Admin flow
 
-/**
- * Generic schema validation function to be used in actions
- * @param request A request with formData
- * @param schema The schema to validate the form against. Must be a z.object
- * @returns typed validated data or throws
- */
-export async function validateForm<T extends Record<string, unknown>, S>(
-	request: Request,
-	schema: S extends z.ZodType ? z.ZodType<T> : any,
-) {
-	const formData = await request.formData();
-	const form = Object.fromEntries(formData);
-	const validation = schema.safeParse(form);
+export const SurveySchema = {
+	some: fg.number({ required: true, min: 1, max: 9 }),
+	site: fg.number({ required: true, min: 1, max: 9 }),
+	feedback: FeedbackSchema,
+};
 
-	return validation;
-}
+export const AdminForm = {
+	selected: fg.multi().pipe(z.array(z.string().uuid())),
+};
+
+export const EmailTemplateSchema = {
+	template_name: fg.text({ required: true }).pipe(z.enum(templateNames)),
+};

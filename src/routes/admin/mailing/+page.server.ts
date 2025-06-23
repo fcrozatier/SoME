@@ -1,22 +1,16 @@
+import { dev } from "$app/environment";
 import { sendTemplate } from "$lib/server/email";
+import { EmailTemplateSchema } from "$lib/validation";
 import type { Actions } from "@sveltejs/kit";
 import { fail } from "@sveltejs/kit";
-import { EmailTemplateSchema, validateForm } from "$lib/validation";
-import { dev } from "$app/environment";
+import { formgate } from "formgator/sveltekit";
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: formgate(EmailTemplateSchema, async (data) => {
 		try {
-			const validation = await validateForm(request, EmailTemplateSchema);
-
-			if (!validation.success) {
-				console.log(validation.error.flatten());
-				return fail(400, validation.error.flatten());
-			}
-
 			if (!dev) {
 				console.log("Sending email template...");
-				await sendTemplate(validation.data.template_name);
+				await sendTemplate(data.template_name);
 			}
 
 			return { success: true };
@@ -24,5 +18,5 @@ export const actions: Actions = {
 			console.error("Couldn't send email", e);
 			return fail(500);
 		}
-	},
+	}),
 };

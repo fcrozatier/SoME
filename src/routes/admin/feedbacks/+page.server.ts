@@ -1,16 +1,16 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
-import { FeedbackForm, validateForm } from "$lib/validation";
-import { fail } from "@sveltejs/kit";
+import { AdminForm } from "$lib/validation";
 import { sql } from "drizzle-orm";
+import { formgate } from "formgator/sveltekit";
 
 export const load = async () => {
 	const feedbacks: (Pick<SelectEntry, "uid" | "title" | "url"> & {
 		feedback: string;
 		user_uid: string;
 	})[] = await db.execute(sql`
-			select user_uid, uid, feedback, title, url
+			select uid, title, url, user_uid, feedback
 			from entries join votes
 			on uid=entry_uid
 			where entries.active='true'
@@ -26,38 +26,22 @@ export const load = async () => {
 };
 
 export const actions = {
-	keep: async ({ request }) => {
-		const validation = await validateForm(request, FeedbackForm);
+	keep: formgate(AdminForm, async (data) => {
+		await db.execute(sql`
+				update votes set maybe_rude='false', reviewed='true' where (user_uid, entry_uid) in ${data.selected.map(
+					(s) => s.split(","),
+				)}
+			`);
 
-		if (!validation.success) {
-			return fail(400, { error: true });
-		}
+		return { success: true };
+	}),
+	remove: formgate(AdminForm, async (data) => {
+		await db.execute(sql`
+				update votes set maybe_rude='true', reviewed='true' where (user_uid, entry_uid) in ${data.selected.map(
+					(s) => s.split(","),
+				)}
+			`);
 
-		try {
-			await db.execute(sql`
-					update votes set maybe_rude='false', reviewed='true' where (user_uid, entry_uid) in ${validation.data.selection}
-				`);
-
-			return { success: true };
-		} catch (error) {
-			return fail(400, { error: true });
-		}
-	},
-	remove: async ({ request }) => {
-		const validation = await validateForm(request, FeedbackForm);
-
-		if (!validation.success) {
-			return fail(400, { error: true });
-		}
-
-		try {
-			await db.execute(sql`
-					update votes set maybe_rude='true', reviewed='true' where (user_uid, entry_uid) in ${validation.data.selection}
-				`);
-
-			return { success: true };
-		} catch (error) {
-			return fail(400, { error: true });
-		}
-	},
+		return { success: true };
+	}),
 };
