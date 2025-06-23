@@ -23,27 +23,16 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
-export const load = async ({ locals, params }) => {
-	if (!submissionsOpen()) {
-		throw error(403, "Submissions are closed");
-	}
-
-	if (!locals?.user?.uid) {
-		throw redirect(302, "/login");
-	}
-
+export const load = async ({ params }) => {
 	const { entryUid } = params;
-	const { user } = locals;
 
 	const [entry]: Pick<
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
 	>[] = await db.execute(sql`
     select uid, title, description, category, url, thumbnail from entries
-    inner join user_to_entry on user_to_entry.entry_uid=entries.uid
     inner join entry_to_tag on entry_to_tag.entry_uid=entries.uid
-    where entries.uid=${entryUid}
-    and user_uid=${user.uid};
+    where entries.uid=${entryUid};
   `);
 
 	if (!entry) {
@@ -53,8 +42,7 @@ export const load = async ({ locals, params }) => {
 	const coauthors: Pick<User, "username">[] = await db.execute(sql`
     select username from users
     join user_to_entry on user_uid=users.uid
-    where entry_uid=${entryUid}
-    and users.username <> ${user.username};
+    where entry_uid=${entryUid};
   `);
 
 	const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
@@ -71,18 +59,9 @@ export const load = async ({ locals, params }) => {
 };
 
 export const actions = {
-	default: formgate(NewEntrySchema, async (data, { locals, params }) => {
+	default: formgate(NewEntrySchema, async (data, { params }) => {
 		try {
-			const { user } = locals;
 			const { entryUid } = params;
-
-			if (!user || !user.username) {
-				throw error(401, "You must be logged in");
-			}
-
-			if (!submissionsOpen() && !user.isAdmin) {
-				throw error(403, "Submissions are closed");
-			}
 
 			const prevCoauthors: Pick<User, "username" | "uid">[] = await db.execute(
 				sql`
@@ -93,7 +72,7 @@ export const actions = {
 			);
 
 			// curr = prev + new - former
-			const usernames = [...new Set([...data.usernames, user.username])];
+			const usernames = [...new Set([...data.usernames])];
 
 			// The distinct team members
 			const team = await db
@@ -274,7 +253,7 @@ export const actions = {
 					.onConflictDoNothing();
 			}
 
-			return redirect(303, "/user/entries");
+			return redirect(303, "/admin/entries");
 		} catch (error) {
 			console.log("[entry update]:", error);
 

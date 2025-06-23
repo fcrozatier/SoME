@@ -24,7 +24,7 @@
 			};
 		}}
 	>
-		<button class="btn-neutral btn" type="submit">Rank</button>
+		<button class="btn-neutral btn" type="submit" disabled>Rank</button>
 	</form>
 
 	<table class="table w-full">
