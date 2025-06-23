@@ -12,7 +12,7 @@
 		<p>Choose a category:</p>
 		<p class="flex gap-4">
 			{#each categories as category}
-				<a class="btn-neutral btn" href={`/vote/${category}`}>{category}</a>
+				<a class="btn-neutral btn" href={`/user/vote/${category}`}>{category}</a>
 			{/each}
 		</p>
 	{:else}

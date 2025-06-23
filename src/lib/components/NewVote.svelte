@@ -19,7 +19,7 @@
 	{#each categories as category}
 		{#if category !== page.params.category}
 			<!-- Force reload to grab a new entry -->
-			<a class="btn" href={`/vote/${page.params.token}/${category}?screen=ok`} data-sveltekit-reload
+			<a class="btn" href={`/user/vote/${category}?screen=ok`} data-sveltekit-reload
 				>Go to {category} entries</a
 			>
 		{/if}

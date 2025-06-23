@@ -129,7 +129,7 @@
 					score = 5;
 
 					// Like update but scrolls to top
-					await goto(`/vote/${page.params["token"]}/${page.params["category"]}`, {
+					await goto(`/user/vote/${page.params["category"]}`, {
 						noScroll: false,
 						invalidateAll: true,
 					});
@@ -298,7 +298,7 @@
 				flagDialog?.close();
 				clearInterval(interval);
 				newToast({ type: "info", content: "Entry flagged" });
-				await goto(`/vote/${page.params["token"]}/${page.params["category"]}`, {
+				await goto(`/user/vote/${page.params["category"]}`, {
 					noScroll: false,
 					invalidateAll: true,
 				});

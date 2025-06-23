@@ -63,9 +63,9 @@
 			</li>
 			<li class="mt-2 ml-1">
 				<a
-					href="/vote"
+					href="/user/vote"
 					class={`btn btn-neutral ${voteOpen() ? "" : "btn-disabled"}`}
-					aria-current={page.url.pathname === "/vote" ? "page" : null}>Vote</a
+					aria-current={page.url.pathname === "/user/vote" ? "page" : null}>Vote</a
 				>
 				<span class="text-xs block text-nowrap relative text-gray-700 -left-3 mt-1"
 					>Starts <Time
