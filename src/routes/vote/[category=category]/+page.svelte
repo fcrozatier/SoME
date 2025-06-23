@@ -247,7 +247,7 @@
 	{/if}
 </article>
 
-<dialog class="" bind:this={guidelines} closedby="any">
+<dialog bind:this={guidelines} closedby="any">
 	<article use:clickOutside={() => guidelines?.close()}>
 		<h2 id="guidlines" class="text-center mt-0 mb-8">Guidelines</h2>
 
@@ -284,7 +284,7 @@
 	</article>
 </dialog>
 
-<dialog class="" bind:this={flagDialog} closedby="any">
+<dialog bind:this={flagDialog} closedby="any">
 	<form
 		method="post"
 		action="?/flag"
@@ -341,7 +341,7 @@
 	<form class="max-w-(--breakpoint-sm)" method="dialog">
 		<h2 class="mt-0">You've made {data.total_votes} votes!</h2>
 		<p class="text-success">Thank you.</p>
-		<p class="">You can continue voting, change category or take a break at any time</p>
+		<p>You can continue voting, change category or take a break at any time</p>
 		<NewVote />
 	</form>
 </dialog>

@@ -185,7 +185,7 @@
 </div>
 
 <dialog
-	class="fixed inset-0 pt-0 m-auto overflow-auto max-w-3xl overscroll-y-none"
+	class="m-auto"
 	bind:this={displayDialog}
 	closedby="any"
 	onclose={() => {
@@ -199,7 +199,7 @@
 				<EntriesPage data={entry}></EntriesPage>
 			</div>
 			<div class="flex justify-end mt-12">
-				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
+				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}>Close</button>
 			</div>
 		{/if}
 	</div>
