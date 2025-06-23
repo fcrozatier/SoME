@@ -8,7 +8,7 @@
 
 	let { data, form = $bindable() } = $props();
 
-	let pageNumber = $state(page.url.searchParams.get("page") ?? "1");
+	let pageNumber = $state(Number(page.url.searchParams.get("page") ?? "1"));
 	let displayDialog: HTMLDialogElement | undefined = $state();
 </script>
 
@@ -20,7 +20,7 @@
 			pages={data.pages}
 			bind:pageNumber
 			onchange={() => {
-				page.url.searchParams.set("page", pageNumber);
+				page.url.searchParams.set("page", `${pageNumber}`);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 					keepFocus: true,
@@ -62,7 +62,7 @@
 							<input type="hidden" name="uid" value={entry.uid} />
 							<button formaction="?/display" class="btn btn-neutral btn-sm">Display</button>
 						</form>
-						<a class="btn btn-sm" href={`/update/${entry.uid}`}>Update</a>
+						<a class="btn btn-sm" href={`/admin/update/${entry.uid}`}>Update</a>
 					</td>
 				</tr>
 			{:else}
@@ -80,7 +80,7 @@
 			pages={data.pages}
 			bind:pageNumber
 			onchange={() => {
-				page.url.searchParams.set("page", pageNumber);
+				page.url.searchParams.set("page", `${pageNumber}`);
 				goto(`?${page.url.searchParams.toString()}`, {
 					invalidateAll: true,
 					keepFocus: true,
@@ -105,8 +105,8 @@
 			<Display data={form.entry}></Display>
 
 			<p class="flex gap-2">
-				<button class="btn btn-outline" onclick={() => displayDialog?.close()}>Close</button>
-				<a class="btn btn-outline" href={`/update/${form.entry.uid}`}>Update</a>
+				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}>Close</button>
+				<a class="btn btn-outline hover:btn-neutral" href={`/admin/update/${form.entry.uid}`}>Update</a>
 			</p>
 		{/if}
 	</article>

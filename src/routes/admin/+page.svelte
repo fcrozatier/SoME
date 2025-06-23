@@ -8,9 +8,9 @@
 		<li><a href="/admin/feedbacks">Feedbacks</a></li>
 		<li><a href="/admin/deactivated">Deactivated entries</a></li>
 	</ul>
-	<h3>Rank</h3>
+	<!-- <h3>Rank</h3>
 	<ul>
 		<li><a href="/admin/rank/video">Videos</a></li>
 		<li><a href="/admin/rank/non-video">Non-videos</a></li>
-	</ul>
+	</ul> -->
 </article>

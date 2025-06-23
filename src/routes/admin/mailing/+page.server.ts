@@ -15,14 +15,13 @@ export const actions: Actions = {
 			}
 
 			if (!dev) {
-				// Fire and forget
-				console.log("send template email");
+				console.log("Sending email template...");
 				await sendTemplate(validation.data.template_name);
 			}
 
 			return { success: true };
 		} catch (e) {
-			console.error("Could not send template", e);
+			console.error("Couldn't send email", e);
 			return fail(500);
 		}
 	},
