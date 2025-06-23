@@ -154,7 +154,7 @@
 					</div>
 					<button
 						type="button"
-						class="btn-outline btn-xs btn-circle btn opacity-80"
+						class="btn btn-outline btn-xs btn-circle hover:btn-neutral"
 						onclick={() => {
 							usernames.splice(i, 1);
 							usernameStatuses.splice(i, 1);
@@ -169,11 +169,11 @@
 			</div>
 		{/each}
 		<div>
-			<label class="inline-flex items-center gap-2 text-sm text-gray-500">
+			<label class="inline-flex items-center gap-2 text-sm">
 				Add coauthor
 				<button
 					type="button"
-					class="btn-outline btn-sm btn-circle btn opacity-80"
+					class="btn btn-outline btn-sm btn-circle hover:btn-neutral"
 					onclick={addContributor}>+</button
 				>
 			</label>

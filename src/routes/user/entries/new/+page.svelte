@@ -151,7 +151,7 @@
 					</div>
 					<button
 						type="button"
-						class="btn-outline btn-xs btn-circle btn opacity-80"
+						class="btn btn-outline btn-xs btn-circle hover:btn-neutral"
 						onclick={() => {
 							usernames.splice(i, 1);
 							usernameStatuses.splice(i, 1);
@@ -170,7 +170,7 @@
 				Add coauthors
 				<button
 					type="button"
-					class="btn-outline btn-sm btn-circle btn opacity-80"
+					class="btn btn-outline btn-sm btn-circle hover:btn-neutral"
 					onclick={addContributor}>+</button
 				>
 			</label>
