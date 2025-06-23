@@ -9,19 +9,7 @@ export const uuid = (str: string | null) => !!str && uuid4.test(str);
 const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp"];
 export const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
-export type Failures<K extends fg.ValidationIssue["code"] = fg.ValidationIssue["code"]> = Pick<
-	{
-		[K in fg.ValidationIssue["code"]]?: Omit<
-			fg.ValidationIssue & { code: K },
-			"code" | "message"
-		> extends Record<string, never>
-			? string
-			: string | ((data: Omit<fg.ValidationIssue & { code: K }, "code" | "message">) => string);
-	},
-	K
->;
-
-const validationMessages: Failures = {
+const validationMessages: fg.Failures = {
 	accept: "Invalid file type",
 	custom: "Invalid value",
 	invalid: "Invalid value",
