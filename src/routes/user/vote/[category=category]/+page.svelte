@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import * as fg from "formgator";
 	import { afterNavigate, goto } from "$app/navigation";
 	import { page } from "$app/state";
 	import { clickOutside } from "$lib/actions";
@@ -10,6 +11,7 @@
 	import { onMount } from "svelte";
 	import { formAction } from "./config";
 	import { setTitle } from "$lib/utils/setTitle";
+	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 
 	let { data, form } = $props();
 
@@ -137,7 +139,6 @@
 			}}
 		>
 			<input type="hidden" value={data.uid} name="uid" />
-			<input type="hidden" value={data.tag} name="tag" />
 			<div class="form-control gap-1">
 				<h3 class="">Vote</h3>
 				<p class="mb-4">
@@ -175,16 +176,18 @@
 					<strong>constructive</strong> as possible in your comments:
 				</p>
 				<textarea
-					name="feedback"
 					id="feedback"
+					name="feedback"
 					class="block textarea-bordered textarea w-full"
 					cols="50"
 					rows="10"
-					maxlength="5000"
 					bind:value={feedback}
+					{...fg.splat(FeedbackSchema.attributes)}
 				></textarea>
 				<div class="label justify-end">
-					<span class="label-text-alt">{feedback?.length}/5000</span>
+					<span class="label-text-alt"
+						>{feedback?.length}/{FeedbackSchema.attributes.maxlength}</span
+					>
 				</div>
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse">
@@ -216,14 +219,14 @@
 								if (splitButtonOpen) splitButtonOpen = false;
 							}}
 							type="submit"
-							formaction={formAction("hard_skip")}
+							formaction={"?/hard_skip"}
 							class="btn btn-neutral text-xs bg-black absolute left-0 px-2 top-[105%]"
 							>Don't show again</button
 						>
 					{/if}
 					<button
 						type="submit"
-						formaction={formAction("skip")}
+						formaction={"?/skip"}
 						class="btn btn-outline rounded-e-none hover:btn-neutral">Skip</button
 					>
 				</div>
@@ -292,9 +295,8 @@
 	</article>
 </dialog>
 
-<dialog bind:this={flagDialog} closedby="any">
+<dialog id="flag" bind:this={flagDialog} closedby="any">
 	<form
-		id="flag"
 		method="post"
 		action="?/flag"
 		use:clickOutside={() => flagDialog?.close()}
@@ -328,12 +330,10 @@
 			id="reason"
 			type="text"
 			name="reason"
-			maxlength="100"
 			class="input-bordered input w-full"
-			required
+			{...fg.splat(FlagSchema["reason"].attributes)}
 		/>
-		<input type="hidden" value={data.uid} name="uid" />
-		<input type="hidden" value={data.tag} name="tag" />
+		<input type="hidden" value={data.uid} name="uid" required />
 		<p class="mb-0 mt-8 flex items-center gap-2">
 			<button
 				type="button"

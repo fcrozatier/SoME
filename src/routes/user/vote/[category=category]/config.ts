@@ -1,4 +1,4 @@
-export const action = {
+const action = {
 	skip: "skip",
 	hard_skip: "hard_skip",
 };

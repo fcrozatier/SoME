@@ -162,36 +162,38 @@ export const levels = [
 ];
 export const invalidTagsMessage = "Pick at least one level from the provided list";
 
-export const FeedbackSchema = z
-	.string()
-	.trim()
-	.refine(
-		(feedback) => {
-			return feedback.length - (feedback.match(/\r\n/g) ?? []).length <= 5000;
-		},
+export const FeedbackSchema = fg
+	.textarea(
 		{
-			message: "Feedback too long",
+			required: false,
+			maxlength: 10_000,
 		},
+		{ ...validationMessages, maxlength: "Feedback too long" },
 	)
-	.optional();
+	.trim();
 
-export const VoteSchema = z.object({
-	score: z.coerce.number().gte(1).lte(9),
+const UidSchema = fg.text({ required: true }).pipe(z.string().uuid());
+
+export const VoteSchema = {
+	score: fg.number({ required: true, min: 1, max: 9 }),
 	feedback: FeedbackSchema,
-	uid: z.string(),
-	tag: z.string(),
-});
+	uid: UidSchema,
+};
 
-export const SkipSchema = z.object({
-	uid: z.string(),
-	tag: z.string(),
-});
+export const SkipSchema = {
+	uid: UidSchema,
+};
 
-export const FlagSchema = z.object({
-	reason: z.string().min(1).max(100, { message: "Reason too long" }),
-	uid: z.string(),
-	tag: z.string(),
-});
+export const FlagSchema = {
+	reason: fg.text(
+		{ minlength: 1, maxlength: 100, required: true },
+		{
+			...validationMessages,
+			maxlength: "Reason too long",
+		},
+	),
+	uid: UidSchema,
+};
 
 export const EmailTemplateSchema = z.object({
 	template_name: z.enum(templateNames),

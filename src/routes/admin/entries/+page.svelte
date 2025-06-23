@@ -92,7 +92,7 @@
 </article>
 
 <dialog
-	class=" m-auto "
+	class="m-auto"
 	bind:this={displayDialog}
 	closedby="any"
 	onclose={() => {
@@ -105,8 +105,12 @@
 			<Display data={form.entry}></Display>
 
 			<p class="flex gap-2 justify-end">
-				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}>Close</button>
-				<a class="btn btn-outline hover:btn-neutral" href={`/admin/update/${form.entry.uid}`}>Update</a>
+				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}
+					>Close</button
+				>
+				<a class="btn btn-outline hover:btn-neutral" href={`/admin/update/${form.entry.uid}`}
+					>Update</a
+				>
 			</p>
 		{/if}
 	</article>
