@@ -1,11 +1,11 @@
 import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from "$env/static/private";
 import type { Category } from "$lib/config";
-import { query3 } from "$lib/server/algo/queries";
+import { query1 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
 import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
 import { decrypt, encrypt } from "$lib/server/encryption";
-import { FlagSchema, SkipSchema, validateForm, VoteSchema } from "$lib/validation";
 import { voteOpen } from "$lib/utils/time";
+import { FlagSchema, SkipSchema, validateForm, VoteSchema } from "$lib/validation";
 import { fail, redirect } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 import { OpenAI } from "openai";
@@ -23,14 +23,14 @@ export const load = async ({ locals, params }) => {
 	}
 
 	if (!voteOpen()) {
-		return redirect(302, `/vote/`);
+		return redirect(302, "/user/vote/");
 	}
 
 	const { category } = params;
 	const token = locals.user.uid;
 
 	const result: postgres.RowList<(SelectEntry & { total_votes: number })[]> = await db.execute(
-		query3(token, category),
+		query1(token, category),
 	);
 
 	if (!result) return { stopVote: true };
