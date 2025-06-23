@@ -3,14 +3,13 @@ import type { Category } from "$lib/config";
 import { query1 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
 import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
-import { decrypt, encrypt } from "$lib/server/encryption";
 import { voteOpen } from "$lib/utils/time";
-import { FlagSchema, SkipSchema, validateForm, VoteSchema } from "$lib/validation";
+import { FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
 import { fail, redirect } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
+import * as fg from "formgator/sveltekit";
 import { OpenAI } from "openai";
 import type postgres from "postgres";
-import { action } from "./config";
 
 const openai = new OpenAI({
 	apiKey: OPENAI_API_KEY,
@@ -38,8 +37,6 @@ export const load = async ({ locals, params }) => {
 	const [entry] = result;
 
 	if (entry) {
-		const { cipherText, tag } = encrypt(entry.uid);
-
 		await db
 			.insert(cache)
 			.values({
@@ -58,9 +55,8 @@ export const load = async ({ locals, params }) => {
 			category: entry.category,
 			url: entry.url,
 			thumbnail: entry.thumbnail,
-			uid: cipherText,
+			uid: entry.uid,
 			total_votes: entry.total_votes,
-			tag,
 		};
 	}
 
@@ -70,7 +66,7 @@ export const load = async ({ locals, params }) => {
 let id: "FLAG" | "VOTE" | "SKIP" | "HARD_SKIP";
 
 export const actions = {
-	flag: async ({ request, params, locals }) => {
+	flag: fg.formgate(FlagSchema, async (data, { params, locals }) => {
 		id = "FLAG";
 		if (!locals.user) {
 			return redirect(302, "/login");
@@ -78,21 +74,13 @@ export const actions = {
 		const token = locals.user.uid;
 		const { category } = params;
 
-		const validation = await validateForm(request, FlagSchema);
-		if (!validation.success) {
-			console.log(validation.error.flatten());
-			return fail(400, { id, flagFail: true });
-		}
-
 		try {
-			const uid = decrypt(validation.data.uid, validation.data.tag);
-
 			await db
 				.insert(flags)
 				.values({
-					entryUid: uid,
+					entryUid: data.uid,
 					userUid: token,
-					reason: validation.data.reason,
+					reason: data.reason,
 				})
 				.onConflictDoNothing();
 
@@ -105,24 +93,18 @@ export const actions = {
 			console.log("error:", error);
 			return fail(400, { id, flagFail: true });
 		}
-	},
-	vote: async ({ request, params, locals }) => {
+	}),
+	vote: fg.formgate(VoteSchema, async (data, { params, locals }) => {
 		id = "VOTE";
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
 		const token = locals.user.uid;
 		const { category } = params;
-		const validation = await validateForm(request, VoteSchema);
-
-		if (!validation.success) {
-			console.log(validation.error.flatten());
-			return fail(400, { id, voteFail: true });
-		}
 
 		let maybe_rude = false;
 
-		if (validation.data.feedback) {
+		if (data.feedback) {
 			const completion = await openai.chat.completions.create({
 				model: "gpt-4",
 				temperature: 0.2,
@@ -133,7 +115,7 @@ export const actions = {
 					},
 					{
 						role: "user",
-						content: validation.data.feedback,
+						content: data.feedback,
 					},
 				],
 			});
@@ -142,22 +124,20 @@ export const actions = {
 		}
 
 		try {
-			const uid = decrypt(validation.data.uid, validation.data.tag);
-
 			await db
 				.insert(votes)
 				.values({
-					entryUid: uid,
+					entryUid: data.uid,
 					userUid: token,
-					score: validation.data.score.toString(),
-					feedback: validation.data.feedback,
+					score: data.score.toString(),
+					feedback: data.feedback,
 					maybe_rude,
 				})
 				.onConflictDoUpdate({
 					target: [votes.userUid, votes.entryUid],
 					set: {
-						score: `${validation.data.score}`,
-						feedback: validation.data.feedback,
+						score: `${data.score}`,
+						feedback: data.feedback,
 					},
 				});
 
@@ -167,31 +147,23 @@ export const actions = {
 
 			return { id, voteSuccess: true };
 		} catch (error) {
-			console.log("error:", error);
+			console.log("[vote]:", error);
 			return fail(400, { id, voteFail: true });
 		}
-	},
-	[action.hard_skip]: async ({ request, params, locals }) => {
+	}),
+	hard_skip: fg.formgate(SkipSchema, async (data, { params, locals }) => {
 		id = "HARD_SKIP";
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
 		const token = locals.user.uid;
 		const { category } = params;
-		const validation = await validateForm(request, SkipSchema);
-
-		if (!validation.success) {
-			console.log(validation.error.flatten());
-			return fail(400, { id, skipFail: true });
-		}
 
 		try {
-			const uid = decrypt(validation.data.uid, validation.data.tag);
-
 			await db
 				.insert(skips)
 				.values({
-					entryUid: uid,
+					entryUid: data.uid,
 					userUid: token,
 				})
 				.onConflictDoNothing();
@@ -205,8 +177,8 @@ export const actions = {
 			console.log("error:", error);
 			return fail(400, { id, skipFail: true });
 		}
-	},
-	[action.skip]: async ({ params, locals }) => {
+	}),
+	skip: fg.formgate(SkipSchema, async (data, { params, locals }) => {
 		id = "SKIP";
 		if (!locals.user) {
 			return redirect(302, "/login");
@@ -219,5 +191,5 @@ export const actions = {
 			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 
 		return { id, skipSuccess: true };
-	},
+	}),
 };

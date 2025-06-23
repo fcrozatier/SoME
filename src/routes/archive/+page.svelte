@@ -199,7 +199,9 @@
 				<EntriesPage data={entry}></EntriesPage>
 			</div>
 			<div class="flex justify-end mt-12">
-				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}>Close</button>
+				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}
+					>Close</button
+				>
 			</div>
 		{/if}
 	</div>

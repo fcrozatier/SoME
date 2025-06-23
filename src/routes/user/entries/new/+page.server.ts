@@ -55,9 +55,7 @@ export const actions = {
 		// Validate team members
 		if (team.length !== teamSize) {
 			const foundUsernames = team.map((u) => u.username);
-			const notFoundUsernames = usernames.filter((username) =>
-				!foundUsernames.includes(username)
-			);
+			const notFoundUsernames = usernames.filter((username) => !foundUsernames.includes(username));
 
 			return formfail({
 				usernames: `Username${
@@ -81,9 +79,7 @@ export const actions = {
 		const failedTags: { tag: string; unknownWords: string[] }[] = [];
 
 		for (const tag of entryTags) {
-			const unknownWords = tag.split("-").filter((part) =>
-				!dictionary.has(part)
-			);
+			const unknownWords = tag.split("-").filter((part) => !dictionary.has(part));
 
 			if (unknownWords.length > 0) {
 				failedTags.push({ tag, unknownWords });
@@ -99,11 +95,9 @@ export const actions = {
 				.onConflictDoNothing();
 
 			return formfail({
-				tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${
-					conjunctionFormatter.format(
-						failedTags.flatMap(({ unknownWords }) => unknownWords),
-					)
-				}`,
+				tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
+					failedTags.flatMap(({ unknownWords }) => unknownWords),
+				)}`,
 			});
 		}
 
@@ -142,9 +136,7 @@ export const actions = {
 			}
 
 			// Connect the creators and the entry
-			await db.insert(usersToEntries).values(
-				team.map((user) => ({ userUid: user.uid, entryUid })),
-			);
+			await db.insert(usersToEntries).values(team.map((user) => ({ userUid: user.uid, entryUid })));
 
 			// Save tags and retrieve ids whether newly inserted or existing
 			if (tagSet.size) {
@@ -158,9 +150,7 @@ export const actions = {
 					.from(tags)
 					.where(inArray(tags.name, entryTags));
 
-				await db.insert(entriesToTags).values(
-					tagIds.map(({ id }) => ({ entryUid, tagId: id })),
-				);
+				await db.insert(entriesToTags).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
 			}
 
 			return redirect(303, "/user/entries");

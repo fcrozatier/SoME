@@ -4,10 +4,7 @@ let controller: AbortController | null = null;
 export type UsernameStatus = "pending" | "available" | "taken" | "error" | undefined;
 
 const checkUsername = debounce(
-	async (
-		username: string,
-		setStatus: (status: UsernameStatus) => void,
-	) => {
+	async (username: string, setStatus: (status: UsernameStatus) => void) => {
 		controller = new AbortController();
 		const signal = controller.signal;
 

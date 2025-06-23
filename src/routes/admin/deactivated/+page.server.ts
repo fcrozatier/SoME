@@ -6,11 +6,8 @@ import { fail } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async () => {
-	const flagged:
-		(
-			& Pick<SelectEntry, "uid" | "title" | "url">
-			& Pick<SelectFlag, "reason">
-		)[] = await db.execute(sql`
+	const flagged: (Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">)[] =
+		await db.execute(sql`
 			select uid, title, url, reason
 			from entries join flags
 			on uid=entry_uid
