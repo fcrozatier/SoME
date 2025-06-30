@@ -97,7 +97,7 @@
 					!ready &&
 					!(action.search === formAction("skip") || action.search === formAction("hard_skip"))
 				) {
-					newToast({ type: "info", content: "Please do not forget to grade the entry" });
+					newToast({ type: "error", content: "Please do not forget to grade the entry" });
 					return cancel();
 				}
 				const buttons = document.querySelectorAll("button");
@@ -237,12 +237,6 @@
 					onclick={() => flagDialog?.showModal()}>Flag</button
 				>
 			</div>
-			{#if form?.voteFail || form?.skipFail}
-				<p class="text-error">
-					<span> Something went wrong. </span>
-					<span> Please try again later</span>
-				</p>
-			{/if}
 		</form>
 
 		<p class="pt-8 text-sm">
@@ -343,9 +337,6 @@
 				onclick={() => flagDialog?.close()}>Cancel</button
 			>
 			<button type="submit" class="btn-outline btn-error btn">Report </button>
-			{#if form?.id === "FLAG" && form?.flagFail}
-				<span class="text-error">Something went wrong.</span>
-			{/if}
 		</p>
 	</form>
 </dialog>
