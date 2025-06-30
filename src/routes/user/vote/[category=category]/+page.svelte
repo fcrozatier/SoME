@@ -17,7 +17,6 @@
 
 	let flagDialog: HTMLDialogElement | undefined = $state();
 	let guidelines: HTMLDialogElement | undefined = $state();
-	let actionScreen: HTMLDialogElement | undefined = $state();
 	let splitButtonOpen = $state(false);
 
 	let score = $state(5);
@@ -55,16 +54,6 @@
 				clearInterval(interval);
 			}
 		}, 100);
-
-		if (
-			!data.stopVote &&
-			!page.url.searchParams.get("screen") &&
-			data.total_votes &&
-			data.total_votes > 0 &&
-			data.total_votes % 5 === 0
-		) {
-			actionScreen?.showModal();
-		}
 	});
 
 	export const snapshot = {
@@ -347,14 +336,5 @@
 				<span class="text-error">Something went wrong.</span>
 			{/if}
 		</p>
-	</form>
-</dialog>
-
-<dialog class="mb-auto" bind:this={actionScreen} closedby="none">
-	<form class="max-w-(--breakpoint-sm)" method="dialog">
-		<h2 class="mt-0">You've made {data.total_votes} votes!</h2>
-		<p class="text-success">Thank you.</p>
-		<p>You can continue voting, change category or take a break at any time</p>
-		<NewVote />
 	</form>
 </dialog>
