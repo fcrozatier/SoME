@@ -90,7 +90,7 @@
 					cooldown > 0 &&
 					!(action.search === formAction("skip") || action.search === formAction("hard_skip"))
 				) {
-					newToast({ type: "info", content: "Please do not rush the review process" });
+					newToast({ type: "error", content: "Please do not rush the review process" });
 					return cancel();
 				}
 				if (
