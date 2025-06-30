@@ -130,18 +130,19 @@
 			<input type="hidden" value={data.uid} name="uid" />
 			<div class="form-control gap-1">
 				<h3 class="">Vote</h3>
+				<h4 class="mb-0 mt-2">Ranking</h4>
 				<p class="mb-4">
 					How valuable is this entry to the space of online math exposition, compared to the typical
 					math {data.category === "video" ? "video" : "article"} you've seen?
 					<button
-						class="font-semibold hover:underline cursor-pointer text-sm"
+						class="font-semibold hover:underline cursor-pointer"
 						type="button"
 						commandfor="guidelines"
 						command="show-modal"
 						onclick={() => {
 							guidelines?.showModal();
 							guidelines?.scrollTo({ top: 0 });
-						}}>(Guidelines*)</button
+						}}>Guidelines*</button
 					>
 				</p>
 				<Slider
@@ -160,9 +161,20 @@
 				<label for="feedback" class="label flex gap-2">
 					<h4 class="mb-0 mt-2">Feedback</h4>
 				</label>
-				<p class="flex-1">
-					Do you have general feedback for the author of this entry? <br /> If so, please be as
-					<strong>constructive</strong> as possible in your comments:
+				<p class="flex-1 mt-2">
+					What worked well? What could be improved? Be <strong>constructive</strong> and
+					<strong>specific</strong>.<br /> Suggest one actionable improvement. For inspiration, you
+					can pick ideas from the
+					<button
+						class="font-semibold hover:underline cursor-pointer"
+						type="button"
+						commandfor="guidelines"
+						command="show-modal"
+						onclick={() => {
+							guidelines?.showModal();
+							guidelines?.scrollTo({ top: 0 });
+						}}>Guidelines*</button
+					>
 				</p>
 				<textarea
 					id="feedback"
@@ -173,10 +185,8 @@
 					bind:value={feedback}
 					{...fg.splat(FeedbackSchema.attributes)}
 				></textarea>
-				<div class="label justify-end">
-					<span class="label-text-alt"
-						>{feedback?.length}/{FeedbackSchema.attributes.maxlength}</span
-					>
+				<div class="flex text-sm text-gray-500">
+					<span>{feedback?.length}/{FeedbackSchema.attributes.maxlength}</span>
 				</div>
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse">
