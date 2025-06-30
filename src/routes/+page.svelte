@@ -30,7 +30,7 @@
 		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
 	>
 		{#each data.top.slice(0, 5) as winner}
-			<div class="max-w-3xl hover:bg-base-200 rounded-3xl p-6">
+			<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
 				<Media {...winner} thumbnailWidth="360px" gap={8}></Media>
 			</div>
 		{/each}

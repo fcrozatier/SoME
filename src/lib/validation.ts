@@ -144,10 +144,10 @@ export const FeedbackSchema = fg
 	)
 	.trim();
 
-const UidSchema = fg.text({ required: true }).pipe(z.string().uuid());
+const UidSchema = fg.hidden().pipe(z.string().uuid());
 
 export const VoteSchema = {
-	score: fg.number({ required: true, min: 1, max: 9 }),
+	score: fg.range({ min: 1, max: 9, step: 0.01 }),
 	feedback: FeedbackSchema,
 	uid: UidSchema,
 };

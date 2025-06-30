@@ -65340,6 +65340,7 @@ eulamellibranch
 eulamellibranchia
 eulamellibranchiata
 euler
+eulerian
 eulers
 eulima
 eulimidae

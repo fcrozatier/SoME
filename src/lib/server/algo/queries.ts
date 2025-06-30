@@ -59,13 +59,9 @@ export function query1(token: string, category: string) {
 			partial as (
 				select uid, sum(max-score) over (
 					order by score rows between unbounded preceding and current row) sum from selection, maximum
-			),
-
-			user_votes as (
-				select count(*) as total_votes from votes where user_uid=${token}
 			)
 
-			select * from (selection join partial on selection.uid=partial.uid), cutoff, user_votes
+			select * from (selection join partial on selection.uid=partial.uid), cutoff
 			where partial.sum >= cutoff.value
 			limit 1;
 		`;
@@ -120,13 +116,9 @@ export function query2(token: string, category: string) {
 			partial as (
 				select uid, sum(score) over (
 					order by score rows between unbounded preceding and current row) sum from selection
-			),
-
-			user_votes as (
-				select count(*) as total_votes from votes where user_uid=${token}
 			)
 
-			select * from (selection join partial on selection.uid=partial.uid), cutoff, user_votes
+			select * from (selection join partial on selection.uid=partial.uid), cutoff
 			where partial.sum >= cutoff.value
 			limit 1;
 		`;

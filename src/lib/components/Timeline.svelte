@@ -12,22 +12,23 @@
 
 	const phases = [
 		{
-			title: "Join the competition as a participant or judge",
+			title: "Join and create",
 			description:
-				'Creators all work on their projects and the <a href="https://discord.gg/WZvZMVsXXR" target="_blank">Discord</a> server allows them to share partial progress, find collaborators and ask for help.',
+				"Sign up as a participant or a judge. Creators begin working on their projects and can share progress, find collaborators, or ask for help in the Discord server.",
 			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
 			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END],
 		},
 		{
-			title: "Vote for the best contributions",
+			title: "Peer Review and Voting",
 			description:
-				"This is the peer review phase where you'll be successively shown entries to review and optionally provide feedback. This is the heart of the event.",
+				"This is the heart of the event. You’ll be shown a series of entries to review, vote on, and give constructive feedback. It’s a chance to reflect, learn, and help others improve.",
 			isOpen: voteOpen(),
 			dates: [PUBLIC_VOTE_START, PUBLIC_VOTE_END],
 		},
 		{
-			title: "Results and feedback",
-			description: "The top entries and the complete ranking are revealed.",
+			title: "Results and Feedback",
+			description:
+				"The top entries and full rankings are revealed, along with the feedback that was shared.",
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE],
 		},
@@ -44,7 +45,7 @@
 <!-- Timeline -->
 <section class="layout-prose pb-4">
 	<h2 class="mb-4 text-4xl font-black">Timeline</h2>
-	<p>The competition has three phases:</p>
+	<p>The competition unfolds in three phases:</p>
 	<ul class="-ml-7 list-outside">
 		{#each phases as phase, i}
 			{@const [start, end] = phase.dates}
