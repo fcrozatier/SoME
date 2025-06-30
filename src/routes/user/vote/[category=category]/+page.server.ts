@@ -60,39 +60,28 @@ export const load = async ({ locals, params }) => {
 	return { stopVote: true };
 };
 
-let id: "FLAG" | "VOTE" | "SKIP" | "HARD_SKIP";
-
 export const actions = {
 	flag: formgate(FlagSchema, async (data, { params, locals }) => {
-		id = "FLAG";
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
 		const token = locals.user.uid;
 		const { category } = params;
 
-		try {
-			await db
-				.insert(flags)
-				.values({
-					entryUid: data.uid,
-					userUid: token,
-					reason: data.reason,
-				})
-				.onConflictDoNothing();
+		await db
+			.insert(flags)
+			.values({
+				entryUid: data.uid,
+				userUid: token,
+				reason: data.reason,
+			})
+			.onConflictDoNothing();
 
-			await db
-				.delete(cache)
-				.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
-
-			return { id, flagSuccess: true };
-		} catch (error) {
-			console.log("error:", error);
-			return fail(400, { id, flagFail: true });
-		}
+		await db
+			.delete(cache)
+			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 	}),
 	vote: formgate(VoteSchema, async (data, { params, locals }) => {
-		id = "VOTE";
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
@@ -120,63 +109,48 @@ export const actions = {
 			maybe_rude = completion.choices[0]?.message.content?.match(/OK|REVIEW/g)?.at(-1) === "REVIEW";
 		}
 
-		try {
-			await db
-				.insert(votes)
-				.values({
-					entryUid: data.uid,
-					userUid: token,
-					score: data.score.toString(),
+		await db
+			.insert(votes)
+			.values({
+				entryUid: data.uid,
+				userUid: token,
+				score: data.score.toString(),
+				feedback: data.feedback,
+				maybe_rude,
+			})
+			.onConflictDoUpdate({
+				target: [votes.userUid, votes.entryUid],
+				set: {
+					score: `${data.score}`,
 					feedback: data.feedback,
-					maybe_rude,
-				})
-				.onConflictDoUpdate({
-					target: [votes.userUid, votes.entryUid],
-					set: {
-						score: `${data.score}`,
-						feedback: data.feedback,
-					},
-				});
+				},
+			});
 
-			await db
-				.delete(cache)
-				.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
-
-			return { id, voteSuccess: true };
-		} catch (error) {
-			console.log("[vote]:", error);
-			return fail(400, { id, voteFail: true });
-		}
+		await db
+			.delete(cache)
+			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 	}),
 	hard_skip: formgate(SkipSchema, async (data, { params, locals }) => {
-		id = "HARD_SKIP";
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
+
 		const token = locals.user.uid;
 		const { category } = params;
 
-		try {
-			await db
-				.insert(skips)
-				.values({
-					entryUid: data.uid,
-					userUid: token,
-				})
-				.onConflictDoNothing();
+		await db
+			.insert(skips)
+			.values({
+				entryUid: data.uid,
+				userUid: token,
+			})
+			.onConflictDoNothing();
 
-			await db
-				.delete(cache)
-				.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
-
-			return { id, skipSuccess: true };
-		} catch (error) {
-			console.log("error:", error);
-			return fail(400, { id, skipFail: true });
-		}
+		await db
+			.delete(cache)
+			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 	}),
 	skip: formgate(SkipSchema, async (data, { params, locals }) => {
-		id = "SKIP";
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
@@ -186,7 +160,5 @@ export const actions = {
 		await db
 			.delete(cache)
 			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
-
-		return { id, skipSuccess: true };
 	}),
 };
