@@ -13,7 +13,7 @@
 	import { setTitle } from "$lib/utils/setTitle";
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 
-	let { data, form } = $props();
+	let { data } = $props();
 
 	let flagDialog: HTMLDialogElement | undefined = $state();
 	let guidelines: HTMLDialogElement | undefined = $state();

@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { VoteSchema } from "$lib/validation";
+	import { once } from "@fcrozatier/ts-helpers";
+	import * as fg from "formgator";
+
 	interface Props {
 		name: string;
 		value: number;
@@ -20,8 +24,6 @@
 		label7 = "",
 		label9 = "",
 	}: Props = $props();
-
-	let input: HTMLInputElement | undefined = $state();
 
 	function label(value: number) {
 		if (value < 1.5) return label1;
@@ -79,17 +81,13 @@
 				id={name}
 				{name}
 				type="range"
-				min="1"
-				max="9"
-				step=".01"
 				class="range w-full"
+				{...fg.splat(VoteSchema.score.attributes)}
 				bind:value
-				bind:this={input}
-				onchange={() => (ready = true)}
+				onchange={once(() => (ready = true))}
 				class:range-error={value <= 3}
 				class:range-success={value >= 7}
 				class:range-warning={value > 3 && value < 7}
-				required
 			/>
 		</div>
 	</div>
