@@ -245,10 +245,9 @@
 			{/if}
 		</form>
 
-		<p class="pt-8">
+		<p class="pt-8 text-sm">
 			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it
-			and we will review it manually. You can also skip an entry in case you can't rank it (maybe you
-			do not have the prerequisites)
+			and we will review it manually. <br /> You can also skip an entry
 		</p>
 	{/if}
 </article>
@@ -294,9 +293,10 @@
 	</article>
 </dialog>
 
-<dialog id="flag" bind:this={flagDialog} closedby="any">
+<dialog id="flag" class="m-auto" bind:this={flagDialog} closedby="any">
 	<form
 		method="post"
+		class="space-y-2"
 		action="?/flag"
 		use:clickOutside={() => flagDialog?.close()}
 		use:enhance={({ formElement }) => {
@@ -315,21 +315,22 @@
 			};
 		}}
 	>
-		<h2 class="mt-0">What's wrong with this entry?</h2>
-		<p class="text-gray-700">You can report an entry if:</p>
-		<ul>
-			<li>it is inappropriate / suspicious</li>
-			<li>it does not respect the rules</li>
-			<li>you cannot proceed (wrong platform etc.)</li>
+		<h2 class="mt-0">Report this entry</h2>
+		<p class="text-gray-700 mb-0">You can report an entry if it:</p>
+		<ul class="mt-0 *:space-y-0">
+			<li>Contains inappropriate content</li>
+			<li>Violates the competition <a href="/rules" target="_blank">rules</a></li>
 		</ul>
-		<p>In any case please provide a reason. The entry will be reviewed by admins.</p>
-		<span class="capitalize font-semibold">{data.title}</span>
-		<label for="reason" class="label">Reason</label>
+		<p>The following entry will be reviewed by the SoME team:</p>
+		<p><strong>{data.title}</strong></p>
+
+		<label for="reason" class="label">Reason for reporting:</label>
 		<input
 			id="reason"
 			type="text"
 			name="reason"
 			class="input-bordered input w-full"
+			placeholder="Briefly explain why this entry should be reviewed"
 			{...fg.splat(FlagSchema["reason"].attributes)}
 		/>
 		<input type="hidden" value={data.uid} name="uid" required />
