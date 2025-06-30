@@ -7,7 +7,7 @@ import { voteOpen } from "$lib/utils/time";
 import { FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
 import { fail, redirect } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
-import * as fg from "formgator/sveltekit";
+import { formgate } from "formgator/sveltekit";
 import { OpenAI } from "openai";
 import type postgres from "postgres";
 
@@ -63,7 +63,7 @@ export const load = async ({ locals, params }) => {
 let id: "FLAG" | "VOTE" | "SKIP" | "HARD_SKIP";
 
 export const actions = {
-	flag: fg.formgate(FlagSchema, async (data, { params, locals }) => {
+	flag: formgate(FlagSchema, async (data, { params, locals }) => {
 		id = "FLAG";
 		if (!locals.user) {
 			return redirect(302, "/login");
@@ -91,7 +91,7 @@ export const actions = {
 			return fail(400, { id, flagFail: true });
 		}
 	}),
-	vote: fg.formgate(VoteSchema, async (data, { params, locals }) => {
+	vote: formgate(VoteSchema, async (data, { params, locals }) => {
 		id = "VOTE";
 		if (!locals.user) {
 			return redirect(302, "/login");
@@ -148,7 +148,7 @@ export const actions = {
 			return fail(400, { id, voteFail: true });
 		}
 	}),
-	hard_skip: fg.formgate(SkipSchema, async (data, { params, locals }) => {
+	hard_skip: formgate(SkipSchema, async (data, { params, locals }) => {
 		id = "HARD_SKIP";
 		if (!locals.user) {
 			return redirect(302, "/login");
@@ -175,7 +175,7 @@ export const actions = {
 			return fail(400, { id, skipFail: true });
 		}
 	}),
-	skip: fg.formgate(SkipSchema, async (data, { params, locals }) => {
+	skip: formgate(SkipSchema, async (data, { params, locals }) => {
 		id = "SKIP";
 		if (!locals.user) {
 			return redirect(302, "/login");

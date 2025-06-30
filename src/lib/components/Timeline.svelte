@@ -14,7 +14,7 @@
 		{
 			title: "Join and create",
 			description:
-				'Sign up as a participant or a judge. Creators begin working on their projects and can share progress, find collaborators, or ask for help in the Discord server.',
+				"Sign up as a participant or a judge. Creators begin working on their projects and can share progress, find collaborators, or ask for help in the Discord server.",
 			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
 			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END],
 		},
@@ -27,7 +27,8 @@
 		},
 		{
 			title: "Results and Feedback",
-			description: "The top entries and full rankings are revealed, along with the feedback that was shared.",
+			description:
+				"The top entries and full rankings are revealed, along with the feedback that was shared.",
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE],
 		},
