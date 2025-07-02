@@ -40,15 +40,7 @@
 	let title = $state("");
 	let description = $state("");
 	let tag = $state("");
-	let tags: string[] = $state([
-		"undergraduate",
-		"language",
-		"linguistics",
-		"formal-linguistics",
-		"programming",
-		"computer",
-		"computers",
-	]);
+	let tags: string[] = $state([]);
 	let url = $state("");
 	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
 	let newtag: HTMLInputElement | undefined = $state();
