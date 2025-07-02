@@ -40,7 +40,15 @@
 	let title = $state("");
 	let description = $state("");
 	let tag = $state("");
-	let tags: string[] = $state([]);
+	let tags: string[] = $state([
+		"undergraduate",
+		"language",
+		"linguistics",
+		"formal-linguistics",
+		"programming",
+		"computer",
+		"computers",
+	]);
 	let url = $state("");
 	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
 	let newtag: HTMLInputElement | undefined = $state();
@@ -308,7 +316,7 @@
 				<span id="newtag-error" class="error-message">{invalidTagsMessage}</span>
 			{/if}
 		</div>
-		<div class="flex gap-2">
+		<div class="flex flex-wrap gap-2">
 			{#each tags as tag}
 				<input type="hidden" value={tag} name="tag" />
 				<span class="tag">

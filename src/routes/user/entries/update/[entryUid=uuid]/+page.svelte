@@ -314,7 +314,7 @@
 				<span id="newtag-error" class="error-message">{invalidTagsMessage}</span>
 			{/if}
 		</div>
-		<div class="flex gap-2">
+		<div class="flex flex-wrap gap-2">
 			{#each tags as tag}
 				<input type="hidden" value={tag} name="tag" />
 				<span class="tag">
