@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { makeTitle } from '$lib/utils/makeTitle.js';
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 
 	const { data } = $props();
 </script>
