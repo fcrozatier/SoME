@@ -1,16 +1,18 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { reportValidity } from "$lib/actions";
-	import { setTitle } from "$lib/utils/setTitle.js";
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { ChangePasswordSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 
 	const { form } = $props();
 
 	let password = $state("");
-
-	setTitle("Change Password");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Change Password")}</title>
+</svelte:head>
 
 <article class="layout-prose max-w-2xl!">
 	{#if form?.success}

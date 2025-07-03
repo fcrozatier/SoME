@@ -4,7 +4,7 @@
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { setTitle } from "$lib/utils/setTitle.js";
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { NewUserSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 	import { resetUsernameStatus, type UsernameStatus } from "../../api/check-username/fetch.js";
@@ -24,9 +24,11 @@
 
 	let username = $state("");
 	let usernameStatus: UsernameStatus = $state(undefined);
-
-	setTitle("Signup");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Signup")}</title>
+</svelte:head>
 
 <article class="layout-prose max-w-2xl!">
 	<h2>Join the competition</h2>

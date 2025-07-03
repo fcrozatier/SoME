@@ -7,7 +7,7 @@
 	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
 	import { currentYear } from "$lib/config.js";
-	import { setTitle } from "$lib/utils/setTitle";
+	import { makeTitle } from "$lib/utils/makeTitle";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 
@@ -48,9 +48,11 @@
 			goto(href);
 		}
 	}
-
-	setTitle("Archive");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Archive")}</title>
+</svelte:head>
 
 {#snippet input()}
 	<button><selectedcontent></selectedcontent></button>

@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { reportValidity } from "$lib/actions.js";
-	import { setTitle } from "$lib/utils/setTitle.js";
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { LoginSchema } from "$lib/validation";
 	import * as fg from "formgator";
 
 	let { form } = $props();
-
-	setTitle("Login");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Login")}</title>
+</svelte:head>
 
 <article class="layout-prose max-w-2xl!">
 	<h2>Login</h2>

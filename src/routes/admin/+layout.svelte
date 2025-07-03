@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setTitle } from "$lib/utils/setTitle";
+	import { makeTitle } from "$lib/utils/makeTitle";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -7,8 +7,10 @@
 	}
 
 	let { children }: Props = $props();
-
-	setTitle("Admin");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Admin Panel")}</title>
+</svelte:head>
 
 {@render children?.()}

@@ -6,7 +6,7 @@
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
-	import { setTitle } from "$lib/utils/setTitle.js";
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { slugify } from "$lib/utils/slugify.js";
 	import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
@@ -63,9 +63,11 @@
 		const lastUsername = document.getElementById(`username-${usernames.length - 1}`);
 		(lastUsername as HTMLInputElement)?.focus();
 	}
-
-	setTitle("New entry");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("New Entry")}</title>
+</svelte:head>
 
 {#snippet input()}
 	<button><selectedcontent></selectedcontent></button>

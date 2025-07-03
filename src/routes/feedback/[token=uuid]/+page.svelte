@@ -2,7 +2,7 @@
 	import Bento from "$lib/components/Bento.svelte";
 	import { round } from "@fcrozatier/ts-helpers";
 
-	import { setTitle } from "$lib/utils/setTitle.js";
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import * as Plot from "@observablehq/plot";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
@@ -26,9 +26,11 @@
 	}
 
 	let { data } = $props();
-
-	setTitle("Feedback");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Feedback")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<h2>Feedbacks</h2>

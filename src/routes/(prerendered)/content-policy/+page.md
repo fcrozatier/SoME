@@ -1,9 +1,11 @@
 <script>
 	import { FULL_NAME } from '$lib/config';
-  import { setTitle } from "$lib/utils/setTitle";
-
-  setTitle("Content Policy")
+  import { makeTitle } from "$lib/utils/makeTitle";
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Content Policy")}</title>
+</svelte:head>
 
 ## Content Policy
 
