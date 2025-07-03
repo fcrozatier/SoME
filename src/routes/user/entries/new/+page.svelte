@@ -11,7 +11,7 @@
 	import * as fg from "formgator";
 	import { tick } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
-	import { resetUsernameStatus, type UsernameStatus } from "../../../api/check-username/fetch.js";
+	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 
 	let { form } = $props();
 
@@ -40,9 +40,9 @@
 	let title = $state("");
 	let description = $state("");
 	let tag = $state("");
-	let tags: string[] = $state([]);
+	let tags: Set<string> = $state(new SvelteSet<string>());
 	let url = $state("");
-	let invalidTags = $derived(new SvelteSet(tags).intersection(new Set(levels)).size === 0);
+	let invalidTags = $derived(tags.intersection(new Set(levels)).size === 0);
 	let newtag: HTMLInputElement | undefined = $state();
 	let showInvalidTagsMessage = $state(false);
 	let invalidTagReason = $state("");
@@ -255,13 +255,13 @@
 			<div class="flex flex-wrap gap-2 mb-6">
 				{#each levels as level}
 					<button
-						class={`tag cursor-pointer  ${tags.includes(level) ? "bg-gray-900 border-gray-900 text-white" : ""}`}
+						class={`tag cursor-pointer  ${tags.has(level) ? "bg-gray-900 border-gray-900 text-white" : ""}`}
 						type="button"
 						onclick={() => {
-							if (tags.includes(level)) {
-								tags = tags.filter((t) => t !== level);
+							if (tags.has(level)) {
+								tags.delete(level);
 							} else {
-								tags.push(level);
+								tags.add(level);
 							}
 							showInvalidTagsMessage = true;
 						}}
@@ -280,24 +280,32 @@
 				aria-invalid={`${invalidTags}`}
 				bind:value={tag}
 				bind:this={newtag}
+				onkeyup={(e) => {
+					if (e.key === ",") {
+						tag = "";
+					}
+				}}
 				onkeydown={async (event) => {
 					if (event.key === "Enter" || event.key === ",") {
 						if (tag.length) {
+							const check = tag;
+							tags.add(slugify(tag));
+							showInvalidTagsMessage = true;
+
 							const res = await fetch(`/api/check-tag`, {
 								method: "POST",
 								headers: {
 									"Content-Type": "application/json",
 								},
-								body: JSON.stringify({ tag }),
+								body: JSON.stringify({ tag: check }),
 							});
 							const { valid, reason }: { valid: boolean; reason?: string } = await res.json();
 
 							if (valid) {
 								invalidTagReason = "";
-								tags.push(slugify(tag));
-								showInvalidTagsMessage = true;
-								tag = "";
 							} else if (reason) {
+								tags.delete(check);
+								tag = check;
 								invalidTagReason = reason;
 							}
 							event.preventDefault();
@@ -320,7 +328,7 @@
 						class="cursor-pointer rounded-full inline-block outline-offset-2 outline-gray-900 leading-0"
 						onclick={() => {
 							showInvalidTagsMessage = true;
-							tags = tags.filter((t) => t !== tag);
+							tags.delete(tag);
 						}}>&cross;</button
 					>
 				</span>
