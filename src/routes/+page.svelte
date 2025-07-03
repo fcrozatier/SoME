@@ -2,12 +2,14 @@
 	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
 	import { FULL_NAME, SHORT_NAME } from "$lib/config";
-	import { setTitle } from "$lib/utils/setTitle.js";
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 
 	let { data } = $props();
-
-	setTitle("Home");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Home")}</title>
+</svelte:head>
 
 <section class="layout-prose">
 	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->

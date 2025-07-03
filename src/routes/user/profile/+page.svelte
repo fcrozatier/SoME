@@ -1,6 +1,12 @@
 <script lang="ts">
+	import { makeTitle } from "$lib/utils/makeTitle.js";
+
 	const { data } = $props();
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Profile")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<h2>Profile</h2>

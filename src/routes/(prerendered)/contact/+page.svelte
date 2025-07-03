@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { setTitle } from "$lib/utils/setTitle";
-
-	setTitle("Contact");
+	import { makeTitle } from "$lib/utils/makeTitle";
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Contact")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<h2>Contact</h2>

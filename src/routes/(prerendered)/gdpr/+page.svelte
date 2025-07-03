@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { setTitle } from "$lib/utils/setTitle";
-
-	setTitle("Privacy Policy");
+	import { makeTitle } from "$lib/utils/makeTitle";
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Privacy Policy")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<h2>Data protection</h2>

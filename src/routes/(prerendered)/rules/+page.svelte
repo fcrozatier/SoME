@@ -2,8 +2,8 @@
 	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
 	import Time from "$lib/components/Time.svelte";
 	import { FULL_NAME } from "$lib/config";
+	import { makeTitle } from "$lib/utils/makeTitle";
 	import { submissionsOpen, timeLeft } from "$lib/utils/time";
-	import { setTitle } from "$lib/utils/setTitle";
 	import { onMount } from "svelte";
 
 	let remaining = timeLeft();
@@ -18,9 +18,11 @@
 			clearInterval(interval);
 		};
 	});
-
-	setTitle("Rules");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Rules")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<section id="rules" class="layout-prose pb-32">

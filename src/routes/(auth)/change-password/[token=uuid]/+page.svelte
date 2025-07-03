@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { setTitle } from "$lib/utils/setTitle";
-
-	setTitle("Change Password");
+	import { makeTitle } from "$lib/utils/makeTitle";
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Change Password")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<h2>Password successfully reset!</h2>

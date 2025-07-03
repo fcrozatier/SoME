@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { PUBLIC_VOTE_START } from "$env/static/public";
-
 	import Time from "$lib/components/Time.svelte";
+	import { makeTitle } from "$lib/utils/makeTitle";
 </script>
+
+<svelte:head>
+	<title>{makeTitle("My Votes")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<h2>My votes</h2>

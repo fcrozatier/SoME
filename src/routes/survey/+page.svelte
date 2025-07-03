@@ -1,19 +1,21 @@
 <script lang="ts">
-	import * as fg from "formgator";
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { setTitle } from "$lib/utils/setTitle.js";
+	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { SurveySchema } from "$lib/validation";
+	import * as fg from "formgator";
 
 	let { form } = $props();
 
 	let someValue = $state(5);
 	let siteValue = $state(5);
 	let feedback = $state("");
-
-	setTitle("Survey");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Survey")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	{#if !form?.surveySuccess}

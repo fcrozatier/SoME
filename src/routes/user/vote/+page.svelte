@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { categories } from "$lib/config";
+	import { makeTitle } from "$lib/utils/makeTitle";
 	import { voteOpen } from "$lib/utils/time";
-	import { setTitle } from "$lib/utils/setTitle";
-
-	setTitle("Vote");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Vote")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	<h2>Vote</h2>

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import * as fg from "formgator";
 	import { afterNavigate, goto } from "$app/navigation";
 	import { page } from "$app/state";
 	import { clickOutside } from "$lib/actions";
@@ -8,10 +7,11 @@
 	import NewVote from "$lib/components/NewVote.svelte";
 	import Slider from "$lib/components/Slider.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
+	import { makeTitle } from "$lib/utils/makeTitle";
+	import { FeedbackSchema, FlagSchema } from "$lib/validation";
+	import * as fg from "formgator";
 	import { onMount } from "svelte";
 	import { formAction } from "./config";
-	import { setTitle } from "$lib/utils/setTitle";
-	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 
 	let { data } = $props();
 
@@ -68,9 +68,11 @@
 			feedback = v.feedback;
 		},
 	};
-
-	setTitle("Vote");
 </script>
+
+<svelte:head>
+	<title>{makeTitle("Vote")}</title>
+</svelte:head>
 
 <article class="layout-prose">
 	{#if data.stopVote}
