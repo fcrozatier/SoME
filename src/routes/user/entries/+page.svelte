@@ -35,7 +35,7 @@
 			<hr class="my-8!" />
 			{#each data.userEntries as { uid, title, description, category, thumbnail, url, createdAt }}
 				<div class="entry">
-					<LayoutSideBySide side="right" contentMinSize="85%" sideWidth="64px">
+					<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
 						{#snippet mainPanel()}
 							<Media
 								{uid}

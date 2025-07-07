@@ -21,7 +21,7 @@
 	let { category, uid, url, title, description, thumbnail, thumbnailWidth, gap }: Props = $props();
 </script>
 
-<LayoutSideBySide side="left" sideWidth={thumbnailWidth} contentMinSize="40%" {gap}>
+<LayoutSideBySide side="left" sidePanelMaxWidth={thumbnailWidth} mainPanelMinWidth="40%" {gap}>
 	{#snippet sidePanel()}
 		{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
 			{#key url}
