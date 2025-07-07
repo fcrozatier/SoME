@@ -318,6 +318,9 @@
 		<p class="text-gray-700 mb-0">You can report an entry if it:</p>
 		<ul class="mt-0 *:space-y-0">
 			<li>Contains inappropriate content</li>
+			<li>
+				Is <a href="/rules#topic-constraint">out of scope</a> (<em>ie.</em> not related to Math/Physics/CS etc.)
+			</li>
 			<li>Violates the competition <a href="/rules" target="_blank">rules</a></li>
 		</ul>
 		<p>The following entry will be reviewed by the SoME team:</p>
