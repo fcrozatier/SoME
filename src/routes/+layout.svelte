@@ -11,12 +11,20 @@
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
 	import { submissionsOpen, voteOpen } from "$lib/utils/time";
+	import { apply, isSupported } from "@oddbird/popover-polyfill/fn";
+	import { onMount } from "svelte";
 	import "../app.css";
 	import "../math.css";
 
 	let { data, children } = $props();
 
 	let dialog: HTMLDialogElement | undefined = $state();
+
+	onMount(async () => {
+		if (!isSupported()) {
+			apply();
+		}
+	});
 
 	beforeNavigate(() => dialog?.close());
 </script>

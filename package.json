@@ -52,6 +52,7 @@
 		"@fcrozatier/ts-helpers": "^2.10.0",
 		"@node-rs/argon2": "^2.0.2",
 		"@observablehq/plot": "^0.6.17",
+		"@oddbird/popover-polyfill": "^0.6.1",
 		"drizzle-orm": "^0.41.0",
 		"form-data": "^4.0.3",
 		"jsonwebtoken": "^9.0.2",
