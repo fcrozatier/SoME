@@ -20,7 +20,7 @@
 
 	let dialog: HTMLDialogElement | undefined = $state();
 
-	onMount(async () => {
+	onMount(() => {
 		if (!isSupported()) apply();
 	});
 
