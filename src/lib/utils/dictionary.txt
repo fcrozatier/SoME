@@ -5224,6 +5224,7 @@ alhambresque
 alhena
 alhenna
 alias
+aliasing
 alibaba
 alibamu
 alibangbang
@@ -77940,6 +77941,7 @@ gloy
 gloze
 glozing
 glozingly
+glsl
 glub
 glucase
 glucemia
@@ -186432,6 +186434,7 @@ spinoid
 spinomuscular
 spinoneural
 spinoperipheral
+spinor
 spinose
 spinosely
 spinoseness
@@ -196218,6 +196221,7 @@ symptomical
 symptomize
 symptomless
 symptosis
+sympy
 symtomology
 synacme
 synacmic
