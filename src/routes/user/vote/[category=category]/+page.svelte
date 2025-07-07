@@ -191,7 +191,7 @@
 					<span>{feedback?.length}/{FeedbackSchema.attributes.maxlength}</span>
 				</div>
 			</div>
-			<div class="flex gap-4 items-center flex-row-reverse">
+			<div class="flex gap-4 items-center flex-row-reverse mt-8">
 				<button class="btn btn-neutral inline-flex gap-4"
 					>Vote
 					{#if cooldown > 0}
@@ -212,6 +212,9 @@
 						title="Open for more skip actions"
 						onclick={() => {
 							if (!splitButtonOpen) splitButtonOpen = true;
+						}}
+						onkeydown={(e) => {
+							if (e.key === "Escape") splitButtonOpen = false;
 						}}>&vellip;</button
 					>
 					{#if splitButtonOpen}
@@ -221,7 +224,7 @@
 							}}
 							type="submit"
 							formaction={"?/hard_skip"}
-							class="btn btn-neutral text-xs bg-black absolute left-0 px-2 top-[105%]"
+							class="btn btn-outline hover:btn-neutral text-xs absolute left-0 px-2 mt-1 top-full whitespace-nowrap"
 							>Don't show again</button
 						>
 					{/if}
