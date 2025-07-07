@@ -48,7 +48,7 @@
 
 <div
 	class={className}
-	class:reverse={side === "right"}
+	data-reverse={side === "right"}
 	data-layout="side-by-side"
 	style={`--gap: calc(var(--spacing) * ${gap}); align-items: ${alignment}`}
 >
@@ -71,7 +71,7 @@
 			flex-grow: 9999;
 		}
 
-		&.reverse {
+		&[data-reverse="true"] {
 			flex-direction: row-reverse;
 
 			& > :last-child {

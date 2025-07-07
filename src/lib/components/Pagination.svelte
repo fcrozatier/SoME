@@ -39,8 +39,7 @@
 				{:else}
 					<input
 						id={`radio${n}`}
-						class="join-item btn btn-square"
-						class:btn-neutral={n === +pageNumber}
+						class={["join-item btn btn-square", n === +pageNumber && "btn-neutral"]}
 						type="radio"
 						name="pagination"
 						aria-label={`${n}`}
