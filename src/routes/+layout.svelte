@@ -21,9 +21,7 @@
 	let dialog: HTMLDialogElement | undefined = $state();
 
 	onMount(async () => {
-		if (!isSupported()) {
-			apply();
-		}
+		if (!isSupported()) apply();
 	});
 
 	beforeNavigate(() => dialog?.close());
