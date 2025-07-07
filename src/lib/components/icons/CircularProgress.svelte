@@ -2,7 +2,7 @@
 	let { class: className }: { class: string } = $props();
 </script>
 
-<svg class={`${className}`} viewBox="0 0 100 100">
+<svg class={`${className}`} viewBox="0 0 100 100" aria-hidden="true">
 	<circle cx="50" cy="50" r="45" />
 </svg>
 

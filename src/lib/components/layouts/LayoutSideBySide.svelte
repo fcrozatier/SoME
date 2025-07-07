@@ -3,17 +3,21 @@
 
 	interface Props {
 		/**
-		 * The side is the column of fixed width
+		 * The side is the panel of fixed max width
 		 */
 		side: "left" | "right";
 		/**
-		 * flex-basis width of the side
+		 * The maximum size the the side panel
+		 *
+		 * Set as the `flex-basis` width
 		 */
-		sideWidth?: string;
+		sidePanelMaxWidth?: string;
 		/**
-		 * content min-inline-size as a percent of the parent containing both the side and the main content
+		 * The minimum size of the main panel before it stacks
+		 *
+		 * Set as the `min-inline-size` as a length-percentage of the parent `<div>`
 		 */
-		contentMinSize: `${number}%`;
+		mainPanelMinWidth: `${number}%` | (string & {});
 		/**
 		 * number on the --spacing scale
 		 *
@@ -37,8 +41,8 @@
 	let {
 		side = "left",
 		gap = 4,
-		sideWidth,
-		contentMinSize = "50%",
+		sidePanelMaxWidth,
+		mainPanelMinWidth = "50%",
 		class: className = "",
 		alignment = "flex-start",
 		sidePanel,
@@ -48,12 +52,15 @@
 
 <div
 	class={className}
-	class:reverse={side === "right"}
+	data-reverse={side === "right"}
 	data-layout="side-by-side"
-	style={`--gap: calc(var(--spacing) * ${gap}); align-items: ${alignment}`}
+	style:--gap={`calc(var(--spacing) * ${gap});`}
+	style:align-items={alignment}
 >
-	<div style={sideWidth ? `flex-basis: ${sideWidth}` : ""}>{@render sidePanel()}</div>
-	<div style={`min-inline-size: ${contentMinSize}`}>{@render mainPanel()}</div>
+	<div style={sidePanelMaxWidth ? `flex-basis: ${sidePanelMaxWidth}` : ""}>
+		{@render sidePanel()}
+	</div>
+	<div style:min-inline-size={`min(${mainPanelMinWidth}, 100%)`}>{@render mainPanel()}</div>
 </div>
 
 <style>
@@ -71,7 +78,7 @@
 			flex-grow: 9999;
 		}
 
-		&.reverse {
+		&[data-reverse="true"] {
 			flex-direction: row-reverse;
 
 			& > :last-child {

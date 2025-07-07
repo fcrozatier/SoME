@@ -6,6 +6,7 @@
 </script>
 
 <svelte:head>
+
 <title>{makeTitle("Algorithm")}</title>
 </svelte:head>
 

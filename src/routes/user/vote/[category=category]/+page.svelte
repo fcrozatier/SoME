@@ -191,13 +191,15 @@
 					<span>{feedback?.length}/{FeedbackSchema.attributes.maxlength}</span>
 				</div>
 			</div>
-			<div class="flex gap-4 items-center flex-row-reverse">
+			<div class="flex gap-4 items-center flex-row-reverse mt-8">
 				<button class="btn btn-neutral inline-flex gap-4"
 					>Vote
 					{#if cooldown > 0}
 						<div
 							class="radial-progress text-sm"
-							style={`--value:${(100 * cooldown) / 600}; --size:2.1rem; --thickness: 1.5px;`}
+							style:--value={(100 * cooldown) / 600}
+							style:--size="2.1rem"
+							style:--thickness="1.5px"
 						>
 							{Math.floor(cooldown / 10)}
 						</div>
@@ -212,6 +214,9 @@
 						title="Open for more skip actions"
 						onclick={() => {
 							if (!splitButtonOpen) splitButtonOpen = true;
+						}}
+						onkeydown={(e) => {
+							if (e.key === "Escape") splitButtonOpen = false;
 						}}>&vellip;</button
 					>
 					{#if splitButtonOpen}
@@ -221,7 +226,7 @@
 							}}
 							type="submit"
 							formaction={"?/hard_skip"}
-							class="btn btn-neutral text-xs bg-black absolute left-0 px-2 top-[105%]"
+							class="btn btn-outline hover:btn-neutral text-xs absolute left-0 px-2 mt-1 top-full whitespace-nowrap"
 							>Don't show again</button
 						>
 					{/if}
@@ -315,6 +320,10 @@
 		<p class="text-gray-700 mb-0">You can report an entry if it:</p>
 		<ul class="mt-0 *:space-y-0">
 			<li>Contains inappropriate content</li>
+			<li>
+				Is <a href="/rules#topic-constraint">out of scope</a> (<em>ie.</em> not related to Math/Physics/CS
+				etc.)
+			</li>
 			<li>Violates the competition <a href="/rules" target="_blank">rules</a></li>
 		</ul>
 		<p>The following entry will be reviewed by the SoME team:</p>

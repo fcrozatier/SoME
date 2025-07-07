@@ -15,6 +15,6 @@
 </script>
 
 <!-- SSR with renderToString -->
-<span class:whitespace-nowrap={nowrap}>
+<span class={{ "whitespace-nowrap": nowrap }}>
 	{@html katex.renderToString(tex, { displayMode, throwOnError: false, ...options })}
 </span>

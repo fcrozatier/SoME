@@ -126,7 +126,7 @@
 		<hr class="my-8!" />
 		{#each data.entries as { uid, title, description, category, thumbnail, url, rank }}
 			<div>
-				<LayoutSideBySide side="right" contentMinSize="85%" sideWidth="64px">
+				<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
 					{#snippet mainPanel()}
 						<Media
 							{uid}
@@ -144,9 +144,9 @@
 							side="left"
 							gap={2}
 							class="text-xs"
-							contentMinSize="60%"
+							mainPanelMinWidth="60%"
 							alignment="center"
-							sideWidth="8ch"
+							sidePanelMaxWidth="8ch"
 						>
 							{#snippet mainPanel()}
 								<div class="flex">

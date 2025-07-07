@@ -4,6 +4,7 @@
 </script>
 
 <svelte:head>
+
 <title>{makeTitle("Content Policy")}</title>
 </svelte:head>
 
