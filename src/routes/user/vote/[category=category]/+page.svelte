@@ -197,7 +197,9 @@
 					{#if cooldown > 0}
 						<div
 							class="radial-progress text-sm"
-							style={`--value:${(100 * cooldown) / 600}; --size:2.1rem; --thickness: 1.5px;`}
+							style:--value={(100 * cooldown) / 600}
+							style:--size="2.1rem"
+							style:--thickness="1.5px"
 						>
 							{Math.floor(cooldown / 10)}
 						</div>
@@ -319,7 +321,8 @@
 		<ul class="mt-0 *:space-y-0">
 			<li>Contains inappropriate content</li>
 			<li>
-				Is <a href="/rules#topic-constraint">out of scope</a> (<em>ie.</em> not related to Math/Physics/CS etc.)
+				Is <a href="/rules#topic-constraint">out of scope</a> (<em>ie.</em> not related to Math/Physics/CS
+				etc.)
 			</li>
 			<li>Violates the competition <a href="/rules" target="_blank">rules</a></li>
 		</ul>
