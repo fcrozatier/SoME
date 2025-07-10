@@ -278,6 +278,12 @@
 				</li>
 			</ul>
 		</details>
+		<details>
+			<summary id="prize"> <a href="/rules#prize">Is there a prize?</a></summary>
+			<p>
+				Yes. You can read more about it on the <a href="/prize"> dedicated page </a>.
+			</p>
+		</details>
 	</section>
 </article>
 

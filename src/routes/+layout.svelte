@@ -170,6 +170,7 @@
 			<a class="text-trim" href="/contact"> Contact </a>
 			<a class="text-trim" href="/content-policy"> Content Policy </a>
 			<a class="text-trim" href="/gdpr" rel="privacy-policy"> GDPR </a>
+			<a class="text-trim" href="/prize"> Prize </a>
 			<a class="text-trim" href="/rules" rel="terms-of-service">Rules</a>
 		</section>
 	</footer>
