@@ -23,22 +23,22 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.53.2",
-		"@sveltejs/adapter-node": "^5.2.12",
-		"@sveltejs/kit": "^2.22.2",
+		"@sveltejs/adapter-node": "^5.2.13",
+		"@sveltejs/kit": "^2.22.4",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.1.11",
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/katex": "^0.16.7",
-		"@types/node": "^22.16.0",
-		"daisyui": "^5.0.43",
+		"@types/node": "^22.16.2",
+		"daisyui": "^5.0.46",
 		"drizzle-kit": "^0.30.6",
 		"formgator": "^0.2.4",
 		"mdsvex": "0.12.3",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
 		"rehype-target-plugin": "^1.0.1",
-		"svelte": "^5.34.9",
+		"svelte": "^5.35.5",
 		"svelte-check": "^4.2.2",
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.8.3",
@@ -48,7 +48,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@aws-sdk/client-s3": "^3.840.0",
+		"@aws-sdk/client-s3": "^3.844.0",
 		"@fcrozatier/ts-helpers": "^2.10.0",
 		"@node-rs/argon2": "^2.0.2",
 		"@observablehq/plot": "^0.6.17",
@@ -62,7 +62,7 @@
 		"pluralize-esm": "^9.0.5",
 		"postgres": "^3.4.7",
 		"sharp": "^0.34.2",
-		"zod": "^3.25.67"
+		"zod": "^3.25.76"
 	},
 	"browserslist": [
 		"cover 95% and last 10 versions and not dead"
