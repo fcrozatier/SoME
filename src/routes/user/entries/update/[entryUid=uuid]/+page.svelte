@@ -196,8 +196,10 @@
 				{...fg.splat(NewEntrySchema["category"].attributes)}
 			>
 				{@render input()}
-				<option value={"video"}>{@render iconVideo()}</option>
-				<option value={"non-video"}>{@render iconNonVideo()}</option>
+				<option value={"video"} onclick={() => (category = "video")}>{@render iconVideo()}</option>
+				<option value={"non-video"} onclick={() => (category = "non-video")}
+					>{@render iconNonVideo()}</option
+				>
 			</select>
 			{#if form?.issues?.category}
 				<span class="error-message">{form.issues.category.message}</span>
