@@ -61,9 +61,9 @@
 				}
 
 				if (result.type === "redirect") {
-					const username = formData.get("username");
-					if (username) {
-						newToast({ type: "success", content: `You're now logged in as ${username}.` });
+					const email = formData.get("email");
+					if (email) {
+						newToast({ type: "success", content: `You can now log in as ${email}.` });
 					}
 				}
 			};
