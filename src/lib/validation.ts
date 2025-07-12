@@ -25,7 +25,7 @@ const validationMessages: fg.Failures = {
 
 // User flow
 
-export const usernameRegex = /^[\p{Letter}0-9_.\-]{3,32}$/v;
+const usernameRegex = /^[\p{Letter}0-9_.\-]+$/v;
 
 export const UsernameSchema = fg
 	.text({ minlength: 3, maxlength: 32, required: true, pattern: usernameRegex }, validationMessages)

@@ -44,15 +44,11 @@ export const actions = {
 		try {
 			await db.insert(users).values(user);
 
-			const sessionToken = auth.generateSessionToken();
-			const session = await auth.createSession(sessionToken, user.uid);
-			auth.setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
-
 			if (!dev) {
 				await addToMailingList(user.email, user.uid);
 			}
 
-			return redirect(303, "/user/entries");
+			return redirect(302, "/login");
 		} catch (error) {
 			console.log("[signup]:", error);
 
@@ -60,8 +56,6 @@ export const actions = {
 				error instanceof postgres.PostgresError &&
 				error.code === postgresErrorCode.unique_violation
 			) {
-				console.log(error);
-
 				if (error.constraint_name === "users_email_unique") {
 					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
 
@@ -75,7 +69,7 @@ export const actions = {
 							})
 							.where(eq(users.email, user.email));
 
-						return { success: true };
+						return redirect(303, "/login");
 					}
 
 					return formfail({ email: "Profile already exists" });
