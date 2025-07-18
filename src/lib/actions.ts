@@ -1,39 +1,40 @@
 import type { SubmitFunction } from "@sveltejs/kit";
-import * as fg from "formgator";
+import { reportValidity } from "formgator/sveltekit";
+import { newToast, type ToastConfig } from "./components/Toasts.svelte";
 
-export const disableSubmitter: SubmitFunction = ({ submitter }) => {
-	submitter?.setAttribute("disabled", "on");
+export { reportValidity };
 
-	return async ({ update }) => {
-		await update();
-		submitter?.removeAttribute("disabled");
-	};
-};
+export const disableSubmitterAndSetValidity: (
+	toast?: {
+		success?: string;
+		error?: string;
+		failure?: string;
+		redirect?: ToastConfig;
+	},
+	options?: { reset?: boolean; invalidateAll?: boolean },
+) => SubmitFunction =
+	(toast, options = { reset: false, invalidateAll: false }) =>
+	({ submitter }) => {
+		submitter?.setAttribute("disabled", "");
 
-export const reportValidity: SubmitFunction = ({ submitter }) => {
-	submitter?.setAttribute("disabled", "on");
+		return async ({ update, result }) => {
+			await update(options);
+			reportValidity(options);
+			submitter?.removeAttribute("disabled");
 
-	return async ({ update, result, formElement }) => {
-		await update();
-		submitter?.removeAttribute("disabled");
-
-		if (result.type === "failure" && typeof result.data?.issues === "object") {
-			const issues = result.data.issues as Record<string, fg.ValidationIssue>;
-
-			for (const element of formElement.elements) {
-				if (!(element instanceof HTMLInputElement)) continue;
-
-				const customMessage = issues[element.name]?.message;
-				if (customMessage) element.setCustomValidity(customMessage);
-				element.reportValidity();
-
-				element.addEventListener("input", () => element.setCustomValidity(""), {
-					once: true,
-				});
+			if (toast) {
+				if (toast?.success && result.type === "success") {
+					newToast({ type: "success", content: toast.success });
+				} else if (toast?.error && result.type === "error") {
+					newToast({ type: "error", content: toast.error });
+				} else if (toast?.failure && result.type === "failure") {
+					newToast({ type: "error", content: toast.failure });
+				} else if (toast?.redirect && result.type === "redirect") {
+					newToast(toast.redirect);
+				}
 			}
-		}
+		};
 	};
-};
 
 export function clickOutside(node: Element, callback: (node?: Element) => void) {
 	const handleClick = (e: Event) => {
