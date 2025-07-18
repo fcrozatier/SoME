@@ -17,7 +17,7 @@ export const load = ({ locals }) => {
 };
 
 export const actions = {
-	default: formgate(NewUserSchema, async (data, { cookies }) => {
+	default: formgate(NewUserSchema, async (data) => {
 		const user: InsertUser = {
 			uid: crypto.randomUUID(),
 			username: data.username,
