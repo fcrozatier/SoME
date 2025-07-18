@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
+	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
-	import { newToast } from "$lib/components/Toasts.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { NewUserSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
@@ -24,6 +24,7 @@
 
 	let username = $state("");
 	let usernameStatus: UsernameStatus = $state(undefined);
+	let email = $state("");
 </script>
 
 <svelte:head>
@@ -37,37 +38,9 @@
 	<form
 		class="space-y-2"
 		method="post"
-		use:enhance={({ submitter }) => {
-			submitter?.setAttribute("disabled", "on");
-
-			return async ({ update, result, formElement, formData }) => {
-				await update();
-				submitter?.removeAttribute("disabled");
-
-				if (result.type === "failure" && typeof result.data?.issues === "object") {
-					const issues = result.data.issues as Record<string, fg.ValidationIssue>;
-
-					for (const element of formElement.elements) {
-						if (!(element instanceof HTMLInputElement)) continue;
-
-						const customMessage = issues[element.name]?.message;
-						if (customMessage) element.setCustomValidity(customMessage);
-						element.reportValidity();
-
-						element.addEventListener("input", () => element.setCustomValidity(""), {
-							once: true,
-						});
-					}
-				}
-
-				if (result.type === "redirect") {
-					const email = formData.get("email");
-					if (email) {
-						newToast({ type: "success", content: `You can now log in as ${email}.` });
-					}
-				}
-			};
-		}}
+		use:enhance={disableSubmitterAndSetValidity({
+			redirect: { type: "success", content: `You can now log in as ${email}.` },
+		})}
 	>
 		<div class="form-control">
 			<label for="username" class="label">
@@ -122,6 +95,7 @@
 				aria-errormessage="email-error"
 				aria-invalid={!!form?.issues?.email}
 				{...fg.splat(NewUserSchema["email"].attributes)}
+				bind:value={email}
 				autocomplete="email"
 				spellcheck="false"
 			/>
