@@ -13,13 +13,13 @@ export const disableSubmitterAndSetValidity: (
 	},
 	options?: { reset?: boolean; invalidateAll?: boolean },
 ) => SubmitFunction =
-	(toast, options = { reset: false, invalidateAll: false }) =>
+	(toast, options) =>
 	({ submitter }) => {
 		submitter?.setAttribute("disabled", "");
 
 		return async ({ update, result }) => {
-			await update(options);
-			reportValidity(options);
+			await update({ reset: false, invalidateAll: false, ...options });
+			reportValidity({ reset: false, invalidateAll: false, ...options });
 			submitter?.removeAttribute("disabled");
 
 			if (toast) {

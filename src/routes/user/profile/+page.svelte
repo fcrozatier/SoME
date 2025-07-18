@@ -24,7 +24,10 @@
 	<form
 		class="space-y-4"
 		method="post"
-		use:enhance={disableSubmitterAndSetValidity({ success: "Profile updated" })}
+		use:enhance={disableSubmitterAndSetValidity(
+			{ success: "Profile updated" },
+			{ invalidateAll: true, reset: false },
+		)}
 	>
 		<div class="form-control">
 			<label for="username" class="label">
