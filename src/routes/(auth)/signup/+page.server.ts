@@ -5,7 +5,7 @@ import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { type InsertUser, users } from "$lib/server/db/schema.js";
 import { addToMailingList, validateEmail } from "$lib/server/email";
 import { NewUserSchema } from "$lib/validation.js";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
