@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	interface ToastConfig {
+	export interface ToastConfig {
 		/**
 		 * The innerHTML or innerText string
 		 */
