@@ -13,6 +13,16 @@ export const actions: Actions = {
 		const email = data.email;
 		const emailToken = crypto.randomUUID();
 
+		const [user] = await db
+			.select({ uid: users.uid, hash: users.passwordHash })
+			.from(users)
+			.where(eq(users.email, email));
+
+		if (!user) {
+			// Prevents polling the db
+			return { success: true };
+		}
+
 		if (data.password !== data.password2) {
 			return formfail({ password2: "Passwords must match" });
 		}

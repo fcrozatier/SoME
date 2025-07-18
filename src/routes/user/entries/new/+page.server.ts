@@ -32,8 +32,12 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	default: formgate(NewEntrySchema, async (data, { locals }) => {
-		if (!locals.user || !locals.user.username) {
+		if (!locals.user) {
 			throw error(401, "You must be logged in");
+		}
+
+		if (!locals.user.username) {
+			throw error(401, "Please choose a username on your Profile page before submitting");
 		}
 
 		if (!submissionsOpen() && !locals.user.isAdmin) {

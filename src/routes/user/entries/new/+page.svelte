@@ -13,7 +13,7 @@
 	import { SvelteSet } from "svelte/reactivity";
 	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 
-	let { form } = $props();
+	let { form, data } = $props();
 
 	export const snapshot = {
 		capture: () => {
@@ -83,8 +83,18 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter }) => {
+		use:enhance={({ submitter, cancel }) => {
 			submitter?.setAttribute("disabled", "on");
+
+			if (!data.user?.username) {
+				newToast({
+					type: "error",
+					content:
+						"Please choose a username on your <a class='underline font-medium' href='/user/profile'>Profile</a> page before submitting",
+					duration: 5000,
+				});
+				cancel();
+			}
 
 			return async ({ update, result, formElement }) => {
 				await update();

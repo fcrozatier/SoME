@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { reportValidity } from "$lib/actions";
+	import { disableSubmitterAndSetValidity } from "$lib/actions";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { ChangePasswordSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
@@ -21,7 +21,7 @@
 			You're about to receive an email containing a validation link to confirm your password reset
 		</p>
 	{:else}
-		<form class="space-y-2" method="POST" use:enhance={reportValidity}>
+		<form class="space-y-2" method="POST" use:enhance={disableSubmitterAndSetValidity()}>
 			<h2>Change your password</h2>
 
 			<div class="form-control">

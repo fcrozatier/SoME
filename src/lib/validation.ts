@@ -42,12 +42,16 @@ export const PasswordSchema = fg
 		title: "8 characters minimum, with lowercase, uppercase and number",
 	});
 
+const TeacherSchema = fg
+	.radio(["true", "false"], { required: true })
+	.transform((value) => value === "true");
+
 export const NewUserSchema = {
 	username: UsernameSchema,
 	email: EmailSchema,
 	// Add pattern
 	password: PasswordSchema,
-	isTeacher: fg.radio(["true", "false"], { required: true }).transform((value) => value === "true"),
+	isTeacher: TeacherSchema,
 	rules: fg.checkbox({ required: true }, validationMessages),
 };
 
@@ -60,6 +64,11 @@ export const ChangePasswordSchema = {
 	email: EmailSchema,
 	password: PasswordSchema,
 	password2: PasswordSchema,
+};
+
+export const UpdateProfileSchema = {
+	username: UsernameSchema,
+	isTeacher: TeacherSchema,
 };
 
 // Entry flow
