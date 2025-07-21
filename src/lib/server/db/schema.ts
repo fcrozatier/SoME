@@ -25,6 +25,7 @@ export const users = pgTable(
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 		isAdmin: boolean("is_admin").default(false),
 		isTeacher: boolean("is_teacher").default(false),
+		bio: text("bio"),
 	},
 	({ username, newPasswordValidationToken }) => [
 		index("username_idx").on(username),
