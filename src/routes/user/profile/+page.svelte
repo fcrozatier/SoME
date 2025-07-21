@@ -114,7 +114,7 @@
 				</p>
 				<p class="mt-0">
 					If you're not a teacher, let us know about your background in math, your interests, and
-					any topic you enjoy exploring or helping others with.
+					any topics you enjoy exploring or helping others with.
 				</p>
 			</div>
 
