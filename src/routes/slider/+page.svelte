@@ -47,7 +47,7 @@
 <div class="mt-20"></div>
 
 <div class="mx-10">
-	<div id="wrapper">
+	<div id="wrapper" style:--grade={grade}>
 		<input
 			type="range"
 			list="values"
@@ -59,9 +59,9 @@
 			bind:value={grade}
 		/>
 		{#if ready}
-			<span id="track" style:--left={grade}></span>
-			<span id="thumb" style:--left={grade}></span>
-			<span id="grade" style:--left={grade}>{displayGrade}</span>
+			<span id="track"></span>
+			<span id="thumb"></span>
+			<span id="grade">{displayGrade}</span>
 		{/if}
 		<datalist id="values">
 			{#each values as value}
@@ -173,7 +173,7 @@
 	#grade {
 		position: absolute;
 		display: inline-block;
-		left: calc((var(--left) - 1) / 8 * 100%);
+		left: calc((var(--grade) - 1) / 8 * 100%);
 		pointer-events: none;
 	}
 
@@ -183,7 +183,7 @@
 		background-color: var(--thumb-color);
 		border-radius: 50%;
 		top: 0;
-		transform: translateX(calc((var(--left) - 1) / 8 * var(--thumb-size) * -1)) translateY(-0.25em);
+		transform: translateX(calc((var(--grade) - 1) / 8 * var(--thumb-size) * -1)) translateY(-0.25em);
 		box-shadow:
 			inset 0px 0px 0px 8px #fff,
 			0px 0px 0px 2px rgba(0, 0, 0, 0.1);
@@ -191,9 +191,9 @@
 
 	#grade {
 		top: -200%;
-		left: calc((var(--left) - 1) / 8 * 100% - 1ch);
+		left: calc((var(--grade) - 1) / 8 * 100% - 1ch);
 		font-variant-numeric: tabular-nums;
-		transform: translateX(calc((var(--left) - 1) / 8 * -1.5em));
+		transform: translateX(calc((var(--grade) - 1) / 8 * -1.5em));
 		padding-inline: 0.5em;
 	}
 
@@ -202,7 +202,7 @@
 		display: inline-block;
 		left: 0;
 		height: var(--track-height);
-		width: calc(1em + (var(--left) - 1) / 8 * (100% - 1em));
+		width: calc(1em + (var(--grade) - 1) / 8 * (100% - 1em));
 		border-radius: 1em;
 		background-color: var(--track-bg);
 		pointer-events: none;
