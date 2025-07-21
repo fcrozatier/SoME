@@ -1,12 +1,44 @@
 <script lang="ts">
+	import type { Attachment } from "svelte/attachments";
+
 	const values = Array.from({ length: 9 }, (_, i) => i + 1);
-	console.log(" values:", values);
 
 	let ready = $state(true);
 	let grade = $state(5);
 	let displayGrade = $derived(grade.toFixed(2));
 
-	let mobile = false;
+	const makeReady: Attachment = (node) => {
+		const setReady = () => {
+			ready = true;
+		};
+		node.addEventListener("pointerdown", setReady, { once: true });
+
+		$effect(() => {
+			if (ready) {
+				node.removeEventListener("pointerdown", setReady);
+			}
+		});
+
+		() => {
+			node.removeEventListener("pointerdown", setReady);
+		};
+	};
+
+	// We go from appearance none to auto since we initially hide the thumb, but then the first click only wakes up the input, we have to delay setting the grade the first time around
+	const setupInput: Attachment<HTMLInputElement> = (input) => {
+		input.addEventListener(
+			"pointerdown",
+			(e) => {
+				ready = true;
+				const width = (e.target as HTMLInputElement).getBoundingClientRect().width;
+
+				setTimeout(() => {
+					grade = Math.max(Math.min((e.offsetX / width) * 8.4 + 0.7, 9), 1);
+				}, 0);
+			},
+			{ once: true },
+		);
+	};
 </script>
 
 <div class="mt-20"></div>
@@ -19,10 +51,9 @@
 			min="1"
 			max="9"
 			step="0.01"
+			class={{ "appearance-none": !ready }}
+			{@attach setupInput}
 			bind:value={grade}
-			onpointerdown={() => {
-				ready = true;
-			}}
 		/>
 		{#if ready}
 			<span id="track" style:--left={grade}></span>
@@ -37,16 +68,29 @@
 	</div>
 
 	<div id="labels" class="w-full flex justify-between text-xs px-1 pb-2">
-		<label for="score" class="-left-1" onpointerdown={() => (grade = 1)}>Notably worse</label>
-		<label for="score" class="-left-0.5 sm:-left-2" onpointerdown={() => (grade = 3)}
-			>Not as good</label
+		<label for="score" class="-left-0.5 sm:-left-0" onpointerdown={() => (grade = 1)} {@attach makeReady}
+			>Notably worse</label
 		>
-		<label for="score" class="sm:-right-2" onpointerdown={() => (grade = 5)}>About the same</label>
-		<label for="score" class="-right-0.5 sm:-right-4" onpointerdown={() => (grade = 7)}
-			>Better than most</label
+		<label
+			for="score"
+			class="sm:-left-2"
+			onpointerdown={() => (grade = 3)}
+			{@attach makeReady}>Not as good</label
 		>
-		<label for="score" class="-right-1 sm:-right-0" onpointerdown={() => (grade = 9)}
-			>Outstanding</label
+		<label for="score" class="sm:-right-2" onpointerdown={() => (grade = 5)} {@attach makeReady}
+			>About the same</label
+		>
+		<label
+			for="score"
+			class="-right-0.5 sm:-right-4"
+			onpointerdown={() => (grade = 7)}
+			{@attach makeReady}>Better than most</label
+		>
+		<label
+			for="score"
+			class="-right-1 sm:-right-0"
+			onpointerdown={() => (grade = 9)}
+			{@attach makeReady}>Outstanding</label
 		>
 	</div>
 </div>
