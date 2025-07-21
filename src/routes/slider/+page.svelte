@@ -4,8 +4,30 @@
 	const values = Array.from({ length: 9 }, (_, i) => i + 1);
 
 	let ready = $state(false);
-	let grade = $state(5);
-	let displayGrade = $derived(grade.toFixed(2));
+	let _grade = $state(5);
+
+	const grade = {
+		get value() {
+			return _grade;
+		},
+		set value(g) {
+			_grade = g;
+
+			if (_grade < 5) {
+				wrapper?.style.setProperty(
+					"--color",
+					`color-mix(in oklch, var(--color-error), var(--color-warning) ${(2 * 100 * (_grade - 1)) / 8}%`,
+				);
+			} else {
+				wrapper?.style.setProperty(
+					"--color",
+					`color-mix(in oklch, var(--color-warning), var(--color-success) ${2 * ((100 * (_grade - 1)) / 8 - 50)}%)`,
+				);
+			}
+		},
+	};
+
+	let displayGrade = $derived(grade.value.toFixed(2));
 
 	const makeReady: Attachment = (node) => {
 		const setReady = () => {
@@ -25,6 +47,7 @@
 	};
 
 	let input: HTMLInputElement | undefined = $state();
+	let wrapper: HTMLDivElement | undefined = $state();
 
 	$effect(() => {
 		// JS-only enhanced input
@@ -47,7 +70,7 @@
 						const rawGrade = (e.offsetX / width) * 8 + 1;
 						// For some reason we need to tweak the offset
 						const delta = Math.abs(rawGrade - 5) / 100;
-						grade = rawGrade * (rawGrade > 5 ? 1 + 0.2 * delta : 1 - delta);
+						grade.value = rawGrade * (rawGrade > 5 ? 1 + 0.2 * delta : 1 - delta);
 					}, 0);
 				},
 				{ once: true },
@@ -59,7 +82,7 @@
 <div class="mt-20"></div>
 
 <div class="mx-10">
-	<div id="wrapper" style:--grade={grade}>
+	<div id="wrapper" style:--grade={grade.value} bind:this={wrapper}>
 		<input
 			id="score"
 			type="range"
@@ -67,7 +90,7 @@
 			min="1"
 			max="9"
 			step="0.01"
-			bind:value={grade}
+			bind:value={grade.value}
 			bind:this={input}
 		/>
 		{#if ready}
@@ -86,25 +109,31 @@
 		<label
 			for="score"
 			class="-left-0.5 sm:-left-0"
-			onpointerdown={() => (grade = 1)}
+			onpointerdown={() => (grade.value = 1)}
 			{@attach makeReady}>Notably worse</label
 		>
-		<label for="score" class="sm:-left-2" onpointerdown={() => (grade = 3)} {@attach makeReady}
-			>Not as good</label
+		<label
+			for="score"
+			class="sm:-left-2"
+			onpointerdown={() => (grade.value = 3)}
+			{@attach makeReady}>Not as good</label
 		>
-		<label for="score" class="sm:-right-2" onpointerdown={() => (grade = 5)} {@attach makeReady}
-			>About the same</label
+		<label
+			for="score"
+			class="sm:-right-2"
+			onpointerdown={() => (grade.value = 5)}
+			{@attach makeReady}>About the same</label
 		>
 		<label
 			for="score"
 			class="-right-0.5 sm:-right-4"
-			onpointerdown={() => (grade = 7)}
+			onpointerdown={() => (grade.value = 7)}
 			{@attach makeReady}>Better than most</label
 		>
 		<label
 			for="score"
 			class="-right-1 sm:-right-0"
-			onpointerdown={() => (grade = 9)}
+			onpointerdown={() => (grade.value = 9)}
 			{@attach makeReady}>Outstanding</label
 		>
 	</div>
