@@ -148,7 +148,7 @@
 		}
 
 		&::-webkit-slider-thumb {
-			appearance: none;
+			opacity: 0;
 			transform: translateY(-0.25em);
 		}
 
@@ -156,6 +156,10 @@
 			border-radius: 1em;
 			background-color: var(--track-bg-remaining);
 			height: var(--track-height-remaining);
+		}
+
+		&::-moz-range-thumb {
+			opacity: 0;
 		}
 
 		&::-moz-range-track {
