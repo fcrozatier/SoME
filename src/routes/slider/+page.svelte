@@ -13,6 +13,7 @@
 		set value(g) {
 			_grade = g;
 
+			// Unfortunately we can't color-mix() with more than 2 colors (yet?)
 			if (_grade < 5) {
 				wrapper?.style.setProperty(
 					"--color",
@@ -32,6 +33,9 @@
 	const makeReady: Attachment = (node) => {
 		const setReady = () => {
 			ready = true;
+			if (input) {
+				input.style.appearance = "auto";
+			}
 		};
 		node.addEventListener("pointerdown", setReady, { once: true });
 
