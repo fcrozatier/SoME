@@ -3,7 +3,7 @@
 
 	const values = Array.from({ length: 9 }, (_, i) => i + 1);
 
-	let ready = $state(true);
+	let ready = $state(false);
 	let grade = $state(5);
 	let displayGrade = $derived(grade.toFixed(2));
 
@@ -33,7 +33,10 @@
 				const width = (e.target as HTMLInputElement).getBoundingClientRect().width;
 
 				setTimeout(() => {
-					grade = Math.max(Math.min((e.offsetX / width) * 8.4 + 0.7, 9), 1);
+					const rawGrade = (e.offsetX / width) * 8 + 1;
+					// For some reason we need to tweak
+					const delta = Math.abs(rawGrade - 5) / 100;
+					grade = rawGrade * (rawGrade > 5 ? 1 + 0.2 * delta : 1 - delta);
 				}, 0);
 			},
 			{ once: true },
@@ -68,14 +71,14 @@
 	</div>
 
 	<div id="labels" class="w-full flex justify-between text-xs px-1 pb-2">
-		<label for="score" class="-left-0.5 sm:-left-0" onpointerdown={() => (grade = 1)} {@attach makeReady}
-			>Notably worse</label
-		>
 		<label
 			for="score"
-			class="sm:-left-2"
-			onpointerdown={() => (grade = 3)}
-			{@attach makeReady}>Not as good</label
+			class="-left-0.5 sm:-left-0"
+			onpointerdown={() => (grade = 1)}
+			{@attach makeReady}>Notably worse</label
+		>
+		<label for="score" class="sm:-left-2" onpointerdown={() => (grade = 3)} {@attach makeReady}
+			>Not as good</label
 		>
 		<label for="score" class="sm:-right-2" onpointerdown={() => (grade = 5)} {@attach makeReady}
 			>About the same</label
