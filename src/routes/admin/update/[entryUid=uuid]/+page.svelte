@@ -1,18 +1,19 @@
 <script lang="ts">
+	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
+	import { reportValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
 	import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
-	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 
 	let { form, data } = $props();
 
@@ -92,28 +93,7 @@
 			return async ({ update, result, formElement }) => {
 				await update();
 				submitter?.removeAttribute("disabled");
-
-				if (result.type === "failure" && typeof result.data?.issues === "object") {
-					const issues = result.data.issues as Record<string, fg.ValidationIssue>;
-
-					for (const element of formElement.elements) {
-						if (
-							!(element instanceof HTMLInputElement) &&
-							!(element instanceof HTMLTextAreaElement) &&
-							!(element instanceof HTMLSelectElement)
-						) {
-							continue;
-						}
-
-						const customMessage = issues[element.name]?.message;
-						if (customMessage) element.setCustomValidity(customMessage);
-						element.reportValidity();
-
-						element.addEventListener("input", () => element.setCustomValidity(""), {
-							once: true,
-						});
-					}
-				}
+				reportValidity({ result, formElement });
 
 				if (result.type === "redirect") {
 					newToast({ type: "success", content: `Entry updated!` });

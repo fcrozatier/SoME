@@ -6,13 +6,14 @@
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
-	import { NewUserSchema } from "$lib/validation.js";
+	import { UpdateProfileSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 
 	let { data, form } = $props();
 
 	let username = $state(data.user.username ?? "");
 	let usernameStatus: UsernameStatus = $state(undefined);
+	let bio = $state(data.user.bio ?? "");
 </script>
 
 <svelte:head>
@@ -45,7 +46,7 @@
 						resetUsernameStatus(username, (status) => {
 							usernameStatus = status;
 						})}
-					{...fg.splat(NewUserSchema["username"].attributes)}
+					{...fg.splat(UpdateProfileSchema["username"].attributes)}
 					aria-errormessage="username-error"
 					aria-invalid={!!form?.issues?.username}
 					autocomplete="username"
@@ -80,7 +81,7 @@
 						class="radio"
 						value="true"
 						checked={data.user.isTeacher}
-						{...fg.splat(NewUserSchema["isTeacher"].attributes)}
+						{...fg.splat(UpdateProfileSchema["isTeacher"].attributes)}
 					/>
 					<span> Yes </span>
 				</label>
@@ -91,13 +92,51 @@
 						class="radio"
 						value="false"
 						checked={!data.user.isTeacher}
-						{...fg.splat(NewUserSchema["isTeacher"].attributes)}
+						{...fg.splat(UpdateProfileSchema["isTeacher"].attributes)}
 					/>
 					<span> No </span>
 				</label>
 			</span>
 			{#if form?.issues?.isTeacher}
 				<span class="error-message">{form.issues.isTeacher.message}</span>
+			{/if}
+		</div>
+
+		<div class="form-control">
+			<label for="bio" class="label">
+				<span class="label-text"> Bio </span>
+			</label>
+			<div id="bio-description" class="mt-0 text-sm">
+				<p class="mt-0">Tell us a bit about yourself!</p>
+				<p class="my-0">
+					If you're a teacher, share your teaching experience, what classes or levels you've taught,
+					your approach and areas of focus.
+				</p>
+				<p class="mt-0">
+					If you're not a teacher, let us know about your background in math, your interests, and
+					any topic you enjoy exploring or helping others with.
+				</p>
+			</div>
+
+			<textarea
+				id="bio"
+				name="bio"
+				class="textarea textarea-bordered w-full"
+				placeholder="Tell us a bit about yourself!"
+				bind:value={bio}
+				{...fg.splat(UpdateProfileSchema["bio"].attributes)}
+				aria-describedby="bio-description"
+				aria-errormessage="bio-error"
+				aria-invalid={!!form?.issues?.bio}
+			></textarea>
+			<div class="flex text-sm text-gray-500">
+				<span>{bio.length}/{UpdateProfileSchema["bio"].attributes.maxlength}</span>
+			</div>
+
+			{#if form?.issues?.bio}
+				<span id="bio-error" class="error-message">
+					{form?.issues?.bio?.message}
+				</span>
 			{/if}
 		</div>
 

@@ -176,6 +176,13 @@
 			"when": 1748764688273,
 			"tag": "0024_exotic_wind_dancer",
 			"breakpoints": true
+		},
+		{
+			"idx": 25,
+			"version": "7",
+			"when": 1753082910739,
+			"tag": "0025_icy_hairball",
+			"breakpoints": true
 		}
 	]
 }

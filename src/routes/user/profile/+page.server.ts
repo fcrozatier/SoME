@@ -12,6 +12,7 @@ export const load = async ({ locals }) => {
 		.select({
 			email: users.email,
 			isTeacher: users.isTeacher,
+			bio: users.bio,
 		})
 		.from(users)
 		.where(eq(users.uid, locals.user.uid));
@@ -23,6 +24,7 @@ export const load = async ({ locals }) => {
 			username: locals.user.username,
 			email: user.email,
 			isTeacher: !!user.isTeacher,
+			bio: user.bio,
 		},
 	};
 };
@@ -36,6 +38,7 @@ export const actions: Actions = {
 			.set({
 				isTeacher: data.isTeacher,
 				username: data.username,
+				bio: data.bio,
 			})
 			.where(eq(users.uid, locals.user.uid));
 

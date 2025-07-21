@@ -2,17 +2,16 @@
 	import type { SVGAttributes } from "svelte/elements";
 	import type { IconName } from "./Icons.svelte";
 
-	let {
-		class: className = "",
-		name,
-		...rest
-	}: {
+	interface IconProps
+		extends Omit<
+			SVGAttributes<SVGSVGElement>,
+			"aria-hidden" | "class" | "fill" | "name" | "stroke" | "stroke-width" | "viewBox" | "xmlns"
+		> {
 		class?: string;
 		name: IconName;
-	} & Omit<
-		SVGAttributes<SVGSVGElement>,
-		"aria-hidden" | "class" | "fill" | "name" | "stroke" | "stroke-width" | "viewBox" | "xmlns"
-	> = $props();
+	}
+
+	let { class: className = "", name, ...rest }: IconProps = $props();
 </script>
 
 <!-- @component
