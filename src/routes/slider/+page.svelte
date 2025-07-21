@@ -24,24 +24,36 @@
 		};
 	};
 
-	// We go from appearance none to auto since we initially hide the thumb, but then the first click only wakes up the input, we have to delay setting the grade the first time around
-	const setupInput: Attachment<HTMLInputElement> = (input) => {
-		input.addEventListener(
-			"pointerdown",
-			(e) => {
-				ready = true;
-				const width = (e.target as HTMLInputElement).getBoundingClientRect().width;
+	let input: HTMLInputElement | undefined = $state();
 
-				setTimeout(() => {
-					const rawGrade = (e.offsetX / width) * 8 + 1;
-					// For some reason we need to tweak
-					const delta = Math.abs(rawGrade - 5) / 100;
-					grade = rawGrade * (rawGrade > 5 ? 1 + 0.2 * delta : 1 - delta);
-				}, 0);
-			},
-			{ once: true },
-		);
-	};
+	$effect(() => {
+		// JS-only enhanced input
+
+		if (input) {
+			// We need this to initially hide the thumb to create an unset state on the range
+			// But this would make the input unusable in no-js scenarios so we style it from inside an effect
+			input.style.appearance = "none";
+
+			// But then going from appearance none to auto on the first click only wakes up the input, we have to delay setting the grade the first time around
+			input.addEventListener(
+				"pointerdown",
+				(e) => {
+					ready = true;
+					const input = e.target as HTMLInputElement;
+					input.style.appearance = "auto";
+					const width = input.getBoundingClientRect().width;
+
+					setTimeout(() => {
+						const rawGrade = (e.offsetX / width) * 8 + 1;
+						// For some reason we need to tweak the offset
+						const delta = Math.abs(rawGrade - 5) / 100;
+						grade = rawGrade * (rawGrade > 5 ? 1 + 0.2 * delta : 1 - delta);
+					}, 0);
+				},
+				{ once: true },
+			);
+		}
+	});
 </script>
 
 <div class="mt-20"></div>
@@ -55,9 +67,8 @@
 			min="1"
 			max="9"
 			step="0.01"
-			class={{ "appearance-none": !ready }}
-			{@attach setupInput}
 			bind:value={grade}
+			bind:this={input}
 		/>
 		{#if ready}
 			<span id="track"></span>
@@ -113,11 +124,14 @@
 	}
 
 	#wrapper {
+		--percent: calc(100% * (var(--grade) - 1) / 8);
+		--color: color-mix(in oklch, var(--color-error), var(--color-success) var(--percent));
+
 		--thumb-size: 1.5em;
-		--thumb-color: var(--color-error);
+		--thumb-color: var(--color);
 
 		--track-height: 1em;
-		--track-bg: var(--color-error);
+		--track-bg: var(--color);
 
 		/* The part of the track not highlighted */
 		--track-height-remaining: 0.5em;
