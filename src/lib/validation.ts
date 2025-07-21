@@ -6,9 +6,6 @@ const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{
 
 export const uuid = (str: string | null) => !!str && uuid4.test(str);
 
-const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp"];
-export const MAX_IMG_SIZE = 10 ** 6; // 1MB
-
 const validationMessages: fg.Failures = {
 	accept: "Invalid file type",
 	custom: "Invalid value",
@@ -23,7 +20,7 @@ const validationMessages: fg.Failures = {
 	type: "Invalid type",
 };
 
-// User flow
+// Users
 
 const usernameRegex = /^[\p{Letter}0-9_.\-]+$/v;
 
@@ -49,7 +46,6 @@ const TeacherSchema = fg
 export const NewUserSchema = {
 	username: UsernameSchema,
 	email: EmailSchema,
-	// Add pattern
 	password: PasswordSchema,
 	isTeacher: TeacherSchema,
 	rules: fg.checkbox({ required: true }, validationMessages),
@@ -69,9 +65,10 @@ export const ChangePasswordSchema = {
 export const UpdateProfileSchema = {
 	username: UsernameSchema,
 	isTeacher: TeacherSchema,
+	bio: fg.textarea({ required: false, maxlength: 500 }).trim(),
 };
 
-// Entry flow
+// Entries
 
 const TitleSchema = fg
 	.text(
@@ -82,20 +79,22 @@ const TitleSchema = fg
 			maxlength: "Title too long",
 		},
 	)
-	.transform((value) => value.trim());
+	.trim();
 
-const DescriptionSchema = fg.textarea(
-	{
-		required: true,
-		minlength: 10,
-		maxlength: 5000,
-	},
-	{
-		required: "Description required",
-		minlength: "Description too short",
-		maxlength: "Description too long",
-	},
-);
+const DescriptionSchema = fg
+	.textarea(
+		{
+			required: true,
+			minlength: 10,
+			maxlength: 5000,
+		},
+		{
+			required: "Description required",
+			minlength: "Description too short",
+			maxlength: "Description too long",
+		},
+	)
+	.trim();
 
 const UrlSchema = fg
 	.url(
@@ -106,6 +105,9 @@ const UrlSchema = fg
 		},
 	)
 	.refine((str) => !str.includes("playlist"), "Playlists are not allowed");
+
+const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp"];
+export const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
 const ThumbnailSchema = fg
 	.file({
@@ -141,7 +143,7 @@ export const levels = [
 
 export const invalidTagsMessage = "Pick at least one level from the provided list";
 
-// Vote flow
+// Votes
 
 export const FeedbackSchema = fg
 	.textarea(
@@ -176,7 +178,7 @@ export const FlagSchema = {
 	uid: UidSchema,
 };
 
-// Admin flow
+// Admin
 
 export const SurveySchema = {
 	some: fg.number({ required: true, min: 1, max: 9 }),
