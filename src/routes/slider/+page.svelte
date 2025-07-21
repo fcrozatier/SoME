@@ -49,6 +49,7 @@
 <div class="mx-10">
 	<div id="wrapper" style:--grade={grade}>
 		<input
+			id="score"
 			type="range"
 			list="values"
 			min="1"
