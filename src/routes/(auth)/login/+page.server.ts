@@ -14,9 +14,7 @@ export const load = ({ locals }) => {
 
 export const actions = {
 	default: formgate(LoginSchema, async (data, { cookies }) => {
-		const [user] = await db.select().from(users).where(
-			eq(users.email, data.email),
-		);
+		const [user] = await db.select().from(users).where(eq(users.email, data.email));
 
 		if (!user) {
 			return formfail({ email: "Invalid email or password" });

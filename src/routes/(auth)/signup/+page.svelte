@@ -42,7 +42,7 @@
 		class="space-y-2"
 		method="post"
 		use:enhance={disableSubmitterAndSetValidity({
-			redirect: { type: "success", content: `You can now log in as ${email}.` },
+			toast: { redirect: { type: "success", content: `You can now log in as ${email}.` } },
 		})}
 	>
 		<div class="form-control">
