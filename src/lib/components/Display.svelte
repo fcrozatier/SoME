@@ -2,6 +2,7 @@
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { YOUTUBE_EMBED } from "$lib/utils/regex";
+	import Description from "./Description.svelte";
 
 	interface Props {
 		data: {
@@ -17,7 +18,11 @@
 </script>
 
 <h3 class="mt-0">{data.title}</h3>
-<p>{data.description}</p>
+
+{#if data.description}
+	<Description content={data.description}></Description>
+{/if}
+
 <div class="flex justify-center">
 	{#if data.category === "video" && data.url && YOUTUBE_EMBED.test(data.url)}
 		<Youtube src={data.url} title={data.title}></Youtube>
