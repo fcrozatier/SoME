@@ -24,7 +24,7 @@
 	let feedback = $state("");
 
 	let targetTime: number;
-	let cooldown = $state(590);
+	let cooldown = $state(290);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
 	const visibilitychange = () => {
@@ -34,7 +34,7 @@
 	};
 
 	onMount(() => {
-		targetTime = Date.now() + 59 * 1000;
+		targetTime = Date.now() + 29 * 1000;
 		document.addEventListener("visibilitychange", visibilitychange);
 
 		return () => {
@@ -45,8 +45,8 @@
 	afterNavigate(() => {
 		splitButtonOpen = false;
 		ready = false;
-		targetTime = Date.now() + 59 * 1000;
-		cooldown = 590;
+		targetTime = Date.now() + 29 * 1000;
+		cooldown = 290;
 		interval = setInterval(() => {
 			if (cooldown > 0) {
 				cooldown -= 1;
@@ -119,7 +119,6 @@
 
 					clearInterval(interval);
 					feedback = "";
-					score = 5;
 
 					// Like update but scrolls to top
 					await goto(`/user/vote/${page.params["category"]}`, {
@@ -186,8 +185,9 @@
 				</div>
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse mt-8">
-				<button class="btn btn-neutral inline-flex gap-4"
-					>Vote
+				<button class="btn btn-neutral inline-flex gap-4">
+					<span class={[{ hidden: cooldown > 0 }, "sm:block"]}>Vote</span>
+
 					{#if cooldown > 0}
 						<div
 							class="radial-progress text-sm"
