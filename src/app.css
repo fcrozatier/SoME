@@ -141,8 +141,8 @@ details {
 		block-size: 0;
 		overflow-y: clip;
 		transition:
-			content-visibility 250ms allow-discrete,
-			block-size 250ms;
+			content-visibility 250ms ease-out allow-discrete,
+			block-size 250ms ease-out;
 	}
 }
 
