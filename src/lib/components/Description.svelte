@@ -2,11 +2,20 @@
 	let { content }: { content: string } = $props();
 
 	let open = $state(false);
+
+	let summary: HTMLElement | undefined = $state();
+
+	$effect(() => {
+		if (summary) {
+			// Remove the summary from the tab sequence if JS is available, so that focus goes directly to the More/Less button when tabbing
+			summary.tabIndex = -1;
+		}
+	});
 </script>
 
 <div class="pile relative mb-10">
 	<details bind:open>
-		<summary>{content}</summary>
+		<summary bind:this={summary}>{content}</summary>
 		<section>{content}</section>
 	</details>
 
@@ -51,6 +60,10 @@
 		cursor: auto;
 
 		transition: opacity 250ms;
+	}
+
+	details:has(summary:focus-visible) + div button {
+		outline: 2px solid var(--color-gray-900);
 	}
 
 	details:open summary {
