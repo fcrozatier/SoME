@@ -147,16 +147,10 @@
 						}}>Guidelines*</button
 					>
 				</p>
-				<Slider
-					name="score"
-					label1="Notably worse"
-					label5="About the same"
-					label9="Outstanding"
-					label3="Not as good"
-					label7="Better than most"
-					bind:value={score}
-					bind:ready
-				></Slider>
+
+				<div class="my-12">
+					<Slider bind:ready></Slider>
+				</div>
 			</div>
 
 			<div class="form-control">
