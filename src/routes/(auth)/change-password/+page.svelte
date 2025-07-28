@@ -93,6 +93,12 @@
 
 			<p>
 				<button type="submit" class="btn btn-neutral">Change password</button>
+
+				{#if form?.feedback}
+					<span class="error-message mt-2" style:--tw-prose-links="--color-red-600"
+						>{@html form.feedback}</span
+					>
+				{/if}
 			</p>
 		</form>
 	{/if}

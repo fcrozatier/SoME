@@ -2,7 +2,7 @@
 	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
-	import { reportValidity } from "$lib/actions.js";
+	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
@@ -84,29 +84,20 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter, cancel }) => {
-			submitter?.setAttribute("disabled", "on");
-
-			if (!data.user?.username) {
-				newToast({
-					type: "error",
-					content:
-						"Please choose a username on your <a class='underline font-medium' href='/user/profile'>Profile</a> page before submitting",
-					duration: 5000,
-				});
-				cancel();
-			}
-
-			return async ({ update, result, formElement }) => {
-				await update();
-				submitter?.removeAttribute("disabled");
-				reportValidity({ result, formElement });
-
-				if (result.type === "redirect") {
-					newToast({ type: "success", content: `Entry submitted!` });
+		use:enhance={disableSubmitterAndSetValidity({
+			before: ({ cancel }) => {
+				if (!data.user?.username) {
+					newToast({
+						type: "error",
+						content:
+							"Please set a username on your <a class='underline font-medium' href='/user/profile'>Profile</a> page before submitting",
+						duration: 5000,
+					});
+					cancel();
 				}
-			};
-		}}
+			},
+			toast: { redirect: { type: "success", content: `Entry submitted!` } },
+		})}
 	>
 		{#each usernames as _, i}
 			<div class="form-control">

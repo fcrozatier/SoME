@@ -1,9 +1,10 @@
+import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db/index.js";
-import { formgate } from "formgator/sveltekit";
 import { users } from "$lib/server/db/schema.js";
-import { type Actions, redirect } from "@sveltejs/kit";
+import { DeleteProfileSchema, UpdateProfileSchema } from "$lib/validation.js";
+import { type Actions, fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
-import { UpdateProfileSchema } from "$lib/validation.js";
+import { formfail, formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
 	if (!locals.user) return redirect(302, "/login");
@@ -30,7 +31,7 @@ export const load = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: formgate(UpdateProfileSchema, async (data, { locals }) => {
+	update: formgate(UpdateProfileSchema, async (data, { locals }) => {
 		if (!locals.user?.uid) throw redirect(301, "/login");
 
 		await db
@@ -43,5 +44,33 @@ export const actions: Actions = {
 			.where(eq(users.uid, locals.user.uid));
 
 		return { data };
+	}),
+	delete: formgate(DeleteProfileSchema, async (data, event) => {
+		const { locals } = event;
+		if (!locals.user?.uid) throw redirect(302, "/login");
+
+		const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
+
+		if (!user?.passwordHash) {
+			return fail(401);
+		}
+
+		// Verify password
+		const validPassword = await auth.verify(user.passwordHash, data.password);
+
+		if (!validPassword) {
+			return formfail({ password: "Invalid password" });
+		}
+
+		if (!locals.session) {
+			return fail(401);
+		}
+
+		await auth.invalidateSession(locals.session.id);
+		auth.deleteSessionTokenCookie(event);
+
+		await db.delete(users).where(eq(users.uid, locals.user.uid));
+
+		return redirect(303, "/");
 	}),
 };

@@ -18,8 +18,9 @@ export const reportValidity = <
 				!(element instanceof HTMLInputElement) &&
 				!(element instanceof HTMLTextAreaElement) &&
 				!(element instanceof HTMLSelectElement)
-			)
+			) {
 				continue;
+			}
 
 			const issue = issues[element.name]?.message ?? "";
 			element.setCustomValidity(issue);
@@ -32,37 +33,42 @@ export const reportValidity = <
 	}
 };
 
-export const disableSubmitterAndSetValidity: (
+export const disableSubmitterAndSetValidity: (options?: {
 	toast?: {
 		success?: string;
 		error?: string;
 		failure?: string;
 		redirect?: ToastConfig;
-	},
-	options?: { reset?: boolean; invalidateAll?: boolean },
-) => SubmitFunction =
-	(toast, options) =>
-	({ submitter }) => {
-		submitter?.setAttribute("disabled", "");
-
-		return async ({ update, result, formElement }) => {
-			await update({ reset: false, invalidateAll: false, ...options });
-			reportValidity({ result, formElement });
-			submitter?.removeAttribute("disabled");
-
-			if (toast) {
-				if (toast?.success && result.type === "success") {
-					newToast({ type: "success", content: toast.success });
-				} else if (toast?.error && result.type === "error") {
-					newToast({ type: "error", content: toast.error });
-				} else if (toast?.failure && result.type === "failure") {
-					newToast({ type: "error", content: toast.failure });
-				} else if (toast?.redirect && result.type === "redirect") {
-					newToast(toast.redirect);
-				}
-			}
-		};
 	};
+	reset?: boolean;
+	invalidateAll?: boolean;
+	before?: (...a: Parameters<SubmitFunction>) => void;
+}) => SubmitFunction = (options) => (input) => {
+	input.submitter?.setAttribute("disabled", "");
+	options?.before?.(input);
+
+	return async ({ update, result, formElement }) => {
+		await update({
+			reset: options?.reset ?? false,
+			invalidateAll: options?.invalidateAll ?? false,
+		});
+		reportValidity({ result, formElement });
+		input.submitter?.removeAttribute("disabled");
+
+		const toast = options?.toast;
+		if (toast) {
+			if (toast?.success && result.type === "success") {
+				newToast({ type: "success", content: toast.success });
+			} else if (toast?.error && result.type === "error") {
+				newToast({ type: "error", content: toast.error });
+			} else if (toast?.failure && result.type === "failure") {
+				newToast({ type: "error", content: toast.failure });
+			} else if (toast?.redirect && result.type === "redirect") {
+				newToast(toast.redirect);
+			}
+		}
+	};
+};
 
 export function clickOutside(node: Element, callback: (node?: Element) => void) {
 	const handleClick = (e: Event) => {

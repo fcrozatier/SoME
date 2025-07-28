@@ -59,6 +59,12 @@
 		<div>
 			<p>
 				<button class="btn-neutral btn block">Login</button>
+
+				{#if form?.feedback}
+					<span class="error-message mt-2" style:--tw-prose-links="--color-red-600"
+						>{@html form.feedback}</span
+					>
+				{/if}
 			</p>
 			<div class="text-sm grid gap-2">
 				<span>

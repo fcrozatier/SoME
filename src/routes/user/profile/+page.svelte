@@ -2,11 +2,11 @@
 	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
-	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
+	import { clickOutside, disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
-	import { UpdateProfileSchema } from "$lib/validation.js";
+	import { DeleteProfileSchema, UpdateProfileSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 
 	let { data, form } = $props();
@@ -14,21 +14,25 @@
 	let username = $state(data.user.username ?? "");
 	let usernameStatus: UsernameStatus = $state(undefined);
 	let bio = $state(data.user.bio ?? "");
+
+	let deleteDialog: HTMLDialogElement | undefined = $state();
 </script>
 
 <svelte:head>
 	<title>{makeTitle("Profile")}</title>
 </svelte:head>
 
-<article class="layout-prose max-w-2xl!">
+<article class="layout-prose">
 	<h2>Profile</h2>
 	<form
 		class="space-y-4"
 		method="post"
-		use:enhance={disableSubmitterAndSetValidity(
-			{ success: "Profile updated" },
-			{ invalidateAll: true, reset: false },
-		)}
+		action="/?update"
+		use:enhance={disableSubmitterAndSetValidity({
+			toast: { success: "Profile updated" },
+			invalidateAll: true,
+			reset: false,
+		})}
 	>
 		<div class="form-control">
 			<label for="username" class="label">
@@ -107,7 +111,7 @@
 				<span class="label-text"> Bio </span>
 			</label>
 			<div id="bio-description" class="mt-0 text-sm">
-				<p class="mt-0">Tell us a bit about yourself!</p>
+				<p class="mt-0">Tell us a bit about yourself</p>
 				<p class="my-0">
 					If you're a teacher, share your teaching experience, what classes or levels you've taught,
 					your approach and areas of focus.
@@ -155,4 +159,73 @@
 		</p>
 		<p></p>
 	</form>
+
+	<h3 class="text-error">Delete account</h3>
+
+	Deleting your account will erase all your data, including your profile information, votes,
+	comments and entries. Note that in rare cases, this may also impact archive rankings. There is no
+	going back. Please proceed with caution.
+
+	<p class="mt-4">
+		<button class="btn btn-outline btn-error" commandfor="delete-dialog" command="show-modal"
+			>Delete account</button
+		>
+	</p>
 </article>
+
+<dialog id="delete-dialog" class="m-auto" bind:this={deleteDialog} closedby="any">
+	<form
+		method="post"
+		class="space-y-2"
+		action="?/delete"
+		use:clickOutside={() => deleteDialog?.close()}
+		use:enhance={disableSubmitterAndSetValidity({
+			toast: {
+				redirect: {
+					type: "success",
+					content: "Account deleted. Sorry to see you go",
+					duration: 5000,
+				},
+			},
+			invalidateAll: true,
+			reset: false,
+		})}
+	>
+		<h2 class="mt-0">You're about to delete your SoME account</h2>
+		<p class="text-gray-700">
+			This action is irreversible and will permanently erase all your data. <br />
+			Please enter your password to confirm.
+		</p>
+
+		<div class="form-control">
+			<label for="password" class="label">
+				<span class="label-text"> Password </span>
+			</label>
+			<input
+				id="password"
+				type="password"
+				name="password"
+				class="input-bordered input w-full"
+				placeholder=" "
+				{...fg.splat(DeleteProfileSchema["password"].attributes)}
+				autocomplete="off"
+				aria-errormessage="pwd-error"
+				aria-invalid={!!form?.issues?.password}
+			/>
+			{#if form?.issues?.password}
+				<span id="pwd-error" class="error-message">{form.issues.password.message}</span>
+			{/if}
+		</div>
+
+		<p class="mb-0 mt-8 flex justify-between items-center gap-2">
+			<button
+				type="button"
+				class="btn-outline btn"
+				commandfor="delete-dialog"
+				command="request-close"
+				onclick={() => deleteDialog?.close()}>Cancel</button
+			>
+			<button type="submit" class="btn-outline btn-error btn">Delete my account </button>
+		</p>
+	</form>
+</dialog>

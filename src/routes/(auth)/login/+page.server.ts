@@ -2,7 +2,7 @@ import * as auth from "$lib/server/auth.js";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/db/schema.js";
 import { LoginSchema } from "$lib/validation";
-import { redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 
@@ -16,8 +16,15 @@ export const actions = {
 	default: formgate(LoginSchema, async (data, { cookies }) => {
 		const [user] = await db.select().from(users).where(eq(users.email, data.email));
 
-		if (!user?.passwordHash) {
+		if (!user) {
 			return formfail({ email: "Invalid email or password" });
+		}
+
+		if (!user.passwordHash) {
+			return fail(400, {
+				feedback:
+					"Welcome back! You need to <a href='/signup'>create an account</a> to upgrade your profile",
+			});
 		}
 
 		// Verify password

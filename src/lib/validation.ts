@@ -68,6 +68,10 @@ export const UpdateProfileSchema = {
 	bio: fg.textarea({ required: false, maxlength: 500 }).trim(),
 };
 
+export const DeleteProfileSchema = {
+	password: PasswordSchema,
+};
+
 // Entries
 
 const TitleSchema = fg

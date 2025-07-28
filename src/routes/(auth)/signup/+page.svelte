@@ -33,13 +33,16 @@
 
 <article class="layout-prose max-w-2xl!">
 	<h2>Join the competition</h2>
-	<p>By creating an account you'll be able to participate as either a creator or a judge</p>
+	<p>
+		Create an account to participate as a creator or judge. If you registered in a previous edition,
+		this will upgrade your profile.
+	</p>
 
 	<form
 		class="space-y-2"
 		method="post"
 		use:enhance={disableSubmitterAndSetValidity({
-			redirect: { type: "success", content: `You can now log in as ${email}.` },
+			toast: { redirect: { type: "success", content: `You can now log in as ${email}.` } },
 		})}
 	>
 		<div class="form-control">

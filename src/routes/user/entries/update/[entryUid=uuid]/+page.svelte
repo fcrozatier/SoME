@@ -87,7 +87,7 @@
 		method="post"
 		enctype="multipart/form-data"
 		use:enhance={disableSubmitterAndSetValidity({
-			redirect: { type: "success", content: `Entry updated!` },
+			toast: { redirect: { type: "success", content: `Entry updated!` } },
 		})}
 	>
 		{#each usernames as _, i}
