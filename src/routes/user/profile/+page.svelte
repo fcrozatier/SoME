@@ -27,7 +27,7 @@
 	<form
 		class="space-y-4"
 		method="post"
-		action="/?update"
+		action="?/update"
 		use:enhance={disableSubmitterAndSetValidity({
 			toast: { success: "Profile updated" },
 			invalidateAll: true,
