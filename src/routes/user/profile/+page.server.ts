@@ -71,6 +71,8 @@ export const actions: Actions = {
 
 		await db.delete(users).where(eq(users.uid, locals.user.uid));
 
+		event.setHeaders({ "Clear-Site-Data": "*" });
+
 		return redirect(303, "/");
 	}),
 };
