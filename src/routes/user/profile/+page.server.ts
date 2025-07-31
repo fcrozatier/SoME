@@ -49,9 +49,7 @@ export const actions: Actions = {
 		const { locals } = event;
 		if (!locals.user?.uid) throw redirect(302, "/login");
 
-		const [user] = await db.select().from(users).where(
-			eq(users.uid, locals.user.uid),
-		);
+		const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
 
 		if (!user?.passwordHash) {
 			return fail(401);
