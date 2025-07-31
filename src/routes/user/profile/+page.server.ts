@@ -49,7 +49,9 @@ export const actions: Actions = {
 		const { locals } = event;
 		if (!locals.user?.uid) throw redirect(302, "/login");
 
-		const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
+		const [user] = await db.select().from(users).where(
+			eq(users.uid, locals.user.uid),
+		);
 
 		if (!user?.passwordHash) {
 			return fail(401);
@@ -70,6 +72,8 @@ export const actions: Actions = {
 		auth.deleteSessionTokenCookie(event);
 
 		await db.delete(users).where(eq(users.uid, locals.user.uid));
+
+		event.setHeaders({ "Clear-Site-Data": "*" });
 
 		return redirect(303, "/");
 	}),
