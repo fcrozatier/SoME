@@ -23,15 +23,6 @@ export const conjunctionFormatter = new Intl.ListFormat("en", {
 });
 
 /**
- * Batch sending templates only
- */
-export const templateNames = [
-	"token_reminder",
-	"end of peer review",
-	"top 100",
-] as const satisfies (keyof typeof emailTemplates)[];
-
-/**
  * The value is the template email subject
  */
 export const emailTemplates = {
