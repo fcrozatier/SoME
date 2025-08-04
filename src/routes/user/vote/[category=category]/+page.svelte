@@ -12,6 +12,8 @@
 	import * as fg from "formgator";
 	import { formAction } from "./config";
 
+	const TIMER = 29;
+
 	let { data } = $props();
 
 	let flagDialog: HTMLDialogElement | undefined = $state();
@@ -31,6 +33,7 @@
 	};
 
 	$effect(() => {
+		// Run on every page refresh
 		data.uid;
 
 		ready = false;
@@ -49,8 +52,6 @@
 
 		return () => {
 			document.removeEventListener("visibilitychange", visibilitychange);
-			ready = false;
-
 			clearInterval(interval);
 		};
 	});
@@ -155,7 +156,7 @@
 					{...fg.splat(FeedbackSchema.attributes)}
 				></textarea>
 				<div class="flex text-sm text-gray-500">
-					<span>{feedback?.length}/{FeedbackSchema.attributes.maxlength}</span>
+					<span>{feedback.length}/{FeedbackSchema.attributes.maxlength}</span>
 				</div>
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse mt-8">

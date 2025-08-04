@@ -117,11 +117,17 @@
 		onpointerdown={() => (grade.value = 1)}
 		{@attach setReadyAttachment}>Notably worse</label
 	>
-	<label for="score" class="sm:-left-2" onpointerdown={() => (grade.value = 3)} {@attach setReadyAttachment}
-		>Not as good</label
+	<label
+		for="score"
+		class="sm:-left-2"
+		onpointerdown={() => (grade.value = 3)}
+		{@attach setReadyAttachment}>Not as good</label
 	>
-	<label for="score" class="sm:-right-2" onpointerdown={() => (grade.value = 5)} {@attach setReadyAttachment}
-		>About the same</label
+	<label
+		for="score"
+		class="sm:-right-2"
+		onpointerdown={() => (grade.value = 5)}
+		{@attach setReadyAttachment}>About the same</label
 	>
 	<label
 		for="score"
