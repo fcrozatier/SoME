@@ -31,13 +31,16 @@
 
 	let displayGrade = $derived(grade.value.toFixed(2));
 
-	const makeReady: Attachment = (node) => {
-		const setReady = () => {
-			ready = true;
-			if (input) {
-				input.style.appearance = "auto";
-			}
-		};
+	const setReady = () => {
+		ready = true;
+
+		if (input) {
+			input.style.appearance = "auto";
+			input.style.opacity = "1";
+		}
+	};
+
+	const setReadyAttachment: Attachment = (node) => {
 		node.addEventListener("pointerdown", setReady, { once: true });
 
 		() => {
@@ -61,11 +64,9 @@
 			input.addEventListener(
 				"pointerdown",
 				(e) => {
-					ready = true;
 					const input = e.target as HTMLInputElement;
-					input.style.appearance = "auto";
-					input.style.opacity = "1";
 					const width = input.getBoundingClientRect().width;
+					setReady();
 
 					setTimeout(() => {
 						const rawGrade = (e.offsetX / width) * 8 + 1;
@@ -88,6 +89,7 @@
 >
 	<input
 		id="score"
+		name="score"
 		type="range"
 		list="values"
 		min="1"
@@ -113,25 +115,25 @@
 		for="score"
 		class="-left-0.5 sm:-left-0"
 		onpointerdown={() => (grade.value = 1)}
-		{@attach makeReady}>Notably worse</label
+		{@attach setReadyAttachment}>Notably worse</label
 	>
-	<label for="score" class="sm:-left-2" onpointerdown={() => (grade.value = 3)} {@attach makeReady}
+	<label for="score" class="sm:-left-2" onpointerdown={() => (grade.value = 3)} {@attach setReadyAttachment}
 		>Not as good</label
 	>
-	<label for="score" class="sm:-right-2" onpointerdown={() => (grade.value = 5)} {@attach makeReady}
+	<label for="score" class="sm:-right-2" onpointerdown={() => (grade.value = 5)} {@attach setReadyAttachment}
 		>About the same</label
 	>
 	<label
 		for="score"
 		class="-right-0.5 sm:-right-4"
 		onpointerdown={() => (grade.value = 7)}
-		{@attach makeReady}>Better than most</label
+		{@attach setReadyAttachment}>Better than most</label
 	>
 	<label
 		for="score"
 		class="-right-1 sm:-right-0"
 		onpointerdown={() => (grade.value = 9)}
-		{@attach makeReady}>Outstanding</label
+		{@attach setReadyAttachment}>Outstanding</label
 	>
 </div>
 
