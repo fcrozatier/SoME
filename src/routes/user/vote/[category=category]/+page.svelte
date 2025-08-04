@@ -164,14 +164,7 @@
 					<span class={[{ hidden: remaining > 0 }, "sm:block"]}>Vote</span>
 
 					{#if remaining > 0}
-						<div
-							class="radial-progress text-sm"
-							style:--value={(remaining * 100) / 60}
-							style:--size="2.1rem"
-							style:--thickness="1.5px"
-						>
-							{Math.floor(remaining)}
-						</div>
+						<span class="tabular-nums">{Math.floor(remaining)}</span>
 					{/if}
 				</button>
 				<div class="relative mr-auto inline-flex flex-row-reverse">
