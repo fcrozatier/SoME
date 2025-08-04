@@ -138,11 +138,10 @@ export const actions = {
 			.delete(cache)
 			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 	}),
-	hard_skip: formgate(SkipSchema, async (data, { params, locals }) => {
+	skip: formgate(SkipSchema, async (data, { params, locals }) => {
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
-
 		const token = locals.user.uid;
 		const { category } = params;
 
@@ -157,16 +156,7 @@ export const actions = {
 		await db
 			.delete(cache)
 			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
-	}),
-	skip: formgate(SkipSchema, async (data, { params, locals }) => {
-		if (!locals.user) {
-			return redirect(302, "/login");
-		}
-		const token = locals.user.uid;
-		const { category } = params;
 
-		await db
-			.delete(cache)
-			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+		return redirect(303, `/user/vote/${category}`);
 	}),
 };
