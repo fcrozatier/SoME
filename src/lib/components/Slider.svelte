@@ -40,12 +40,6 @@
 		};
 		node.addEventListener("pointerdown", setReady, { once: true });
 
-		$effect(() => {
-			if (ready) {
-				node.removeEventListener("pointerdown", setReady);
-			}
-		});
-
 		() => {
 			node.removeEventListener("pointerdown", setReady);
 		};
