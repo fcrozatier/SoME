@@ -16,7 +16,7 @@
 
 <div class="mb-12">
 	<div>
-		<p id="description" aria-expanded={open} bind:this={description}>
+		<p id="description" class={{ "line-clamp-3": !open }} bind:this={description}>
 			{content}
 		</p>
 
@@ -34,18 +34,6 @@
 </div>
 
 <style>
-	p {
-		position: relative;
-		display: block;
-		transition: height 500ms ease;
-		overflow: hidden;
-		height: 3lh;
-
-		&[aria-expanded="true"] {
-			height: auto;
-		}
-	}
-
 	hr {
 		margin-block: 0;
 		width: 100%;
