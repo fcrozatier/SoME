@@ -44,12 +44,14 @@ export const actions: Actions = {
 			.where(eq(users.uid, locals.user.uid));
 
 		return { data };
-	}),
+	}, { id: "update" }),
 	delete: formgate(DeleteProfileSchema, async (data, event) => {
 		const { locals } = event;
 		if (!locals.user?.uid) throw redirect(302, "/login");
 
-		const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
+		const [user] = await db.select().from(users).where(
+			eq(users.uid, locals.user.uid),
+		);
 
 		if (!user?.passwordHash) {
 			return fail(401);
@@ -74,5 +76,5 @@ export const actions: Actions = {
 		event.setHeaders({ "Clear-Site-Data": "*" });
 
 		return redirect(303, "/");
-	}),
+	}, { id: "delete" }),
 };

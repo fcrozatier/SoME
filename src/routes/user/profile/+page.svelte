@@ -52,7 +52,7 @@
 						})}
 					{...fg.splat(UpdateProfileSchema["username"].attributes)}
 					aria-errormessage="username-error"
-					aria-invalid={!!form?.issues?.username}
+					aria-invalid={form?.id === "update" && !!form?.issues?.username}
 					autocomplete="username"
 					spellcheck="false"
 				/>
@@ -67,7 +67,7 @@
 					></CircularProgress>
 				{/if}
 			</div>
-			{#if form?.issues?.username || (username && usernameStatus === "taken" && username !== data.user.username)}
+			{#if form?.id === "update" && (form?.issues?.username || (username && usernameStatus === "taken" && username !== data.user.username))}
 				<span id="username-error" class="error-message">
 					{form?.issues?.username?.message || "Username already taken"}
 				</span>
@@ -101,7 +101,7 @@
 					<span> No </span>
 				</label>
 			</span>
-			{#if form?.issues?.isTeacher}
+			{#if form?.id === "update" && form?.issues?.isTeacher}
 				<span class="error-message">{form.issues.isTeacher.message}</span>
 			{/if}
 		</div>
@@ -131,13 +131,13 @@
 				{...fg.splat(UpdateProfileSchema["bio"].attributes)}
 				aria-describedby="bio-description"
 				aria-errormessage="bio-error"
-				aria-invalid={!!form?.issues?.bio}
+				aria-invalid={form?.id === "update" && !!form?.issues?.bio}
 			></textarea>
 			<div class="flex text-sm text-gray-500">
 				<span>{bio.length}/{UpdateProfileSchema["bio"].attributes.maxlength}</span>
 			</div>
 
-			{#if form?.issues?.bio}
+			{#if form?.id === "update" && form?.issues?.bio}
 				<span id="bio-error" class="error-message">
 					{form?.issues?.bio?.message}
 				</span>
@@ -210,9 +210,9 @@
 				{...fg.splat(DeleteProfileSchema["password"].attributes)}
 				autocomplete="off"
 				aria-errormessage="pwd-error"
-				aria-invalid={!!form?.issues?.password}
+				aria-invalid={form?.id === "delete" && !!form?.issues?.password}
 			/>
-			{#if form?.issues?.password}
+			{#if form?.id === "delete" && form?.issues?.password}
 				<span id="pwd-error" class="error-message">{form.issues.password.message}</span>
 			{/if}
 		</div>
