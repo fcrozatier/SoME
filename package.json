@@ -61,7 +61,16 @@
 		"openai": "^4.104.0",
 		"pluralize-esm": "^9.0.5",
 		"postgres": "^3.4.7",
+		"rehype-katex": "^7.0.1",
+		"rehype-sanitize": "^6.0.0",
+		"rehype-stringify": "^10.0.1",
+		"remark-gfm": "^4.0.1",
+		"remark-math": "^6.0.0",
+		"remark-parse": "^11.0.0",
+		"remark-rehype": "^11.1.2",
+		"remark-smartypants": "^3.0.2",
 		"sharp": "^0.34.3",
+		"unified": "^11.0.5",
 		"zod": "^3.25.76"
 	},
 	"browserslist": [
