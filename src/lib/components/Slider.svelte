@@ -51,10 +51,11 @@
 	$effect(() => {
 		// JS-only enhanced input
 
-		if (input) {
+		if (input && !ready) {
 			// We need this to initially hide the thumb to create an unset state on the range
 			// But this would make the input unusable in no-js scenarios so we style it from inside an effect
 			input.style.appearance = "none";
+			input.style.opacity = "0";
 
 			// But then going from appearance none to auto on the first click only wakes up the input, we have to delay setting the grade the first time around
 			input.addEventListener(
@@ -63,6 +64,7 @@
 					ready = true;
 					const input = e.target as HTMLInputElement;
 					input.style.appearance = "auto";
+					input.style.opacity = "1";
 					const width = input.getBoundingClientRect().width;
 
 					setTimeout(() => {
@@ -78,7 +80,12 @@
 	});
 </script>
 
-<div id="wrapper" style:--grade={grade.value} bind:this={wrapper}>
+<div
+	id="wrapper"
+	class={{ "outline outline-gray-200 bg-gray-100 overflow-hidden -outline-offset-1": !ready }}
+	style:--grade={grade.value}
+	bind:this={wrapper}
+>
 	<input
 		id="score"
 		type="range"
@@ -158,6 +165,7 @@
 		display: flex;
 		align-items: center;
 		position: relative;
+		border-radius: calc(infinity * 1px);
 	}
 
 	input {
@@ -169,6 +177,8 @@
 
 		outline: none;
 		border-radius: 1em;
+
+		transition: all 500ms ease-out;
 
 		&:focus-visible {
 			outline: 2px solid var(--track-bg);
