@@ -21,12 +21,12 @@
 	let feedback = $state("");
 
 	let targetTime: number;
-	let cooldown = $state(290);
+	let remaining = $state(TIMER);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
 	const visibilitychange = () => {
 		if (document.visibilityState === "visible") {
-			cooldown = Math.round((targetTime - Date.now()) / 100);
+			remaining = Math.round((targetTime - Date.now()) / 1000);
 		}
 	};
 
@@ -34,17 +34,18 @@
 		data.uid;
 
 		ready = false;
-		targetTime = Date.now() + 29 * 1000;
-		cooldown = 290;
+		feedback = "";
+		targetTime = Date.now() + TIMER * 1000;
+		remaining = TIMER;
 
 		document.addEventListener("visibilitychange", visibilitychange);
 		interval = setInterval(() => {
-			if (cooldown > 0) {
-				cooldown -= 1;
+			if (remaining > 0) {
+				remaining -= 1;
 			} else {
 				clearInterval(interval);
 			}
-		}, 100);
+		}, 1000);
 
 		return () => {
 			document.removeEventListener("visibilitychange", visibilitychange);
@@ -76,7 +77,7 @@
 			action="?/vote"
 			class="space-y-4"
 			use:enhance={({ cancel, action }) => {
-				if (cooldown > 0 && !(action.search === formAction("skip"))) {
+				if (remaining > 0 && !(action.search === formAction("skip"))) {
 					newToast({ type: "error", content: "Please do not rush the review process" });
 					return cancel();
 				}
@@ -159,16 +160,16 @@
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse mt-8">
 				<button class="btn btn-neutral inline-flex gap-4">
-					<span class={[{ hidden: cooldown > 0 }, "sm:block"]}>Vote</span>
+					<span class={[{ hidden: remaining > 0 }, "sm:block"]}>Vote</span>
 
-					{#if cooldown > 0}
+					{#if remaining > 0}
 						<div
 							class="radial-progress text-sm"
-							style:--value={(100 * cooldown) / 600}
+							style:--value={(remaining * 100) / 60}
 							style:--size="2.1rem"
 							style:--thickness="1.5px"
 						>
-							{Math.floor(cooldown / 10)}
+							{Math.floor(remaining)}
 						</div>
 					{/if}
 				</button>
