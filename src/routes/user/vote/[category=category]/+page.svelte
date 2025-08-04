@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { afterNavigate, goto } from "$app/navigation";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
 	import { clickOutside } from "$lib/actions";
 	import Display from "$lib/components/Display.svelte";
@@ -10,64 +10,51 @@
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 	import * as fg from "formgator";
-	import { onMount } from "svelte";
 	import { formAction } from "./config";
+
+	const TIMER = 29;
 
 	let { data } = $props();
 
 	let flagDialog: HTMLDialogElement | undefined = $state();
 	let guidelines: HTMLDialogElement | undefined = $state();
-	let splitButtonOpen = $state(false);
 
-	let score = $state(5);
 	let ready = $state(false);
 	let feedback = $state("");
 
 	let targetTime: number;
-	let cooldown = $state(290);
+	let remaining = $state(TIMER);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
 	const visibilitychange = () => {
 		if (document.visibilityState === "visible") {
-			cooldown = Math.round((targetTime - Date.now()) / 100);
+			remaining = Math.round((targetTime - Date.now()) / 1000);
 		}
 	};
 
-	onMount(() => {
-		targetTime = Date.now() + 29 * 1000;
-		document.addEventListener("visibilitychange", visibilitychange);
+	$effect(() => {
+		// Run on every page refresh
+		data.uid;
 
-		return () => {
-			document.removeEventListener("visibilitychange", visibilitychange);
-		};
-	});
-
-	afterNavigate(() => {
-		splitButtonOpen = false;
 		ready = false;
-		targetTime = Date.now() + 29 * 1000;
-		cooldown = 290;
+		feedback = "";
+		targetTime = Date.now() + TIMER * 1000;
+		remaining = TIMER;
+
+		document.addEventListener("visibilitychange", visibilitychange);
 		interval = setInterval(() => {
-			if (cooldown > 0) {
-				cooldown -= 1;
+			if (remaining > 0) {
+				remaining -= 1;
 			} else {
 				clearInterval(interval);
 			}
-		}, 100);
-	});
+		}, 1000);
 
-	export const snapshot = {
-		capture: () => {
-			return {
-				score,
-				feedback,
-			};
-		},
-		restore: (v) => {
-			score = v.score;
-			feedback = v.feedback;
-		},
-	};
+		return () => {
+			document.removeEventListener("visibilitychange", visibilitychange);
+			clearInterval(interval);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -82,49 +69,35 @@
 			<NewVote displayCategories="others-only" />
 		</div>
 	{:else}
-		<Display {data}></Display>
+		<!-- The lite-youtube player doesn't auto update the loaded video -->
+		{#key data.uid}
+			<Display {data}></Display>
+		{/key}
 		<form
 			method="post"
 			action="?/vote"
 			class="space-y-4"
 			use:enhance={({ cancel, action }) => {
-				if (
-					cooldown > 0 &&
-					!(action.search === formAction("skip") || action.search === formAction("hard_skip"))
-				) {
+				if (remaining > 0 && !(action.search === formAction("skip"))) {
 					newToast({ type: "error", content: "Please do not rush the review process" });
 					return cancel();
 				}
-				if (
-					!ready &&
-					!(action.search === formAction("skip") || action.search === formAction("hard_skip"))
-				) {
+				if (!ready && !(action.search === formAction("skip"))) {
 					newToast({ type: "error", content: "Please do not forget to grade the entry" });
 					return cancel();
 				}
 				const buttons = document.querySelectorAll("button");
 				buttons.forEach((b) => b.setAttribute("disabled", "on"));
 
-				return async ({ action }) => {
-					buttons.forEach((b) => b.removeAttribute("disabled"));
-					if (action.search === formAction("skip") || action.search === formAction("hard_skip")) {
-						const message = `Entry skipped${
-							action.search === formAction("hard_skip") ? " (you won't see it again)" : ""
-						}`;
+				return async ({ update, action }) => {
+					await update({ reset: false, invalidateAll: true });
 
-						newToast({ type: "info", content: message });
+					buttons.forEach((b) => b.removeAttribute("disabled"));
+					if (action.search === formAction("skip")) {
+						newToast({ type: "info", content: "Entry skipped" });
 					} else {
 						newToast({ type: "success", content: "Thank you! 🎉 🥳" });
 					}
-
-					clearInterval(interval);
-					feedback = "";
-
-					// Like update but scrolls to top
-					await goto(`/user/vote/${page.params["category"]}`, {
-						noScroll: false,
-						invalidateAll: true,
-					});
 				};
 			}}
 		>
@@ -148,7 +121,9 @@
 				</p>
 
 				<div class="my-12">
-					<Slider bind:ready></Slider>
+					{#key data.uid}
+						<Slider bind:ready></Slider>
+					{/key}
 				</div>
 			</div>
 
@@ -181,53 +156,20 @@
 					{...fg.splat(FeedbackSchema.attributes)}
 				></textarea>
 				<div class="flex text-sm text-gray-500">
-					<span>{feedback?.length}/{FeedbackSchema.attributes.maxlength}</span>
+					<span>{feedback.length}/{FeedbackSchema.attributes.maxlength}</span>
 				</div>
 			</div>
 			<div class="flex gap-4 items-center flex-row-reverse mt-8">
 				<button class="btn btn-neutral inline-flex gap-4">
-					<span class={[{ hidden: cooldown > 0 }, "sm:block"]}>Vote</span>
+					<span class={[{ hidden: remaining > 0 }, "sm:block"]}>Vote</span>
 
-					{#if cooldown > 0}
-						<div
-							class="radial-progress text-sm"
-							style:--value={(100 * cooldown) / 600}
-							style:--size="2.1rem"
-							style:--thickness="1.5px"
-						>
-							{Math.floor(cooldown / 10)}
-						</div>
+					{#if remaining > 0}
+						<span class="tabular-nums">{Math.floor(remaining)}</span>
 					{/if}
 				</button>
 				<div class="relative mr-auto inline-flex flex-row-reverse">
-					<button
-						class="btn btn-outline hover:btn-neutral rounded-l-none border-l-0 text-lg shrink-0"
-						type="button"
-						aria-expanded={splitButtonOpen}
-						aria-haspopup="true"
-						title="Open for more skip actions"
-						onclick={() => {
-							if (!splitButtonOpen) splitButtonOpen = true;
-						}}
-						onkeydown={(e) => {
-							if (e.key === "Escape") splitButtonOpen = false;
-						}}>&vellip;</button
-					>
-					{#if splitButtonOpen}
-						<button
-							use:clickOutside={() => {
-								if (splitButtonOpen) splitButtonOpen = false;
-							}}
-							type="submit"
-							formaction={"?/hard_skip"}
-							class="btn btn-outline hover:btn-neutral text-xs absolute left-0 px-2 mt-1 top-full whitespace-nowrap"
-							>Don't show again</button
-						>
-					{/if}
-					<button
-						type="submit"
-						formaction={"?/skip"}
-						class="btn btn-outline rounded-e-none hover:btn-neutral">Skip</button
+					<button type="submit" formaction={"?/skip"} class="btn btn-outline hover:btn-neutral"
+						>Skip</button
 					>
 				</div>
 				<button

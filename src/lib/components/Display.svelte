@@ -2,6 +2,7 @@
 	import Thumbnail from "$lib/components/Thumbnail.svelte";
 	import Youtube from "$lib/components/Youtube.svelte";
 	import { YOUTUBE_EMBED } from "$lib/utils/regex";
+	import { levels } from "$lib/validation";
 	import Description from "./Description.svelte";
 
 	interface Props {
@@ -11,13 +12,35 @@
 			category?: string;
 			url?: string;
 			thumbnail?: string | null;
+			tags?: string[];
 		};
 	}
 
 	let { data }: Props = $props();
+
+	const audience = $derived(data.tags?.filter((tag) => levels.includes(tag)) ?? []);
+	const otherTags = $derived(new Set(data.tags).difference(new Set(audience)));
 </script>
 
 <h3 class="mt-0">{data.title}</h3>
+
+{#if data.tags && audience.length > 0}
+	<p class="flex mt-0 gap-2 flex-wrap items-center mb-2">
+		<b>Audience:</b>
+		{#each audience as audience}
+			<span class="tag">{audience}</span>
+		{/each}
+	</p>
+
+	{#if otherTags.size > 0}
+		<p class="flex mt-0 gap-2 flex-wrap items-center">
+			<b>Tags:</b>
+			{#each otherTags as tag}
+				<span class="tag">{tag}</span>
+			{/each}
+		</p>
+	{/if}
+{/if}
 
 {#if data.description}
 	<Description content={data.description}></Description>

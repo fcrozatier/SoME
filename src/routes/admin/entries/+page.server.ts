@@ -1,5 +1,6 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
+import type { SelectTag } from "$lib/server/db/schema";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { fail } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -46,6 +47,12 @@ export const actions = {
 			from entries where uid=${uid}
 			`);
 
-		return { success: true, entry };
+		const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
+			select name from tags
+			inner join entry_to_tag on tag_id=id
+			where entry_uid=${entry?.uid};
+		`);
+
+		return { success: true, entry, tags: entryTags.map((t) => t.name) };
 	},
 };

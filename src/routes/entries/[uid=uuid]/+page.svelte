@@ -33,7 +33,7 @@
 </svelte:head>
 
 <article class="layout-prose">
-	<Display data={data.entry}></Display>
+	<Display data={{ ...data.entry, tags: data.tags }}></Display>
 
 	{#if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>

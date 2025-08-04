@@ -3,10 +3,9 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
-	import { reportValidity } from "$lib/actions.js";
+	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
-	import { newToast } from "$lib/components/Toasts.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
@@ -87,19 +86,9 @@
 		class="space-y-2"
 		method="post"
 		enctype="multipart/form-data"
-		use:enhance={({ submitter }) => {
-			submitter?.setAttribute("disabled", "on");
-
-			return async ({ update, result, formElement }) => {
-				await update();
-				submitter?.removeAttribute("disabled");
-				reportValidity({ result, formElement });
-
-				if (result.type === "redirect") {
-					newToast({ type: "success", content: `Entry updated!` });
-				}
-			};
-		}}
+		use:enhance={disableSubmitterAndSetValidity({
+			toast: { redirect: { type: "success", content: `Entry updated!` } },
+		})}
 	>
 		{#each usernames as _, i}
 			<div class="form-control">

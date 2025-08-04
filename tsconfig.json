@@ -9,6 +9,6 @@
 		"sourceMap": false,
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
-		"moduleResolution": "bundler"
+		"types": []
 	}
 }

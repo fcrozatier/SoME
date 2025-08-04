@@ -31,48 +31,56 @@ export const load = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	update: formgate(UpdateProfileSchema, async (data, { locals }) => {
-		if (!locals.user?.uid) throw redirect(301, "/login");
+	update: formgate(
+		UpdateProfileSchema,
+		async (data, { locals }) => {
+			if (!locals.user?.uid) throw redirect(301, "/login");
 
-		await db
-			.update(users)
-			.set({
-				isTeacher: data.isTeacher,
-				username: data.username,
-				bio: data.bio,
-			})
-			.where(eq(users.uid, locals.user.uid));
+			await db
+				.update(users)
+				.set({
+					isTeacher: data.isTeacher,
+					username: data.username,
+					bio: data.bio,
+				})
+				.where(eq(users.uid, locals.user.uid));
 
-		return { data };
-	}),
-	delete: formgate(DeleteProfileSchema, async (data, event) => {
-		const { locals } = event;
-		if (!locals.user?.uid) throw redirect(302, "/login");
+			return { data };
+		},
+		{ id: "update" },
+	),
+	delete: formgate(
+		DeleteProfileSchema,
+		async (data, event) => {
+			const { locals } = event;
+			if (!locals.user?.uid) throw redirect(302, "/login");
 
-		const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
+			const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
 
-		if (!user?.passwordHash) {
-			return fail(401);
-		}
+			if (!user?.passwordHash) {
+				return fail(401);
+			}
 
-		// Verify password
-		const validPassword = await auth.verify(user.passwordHash, data.password);
+			// Verify password
+			const validPassword = await auth.verify(user.passwordHash, data.password);
 
-		if (!validPassword) {
-			return formfail({ password: "Invalid password" });
-		}
+			if (!validPassword) {
+				return formfail({ password: "Invalid password" });
+			}
 
-		if (!locals.session) {
-			return fail(401);
-		}
+			if (!locals.session) {
+				return fail(401);
+			}
 
-		await auth.invalidateSession(locals.session.id);
-		auth.deleteSessionTokenCookie(event);
+			await auth.invalidateSession(locals.session.id);
+			auth.deleteSessionTokenCookie(event);
 
-		await db.delete(users).where(eq(users.uid, locals.user.uid));
+			await db.delete(users).where(eq(users.uid, locals.user.uid));
 
-		event.setHeaders({ "Clear-Site-Data": "*" });
+			event.setHeaders({ "Clear-Site-Data": "*" });
 
-		return redirect(303, "/");
-	}),
+			return redirect(303, "/");
+		},
+		{ id: "delete" },
+	),
 };

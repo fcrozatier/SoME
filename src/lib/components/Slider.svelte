@@ -31,20 +31,17 @@
 
 	let displayGrade = $derived(grade.value.toFixed(2));
 
-	const makeReady: Attachment = (node) => {
-		const setReady = () => {
-			ready = true;
-			if (input) {
-				input.style.appearance = "auto";
-			}
-		};
-		node.addEventListener("pointerdown", setReady, { once: true });
+	const setReady = () => {
+		ready = true;
 
-		$effect(() => {
-			if (ready) {
-				node.removeEventListener("pointerdown", setReady);
-			}
-		});
+		if (input) {
+			input.style.appearance = "auto";
+			input.style.opacity = "1";
+		}
+	};
+
+	const setReadyAttachment: Attachment = (node) => {
+		node.addEventListener("pointerdown", setReady, { once: true });
 
 		() => {
 			node.removeEventListener("pointerdown", setReady);
@@ -57,19 +54,19 @@
 	$effect(() => {
 		// JS-only enhanced input
 
-		if (input) {
+		if (input && !ready) {
 			// We need this to initially hide the thumb to create an unset state on the range
 			// But this would make the input unusable in no-js scenarios so we style it from inside an effect
 			input.style.appearance = "none";
+			input.style.opacity = "0";
 
 			// But then going from appearance none to auto on the first click only wakes up the input, we have to delay setting the grade the first time around
 			input.addEventListener(
 				"pointerdown",
 				(e) => {
-					ready = true;
 					const input = e.target as HTMLInputElement;
-					input.style.appearance = "auto";
 					const width = input.getBoundingClientRect().width;
+					setReady();
 
 					setTimeout(() => {
 						const rawGrade = (e.offsetX / width) * 8 + 1;
@@ -84,9 +81,15 @@
 	});
 </script>
 
-<div id="wrapper" style:--grade={grade.value} bind:this={wrapper}>
+<div
+	id="wrapper"
+	class={{ "outline outline-gray-200 bg-gray-100 overflow-hidden -outline-offset-1": !ready }}
+	style:--grade={grade.value}
+	bind:this={wrapper}
+>
 	<input
 		id="score"
+		name="score"
 		type="range"
 		list="values"
 		min="1"
@@ -112,25 +115,31 @@
 		for="score"
 		class="-left-0.5 sm:-left-0"
 		onpointerdown={() => (grade.value = 1)}
-		{@attach makeReady}>Notably worse</label
+		{@attach setReadyAttachment}>Notably worse</label
 	>
-	<label for="score" class="sm:-left-2" onpointerdown={() => (grade.value = 3)} {@attach makeReady}
-		>Not as good</label
+	<label
+		for="score"
+		class="sm:-left-2"
+		onpointerdown={() => (grade.value = 3)}
+		{@attach setReadyAttachment}>Not as good</label
 	>
-	<label for="score" class="sm:-right-2" onpointerdown={() => (grade.value = 5)} {@attach makeReady}
-		>About the same</label
+	<label
+		for="score"
+		class="sm:-right-2"
+		onpointerdown={() => (grade.value = 5)}
+		{@attach setReadyAttachment}>About the same</label
 	>
 	<label
 		for="score"
 		class="-right-0.5 sm:-right-4"
 		onpointerdown={() => (grade.value = 7)}
-		{@attach makeReady}>Better than most</label
+		{@attach setReadyAttachment}>Better than most</label
 	>
 	<label
 		for="score"
 		class="-right-1 sm:-right-0"
 		onpointerdown={() => (grade.value = 9)}
-		{@attach makeReady}>Outstanding</label
+		{@attach setReadyAttachment}>Outstanding</label
 	>
 </div>
 
@@ -164,6 +173,7 @@
 		display: flex;
 		align-items: center;
 		position: relative;
+		border-radius: calc(infinity * 1px);
 	}
 
 	input {
@@ -175,6 +185,8 @@
 
 		outline: none;
 		border-radius: 1em;
+
+		transition: all 500ms ease-out;
 
 		&:focus-visible {
 			outline: 2px solid var(--track-bg);

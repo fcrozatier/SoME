@@ -1,4 +1,3 @@
-import { templateNames } from "$lib/config";
 import * as fg from "formgator";
 import { z } from "zod";
 
@@ -192,8 +191,4 @@ export const SurveySchema = {
 
 export const AdminForm = {
 	selected: fg.multi().pipe(z.array(z.string().uuid())),
-};
-
-export const EmailTemplateSchema = {
-	template_name: fg.text({ required: true }).pipe(z.enum(templateNames)),
 };

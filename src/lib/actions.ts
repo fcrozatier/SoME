@@ -1,37 +1,6 @@
-import type { ActionResult, SubmitFunction } from "@sveltejs/kit";
+import type { SubmitFunction } from "@sveltejs/kit";
+import { reportValidityBase } from "formgator/sveltekit";
 import { newToast, type ToastConfig } from "./components/Toasts.svelte";
-import * as fg from "formgator";
-
-export const reportValidity = <
-	Success extends Record<string, unknown> | undefined = Record<string, any>,
-	Failure extends Record<string, unknown> | undefined = Record<string, any>,
->(options: {
-	result: ActionResult<Success, Failure>;
-	formElement: HTMLFormElement;
-}) => {
-	const result = options.result;
-	if (result.type === "failure" && typeof result.data?.issues === "object") {
-		const issues = result.data.issues as Record<string, fg.ValidationIssue>;
-
-		for (const element of options.formElement.elements) {
-			if (
-				!(element instanceof HTMLInputElement) &&
-				!(element instanceof HTMLTextAreaElement) &&
-				!(element instanceof HTMLSelectElement)
-			) {
-				continue;
-			}
-
-			const issue = issues[element.name]?.message ?? "";
-			element.setCustomValidity(issue);
-			element.reportValidity();
-
-			element.addEventListener("input", () => element.setCustomValidity(""), {
-				once: true,
-			});
-		}
-	}
-};
 
 export const disableSubmitterAndSetValidity: (options?: {
 	toast?: {
@@ -52,7 +21,7 @@ export const disableSubmitterAndSetValidity: (options?: {
 			reset: options?.reset ?? false,
 			invalidateAll: options?.invalidateAll ?? false,
 		});
-		reportValidity({ result, formElement });
+		reportValidityBase({ result, formElement });
 		input.submitter?.removeAttribute("disabled");
 
 		const toast = options?.toast;
