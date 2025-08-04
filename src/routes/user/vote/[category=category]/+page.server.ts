@@ -3,10 +3,11 @@ import type { Category } from "$lib/config";
 import { query1 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
 import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
+import type { SelectTag } from "$lib/server/db/schema.js";
 import { voteOpen } from "$lib/utils/time";
 import { FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
-import { fail, redirect } from "@sveltejs/kit";
-import { and, eq } from "drizzle-orm";
+import { redirect } from "@sveltejs/kit";
+import { and, eq, sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 import { OpenAI } from "openai";
 import type postgres from "postgres";
@@ -47,6 +48,12 @@ export const load = async ({ locals, params }) => {
 				set: { entryUid: entry.uid },
 			});
 
+		const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
+			select name from tags
+			inner join entry_to_tag on tag_id=id
+			where entry_uid=${entry.uid};
+		`);
+
 		return {
 			title: entry.title,
 			description: entry.description,
@@ -54,6 +61,7 @@ export const load = async ({ locals, params }) => {
 			url: entry.url,
 			thumbnail: entry.thumbnail,
 			uid: entry.uid,
+			tags: entryTags.map((t) => t.name),
 		};
 	}
 

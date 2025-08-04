@@ -92,7 +92,7 @@
 </article>
 
 <dialog
-	class="m-auto"
+	class="m-auto w-full"
 	bind:this={displayDialog}
 	closedby="any"
 	onclose={() => {
@@ -102,7 +102,7 @@
 >
 	<article class="" use:clickOutside={() => displayDialog?.close()}>
 		{#if form?.entry}
-			<Display data={form.entry}></Display>
+			<Display data={{ ...form.entry, tags: form.tags }}></Display>
 
 			<p class="flex gap-2 justify-end">
 				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}
