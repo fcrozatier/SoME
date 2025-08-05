@@ -20,19 +20,18 @@ export const handle = async function ({ event, resolve }) {
 	if (!sessionToken) {
 		event.locals.user = null;
 		event.locals.session = null;
-		return resolve(event);
-	}
-
-	const { session, user } = await auth.validateSessionToken(sessionToken);
-
-	if (session) {
-		auth.setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
 	} else {
-		auth.deleteSessionTokenCookie(event);
-	}
+		const { session, user } = await auth.validateSessionToken(sessionToken);
 
-	event.locals.user = user;
-	event.locals.session = session;
+		if (session) {
+			auth.setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
+		} else {
+			auth.deleteSessionTokenCookie(event);
+		}
+
+		event.locals.user = user;
+		event.locals.session = session;
+	}
 
 	if (event.url.pathname.includes("/user/") && !event.locals.user) {
 		return redirect(302, "/login");
