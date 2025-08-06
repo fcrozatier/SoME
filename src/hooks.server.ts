@@ -38,8 +38,7 @@ export const handle = async function ({ event, resolve }) {
 	}
 
 	if (event.url.pathname.includes("/admin") && !event.locals.user?.isAdmin) {
-		console.log("[admin]: redirect");
-		return redirect(302, "/");
+		return redirect(302, "/404");
 	}
 
 	return await resolve(event);

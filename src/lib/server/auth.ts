@@ -91,9 +91,9 @@ export async function invalidateSession(sessionId: string) {
 	await db.delete(table.sessions).where(eq(table.sessions.id, sessionId));
 }
 
-export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt: Date) {
+export function setSessionTokenCookie(cookies: Cookies, token: string, expires: Date) {
 	cookies.set(sessionCookieName, token, {
-		expires: expiresAt,
+		expires,
 		path: "/",
 		httpOnly: true,
 		// secure: true, (Safari)
