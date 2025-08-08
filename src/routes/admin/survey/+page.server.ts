@@ -1,9 +1,12 @@
 import { currentYear } from "$lib/config";
 import { db } from "$lib/server/db";
 import { type SelectSurveys } from "$lib/server/db/schema";
+import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
-export const load = async () => {
+export const load = async ({ locals }) => {
+	if (!locals.user?.isAdmin) return error(404);
+
 	const surveys: (Pick<SelectSurveys, "some" | "site" | "feedback"> & {
 		off_season: boolean;
 	})[] = await db.execute(sql`
