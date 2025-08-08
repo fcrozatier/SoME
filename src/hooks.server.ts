@@ -20,6 +20,7 @@ export const handle = async function ({ event, resolve }) {
 	if (!sessionToken) {
 		event.locals.user = null;
 		event.locals.session = null;
+		return resolve(event);
 	} else {
 		const { session, user } = await auth.validateSessionToken(sessionToken);
 
@@ -33,13 +34,5 @@ export const handle = async function ({ event, resolve }) {
 		event.locals.session = session;
 	}
 
-	if (event.url.pathname.includes("/user/") && !event.locals.user) {
-		return redirect(302, "/login");
-	}
-
-	if (event.url.pathname.includes("/admin") && !event.locals.user?.isAdmin) {
-		return redirect(302, "/404");
-	}
-
-	return await resolve(event);
+	return resolve(event);
 } satisfies Handle;

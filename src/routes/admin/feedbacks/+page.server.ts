@@ -2,10 +2,13 @@ import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { AdminForm } from "$lib/validation";
+import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
-export const load = async () => {
+export const load = async ({ locals }) => {
+	if (!locals.user?.isAdmin) return error(404);
+
 	const feedbacks: (Pick<SelectEntry, "uid" | "title" | "url"> & {
 		feedback: string;
 		user_uid: string;

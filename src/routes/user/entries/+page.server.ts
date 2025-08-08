@@ -4,7 +4,9 @@ import { redirect } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ locals }) => {
-	if (!locals.user) return redirect(302, "/login");
+	if (!locals.user) {
+		return redirect(302, "/login");
+	}
 
 	const userEntries: Pick<
 		SelectEntry,

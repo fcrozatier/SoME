@@ -23,7 +23,9 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
-export const load = async ({ params }) => {
+export const load = async ({ params, locals }) => {
+	if (!locals.user?.isAdmin) return error(404);
+
 	const { entryUid } = params;
 
 	const [entry]: Pick<

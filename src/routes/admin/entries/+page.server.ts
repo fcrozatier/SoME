@@ -2,10 +2,13 @@ import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import type { SelectTag } from "$lib/server/db/schema";
 import { type SelectEntry } from "$lib/server/db/schema";
+import { error } from "@sveltejs/kit";
 import { fail } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
-export const load = async ({ url }) => {
+export const load = async ({ locals, url }) => {
+	if (!locals.user?.isAdmin) return error(404);
+
 	let page = url.searchParams.get("page");
 
 	if (!page) {
