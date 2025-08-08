@@ -23,8 +23,8 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.54.2",
-		"@sveltejs/adapter-node": "^5.2.13",
-		"@sveltejs/kit": "^2.27.0",
+		"@sveltejs/adapter-node": "^5.2.14",
+		"@sveltejs/kit": "^2.27.3",
 		"@sveltejs/vite-plugin-svelte": "^5.1.1",
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.1.11",
@@ -37,7 +37,7 @@
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
 		"rehype-target-plugin": "^1.0.1",
-		"svelte": "^5.37.3",
+		"svelte": "^5.38.0",
 		"svelte-check": "^4.3.1",
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.9.2",
@@ -47,7 +47,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@aws-sdk/client-s3": "^3.859.0",
+		"@aws-sdk/client-s3": "^3.863.0",
 		"@fcrozatier/ts-helpers": "^2.10.0",
 		"@node-rs/argon2": "^2.0.2",
 		"@observablehq/plot": "^0.6.17",
