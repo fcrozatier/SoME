@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { disableSubmitterAndSetValidity } from "$lib/actions";
-	import { newToast } from "./Toasts.svelte";
+	import { nanoId } from "@fcrozatier/ts-helpers";
 
 	let { form } = $props();
 </script>
@@ -14,7 +14,7 @@
 		toast: { success: "You'll be notified of future editions! 🎉" },
 	})}
 >
-	<h3 id="stay-tuned">Receive News on Upcoming Editions</h3>
+	<h3 id="stay-tuned-{nanoId()}">Receive News on Upcoming Editions</h3>
 	<div class="flex gap-2">
 		<input
 			type="email"
