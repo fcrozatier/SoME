@@ -29,7 +29,7 @@
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.1.11",
 		"@types/katex": "^0.16.7",
-		"@types/node": "^22.17.0",
+		"@types/node": "^22.17.1",
 		"daisyui": "^5.0.50",
 		"drizzle-kit": "^0.30.6",
 		"formgator": "^0.2.5",
@@ -47,7 +47,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@aws-sdk/client-s3": "^3.863.0",
+		"@aws-sdk/client-s3": "^3.864.0",
 		"@fcrozatier/ts-helpers": "^2.10.0",
 		"@node-rs/argon2": "^2.0.2",
 		"@observablehq/plot": "^0.6.17",

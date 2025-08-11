@@ -10,7 +10,7 @@
 </script>
 
 <img
-	class="my-0 not-prose max-w-full rounded-lg aspect-video"
+	class="my-0 not-prose w-full rounded-lg aspect-video"
 	src={`https://${PUBLIC_S3_BUCKET}.${PUBLIC_S3_ENDPOINT.replace("https://", "")}/${uid}`}
 	alt="thumbnail"
 	loading="lazy"

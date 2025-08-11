@@ -128,13 +128,15 @@ export const actions = {
 				userUid: token,
 				score: String(data.score),
 				feedback: feedbackSafe,
+				feedback_unsafe_md: data.feedback,
 				maybe_rude,
 			})
 			.onConflictDoUpdate({
 				target: [votes.userUid, votes.entryUid],
 				set: {
-					score: `${data.score}`,
-					feedback: data.feedback,
+					score: String(data.score),
+					feedback: feedbackSafe,
+					feedback_unsafe_md: data.feedback,
 				},
 			});
 

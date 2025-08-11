@@ -99,9 +99,10 @@ export const votes = pgTable(
 	{
 		score: decimal("score", { precision: 4, scale: 2 }).notNull(),
 		feedback: text("feedback"),
+		feedback_unsafe_md: text("feedback_unsafe_md"),
 		maybe_rude: boolean("maybe_rude").default(false),
 		reviewed: boolean("reviewed").default(false),
-		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+		created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
 		userUid: uuid("user_uid")
 			.references(() => users.uid, { onDelete: "cascade" })
 			.notNull(),

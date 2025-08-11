@@ -34,7 +34,7 @@
 		<div class="max-w-3xl mx-auto">
 			<hr class="my-8!" />
 			{#each data.userEntries as { uid, title, description, category, thumbnail, url, createdAt }}
-				<div class="entry">
+				<div>
 					<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
 						{#snippet mainPanel()}
 							<Media

@@ -9,8 +9,9 @@
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
+	import { randint } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
-	import { formAction } from "./config";
+	import { examples, formAction, toastsWithFeedback, toastsWithoutFeedback } from "./config";
 
 	const TIMER = 29;
 
@@ -26,6 +27,8 @@
 	let remaining = $state(TIMER);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
+	let example = $state(examples[randint(0, examples.length - 1)]!);
+
 	const visibilitychange = () => {
 		if (document.visibilityState === "visible") {
 			remaining = Math.round((targetTime - Date.now()) / 1000);
@@ -40,6 +43,7 @@
 		feedback = "";
 		targetTime = Date.now() + TIMER * 1000;
 		remaining = TIMER;
+		example = examples[randint(0, examples.length - 1)]!;
 
 		document.addEventListener("visibilitychange", visibilitychange);
 		interval = setInterval(() => {
@@ -77,7 +81,7 @@
 			method="post"
 			action="?/vote"
 			class="space-y-4"
-			use:enhance={({ cancel, action }) => {
+			use:enhance={({ cancel, action, formData }) => {
 				if (remaining > 0 && !(action.search === formAction("skip"))) {
 					newToast({ type: "error", content: "Please do not rush the review process" });
 					return cancel();
@@ -96,7 +100,12 @@
 					if (action.search === formAction("skip")) {
 						newToast({ type: "info", content: "Entry skipped" });
 					} else {
-						newToast({ type: "success", content: "Thank you! 🎉 🥳" });
+						const feedback = formData.get("feedback");
+						const toast =
+							feedback && typeof feedback === "string" && feedback.length > 0
+								? toastsWithFeedback[randint(0, toastsWithFeedback.length - 1)]!
+								: toastsWithoutFeedback[randint(0, toastsWithoutFeedback.length - 1)]!;
+						newToast({ type: "success", content: toast });
 					}
 				};
 			}}
@@ -132,9 +141,8 @@
 					<h4 class="mb-0 mt-2">Feedback</h4>
 				</label>
 				<p class="flex-1 mt-2">
-					What worked well? What could be improved? Be <strong>constructive</strong> and
-					<strong>specific</strong>.<br /> Suggest one actionable improvement. For inspiration, you
-					can pick ideas from the
+					{example.prompt}
+					<br />For inspiration, you can pick ideas from the
 					<button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
@@ -152,6 +160,7 @@
 					class="block textarea-bordered textarea w-full"
 					cols="50"
 					rows="10"
+					placeholder={example.placeholder}
 					bind:value={feedback}
 					{...fg.splat(FeedbackSchema.attributes)}
 				></textarea>

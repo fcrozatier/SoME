@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Attachment } from "svelte/attachments";
 
-	let { ready = $bindable(false) } = $props();
+	let { ready = $bindable(false), score = 5 } = $props();
 
 	const values = Array.from({ length: 9 }, (_, i) => i + 1);
 
-	let _grade = $state(5);
+	let _grade = $state(score);
 
 	const grade = {
 		get value() {
@@ -33,11 +33,6 @@
 
 	const setReady = () => {
 		ready = true;
-
-		if (input) {
-			input.style.appearance = "auto";
-			input.style.opacity = "1";
-		}
 	};
 
 	const setReadyAttachment: Attachment = (node) => {
@@ -77,6 +72,9 @@
 				},
 				{ once: true },
 			);
+		} else if (input && ready) {
+			input.style.appearance = "auto";
+			input.style.opacity = "1";
 		}
 	});
 </script>

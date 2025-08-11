@@ -2,6 +2,9 @@ import type { SubmitFunction } from "@sveltejs/kit";
 import { reportValidityBase } from "formgator/sveltekit";
 import { newToast, type ToastConfig } from "./components/Toasts.svelte";
 
+type SubmitFunctionReturnType = Awaited<ReturnType<SubmitFunction>>;
+type SubmitResponseCallback = Exclude<SubmitFunctionReturnType, void>;
+
 export const disableSubmitterAndSetValidity: (options?: {
 	toast?: {
 		success?: string;
@@ -12,18 +15,21 @@ export const disableSubmitterAndSetValidity: (options?: {
 	reset?: boolean;
 	invalidateAll?: boolean;
 	before?: (...a: Parameters<SubmitFunction>) => void;
+	after?: (...a: Parameters<SubmitResponseCallback>) => void;
 }) => SubmitFunction = (options) => (input) => {
 	input.submitter?.setAttribute("disabled", "");
 	options?.before?.(input);
 
-	return async ({ update, result, formElement }) => {
-		await update({
+	return async (opts) => {
+		await opts.update({
 			reset: options?.reset ?? false,
 			invalidateAll: options?.invalidateAll ?? false,
 		});
-		reportValidityBase({ result, formElement });
+
+		reportValidityBase(opts);
 		input.submitter?.removeAttribute("disabled");
 
+		const result = opts.result;
 		const toast = options?.toast;
 		if (toast) {
 			if (toast?.success && result.type === "success") {
@@ -35,6 +41,10 @@ export const disableSubmitterAndSetValidity: (options?: {
 			} else if (toast?.redirect && result.type === "redirect") {
 				newToast(toast.redirect);
 			}
+		}
+
+		if (options?.after) {
+			await Promise.try(options.after, opts);
 		}
 	};
 };

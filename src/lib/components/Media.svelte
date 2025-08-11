@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { YOUTUBE_EMBED } from "$lib/utils/regex";
+	import type { Snippet } from "svelte";
 	import LayoutSideBySide from "./layouts/LayoutSideBySide.svelte";
 	import Thumbnail from "./Thumbnail.svelte";
 	import Youtube from "./Youtube.svelte";
@@ -8,7 +9,7 @@
 		category: "video" | "non-video";
 		uid: string;
 		title: string;
-		description: string;
+		description?: string;
 		url: string;
 		thumbnail?: string | null;
 		/**
