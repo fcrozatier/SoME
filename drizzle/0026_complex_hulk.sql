@@ -1,0 +1,1 @@
+ALTER TABLE "votes" ADD COLUMN "feedback_unsafe_md" text;
