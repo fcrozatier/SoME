@@ -10,7 +10,6 @@
 		uid: string;
 		title: string;
 		description?: string;
-		descriptionSnippet?: Snippet;
 		url: string;
 		thumbnail?: string | null;
 		/**
@@ -20,17 +19,7 @@
 		gap?: number;
 	};
 
-	let {
-		category,
-		uid,
-		url,
-		title,
-		description,
-		descriptionSnippet,
-		thumbnail,
-		thumbnailWidth,
-		gap,
-	}: Props = $props();
+	let { category, uid, url, title, description, thumbnail, thumbnailWidth, gap }: Props = $props();
 </script>
 
 <LayoutSideBySide side="left" sidePanelMaxWidth={thumbnailWidth} mainPanelMinWidth="40%" {gap}>
@@ -53,8 +42,6 @@
 		</a>
 		{#if description}
 			<p class="line-clamp-3">{description}</p>
-		{:else if descriptionSnippet}
-			{@render descriptionSnippet()}
 		{/if}
 	{/snippet}
 </LayoutSideBySide>
