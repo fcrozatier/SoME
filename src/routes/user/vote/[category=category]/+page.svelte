@@ -177,8 +177,11 @@
 					{/if}
 				</button>
 				<div class="relative mr-auto inline-flex flex-row-reverse">
-					<button type="submit" formaction={"?/skip"} class="btn btn-outline hover:btn-neutral"
-						>Skip</button
+					<button
+						type="submit"
+						formaction={"?/skip"}
+						class="btn btn-outline hover:btn-neutral"
+						disabled={feedback.length > 0}>Skip</button
 					>
 				</div>
 				<button
