@@ -96,7 +96,14 @@
 			<label for="category" class="label">
 				<span class="label-text"> Category </span>
 			</label>
-			<select class="select-bordered select" bind:value={category} name="category" id="category">
+			<!-- Somehow this select sometimes needs a little help to switch the category -->
+			<select
+				class="select-bordered select"
+				onchange={() => (category = category === "video" ? "non-video" : "video")}
+				bind:value={category}
+				name="category"
+				id="category"
+			>
 				{@render input()}
 				<option value={"video"}>{@render iconVideo()}</option>
 				<option value={"non-video"}>{@render iconNonVideo()}</option>
