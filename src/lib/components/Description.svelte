@@ -10,9 +10,12 @@
 	const clamped = $derived(description && description.clientHeight < description.scrollHeight);
 
 	$effect(() => {
-		if (!clamped) {
-			more?.remove();
-		}
+		// Ensures the styles are applied before checking, as with dynamically loaded descriptions inside dialogs
+		requestAnimationFrame(() => {
+			if (!clamped) {
+				more?.remove();
+			}
+		});
 	});
 
 	const id = nanoId();

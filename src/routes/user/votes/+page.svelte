@@ -40,7 +40,7 @@
 
 <article class="layout-prose">
 	<h2>My votes</h2>
-	<p>Review all your votes. Update your feedback and scores during peer review</p>
+	<p>Review all your votes. Update your feedbacks and scores during peer review</p>
 
 	{#each Object.entries(votesByYear) as [year, votes]}
 		<section class="mt-10">
