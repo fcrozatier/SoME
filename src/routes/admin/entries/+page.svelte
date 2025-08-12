@@ -40,7 +40,7 @@
 		<tbody>
 			{#each data.entries as entry (entry.uid)}
 				<tr class="px-6 py-2">
-					<td class="capitalize">{entry.title}</td>
+					<td class="capitalize"><a href="/entries/{entry.uid}">{entry.title}</a></td>
 					<td class="inline-flex gap-2">
 						<form
 							method="POST"
