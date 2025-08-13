@@ -54,7 +54,7 @@
 			return async ({ update, result }) => {
 				buttons.forEach((b) => b.removeAttribute("disabled"));
 				if (result.type === "success") {
-					newToast({ type: "info", content: "Entry reactivated!" });
+					newToast({ type: "info", content: "Entry reactivated" });
 				}
 				await update();
 			};
