@@ -9,10 +9,12 @@ import * as fg from "formgator/sveltekit";
 export const load = async ({ locals }) => {
 	if (!locals.user?.isAdmin) return error(404);
 
+	// Turn the left join into an inner join to hide entries deactivated (by admins) without being flagged
+
 	const flagged: (Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">)[] =
 		await db.execute(sql`
 			select uid, title, url, reason
-			from entries join flags
+			from entries left join flags
 			on uid=entry_uid
 			where entries.active='false'
 			and date_part('year', entries.created_at)=${currentYear}
