@@ -70,22 +70,10 @@
 				<form
 					class="flex gap-2 flex-wrap justify-start"
 					method="POST"
-					use:enhance={disableSubmitterAndSetValidity({ invalidateAll: true })}
-					use:enhance={() => {
-						const buttons = document.querySelectorAll("button");
-						buttons.forEach((b) => b.setAttribute("disabled", "on"));
-						return async ({ result, action }) => {
-							await applyAction(result);
-							buttons.forEach((b) => b.removeAttribute("disabled"));
-							if (result.type === "success" && action.search.includes("display")) {
-								displayDialog?.showModal();
-								displayDialog?.scrollTo({ top: 0 });
-							}
-							if (result.type === "success" && action.search.includes("deactivate")) {
-								newToast({ type: "info", content: "Entry deactivated" });
-							}
-						};
-					}}
+					use:enhance={disableSubmitterAndSetValidity({
+						invalidateAll: true,
+						toast: { success: { type: "info", content: "Entry deactivated" } },
+					})}
 				>
 					<input type="hidden" name="uid" value={entry.uid} />
 					<a class="btn btn-neutral btn-sm" href={`/entries/${entry.uid}`} onclick={loadData}
@@ -120,7 +108,7 @@
 </article>
 
 <dialog
-	class="m-auto"
+	class="m-auto w-full"
 	bind:this={displayDialog}
 	closedby="any"
 	onclose={() => {
