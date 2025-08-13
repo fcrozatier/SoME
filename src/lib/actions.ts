@@ -7,7 +7,7 @@ type SubmitResponseCallback = Exclude<SubmitFunctionReturnType, void>;
 
 export const disableSubmitterAndSetValidity: (options?: {
 	toast?: {
-		success?: string;
+		success?: string | ToastConfig;
 		error?: string;
 		failure?: string;
 		redirect?: ToastConfig;
@@ -34,7 +34,11 @@ export const disableSubmitterAndSetValidity: (options?: {
 		const toast = options?.toast;
 		if (toast) {
 			if (toast?.success && result.type === "success") {
-				newToast({ type: "success", content: toast.success });
+				if (typeof toast.success === "string") {
+					newToast({ type: "success", content: toast.success });
+				} else {
+					newToast(toast.success);
+				}
 			} else if (toast?.error && result.type === "error") {
 				newToast({ type: "error", content: toast.error });
 			} else if (toast?.failure && result.type === "failure") {
