@@ -238,7 +238,7 @@ So here’s a general rule of thumb: If you are using AI and your audience canno
 <li id="note-1">
 <b>AI in the Public Domain:</b> This argument follows the long-standing tradition of the US copyright office not to provide copyright to a piece of art unless it was created by a human. In such cases, the work falls under Public Domain. If this holds up for AI art, it would be possible to use it in videos, blogs, etc, for the purposes of this competition. Things to consider:
 
-- There is a very interesting discussion about why copyright cannot be extended to non-human entities with the [Monkey selfie copyright dispute](https://en.wikipedia.org/wiki/Monkey_selfie_copyright_dispute) where a nature photographer managed to get a few monkeys to take a selfie of itself but neither the monkey nor the photographer were granted copyright of the image(s), and instead they were immediately put in the public domain. Also (because it’s interesting), the court case is [Naruto vs Slater](https://www.lexisnexis.com/community/casebrief/p/casebrief-naruto-v-slater)
+- There is a very interesting discussion about why copyright cannot be extended to non-human entities with the [Monkey selfie copyright dispute](https://en.wikipedia.org/wiki/Monkey_selfie_copyright_dispute) where a nature photographer managed to get a few monkeys to take a selfie of itself but neither the monkey nor the photographer were granted copyright of the images, and instead they were immediately put in the public domain. Also, the court case is Naruto vs Slater.
 
 - It is not particularly likely that AI generated art will always be in the public domain. It only falls there for now while we wait on actual legislation.
 
@@ -254,9 +254,9 @@ of AI in art. Things to consider:
 
       1. [https://githubcopilotlitigation.com/](https://githubcopilotlitigation.com/): This is a class-action lawsuit against Microsoft, Github, and OpenAI claiming that Github Copilot has violated the copyright of each user’s software repository.
 
-      1. GettyImages has sued Stability AI twice, in the [US](https://fingfx.thomsonreuters.com/gfx/legaldocs/byvrlkmwnve/GETTY%20IMAGES%20AI%20LAWSUIT%20complaint.pdf) and in the [UK](https://newsroom.gettyimages.com/en/getty-images/getty-images-statement), for using their images in their AI models. Note that they can make the claim that the AI output is “substantially similar” because the GettyImages watermark regularly appears on generated images
+      2. GettyImages has sued Stability AI twice, in the [US](https://fingfx.thomsonreuters.com/gfx/legaldocs/byvrlkmwnve/GETTY%20IMAGES%20AI%20LAWSUIT%20complaint.pdf) and in the [UK](https://newsroom.gettyimages.com/en/getty-images/getty-images-statement), for using their images in their AI models. Note that they can make the claim that the AI output is “substantially similar” because the GettyImages watermark regularly appears on generated images
 
-      1. Individual [artists have also come forward](https://www.theverge.com/2023/1/16/23557098/generative-ai-art-copyright-legal-lawsuit-stable-diffusion-midjourney-deviantart) to file lawsuits against several companies
+      3. Individual [artists have also come forward](https://www.theverge.com/2023/1/16/23557098/generative-ai-art-copyright-legal-lawsuit-stable-diffusion-midjourney-deviantart) to file lawsuits against several companies
 
 - Though AI has been trained on copyrighted data, it <em>might</em> be considered fair use as in the case of [The Author’s Guild v. Google](https://en.wikipedia.org/wiki/Authors_Guild,_Inc._v._Google,_Inc). Because the scanned data was not made publicly available.
 
