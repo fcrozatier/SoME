@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { applyAction, enhance } from "$app/forms";
+	import { enhance } from "$app/forms";
 	import { goto, preloadData, pushState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { clickOutside, disableSubmitterAndSetValidity } from "$lib/actions";
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
-	import { newToast } from "$lib/components/Toasts.svelte";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../../entries/[uid=uuid]/+page.svelte";
 
@@ -46,7 +45,7 @@
 <article class="mx-auto w-4/5 max-w-5xl">
 	<h2>Entries to review</h2>
 
-	<div class="mt-10 mx-auto flex justify-center">
+	<div class="mb-10 mx-auto flex justify-center">
 		<Pagination
 			pages={data.pages}
 			bind:pageNumber
