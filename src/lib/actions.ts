@@ -17,7 +17,8 @@ export const disableSubmitterAndSetValidity: (options?: {
 	before?: (...a: Parameters<SubmitFunction>) => void;
 	after?: (...a: Parameters<SubmitResponseCallback>) => void;
 }) => SubmitFunction = (options) => (input) => {
-	input.submitter?.setAttribute("disabled", "");
+	const buttons = input.formElement.querySelectorAll("button");
+	buttons.forEach((b) => b.setAttribute("disabled", "on"));
 	options?.before?.(input);
 
 	return async (opts) => {
@@ -27,7 +28,7 @@ export const disableSubmitterAndSetValidity: (options?: {
 		});
 
 		reportValidityBase(opts);
-		input.submitter?.removeAttribute("disabled");
+		buttons.forEach((b) => b.removeAttribute("disabled"));
 
 		const result = opts.result;
 		const toast = options?.toast;
