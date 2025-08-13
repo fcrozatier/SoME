@@ -189,6 +189,10 @@ export const SurveySchema = {
 	feedback: FeedbackSchema,
 };
 
+export const AdminDeactivateForm = {
+	uid: UidSchema,
+};
+
 export const AdminForm = {
 	selected: fg.multi().pipe(z.array(z.string().uuid())),
 };

@@ -7,7 +7,7 @@ type SubmitResponseCallback = Exclude<SubmitFunctionReturnType, void>;
 
 export const disableSubmitterAndSetValidity: (options?: {
 	toast?: {
-		success?: string;
+		success?: string | ToastConfig;
 		error?: string;
 		failure?: string;
 		redirect?: ToastConfig;
@@ -17,7 +17,8 @@ export const disableSubmitterAndSetValidity: (options?: {
 	before?: (...a: Parameters<SubmitFunction>) => void;
 	after?: (...a: Parameters<SubmitResponseCallback>) => void;
 }) => SubmitFunction = (options) => (input) => {
-	input.submitter?.setAttribute("disabled", "");
+	const buttons = input.formElement.querySelectorAll("button");
+	buttons.forEach((b) => b.setAttribute("disabled", "on"));
 	options?.before?.(input);
 
 	return async (opts) => {
@@ -27,13 +28,17 @@ export const disableSubmitterAndSetValidity: (options?: {
 		});
 
 		reportValidityBase(opts);
-		input.submitter?.removeAttribute("disabled");
+		buttons.forEach((b) => b.removeAttribute("disabled"));
 
 		const result = opts.result;
 		const toast = options?.toast;
 		if (toast) {
 			if (toast?.success && result.type === "success") {
-				newToast({ type: "success", content: toast.success });
+				if (typeof toast.success === "string") {
+					newToast({ type: "success", content: toast.success });
+				} else {
+					newToast(toast.success);
+				}
 			} else if (toast?.error && result.type === "error") {
 				newToast({ type: "error", content: toast.error });
 			} else if (toast?.failure && result.type === "failure") {

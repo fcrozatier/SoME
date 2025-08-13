@@ -194,7 +194,7 @@
 </div>
 
 <dialog
-	class="m-auto"
+	class="m-auto w-full"
 	bind:this={displayDialog}
 	closedby="any"
 	onclose={() => {

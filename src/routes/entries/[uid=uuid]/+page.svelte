@@ -69,7 +69,7 @@
 
 			{#each comments as { feedback, score }}
 				<div class="grid grid-cols-[1fr_2rem] items-start border-b gap-x-4 first:border-t py-4">
-					<div class="prose whitespace-pre-wrap">{@html feedback}</div>
+					<div class="prose">{@html feedback}</div>
 					<span
 						class={`ml-auto w-full border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center
 							${+score <= 3 ? "bg-error/10 border-error" : ""}

@@ -9,9 +9,9 @@ export const load = async (event) => {
 
 	const [entry]: Pick<
 		SelectEntry,
-		"title" | "description" | "category" | "thumbnail" | "url" | "rank" | "final_score"
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank" | "final_score"
 	>[] = await db.execute(sql`
-      select title, description, category, thumbnail, url, rank, final_score
+      select uid, title, description, category, thumbnail, url, rank, final_score
       from entries
       where uid=${uid}
     `);
