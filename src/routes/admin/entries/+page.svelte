@@ -1,15 +1,46 @@
 <script lang="ts">
 	import { applyAction, enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
+	import { goto, preloadData, pushState } from "$app/navigation";
 	import { page } from "$app/state";
-	import { clickOutside } from "$lib/actions";
-	import Display from "$lib/components/Display.svelte";
+	import { clickOutside, disableSubmitterAndSetValidity } from "$lib/actions";
+	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
+	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
+	import { newToast } from "$lib/components/Toasts.svelte";
+	import type { ComponentProps } from "svelte";
+	import EntriesPage from "../../entries/[uid=uuid]/+page.svelte";
 
 	let { data, form = $bindable() } = $props();
 
 	let pageNumber = $state(Number(page.url.searchParams.get("page") ?? "1"));
+
 	let displayDialog: HTMLDialogElement | undefined = $state();
+	let entryPageData: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();
+
+	async function loadData(
+		e: MouseEvent & {
+			currentTarget: EventTarget & HTMLAnchorElement;
+		},
+	) {
+		if (window.innerWidth < 640 || e.shiftKey || e.metaKey || e.ctrlKey) {
+			return;
+		}
+
+		e.preventDefault();
+
+		const { href } = e.currentTarget;
+		const result = await preloadData(href);
+
+		if (result.type === "loaded" && result.status === 200) {
+			pushState(href, { entry: result.data });
+			// @ts-ignore
+			entryPageData = result.data;
+			displayDialog?.showModal();
+			displayDialog?.scrollTo({ top: 0 });
+		} else {
+			goto(href);
+		}
+	}
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl">
@@ -30,50 +61,47 @@
 		></Pagination>
 	</div>
 
-	<table class="w-full">
-		<thead>
-			<tr class="px-6">
-				<th class="text-left">Entry</th>
-				<th class="text-left">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.entries as entry (entry.uid)}
-				<tr class="px-6 py-2">
-					<td class="capitalize"><a href="/entries/{entry.uid}">{entry.title}</a></td>
-					<td class="inline-flex gap-2">
-						<form
-							method="POST"
-							use:enhance={() => {
-								const buttons = document.querySelectorAll("button");
-								buttons.forEach((b) => b.setAttribute("disabled", "on"));
-
-								return async ({ result, action }) => {
-									await applyAction(result);
-									buttons.forEach((b) => b.removeAttribute("disabled"));
-
-									if (result.type === "success" && action.search.includes("display")) {
-										displayDialog?.showModal();
-										displayDialog?.scrollTo({ top: 0 });
-									}
-								};
-							}}
-						>
-							<input type="hidden" name="uid" value={entry.uid} />
-							<button formaction="?/display" class="btn btn-neutral btn-sm">Display</button>
-						</form>
-						<a class="btn btn-sm" href={`/admin/update/${entry.uid}`}>Update</a>
-					</td>
-				</tr>
-			{:else}
-				<tr>
-					<td>
-						<p class="px-6">No entries to review</p>
-					</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+	{#each data.entries as entry (entry.uid)}
+		<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
+			{#snippet mainPanel()}
+				<Media {...entry} thumbnailWidth="256px" gap={6}></Media>
+			{/snippet}
+			{#snippet sidePanel()}
+				<form
+					class="flex gap-2 flex-wrap justify-start"
+					method="POST"
+					use:enhance={disableSubmitterAndSetValidity({ invalidateAll: true })}
+					use:enhance={() => {
+						const buttons = document.querySelectorAll("button");
+						buttons.forEach((b) => b.setAttribute("disabled", "on"));
+						return async ({ result, action }) => {
+							await applyAction(result);
+							buttons.forEach((b) => b.removeAttribute("disabled"));
+							if (result.type === "success" && action.search.includes("display")) {
+								displayDialog?.showModal();
+								displayDialog?.scrollTo({ top: 0 });
+							}
+							if (result.type === "success" && action.search.includes("deactivate")) {
+								newToast({ type: "info", content: "Entry deactivated" });
+							}
+						};
+					}}
+				>
+					<input type="hidden" name="uid" value={entry.uid} />
+					<a class="btn btn-neutral btn-sm" href={`/entries/${entry.uid}`} onclick={loadData}
+						>Display
+					</a>
+					<a class="btn btn-sm" href={`/admin/update/${entry.uid}`}>Update</a>
+					<button formaction="?/deactivate" class="btn btn-error btn-outline btn-sm"
+						>Deactivate</button
+					>
+				</form>
+			{/snippet}
+		</LayoutSideBySide>
+		<hr class="my-8!" />
+	{:else}
+		<p class="px-6">No entries to review</p>
+	{/each}
 
 	<div class="mt-10 mx-auto flex justify-center">
 		<Pagination
@@ -92,38 +120,28 @@
 </article>
 
 <dialog
-	class="m-auto w-full"
+	class="m-auto"
 	bind:this={displayDialog}
 	closedby="any"
 	onclose={() => {
-		// Stop playing
-		form = null;
+		history.back();
+		entryPageData = undefined;
 	}}
 >
-	<article class="" use:clickOutside={() => displayDialog?.close()}>
-		{#if form?.entry}
-			<Display data={{ ...form.entry, tags: form.tags }}></Display>
-
+	<div use:clickOutside={() => displayDialog?.close()}>
+		{#if entryPageData}
+			<div class="-mx-8">
+				<EntriesPage data={entryPageData}></EntriesPage>
+			</div>
 			<p class="flex gap-2 justify-end">
 				<button class="btn btn-outline hover:btn-neutral" onclick={() => displayDialog?.close()}
 					>Close</button
 				>
-				<a class="btn btn-outline hover:btn-neutral" href={`/admin/update/${form.entry.uid}`}
-					>Update</a
+				<a
+					class="btn btn-outline hover:btn-neutral"
+					href={`/admin/update/${entryPageData.entry.uid}`}>Update</a
 				>
 			</p>
 		{/if}
-	</article>
+	</div>
 </dialog>
-
-<style>
-	tr {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 1rem;
-		align-items: start;
-	}
-	tr:nth-child(even) {
-		background-color: rgb(242, 242, 242);
-	}
-</style>

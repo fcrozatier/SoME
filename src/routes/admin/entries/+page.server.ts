@@ -1,10 +1,10 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
-import type { SelectTag } from "$lib/server/db/schema";
 import { type SelectEntry } from "$lib/server/db/schema";
+import { AdminDeactivateForm } from "$lib/validation";
 import { error } from "@sveltejs/kit";
-import { fail } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
+import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals, url }) => {
 	if (!locals.user?.isAdmin) return error(404);
@@ -17,8 +17,11 @@ export const load = async ({ locals, url }) => {
 	}
 	const limit = 50;
 
-	const entries: Pick<SelectEntry, "uid" | "title">[] = await db.execute(sql`
-			select uid, title
+	const entries: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+	>[] = await db.execute(sql`
+			select uid, title, description, category, url, thumbnail
 			from entries
 			where entries.active='true'
 			and date_part('year', entries.created_at)=${currentYear}
@@ -37,25 +40,13 @@ export const load = async ({ locals, url }) => {
 };
 
 export const actions = {
-	display: async ({ request }) => {
-		const uid = (await request.formData()).get("uid")?.toString();
+	deactivate: formgate(AdminDeactivateForm, async (data, { locals }) => {
+		if (!locals.user?.isAdmin) return error(403);
 
-		if (!uid) return fail(400);
-
-		const [entry]: Pick<
-			SelectEntry,
-			"uid" | "title" | "url" | "description" | "category" | "thumbnail"
-		>[] = await db.execute(sql`
-			select uid, title, url, description, category, thumbnail
-			from entries where uid=${uid}
-			`);
-
-		const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
-			select name from tags
-			inner join entry_to_tag on tag_id=id
-			where entry_uid=${entry?.uid};
+		await db.execute(sql`
+			update entries set active='false' where uid=${data.uid};
 		`);
 
-		return { success: true, entry, tags: entryTags.map((t) => t.name) };
-	},
+		return { success: true };
+	}),
 };
