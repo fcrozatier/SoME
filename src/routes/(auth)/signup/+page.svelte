@@ -45,6 +45,11 @@
 			toast: { redirect: { type: "success", content: `You can now log in as ${email}.` } },
 		})}
 	>
+		<!-- Firefox hack to prevent showing the manage password popup on the username field -->
+		<input type="text" style="display:none" />
+		<input type="password" style="display:none" />
+		<!-- /hack -->
+
 		<div class="form-control">
 			<label for="username" class="label">
 				<span class="label-text"> Username </span>
