@@ -23,6 +23,10 @@
 	{:else}
 		<form class="space-y-2" method="POST" use:enhance={disableSubmitterAndSetValidity()}>
 			<h2>Change your password</h2>
+			<!-- Firefox hack to prevent showing the manage password popup on the email field -->
+			<input type="text" style="display:none" />
+			<input type="password" style="display:none" />
+			<!-- /hack -->
 
 			<div class="form-control">
 				<label for="email" class="label">
