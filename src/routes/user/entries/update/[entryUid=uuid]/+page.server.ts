@@ -1,4 +1,5 @@
 import { dev } from "$app/environment";
+import { PUBLIC_REGISTRATION_START } from "$env/static/public";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
@@ -84,6 +85,40 @@ export const actions = {
 				throw error(403, "Submissions are closed");
 			}
 
+			// Validate youtube entries creation date and channel identity
+			if (YOUTUBE_EMBEDDABLE.test(data.url)) {
+				const r = await fetch(data.url);
+				if (!r.ok) {
+					throw error(429, "Failed to fetch the Youtube metadata");
+				}
+
+				const html = await r.text();
+				const embeddedjson = html.match(
+					/ytInitialPlayerResponse\s*=\s*(\{.+?\});/,
+				);
+				if (!embeddedjson) {
+					console.log("[new entry]: couldn't parse yt metadata from", data.url);
+				} else {
+					try {
+						const ytInitialPlayerResponse = embeddedjson[1]!;
+						// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
+						var createdAt =
+							JSON.parse(ytInitialPlayerResponse).microformat
+								.playerMicroformatRenderer.uploadDate;
+					} catch (error) {
+						console.log("[new entry]: error wile parsing yt metadata", error);
+					}
+
+					// Check whether content is too old
+					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
+						return formfail({
+							url:
+								`This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+						});
+					}
+				}
+			}
+
 			const prevCoauthors: Pick<User, "username" | "uid">[] = await db.execute(
 				sql`
           select username, uid from users
@@ -104,7 +139,9 @@ export const actions = {
 				.from(users)
 				.where(inArray(users.username, usernames));
 
-			const formerCoauthors = prevCoauthors.filter((a) => !usernames.includes(a.username!));
+			const formerCoauthors = prevCoauthors.filter((a) =>
+				!usernames.includes(a.username!)
+			);
 
 			// Validate team members
 			if (team.length !== usernames.length) {
@@ -135,7 +172,9 @@ export const actions = {
 			const failedTags: { tag: string; unknownWords: string[] }[] = [];
 
 			for (const tag of entryTags) {
-				const unknownWords = tag.split("-").filter((part) => !dictionary.has(part));
+				const unknownWords = tag.split("-").filter((part) =>
+					!dictionary.has(part)
+				);
 
 				if (unknownWords.length > 0) {
 					failedTags.push({ tag, unknownWords });
@@ -151,9 +190,11 @@ export const actions = {
 					.onConflictDoNothing();
 
 				return formfail({
-					tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-						failedTags.flatMap(({ unknownWords }) => unknownWords),
-					)}`,
+					tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${
+						conjunctionFormatter.format(
+							failedTags.flatMap(({ unknownWords }) => unknownWords),
+						)
+					}`,
 				});
 			}
 
@@ -242,7 +283,9 @@ export const actions = {
 					eq(entriesToTags.entryUid, entryUid),
 					inArray(
 						entriesToTags.tagId,
-						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) => t.id),
+						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) =>
+							t.id
+						),
 					),
 				),
 			);
