@@ -190,6 +190,13 @@
 			"when": 1754925355155,
 			"tag": "0026_complex_hulk",
 			"breakpoints": true
+		},
+		{
+			"idx": 27,
+			"version": "7",
+			"when": 1755514117564,
+			"tag": "0027_marvelous_skrulls",
+			"breakpoints": true
 		}
 	]
 }

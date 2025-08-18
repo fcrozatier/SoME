@@ -155,6 +155,8 @@ export const cache = pgTable(
 		entryUid: uuid("entry_uid")
 			.references(() => entries.uid, { onDelete: "cascade" })
 			.notNull(),
+		score: decimal("score", { precision: 4, scale: 2 }),
+		feedback_unsafe_md: text("feedback_unsafe_md"),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
 	({ userUid, category, entryUid }) => [
@@ -183,6 +185,7 @@ export type InsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type SelectEntry = typeof entries.$inferSelect;
+export type SelectCache = typeof cache.$inferSelect;
 export type SelectTag = typeof tags.$inferSelect;
 export type SelectVote = typeof votes.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;

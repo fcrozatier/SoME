@@ -91628,6 +91628,7 @@ impages
 impaint
 impair
 impairable
+impaired
 impairer
 impairment
 impala
@@ -189572,6 +189573,7 @@ stirk
 stirless
 stirlessly
 stirlessness
+stirling
 stirp
 stirpicultural
 stirpiculture

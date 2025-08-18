@@ -9,7 +9,7 @@
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
-	import { randint } from "@fcrozatier/ts-helpers";
+	import { debounce, randint } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
 	import { examples, formAction, toastsWithFeedback, toastsWithoutFeedback } from "./config";
 
@@ -20,8 +20,8 @@
 	let flagDialog: HTMLDialogElement | undefined = $state();
 	let guidelines: HTMLDialogElement | undefined = $state();
 
-	let ready = $state(false);
-	let feedback = $state("");
+	let ready = $state(!!data.score);
+	let feedback = $state(data.feedback_unsafe_md ?? "");
 
 	let targetTime: number;
 	let remaining = $state(TIMER);
@@ -35,12 +35,18 @@
 		}
 	};
 
+	let cacheButton: HTMLButtonElement | undefined = $state();
+
+	const cacheVote = debounce(() => {
+		cacheButton?.click();
+	}, 2000);
+
 	$effect(() => {
 		// Run on every page refresh
 		data.uid;
 
-		ready = false;
-		feedback = "";
+		ready = !!data.score;
+		feedback = data.feedback_unsafe_md ?? "";
 		targetTime = Date.now() + TIMER * 1000;
 		remaining = TIMER;
 		example = examples[randint(0, examples.length - 1)]!;
@@ -82,21 +88,35 @@
 			action="?/vote"
 			class="space-y-4"
 			use:enhance={({ cancel, action, formData }) => {
-				if (remaining > 0 && !(action.search === formAction("skip"))) {
+				if (
+					remaining > 0 &&
+					!(action.search === formAction("skip") || action.search === formAction("cache"))
+				) {
 					newToast({ type: "error", content: "Please do not rush the review process" });
 					return cancel();
 				}
-				if (!ready && !(action.search === formAction("skip"))) {
+				if (
+					!ready &&
+					!(action.search === formAction("skip") || action.search === formAction("cache"))
+				) {
 					newToast({ type: "error", content: "Please do not forget to grade the entry" });
 					return cancel();
 				}
-				const buttons = document.querySelectorAll("button");
-				buttons.forEach((b) => b.setAttribute("disabled", "on"));
+				if (action.search !== formAction("cache")) {
+					var buttons = document.querySelectorAll("button");
+					buttons.forEach((b) => b.setAttribute("disabled", "on"));
+				}
+				if (!ready && action.search === formAction("cache")) {
+					formData.delete("score");
+				}
 
 				return async ({ update, action }) => {
-					await update({ reset: false, invalidateAll: true });
+					if (action.search === formAction("cache")) return;
 
 					buttons.forEach((b) => b.removeAttribute("disabled"));
+
+					await update({ reset: false, invalidateAll: true });
+
 					if (action.search === formAction("skip")) {
 						newToast({ type: "info", content: "Entry skipped" });
 					} else {
@@ -131,7 +151,7 @@
 
 				<div class="my-12">
 					{#key data.uid}
-						<Slider bind:ready></Slider>
+						<Slider bind:ready score={data.score ? Number(data.score) : 5}></Slider>
 					{/key}
 				</div>
 			</div>
@@ -162,6 +182,7 @@
 					rows="10"
 					placeholder={example.placeholder}
 					bind:value={feedback}
+					oninput={cacheVote}
 					{...fg.splat(FeedbackSchema.attributes)}
 				></textarea>
 				<div class="flex text-sm text-gray-500">
@@ -191,6 +212,7 @@
 					command="show-modal"
 					onclick={() => flagDialog?.showModal()}>Flag</button
 				>
+				<button type="submit" formaction={"?/cache"} hidden bind:this={cacheButton}>Cache</button>
 			</div>
 		</form>
 

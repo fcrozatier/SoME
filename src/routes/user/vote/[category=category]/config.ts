@@ -1,5 +1,6 @@
 const action = {
 	skip: "skip",
+	cache: "cache",
 };
 
 export const formAction = (key: keyof typeof action) => {
