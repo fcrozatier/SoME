@@ -7,7 +7,7 @@ import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/sch
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 import { voteOpen } from "$lib/utils/time";
-import { FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
+import { CacheVoteSchema, FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
 import { redirect } from "@sveltejs/kit";
 import { and, eq, sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
@@ -161,16 +161,16 @@ export const actions = {
 
 		return redirect(303, `/user/vote/${category}`);
 	}),
-	cache: formgate(VoteSchema, async (data, { params, locals }) => {
+	cache: formgate(CacheVoteSchema, async (data, { params, locals }) => {
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
 
 		await db.execute(sql`
 			update cache
-			set (score, feedback_unsafe_md)=(${data.score}, ${data.feedback})
-			where user_uid=${locals.user.uid}
-			and category=${params.category}
+				set score=${data.score}, feedback_unsafe_md=${data.feedback}
+				where user_uid=${locals.user.uid}
+				and category=${params.category}
 		`);
 
 		return { success: true };

@@ -95,13 +95,19 @@
 					newToast({ type: "error", content: "Please do not rush the review process" });
 					return cancel();
 				}
-				if (!ready && !(action.search === formAction("skip"))) {
+				if (
+					!ready &&
+					!(action.search === formAction("skip") || action.search === formAction("cache"))
+				) {
 					newToast({ type: "error", content: "Please do not forget to grade the entry" });
 					return cancel();
 				}
 				if (action.search !== formAction("cache")) {
 					var buttons = document.querySelectorAll("button");
 					buttons.forEach((b) => b.setAttribute("disabled", "on"));
+				}
+				if (!ready && action.search === formAction("cache")) {
+					formData.delete("score");
 				}
 
 				return async ({ update, action }) => {
@@ -143,7 +149,7 @@
 					>
 				</p>
 
-				<div class="my-12" onchange={cacheVote}>
+				<div class="my-12">
 					{#key data.uid}
 						<Slider bind:ready score={data.score ? Number(data.score) : 5}></Slider>
 					{/key}

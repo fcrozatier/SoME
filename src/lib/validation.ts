@@ -166,6 +166,12 @@ export const VoteSchema = {
 	uid: UidSchema,
 };
 
+export const CacheVoteSchema = {
+	score: fg.range({ min: 1, max: 9, step: 0.01 }).optional(null),
+	feedback: FeedbackSchema,
+	uid: UidSchema,
+};
+
 export const SkipSchema = {
 	uid: UidSchema,
 };
