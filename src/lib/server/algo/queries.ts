@@ -7,14 +7,7 @@ import { currentYear } from "$lib/config";
  */
 export function query1(token: string, category: string) {
 	return sql`
-			with cached as (
-				select entry_uid
-				from cache join entries on cache.entry_uid=entries.uid
-				where cache.user_uid=${token}
-				and cache.category=${category}
-			),
-
-			total as (
+			with total as (
 				select entry_uid, count(*) as count
 				from (
 					select entry_uid, created_at from votes
@@ -31,19 +24,13 @@ export function query1(token: string, category: string) {
 				left join total
 				on entries.uid=total.entry_uid
 
-				where
-					case when (select count(*) > 0 from cached)
-					then
-						uid in (select entry_uid from cached)
-					else
-						entries.category=${category}
-						and active='true'
-						and date_part('year', entries.created_at)=${currentYear}
-						and uid not in (select entry_uid from votes where votes.user_uid=${token})
-						and uid not in (select entry_uid from skips where skips.user_uid=${token})
-						and uid not in (select entry_uid from flags where flags.user_uid=${token})
-						and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
-					end
+				where entries.category=${category}
+					and active='true'
+					and date_part('year', entries.created_at)=${currentYear}
+					and uid not in (select entry_uid from votes where votes.user_uid=${token})
+					and uid not in (select entry_uid from skips where skips.user_uid=${token})
+					and uid not in (select entry_uid from flags where flags.user_uid=${token})
+					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
 
 				order by total.count nulls first
 			),
@@ -53,7 +40,7 @@ export function query1(token: string, category: string) {
 			),
 
 			cutoff as (
-			  select floor(random() * (select sum(max-score) from selection, maximum)) as value
+				select floor(random() * (select sum(max-score) from selection, maximum)) as value
 			),
 
 			partial as (
@@ -73,14 +60,7 @@ export function query1(token: string, category: string) {
  */
 export function query2(token: string, category: string) {
 	return sql`
-			with cached as (
-				select entry_uid
-				from cache join entries on cache.entry_uid=entries.uid
-				where cache.user_uid=${token}
-				and cache.category=${category}
-			),
-
-			median as (
+			with median as (
 				select entry_uid, percentile_cont(0.5) within group (order by score) as score
 				from (select entry_uid, score from votes where date_part('year', created_at)=${currentYear}) as Q
 				group by entry_uid
@@ -92,19 +72,13 @@ export function query2(token: string, category: string) {
 				left join median
 				on entries.uid=median.entry_uid
 
-				where
-					case when (select count(*) > 0 from cached)
-					then
-						uid in (select entry_uid from cached)
-					else
-						entries.category=${category}
-						and active='true'
-						and date_part('year', created_at)=${currentYear}
-						and uid not in (select entry_uid from votes where votes.user_uid=${token})
-						and uid not in (select entry_uid from skips where skips.user_uid=${token})
-						and uid not in (select entry_uid from flags where flags.user_uid=${token})
-						and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
-					end
+				where entries.category=${category}
+					and active='true'
+					and date_part('year', created_at)=${currentYear}
+					and uid not in (select entry_uid from votes where votes.user_uid=${token})
+					and uid not in (select entry_uid from skips where skips.user_uid=${token})
+					and uid not in (select entry_uid from flags where flags.user_uid=${token})
+					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
 
 				order by score nulls last
 			),
@@ -132,14 +106,7 @@ const multiplier_start_date = "2024-08-23";
  */
 export function query3(token: string, category: string) {
 	return sql`
-			with cached as (
-				select entry_uid
-				from cache join entries on cache.entry_uid=entries.uid
-				where cache.user_uid=${token}
-				and cache.category=${category}
-			),
-
-			scores as (
+			with scores as (
 				select entry_uid, count(*), percentile_cont(0.5) within group (order by score) as median,
 				stddev_samp(score) as std
 				from (select entry_uid, score from votes where date_part('year', created_at)=${currentYear}) as Q
@@ -161,19 +128,13 @@ export function query3(token: string, category: string) {
 				left join scores
 				on entries.uid=scores.entry_uid
 
-				where
-					case when (select count(*) > 0 from cached)
-					then
-						uid in (select entry_uid from cached)
-					else
-						entries.category=${category}
-						and active='true'
-						and date_part('year', created_at)=${currentYear}
-						and uid not in (select entry_uid from votes where votes.user_uid=${token})
-						and uid not in (select entry_uid from skips where skips.user_uid=${token})
-						and uid not in (select entry_uid from flags where flags.user_uid=${token})
-						and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
-					end
+				where entries.category=${category}
+					and active='true'
+					and date_part('year', created_at)=${currentYear}
+					and uid not in (select entry_uid from votes where votes.user_uid=${token})
+					and uid not in (select entry_uid from skips where skips.user_uid=${token})
+					and uid not in (select entry_uid from flags where flags.user_uid=${token})
+					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
 
 				order by score nulls last
 			),
