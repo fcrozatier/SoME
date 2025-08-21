@@ -1,6 +1,6 @@
 export const YOUTUBE_EMBED = /^https:\/\/youtube\.com\/embed/;
 export const YOUTUBE_EMBEDDABLE =
-	/youtube\.com\/watch\?.*v=([^&]+)|youtu\.be\/([^?]+)|youtube\.com\/embed\/([^?]+)/;
+	/youtube\.com\/watch\?.*v=(?<id>[^&]+)|youtu\.be\/(?<id>[^?]+)|youtube\.com\/embed\/(?<id>[^?]+)/;
 
 /**
  * Normalizes youtube links to improve uniqueness and make sure the embed link is correct
