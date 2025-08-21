@@ -60,17 +60,17 @@ export const actions = {
 				try {
 					const ytInitialPlayerResponse = embeddedjson[1]!;
 					// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
-					var createdAt =
+					const createdAt =
 						JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
-				} catch (error) {
-					console.log("[new entry]: error wile parsing yt metadata", error);
-				}
 
-				// Check whether content is too old
-				if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
-					return formfail({
-						url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
-					});
+					// Check whether content is too old
+					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
+						return formfail({
+							url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+						});
+					}
+				} catch (error) {
+					console.log("[new entry]: error wile parsing yt metadata", data.url, error);
 				}
 			}
 		}
