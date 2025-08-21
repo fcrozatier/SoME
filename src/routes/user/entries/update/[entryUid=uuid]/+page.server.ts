@@ -86,8 +86,9 @@ export const actions = {
 			}
 
 			// Validate youtube entries creation date and channel identity
-			if (YOUTUBE_EMBEDDABLE.test(data.url)) {
-				const r = await fetch(data.url);
+			const id = data.url.match(YOUTUBE_EMBEDDABLE)?.groups?.id;
+			if (id) {
+				const r = await fetch(`https://youtube.com/watch?v=${id}`);
 				if (!r.ok) {
 					throw error(429, "Failed to fetch the Youtube metadata");
 				}
@@ -95,22 +96,21 @@ export const actions = {
 				const html = await r.text();
 				const embeddedjson = html.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});/);
 				if (!embeddedjson) {
-					console.log("[new entry]: couldn't parse yt metadata from", data.url);
+					console.log("[update entry]: couldn't parse yt metadata from", data.url);
 				} else {
 					try {
 						const ytInitialPlayerResponse = embeddedjson[1]!;
 						// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
-						var createdAt =
+						const createdAt =
 							JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
+						// Check whether content is too old
+						if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
+							return formfail({
+								url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+							});
+						}
 					} catch (error) {
-						console.log("[new entry]: error wile parsing yt metadata", error);
-					}
-
-					// Check whether content is too old
-					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
-						return formfail({
-							url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
-						});
+						console.log("[update entry]: error wile parsing yt metadata", error, data.url);
 					}
 				}
 			}
