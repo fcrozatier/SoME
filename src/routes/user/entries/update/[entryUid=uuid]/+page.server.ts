@@ -86,8 +86,9 @@ export const actions = {
 			}
 
 			// Validate youtube entries creation date and channel identity
-			if (YOUTUBE_EMBEDDABLE.test(data.url)) {
-				const r = await fetch(data.url);
+			const id = data.url.match(YOUTUBE_EMBEDDABLE)?.groups?.id;
+			if (id) {
+				const r = await fetch(`https://youtube.com/watch?v=${id}`);
 				if (!r.ok) {
 					throw error(429, "Failed to fetch the Youtube metadata");
 				}
