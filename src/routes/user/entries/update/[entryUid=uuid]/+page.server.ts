@@ -72,7 +72,7 @@ export const load = async ({ locals, params }) => {
 };
 
 export const actions = {
-	default: formgate(NewEntrySchema, async (data, { locals, params }) => {
+	default: formgate(NewEntrySchema, async (data, { locals, params, fetch }) => {
 		try {
 			const { user } = locals;
 			const { entryUid } = params;

@@ -25,7 +25,7 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-	default: formgate(NewEntrySchema, async (data, { locals }) => {
+	default: formgate(NewEntrySchema, async (data, { locals, fetch }) => {
 		if (!locals.user) {
 			throw error(401, "You must be logged in");
 		}
