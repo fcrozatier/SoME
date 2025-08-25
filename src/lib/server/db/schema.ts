@@ -94,6 +94,19 @@ export const entryToTag = pgTable(
 	({ tagId, entryUid }) => [primaryKey({ columns: [tagId, entryUid] })],
 );
 
+export const userToTag = pgTable(
+	"user_to_tag",
+	{
+		userUid: uuid("user_uid").references(() => entries.uid, {
+			onDelete: "cascade",
+		}),
+		tagId: integer("tag_id").references(() => tags.id, {
+			onDelete: "cascade",
+		}),
+	},
+	({ userUid, tagId }) => [primaryKey({ columns: [userUid, tagId] })],
+);
+
 export const votes = pgTable(
 	"votes",
 	{
