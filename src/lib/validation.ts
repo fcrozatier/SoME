@@ -64,6 +64,7 @@ export const ChangePasswordSchema = {
 export const UpdateProfileSchema = {
 	username: UsernameSchema,
 	isTeacher: TeacherSchema,
+	level: fg.multi({ min: 1 }),
 	bio: fg.textarea({ required: false, maxlength: 500 }).trim(),
 };
 

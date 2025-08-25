@@ -2,14 +2,7 @@ import { PUBLIC_REGISTRATION_START } from "$env/static/public";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import {
-	entries,
-	entryToTag,
-	nonTags,
-	tags,
-	users,
-	userToEntry,
-} from "$lib/server/db/schema.js";
+import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
