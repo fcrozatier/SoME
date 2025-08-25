@@ -103,7 +103,7 @@ export const actions = {
 
 			const feedbackSafe = await parseAndSanitizeMarkdown(data.feedback);
 
-			if (!dev && data.feedback) {
+			if (!dev && data.feedback && Math.random() > 0.5) {
 				const completion = await openai.chat.completions.create({
 					model: "gpt-4",
 					temperature: 0.2,
@@ -169,7 +169,7 @@ export const actions = {
 
 		const feedbackSafe = await parseAndSanitizeMarkdown(data.feedback);
 
-		if (!dev && data.feedback) {
+		if (!dev && data.feedback && Math.random() > 0.5) {
 			const completion = await openai.chat.completions.create({
 				model: "gpt-4",
 				temperature: 0.2,
