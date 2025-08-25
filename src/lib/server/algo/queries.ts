@@ -23,6 +23,8 @@ export function query1(token: string, category: string) {
 				from entries
 				left join total
 				on entries.uid=total.entry_uid
+				left join entry_to_tag
+				on entries.uid=entry_to_tag.entry_uid
 
 				where entries.category=${category}
 					and active='true'
@@ -31,6 +33,7 @@ export function query1(token: string, category: string) {
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
 					and uid not in (select entry_uid from flags where flags.user_uid=${token})
 					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${token})
+					and entry_to_tag.tag_id in (select tag_id from user_to_tag where user_uid=${token})
 
 				order by total.count nulls first
 			),
@@ -71,6 +74,8 @@ export function query2(token: string, category: string) {
 				from entries
 				left join median
 				on entries.uid=median.entry_uid
+				left join entry_to_tag
+				on entries.uid=entry_to_tag.entry_uid
 
 				where entries.category=${category}
 					and active='true'
@@ -79,6 +84,7 @@ export function query2(token: string, category: string) {
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
 					and uid not in (select entry_uid from flags where flags.user_uid=${token})
 					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${token})
+					and entry_to_tag.tag_id in (select tag_id from user_to_tag where user_uid=${token})
 
 				order by score nulls last
 			),
@@ -127,6 +133,8 @@ export function query3(token: string, category: string) {
 				on entries.uid=multiplier.entry_uid
 				left join scores
 				on entries.uid=scores.entry_uid
+				left join entry_to_tag
+				on entries.uid=entry_to_tag.entry_uid
 
 				where entries.category=${category}
 					and active='true'
@@ -135,6 +143,7 @@ export function query3(token: string, category: string) {
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
 					and uid not in (select entry_uid from flags where flags.user_uid=${token})
 					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${token})
+					and entry_to_tag.tag_id in (select tag_id from user_to_tag where user_uid=${token})
 
 				order by score nulls last
 			),
