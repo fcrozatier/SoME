@@ -21,6 +21,7 @@
 	let guidelines: HTMLDialogElement | undefined = $state();
 
 	let ready = $state(!!data.score);
+	let score = $state(data.score ? Number(data.score) : 5);
 	let feedback = $state(data.feedback_unsafe_md ?? "");
 
 	let targetTime: number;
@@ -151,7 +152,7 @@
 
 				<div class="my-12">
 					{#key data.uid}
-						<Slider bind:ready score={data.score ? Number(data.score) : 5}></Slider>
+						<Slider bind:ready bind:score></Slider>
 					{/key}
 				</div>
 			</div>
@@ -270,19 +271,34 @@
 		class="space-y-2"
 		action="?/flag"
 		use:clickOutside={() => flagDialog?.close()}
-		use:enhance={({ formElement }) => {
+		use:enhance={({ formElement, formData }) => {
 			const buttons = document.querySelectorAll("button");
 			buttons.forEach((b) => b.setAttribute("disabled", "on"));
-			return async () => {
+			formData.set("feedback", feedback);
+			if (ready) {
+				formData.set("score", String(score));
+			}
+			return async ({ result }) => {
 				buttons.forEach((b) => b.removeAttribute("disabled"));
-				formElement.reset();
-				flagDialog?.close();
-				clearInterval(interval);
-				newToast({ type: "info", content: "Entry flagged" });
-				await goto(`/user/vote/${page.params["category"]}`, {
-					noScroll: false,
-					invalidateAll: true,
-				});
+				if (result.type === "success") {
+					formElement.reset();
+					flagDialog?.close();
+					clearInterval(interval);
+					newToast({ type: "info", content: "Entry flagged" });
+					await goto(`/user/vote/${page.params["category"]}`, {
+						noScroll: false,
+						invalidateAll: true,
+					});
+				} else if (
+					result.type === "failure" &&
+					result.data?.issues !== null &&
+					typeof result.data?.issues === "object"
+				) {
+					const message = Object.values(result.data.issues)?.[0]?.message ?? "";
+					if (message) {
+						newToast({ type: "error", content: message });
+					}
+				}
 			};
 		}}
 	>
@@ -308,6 +324,17 @@
 			placeholder="Briefly explain why this entry should be reviewed"
 			{...fg.splat(FlagSchema["reason"].attributes)}
 		/>
+
+		<label>
+			<input
+				type="checkbox"
+				name="vote"
+				class="checkbox"
+				{...fg.splat(FlagSchema["vote"].attributes)}
+			/>
+			Submit score & feedback along with flag
+		</label>
+
 		<input type="hidden" value={data.uid} name="uid" required />
 		<p class="mb-0 mt-8 flex items-center gap-2">
 			<button

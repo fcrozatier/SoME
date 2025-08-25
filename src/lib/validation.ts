@@ -178,6 +178,9 @@ export const SkipSchema = {
 };
 
 export const FlagSchema = {
+	score: fg.range({ min: 1, max: 9, step: 0.01 }).optional(),
+	feedback: FeedbackSchema,
+	uid: UidSchema,
 	reason: fg.text(
 		{ minlength: 1, maxlength: 100, required: true },
 		{
@@ -185,7 +188,7 @@ export const FlagSchema = {
 			maxlength: "Reason too long",
 		},
 	),
-	uid: UidSchema,
+	vote: fg.checkbox({ required: false }),
 };
 
 // Admin

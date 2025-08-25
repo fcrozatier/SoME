@@ -1,29 +1,27 @@
 <script lang="ts">
 	import type { Attachment } from "svelte/attachments";
 
-	let { ready = $bindable(false), score = 5 } = $props();
+	let { ready = $bindable(false), score = $bindable(5) } = $props();
 
 	const values = Array.from({ length: 9 }, (_, i) => i + 1);
 
-	let _grade = $state(score);
-
 	const grade = {
 		get value() {
-			return _grade;
+			return score;
 		},
 		set value(g) {
-			_grade = g;
+			score = g;
 
 			// Unfortunately we can't color-mix() with more than 2 colors (yet?)
-			if (_grade < 5) {
+			if (score < 5) {
 				wrapper?.style.setProperty(
 					"--color",
-					`color-mix(in oklch, var(--color-error), var(--color-warning) ${(2 * 100 * (_grade - 1)) / 8}%`,
+					`color-mix(in oklch, var(--color-error), var(--color-warning) ${(2 * 100 * (score - 1)) / 8}%`,
 				);
 			} else {
 				wrapper?.style.setProperty(
 					"--color",
-					`color-mix(in oklch, var(--color-warning), var(--color-success) ${2 * ((100 * (_grade - 1)) / 8 - 50)}%)`,
+					`color-mix(in oklch, var(--color-warning), var(--color-success) ${2 * ((100 * (score - 1)) / 8 - 50)}%)`,
 				);
 			}
 		},
