@@ -1,22 +1,16 @@
 import { dev } from "$app/environment";
-import { MODERATION_PROMPT, OPENAI_API_KEY, OPENAI_PROJECT } from "$env/static/private";
 import type { Category } from "$lib/config";
 import { query1 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
 import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
+import { maybeRude } from "$lib/server/moderation.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 import { voteOpen } from "$lib/utils/time";
 import { CacheVoteSchema, FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
 import { redirect } from "@sveltejs/kit";
 import { and, eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
-import { OpenAI } from "openai";
-
-const openai = new OpenAI({
-	apiKey: OPENAI_API_KEY,
-	project: OPENAI_PROJECT,
-});
 
 export const load = async ({ locals, params }) => {
 	if (!locals.user) {
@@ -101,27 +95,11 @@ export const actions = {
 
 			let maybe_rude = false;
 
-			const feedbackSafe = await parseAndSanitizeMarkdown(data.feedback);
-
 			if (!dev && data.feedback && Math.random() > 0.5) {
-				const completion = await openai.chat.completions.create({
-					model: "gpt-4.1-nano",
-					temperature: 0.2,
-					messages: [
-						{
-							role: "system",
-							content: MODERATION_PROMPT,
-						},
-						{
-							role: "user",
-							content: feedbackSafe,
-						},
-					],
-				});
-
-				maybe_rude =
-					completion.choices[0]?.message.content?.match(/OK|REVIEW/g)?.at(-1) === "REVIEW";
+				maybe_rude = await maybeRude(data.feedback);
 			}
+
+			const feedbackSafe = await parseAndSanitizeMarkdown(data.feedback);
 
 			await db
 				.insert(votes)
@@ -167,26 +145,11 @@ export const actions = {
 
 		let maybe_rude = false;
 
-		const feedbackSafe = await parseAndSanitizeMarkdown(data.feedback);
-
 		if (!dev && data.feedback && Math.random() > 0.5) {
-			const completion = await openai.chat.completions.create({
-				model: "gpt-4",
-				temperature: 0.2,
-				messages: [
-					{
-						role: "system",
-						content: MODERATION_PROMPT,
-					},
-					{
-						role: "user",
-						content: feedbackSafe,
-					},
-				],
-			});
-
-			maybe_rude = completion.choices[0]?.message.content?.match(/OK|REVIEW/g)?.at(-1) === "REVIEW";
+			maybe_rude = await maybeRude(data.feedback);
 		}
+
+		const feedbackSafe = await parseAndSanitizeMarkdown(data.feedback);
 
 		await db
 			.insert(votes)
