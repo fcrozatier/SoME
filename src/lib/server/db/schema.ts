@@ -141,9 +141,7 @@ export const flags = pgTable(
 		reason: text("reason").notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	(
-		{ userUid, entryUid },
-	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const skips = pgTable(
@@ -157,9 +155,7 @@ export const skips = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	(
-		{ userUid, entryUid },
-	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const cache = pgTable(
