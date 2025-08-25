@@ -181,7 +181,7 @@
 			>
 			<button class="btn-neutral btn block">Update</button>
 		</p>
-		{#if form?.issues || page.status !== 200}
+		{#if form?.id === "update" && (form?.issues || page.status !== 200)}
 			<p class="error-message mt-2">
 				Something went wrong. {form?.issues?.level
 					? "Please select at least one review level"
