@@ -10,7 +10,7 @@ import { voteOpen } from "$lib/utils/time";
 import { CacheVoteSchema, FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
 import { redirect } from "@sveltejs/kit";
 import { and, eq, sql } from "drizzle-orm";
-import { formgate } from "formgator/sveltekit";
+import { formfail, formgate } from "formgator/sveltekit";
 import { OpenAI } from "openai";
 
 const openai = new OpenAI({
@@ -86,25 +86,77 @@ export const load = async ({ locals, params }) => {
 };
 
 export const actions = {
-	flag: formgate(FlagSchema, async (data, { params, locals }) => {
-		if (!locals.user) {
+	flag: formgate(FlagSchema, async (data, event) => {
+		if (!event.locals.user) {
 			return redirect(302, "/login");
 		}
-		const token = locals.user.uid;
-		const { category } = params;
+		const uid = event.locals.user.uid;
+
+		if (data.vote) {
+			if (!data.score) {
+				return formfail({
+					vote: "Please grade the entry first",
+				});
+			}
+
+			let maybe_rude = false;
+
+			const feedbackSafe = await parseAndSanitizeMarkdown(data.feedback);
+
+			if (!dev && data.feedback) {
+				const completion = await openai.chat.completions.create({
+					model: "gpt-4",
+					temperature: 0.2,
+					messages: [
+						{
+							role: "system",
+							content: MODERATION_PROMPT,
+						},
+						{
+							role: "user",
+							content: feedbackSafe,
+						},
+					],
+				});
+
+				maybe_rude =
+					completion.choices[0]?.message.content?.match(/OK|REVIEW/g)?.at(-1) === "REVIEW";
+			}
+
+			await db
+				.insert(votes)
+				.values({
+					entryUid: data.uid,
+					userUid: uid,
+					score: String(data.score),
+					feedback: feedbackSafe,
+					feedback_unsafe_md: data.feedback,
+					maybe_rude,
+				})
+				.onConflictDoUpdate({
+					target: [votes.userUid, votes.entryUid],
+					set: {
+						score: String(data.score),
+						feedback: feedbackSafe,
+						feedback_unsafe_md: data.feedback,
+					},
+				});
+		}
 
 		await db
 			.insert(flags)
 			.values({
 				entryUid: data.uid,
-				userUid: token,
+				userUid: uid,
 				reason: data.reason,
 			})
 			.onConflictDoNothing();
 
 		await db
 			.delete(cache)
-			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+			.where(and(eq(cache.userUid, uid), eq(cache.category, event.params.category as Category)));
+
+		return { success: true };
 	}),
 	vote: formgate(VoteSchema, async (data, { params, locals }) => {
 		if (!locals.user) {
