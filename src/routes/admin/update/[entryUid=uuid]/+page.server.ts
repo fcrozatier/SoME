@@ -5,11 +5,11 @@ import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
 import {
 	entries,
-	entriesToTags,
+	entryToTag,
 	nonTags,
 	tags,
 	users,
-	usersToEntries,
+	userToEntry,
 	votes,
 } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
@@ -205,7 +205,7 @@ export const actions = {
 
 			// Connect the creators and the entry
 			await db
-				.insert(usersToEntries)
+				.insert(userToEntry)
 				.values(team.map((user) => ({ userUid: user.uid, entryUid })))
 				.onConflictDoNothing();
 
@@ -218,11 +218,11 @@ export const actions = {
       `,
 			);
 
-			await db.delete(entriesToTags).where(
+			await db.delete(entryToTag).where(
 				and(
-					eq(entriesToTags.entryUid, entryUid),
+					eq(entryToTag.entryUid, entryUid),
 					inArray(
-						entriesToTags.tagId,
+						entryToTag.tagId,
 						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) => t.id),
 					),
 				),
@@ -242,7 +242,7 @@ export const actions = {
 
 				// Update entry tags
 				await db
-					.insert(entriesToTags)
+					.insert(entryToTag)
 					.values(tagIds.map(({ id }) => ({ entryUid, tagId: id })))
 					.onConflictDoNothing();
 			}

@@ -2,14 +2,7 @@ import { PUBLIC_REGISTRATION_START } from "$env/static/public";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import {
-	entries,
-	entriesToTags,
-	nonTags,
-	tags,
-	users,
-	usersToEntries,
-} from "$lib/server/db/schema.js";
+import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
@@ -61,17 +54,16 @@ export const actions = {
 				try {
 					const ytInitialPlayerResponse = embeddedjson[1]!;
 					// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
-					const createdAt =
+					var createdAt =
 						JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
-
-					// Check whether content is too old
-					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
-						return formfail({
-							url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
-						});
-					}
 				} catch (error) {
 					console.log("[new entry]: error wile parsing yt metadata", data.url, error);
+				}
+				// Check whether content is too old
+				if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
+					return formfail({
+						url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+					});
 				}
 			}
 		}
@@ -172,7 +164,7 @@ export const actions = {
 			}
 
 			// Connect the creators and the entry
-			await db.insert(usersToEntries).values(team.map((user) => ({ userUid: user.uid, entryUid })));
+			await db.insert(userToEntry).values(team.map((user) => ({ userUid: user.uid, entryUid })));
 
 			// Save tags and retrieve ids whether newly inserted or existing
 			if (tagSet.size) {
@@ -186,7 +178,7 @@ export const actions = {
 					.from(tags)
 					.where(inArray(tags.name, entryTags));
 
-				await db.insert(entriesToTags).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
+				await db.insert(entryToTag).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
 			}
 
 			return redirect(303, "/user/entries");

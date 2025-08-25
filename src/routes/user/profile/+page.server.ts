@@ -1,31 +1,42 @@
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db/index.js";
-import { users } from "$lib/server/db/schema.js";
+import { userToTag } from "$lib/server/db/schema.js";
+import { type SelectTag, type User, users } from "$lib/server/db/schema.js";
 import { DeleteProfileSchema, UpdateProfileSchema } from "$lib/validation.js";
 import { type Actions, fail, redirect } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
 	if (!locals.user) return redirect(302, "/login");
 
-	const [user] = await db
-		.select({
-			email: users.email,
-			isTeacher: users.isTeacher,
-			bio: users.bio,
-		})
-		.from(users)
-		.where(eq(users.uid, locals.user.uid));
+	const uid = locals.user.uid;
+
+	const [user]: Pick<User, "email" | "is_teacher" | "bio">[] = await db.execute(
+		sql`
+			select email, is_teacher, bio from users
+			where uid=${uid}
+		`,
+	);
 
 	if (!user) return redirect(302, "/login");
+
+	const tags: Pick<SelectTag, "name">[] = await db.execute(sql`
+		select name from users
+		join user_to_tag
+		on users.uid=user_uid
+		join tags
+		on tags.id=tag_id
+		where user_uid=${uid}
+	`);
 
 	return {
 		user: {
 			username: locals.user.username,
 			email: user.email,
-			isTeacher: !!user.isTeacher,
+			isTeacher: !!user.is_teacher,
 			bio: user.bio,
+			tags: tags.map((t) => t.name),
 		},
 	};
 };
@@ -34,16 +45,34 @@ export const actions: Actions = {
 	update: formgate(
 		UpdateProfileSchema,
 		async (data, { locals }) => {
-			if (!locals.user?.uid) throw redirect(301, "/login");
+			const uid = locals.user?.uid;
+			if (!uid) throw redirect(301, "/login");
 
 			await db
 				.update(users)
 				.set({
-					isTeacher: data.isTeacher,
+					is_teacher: data.isTeacher,
 					username: data.username,
 					bio: data.bio,
 				})
-				.where(eq(users.uid, locals.user.uid));
+				.where(eq(users.uid, uid));
+
+			// Remove old review preferences
+			await db.execute(sql`
+				delete from user_to_tag
+				where user_uid=${uid}
+			`);
+
+			const tagIds: { id: number }[] = await db.execute(sql`
+					select id from tags
+					where name in ${data.level}
+				`);
+
+			// Update entry tags
+			await db
+				.insert(userToTag)
+				.values(tagIds.map(({ id }) => ({ userUid: uid, tagId: id })))
+				.onConflictDoNothing();
 
 			return { data };
 		},
@@ -55,7 +84,9 @@ export const actions: Actions = {
 			const { locals } = event;
 			if (!locals.user?.uid) throw redirect(302, "/login");
 
-			const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
+			const [user] = await db.select().from(users).where(
+				eq(users.uid, locals.user.uid),
+			);
 
 			if (!user?.passwordHash) {
 				return fail(401);

@@ -6,13 +6,15 @@
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
-	import { DeleteProfileSchema, UpdateProfileSchema } from "$lib/validation.js";
+	import { DeleteProfileSchema, levels, UpdateProfileSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
+	import { SvelteSet } from "svelte/reactivity";
 
 	let { data, form } = $props();
 
 	let username = $state(data.user.username ?? "");
 	let usernameStatus: UsernameStatus = $state(undefined);
+	let tags: Set<string> = $state(new SvelteSet<string>(data.user.tags));
 	let bio = $state(data.user.bio ?? "");
 
 	let deleteDialog: HTMLDialogElement | undefined = $state();
@@ -107,12 +109,41 @@
 		</div>
 
 		<div class="form-control">
+			<span class="label label-text"> Review Preferences </span>
+			<p class="mt-0">
+				Select the academic levels you'd prefer to review. This helps us customize your peer review
+				experience
+			</p>
+
+			<div class="flex flex-wrap gap-2 mb-6">
+				{#each levels as level}
+					{#if tags.has(level)}
+						<input type="hidden" value={level} name="level" />
+					{/if}
+					<button
+						class={`tag cursor-pointer  ${tags.has(level) ? "bg-gray-900 border-gray-900 text-white" : ""}`}
+						type="button"
+						onclick={() => {
+							if (tags.has(level)) {
+								tags.delete(level);
+							} else {
+								tags.add(level);
+							}
+						}}
+					>
+						{level}
+					</button>
+				{/each}
+			</div>
+		</div>
+
+		<div class="form-control">
 			<label for="bio" class="label">
 				<span class="label-text"> Bio </span>
 			</label>
-			<div id="bio-description" class="mt-0 text-sm">
-				<p class="mt-0">Tell us a bit about yourself</p>
-				<p class="my-0">
+			<div id="bio-description" class="mt-0">
+				<p class="my-0!">Tell us a bit about yourself</p>
+				<p class="my-2!">
 					If you're a teacher, share your teaching experience, what classes or levels you've taught,
 					your approach and areas of focus.
 				</p>
@@ -126,7 +157,7 @@
 				id="bio"
 				name="bio"
 				class="textarea textarea-bordered w-full"
-				placeholder="Tell us a bit about yourself!"
+				placeholder="Tell us a bit about yourself"
 				bind:value={bio}
 				{...fg.splat(UpdateProfileSchema["bio"].attributes)}
 				aria-describedby="bio-description"
@@ -149,15 +180,14 @@
 				>Sign out</a
 			>
 			<button class="btn-neutral btn block">Update</button>
-			{#if form?.issues || page.status !== 200}
-				<span class="error-message mt-2">
-					Something went wrong. {form?.issues
-						? "Please correct the highlighted fields above"
-						: "There was a network error. Please try again later"}
-				</span>
-			{/if}
 		</p>
-		<p></p>
+		{#if form?.id === "update" && (form?.issues || page.status !== 200)}
+			<p class="error-message mt-2">
+				Something went wrong. {form?.issues?.level
+					? "Please select at least one review level"
+					: "Please correct the highlighted fields above"}
+			</p>
+		{/if}
 	</form>
 
 	<h3 class="text-error">Delete account</h3>

@@ -24,7 +24,7 @@ export const users = pgTable(
 		newPasswordValidationToken: uuid("new_password_validation_token"),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 		isAdmin: boolean("is_admin").default(false),
-		isTeacher: boolean("is_teacher").default(false),
+		is_teacher: boolean("is_teacher").default(false),
 		bio: text("bio"),
 	},
 	({ username, newPasswordValidationToken }) => [
@@ -56,7 +56,7 @@ export const entries = pgTable("entries", {
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 });
 
-export const usersToEntries = pgTable(
+export const userToEntry = pgTable(
 	"user_to_entry",
 	{
 		userUid: uuid("user_uid").references(() => users.uid, {
@@ -81,7 +81,7 @@ export const nonTags = pgTable("non_tags", {
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 });
 
-export const entriesToTags = pgTable(
+export const entryToTag = pgTable(
 	"entry_to_tag",
 	{
 		entryUid: uuid("entry_uid").references(() => entries.uid, {
@@ -92,6 +92,19 @@ export const entriesToTags = pgTable(
 		}),
 	},
 	({ tagId, entryUid }) => [primaryKey({ columns: [tagId, entryUid] })],
+);
+
+export const userToTag = pgTable(
+	"user_to_tag",
+	{
+		userUid: uuid("user_uid").references(() => users.uid, {
+			onDelete: "cascade",
+		}),
+		tagId: integer("tag_id").references(() => tags.id, {
+			onDelete: "cascade",
+		}),
+	},
+	({ userUid, tagId }) => [primaryKey({ columns: [userUid, tagId] })],
 );
 
 export const votes = pgTable(

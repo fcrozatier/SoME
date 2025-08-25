@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { usersToEntries } from "../db/schema";
+import { userToEntry } from "../db/schema";
 import { currentYear } from "$lib/config";
 
 /**
@@ -30,7 +30,7 @@ export function query1(token: string, category: string) {
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
 					and uid not in (select entry_uid from flags where flags.user_uid=${token})
-					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
+					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${token})
 
 				order by total.count nulls first
 			),
@@ -78,7 +78,7 @@ export function query2(token: string, category: string) {
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
 					and uid not in (select entry_uid from flags where flags.user_uid=${token})
-					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
+					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${token})
 
 				order by score nulls last
 			),
@@ -134,7 +134,7 @@ export function query3(token: string, category: string) {
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
 					and uid not in (select entry_uid from flags where flags.user_uid=${token})
-					and uid not in (select entry_uid from ${usersToEntries} where ${usersToEntries.userUid}=${token})
+					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${token})
 
 				order by score nulls last
 			),

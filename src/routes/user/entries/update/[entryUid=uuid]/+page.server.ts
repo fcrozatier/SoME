@@ -6,11 +6,11 @@ import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
 import {
 	entries,
-	entriesToTags,
+	entryToTag,
 	nonTags,
 	tags,
 	users,
-	usersToEntries,
+	userToEntry,
 	votes,
 } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
@@ -101,16 +101,16 @@ export const actions = {
 					try {
 						const ytInitialPlayerResponse = embeddedjson[1]!;
 						// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
-						const createdAt =
+						var createdAt =
 							JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
-						// Check whether content is too old
-						if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
-							return formfail({
-								url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
-							});
-						}
 					} catch (error) {
 						console.log("[update entry]: error wile parsing yt metadata", error, data.url);
+					}
+					// Check whether content is too old
+					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
+						return formfail({
+							url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+						});
 					}
 				}
 			}
@@ -255,7 +255,7 @@ export const actions = {
 
 			// Connect the creators and the entry
 			await db
-				.insert(usersToEntries)
+				.insert(userToEntry)
 				.values(team.map((user) => ({ userUid: user.uid, entryUid })))
 				.onConflictDoNothing();
 
@@ -268,11 +268,11 @@ export const actions = {
       `,
 			);
 
-			await db.delete(entriesToTags).where(
+			await db.delete(entryToTag).where(
 				and(
-					eq(entriesToTags.entryUid, entryUid),
+					eq(entryToTag.entryUid, entryUid),
 					inArray(
-						entriesToTags.tagId,
+						entryToTag.tagId,
 						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) => t.id),
 					),
 				),
@@ -292,7 +292,7 @@ export const actions = {
 
 				// Update entry tags
 				await db
-					.insert(entriesToTags)
+					.insert(entryToTag)
 					.values(tagIds.map(({ id }) => ({ entryUid, tagId: id })))
 					.onConflictDoNothing();
 			}
