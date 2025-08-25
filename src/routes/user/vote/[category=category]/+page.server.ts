@@ -105,7 +105,7 @@ export const actions = {
 
 			if (!dev && data.feedback && Math.random() > 0.5) {
 				const completion = await openai.chat.completions.create({
-					model: "gpt-4",
+					model: "gpt-4.1-nano",
 					temperature: 0.2,
 					messages: [
 						{
