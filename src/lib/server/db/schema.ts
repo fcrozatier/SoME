@@ -56,7 +56,7 @@ export const entries = pgTable("entries", {
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 });
 
-export const usersToEntries = pgTable(
+export const userToEntry = pgTable(
 	"user_to_entry",
 	{
 		userUid: uuid("user_uid").references(() => users.uid, {
@@ -81,7 +81,7 @@ export const nonTags = pgTable("non_tags", {
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 });
 
-export const entriesToTags = pgTable(
+export const entryToTag = pgTable(
 	"entry_to_tag",
 	{
 		entryUid: uuid("entry_uid").references(() => entries.uid, {
@@ -128,7 +128,9 @@ export const flags = pgTable(
 		reason: text("reason").notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const skips = pgTable(
@@ -142,7 +144,9 @@ export const skips = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const cache = pgTable(

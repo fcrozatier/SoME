@@ -4,11 +4,11 @@ import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import {
 	entries,
-	entriesToTags,
+	entryToTag,
 	nonTags,
 	tags,
 	users,
-	usersToEntries,
+	userToEntry,
 } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
@@ -171,7 +171,7 @@ export const actions = {
 			}
 
 			// Connect the creators and the entry
-			await db.insert(usersToEntries).values(team.map((user) => ({ userUid: user.uid, entryUid })));
+			await db.insert(userToEntry).values(team.map((user) => ({ userUid: user.uid, entryUid })));
 
 			// Save tags and retrieve ids whether newly inserted or existing
 			if (tagSet.size) {
@@ -185,7 +185,7 @@ export const actions = {
 					.from(tags)
 					.where(inArray(tags.name, entryTags));
 
-				await db.insert(entriesToTags).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
+				await db.insert(entryToTag).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
 			}
 
 			return redirect(303, "/user/entries");
