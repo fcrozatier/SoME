@@ -101,16 +101,16 @@ export const actions = {
 					try {
 						const ytInitialPlayerResponse = embeddedjson[1]!;
 						// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
-						const createdAt =
+						var createdAt =
 							JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
-						// Check whether content is too old
-						if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
-							return formfail({
-								url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
-							});
-						}
 					} catch (error) {
 						console.log("[update entry]: error wile parsing yt metadata", error, data.url);
+					}
+					// Check whether content is too old
+					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
+						return formfail({
+							url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+						});
 					}
 				}
 			}
