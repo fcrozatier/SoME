@@ -97,7 +97,7 @@ export const entryToTag = pgTable(
 export const userToTag = pgTable(
 	"user_to_tag",
 	{
-		userUid: uuid("user_uid").references(() => entries.uid, {
+		userUid: uuid("user_uid").references(() => users.uid, {
 			onDelete: "cascade",
 		}),
 		tagId: integer("tag_id").references(() => tags.id, {
