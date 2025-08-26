@@ -7,7 +7,7 @@ export const formAction = (key: keyof typeof action) => {
 	return "?/" + action[key];
 };
 
-export const examples: { prompt: string; placeholder: string }[] = [
+export const rotatingPairs: { prompt: string; placeholder: string }[] = [
 	{
 		prompt: "What worked well? What could be improved? Suggest one actionable improvement",
 		placeholder:
@@ -85,6 +85,35 @@ export const examples: { prompt: string; placeholder: string }[] = [
 	{
 		prompt: "What’s one thing you found especially impressive or well-done?",
 		placeholder: "The explanation is crystal clear",
+	},
+];
+
+export const teacherRotatingPairs: { prompt: string; placeholder: string }[] = [
+	{
+		prompt: "Would this explanation help your students understand the topic better?",
+		placeholder: "The analogy with the balance scale makes equations more concrete",
+	},
+	{
+		prompt: "What part of this exposition would be most helpful in class?",
+		placeholder:
+			"The step-by-step visuals of factoring quadratics would be great for struggling learners",
+	},
+	{
+		prompt: "Is there anything that might confuse a student?",
+		placeholder:
+			"The jump from the example to the formula could lose some students: a slower transition might help",
+	},
+	{
+		prompt: "How might this be useful as a teaching resource?",
+		placeholder: "I could use the interactive diagram as a warm-up activity in algebra.",
+	},
+	{
+		prompt: "Could a beginner follow this exposition?",
+		placeholder: "A quick refresher on fractions would help middle school students.",
+	},
+	{
+		prompt: "What student reactions do you anticipate?",
+		placeholder: "Students would find the puzzle-like framing engaging and motivating",
 	},
 ];
 

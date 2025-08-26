@@ -90,8 +90,26 @@ export const actions = {
 			if (id) {
 				const r = await fetch(`https://youtube.com/watch?v=${id}`, {
 					headers: {
-						Accept: "text/html",
+						accept:
+							"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+						"accept-language": "en-US,en;q=0.9",
+						"cache-control": "no-cache",
+						pragma: "no-cache",
+						priority: "u=0, i",
+						"sec-ch-ua": '"Not;A=Brand";v="99", "Brave";v="139", "Chromium";v="139"',
+						"sec-ch-ua-mobile": "?0",
+						"sec-ch-ua-platform": '"macOS"',
+						"sec-fetch-dest": "document",
+						"sec-fetch-mode": "navigate",
+						"sec-fetch-site": "none",
+						"sec-fetch-user": "?1",
+						"sec-gpc": "1",
+						"upgrade-insecure-requests": "1",
 					},
+					body: null,
+					method: "GET",
+					mode: "cors",
+					credentials: "omit",
 				});
 				if (!r.ok) {
 					throw error(429, "Failed to fetch the Youtube metadata");

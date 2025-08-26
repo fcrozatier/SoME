@@ -55,6 +55,7 @@ export async function validateSessionToken(token: string) {
 				uid: table.users.uid,
 				username: table.users.username,
 				isAdmin: table.users.isAdmin,
+				isTeacher: table.users.is_teacher,
 			},
 			session: table.sessions,
 		})
