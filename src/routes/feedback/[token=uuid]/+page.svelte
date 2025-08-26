@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Bento from "$lib/components/Bento.svelte";
-	import { round } from "@fcrozatier/ts-helpers";
-
+	import Score from "$lib/components/Score.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { round } from "@fcrozatier/ts-helpers";
 	import * as Plot from "@observablehq/plot";
 
 	function hist(node: HTMLElement, arg: { score: number }[]) {
@@ -72,15 +72,7 @@
 					{#each comments as { feedback, score }}
 						<div class="grid grid-cols-[1fr_2rem] gap-x-4 items-start border-b first:border-t py-4">
 							<p class="my-0 leading-loose whitespace-pre-wrap">{feedback}</p>
-							<span
-								class={`ml-auto w-full border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center
-								${+score <= 3 ? "bg-error/10 border-error" : ""}
-								${+score > 3 && +score <= 7 ? "bg-warning/10 border-warning" : ""}
-								${+score > 7 ? "bg-success border-success" : ""}
-							`}
-							>
-								{round(score, 1)}
-							</span>
+							<Score {score}></Score>
 						</div>
 					{/each}
 				{/if}

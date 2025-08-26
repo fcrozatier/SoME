@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Bento from "$lib/components/Bento.svelte";
 	import Display from "$lib/components/Display.svelte";
+	import Score from "$lib/components/Score.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { round } from "@fcrozatier/ts-helpers";
 	import * as Plot from "@observablehq/plot";
@@ -70,15 +71,7 @@
 			{#each comments as { feedback, score }}
 				<div class="grid grid-cols-[1fr_2rem] items-start border-b gap-x-4 first:border-t py-4">
 					<div class="prose">{@html feedback}</div>
-					<span
-						class={`ml-auto w-full border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center
-							${+score <= 3 ? "bg-error/10 border-error" : ""}
-							${+score > 3 && +score <= 7 ? "bg-warning/10 border-warning" : ""}
-							${+score > 7 ? "bg-success/10 border-success" : ""}
-						`}
-					>
-						{round(+score, 1)}
-					</span>
+					<Score score={+score}></Score>
 				</div>
 			{/each}
 		{/if}

@@ -5,13 +5,13 @@
 	import Display from "$lib/components/Display.svelte";
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
+	import Score from "$lib/components/Score.svelte";
 	import Slider from "$lib/components/Slider.svelte";
 	import Time from "$lib/components/Time.svelte";
 	import { currentYear } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { voteOpen } from "$lib/utils/time";
 	import { FeedbackSchema } from "$lib/validation.js";
-	import { round } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
 
 	let { data } = $props();
@@ -64,17 +64,7 @@
 						{/snippet}
 						{#snippet sidePanel()}
 							<div class="flex items-center justify-end sm:flex-col text-xs flex-wrap gap-4">
-								<div class="w-16 flex justify-center">
-									<span
-										class={`w-8 border text-xs rounded-full aspect-square min-w-4 text-center px-2 flex items-center justify-center
-							${score <= 3 ? "bg-error/10 border-error" : ""}
-							${score > 3 && score <= 7 ? "bg-warning/10 border-warning" : ""}
-							${score > 7 ? "bg-success/10 border-success" : ""}
-							`}
-									>
-										{round(score, 1)}
-									</span>
-								</div>
+								<Score {score}></Score>
 								{#if Number(year) === currentYear && voteOpen()}
 									<button
 										class="btn btn-sm"
