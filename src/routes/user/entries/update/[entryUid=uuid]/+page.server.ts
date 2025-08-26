@@ -89,15 +89,14 @@ export const actions = {
 			const id = data.url.match(YOUTUBE_EMBEDDABLE)?.groups?.id;
 			if (id) {
 				const r = await fetch(`https://youtube.com/watch?v=${id}`, {
-					"headers": {
-						"accept":
+					headers: {
+						accept:
 							"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
 						"accept-language": "en-US,en;q=0.9",
 						"cache-control": "no-cache",
-						"pragma": "no-cache",
-						"priority": "u=0, i",
-						"sec-ch-ua":
-							'"Not;A=Brand";v="99", "Brave";v="139", "Chromium";v="139"',
+						pragma: "no-cache",
+						priority: "u=0, i",
+						"sec-ch-ua": '"Not;A=Brand";v="99", "Brave";v="139", "Chromium";v="139"',
 						"sec-ch-ua-mobile": "?0",
 						"sec-ch-ua-platform": '"macOS"',
 						"sec-fetch-dest": "document",
@@ -107,43 +106,32 @@ export const actions = {
 						"sec-gpc": "1",
 						"upgrade-insecure-requests": "1",
 					},
-					"body": null,
-					"method": "GET",
-					"mode": "cors",
-					"credentials": "omit",
+					body: null,
+					method: "GET",
+					mode: "cors",
+					credentials: "omit",
 				});
 				if (!r.ok) {
 					throw error(429, "Failed to fetch the Youtube metadata");
 				}
 
 				const html = await r.text();
-				const embeddedjson = html.match(
-					/ytInitialPlayerResponse\s*=\s*(\{.+?\});/,
-				);
+				const embeddedjson = html.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});/);
 				if (!embeddedjson) {
-					console.log(
-						"[update entry]: couldn't parse yt metadata from",
-						data.url,
-					);
+					console.log("[update entry]: couldn't parse yt metadata from", data.url);
 				} else {
 					try {
 						const ytInitialPlayerResponse = embeddedjson[1]!;
 						// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
 						var createdAt =
-							JSON.parse(ytInitialPlayerResponse).microformat
-								.playerMicroformatRenderer.uploadDate;
+							JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
 					} catch (error) {
-						console.log(
-							"[update entry]: error wile parsing yt metadata",
-							error,
-							data.url,
-						);
+						console.log("[update entry]: error wile parsing yt metadata", error, data.url);
 					}
 					// Check whether content is too old
 					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
 						return formfail({
-							url:
-								`This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+							url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
 						});
 					}
 				}
@@ -169,9 +157,7 @@ export const actions = {
 				.from(users)
 				.where(inArray(users.username, usernames));
 
-			const formerCoauthors = prevCoauthors.filter((a) =>
-				!usernames.includes(a.username!)
-			);
+			const formerCoauthors = prevCoauthors.filter((a) => !usernames.includes(a.username!));
 
 			// Validate team members
 			if (team.length !== usernames.length) {
@@ -202,9 +188,7 @@ export const actions = {
 			const failedTags: { tag: string; unknownWords: string[] }[] = [];
 
 			for (const tag of entryTags) {
-				const unknownWords = tag.split("-").filter((part) =>
-					!dictionary.has(part)
-				);
+				const unknownWords = tag.split("-").filter((part) => !dictionary.has(part));
 
 				if (unknownWords.length > 0) {
 					failedTags.push({ tag, unknownWords });
@@ -220,11 +204,9 @@ export const actions = {
 					.onConflictDoNothing();
 
 				return formfail({
-					tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${
-						conjunctionFormatter.format(
-							failedTags.flatMap(({ unknownWords }) => unknownWords),
-						)
-					}`,
+					tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
+						failedTags.flatMap(({ unknownWords }) => unknownWords),
+					)}`,
 				});
 			}
 
@@ -313,9 +295,7 @@ export const actions = {
 					eq(entryToTag.entryUid, entryUid),
 					inArray(
 						entryToTag.tagId,
-						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) =>
-							t.id
-						),
+						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) => t.id),
 					),
 				),
 			);
