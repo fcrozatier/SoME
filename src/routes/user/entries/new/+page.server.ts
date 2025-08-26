@@ -2,7 +2,14 @@ import { PUBLIC_REGISTRATION_START } from "$env/static/public";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
+import {
+	entries,
+	entryToTag,
+	nonTags,
+	tags,
+	users,
+	userToEntry,
+} from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
@@ -31,7 +38,10 @@ export const actions = {
 		}
 
 		if (!locals.user.username) {
-			throw error(401, "Please choose a username on your Profile page before submitting");
+			throw error(
+				401,
+				"Please choose a username on your Profile page before submitting",
+			);
 		}
 
 		if (!submissionsOpen() && !locals.user.isAdmin) {
@@ -42,31 +52,60 @@ export const actions = {
 		const id = data.url.match(YOUTUBE_EMBEDDABLE)?.groups?.id;
 		if (id) {
 			const r = await fetch(`https://youtube.com/watch?v=${id}`, {
-				headers: {
-					Accept: "text/html",
+				"headers": {
+					"accept":
+						"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+					"accept-language": "en-US,en;q=0.9",
+					"cache-control": "no-cache",
+					"pragma": "no-cache",
+					"priority": "u=0, i",
+					"sec-ch-ua":
+						'"Not;A=Brand";v="99", "Brave";v="139", "Chromium";v="139"',
+					"sec-ch-ua-mobile": "?0",
+					"sec-ch-ua-platform": '"macOS"',
+					"sec-fetch-dest": "document",
+					"sec-fetch-mode": "navigate",
+					"sec-fetch-site": "none",
+					"sec-fetch-user": "?1",
+					"sec-gpc": "1",
+					"upgrade-insecure-requests": "1",
 				},
+				"body": null,
+				"method": "GET",
+				"mode": "cors",
+				"credentials": "omit",
 			});
 			if (!r.ok) {
 				throw error(429, "Failed to fetch the Youtube metadata");
 			}
 
 			const html = await r.text();
-			const embeddedjson = html.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});/);
+			const embeddedjson = html.match(
+				/ytInitialPlayerResponse\s*=\s*(\{.+?\});/,
+			);
 			if (!embeddedjson) {
 				console.log("[new entry]: couldn't parse yt metadata from", data.url);
 			} else {
 				try {
 					const ytInitialPlayerResponse = embeddedjson[1]!;
 					// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
-					var createdAt =
-						JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
+					var createdAt = JSON.parse(ytInitialPlayerResponse).microformat
+						.playerMicroformatRenderer.uploadDate;
 				} catch (error) {
-					console.log("[new entry]: error wile parsing yt metadata", data.url, error);
+					if (error instanceof Error) {
+						console.log(
+							"[new entry]: error wile parsing yt metadata",
+							data.url,
+							error.message,
+							embeddedjson,
+						);
+					}
 				}
 				// Check whether content is too old
 				if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
 					return formfail({
-						url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+						url:
+							`This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
 					});
 				}
 			}
@@ -87,7 +126,9 @@ export const actions = {
 		// Validate team members
 		if (team.length !== teamSize) {
 			const foundUsernames = team.map((u) => u.username);
-			const notFoundUsernames = usernames.filter((username) => !foundUsernames.includes(username));
+			const notFoundUsernames = usernames.filter((username) =>
+				!foundUsernames.includes(username)
+			);
 
 			return formfail({
 				usernames: `Username${
@@ -111,7 +152,9 @@ export const actions = {
 		const failedTags: { tag: string; unknownWords: string[] }[] = [];
 
 		for (const tag of entryTags) {
-			const unknownWords = tag.split("-").filter((part) => !dictionary.has(part));
+			const unknownWords = tag.split("-").filter((part) =>
+				!dictionary.has(part)
+			);
 
 			if (unknownWords.length > 0) {
 				failedTags.push({ tag, unknownWords });
@@ -127,9 +170,11 @@ export const actions = {
 				.onConflictDoNothing();
 
 			return formfail({
-				tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
-					failedTags.flatMap(({ unknownWords }) => unknownWords),
-				)}`,
+				tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${
+					conjunctionFormatter.format(
+						failedTags.flatMap(({ unknownWords }) => unknownWords),
+					)
+				}`,
 			});
 		}
 
@@ -168,7 +213,9 @@ export const actions = {
 			}
 
 			// Connect the creators and the entry
-			await db.insert(userToEntry).values(team.map((user) => ({ userUid: user.uid, entryUid })));
+			await db.insert(userToEntry).values(
+				team.map((user) => ({ userUid: user.uid, entryUid })),
+			);
 
 			// Save tags and retrieve ids whether newly inserted or existing
 			if (tagSet.size) {
@@ -182,7 +229,9 @@ export const actions = {
 					.from(tags)
 					.where(inArray(tags.name, entryTags));
 
-				await db.insert(entryToTag).values(tagIds.map(({ id }) => ({ entryUid, tagId: id })));
+				await db.insert(entryToTag).values(
+					tagIds.map(({ id }) => ({ entryUid, tagId: id })),
+				);
 			}
 
 			return redirect(303, "/user/entries");
