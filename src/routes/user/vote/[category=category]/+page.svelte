@@ -11,7 +11,13 @@
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 	import { debounce, randint } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
-	import { examples, formAction, toastsWithFeedback, toastsWithoutFeedback } from "./config";
+	import {
+		formAction,
+		rotatingPairs,
+		teacherRotatingPairs,
+		toastsWithFeedback,
+		toastsWithoutFeedback,
+	} from "./config";
 
 	const TIMER = 29;
 
@@ -28,7 +34,11 @@
 	let remaining = $state(TIMER);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
-	let example = $state(examples[randint(0, examples.length - 1)]!);
+	let example = $state(
+		data.user?.isTeacher
+			? teacherRotatingPairs[randint(0, teacherRotatingPairs.length - 1)]!
+			: rotatingPairs[randint(0, rotatingPairs.length - 1)]!,
+	);
 
 	const visibilitychange = () => {
 		if (document.visibilityState === "visible") {
@@ -50,7 +60,9 @@
 		feedback = data.feedback_unsafe_md ?? "";
 		targetTime = Date.now() + TIMER * 1000;
 		remaining = TIMER;
-		example = examples[randint(0, examples.length - 1)]!;
+		example = data.user?.isTeacher
+			? teacherRotatingPairs[randint(0, teacherRotatingPairs.length - 1)]!
+			: rotatingPairs[randint(0, rotatingPairs.length - 1)]!;
 
 		document.addEventListener("visibilitychange", visibilitychange);
 		interval = setInterval(() => {
@@ -136,8 +148,13 @@
 				<h3 class="">Vote</h3>
 				<h4 class="mb-0 mt-2">Ranking</h4>
 				<p class="mb-4">
-					How valuable is this entry to the space of online math exposition, compared to the typical
-					math {data.category === "video" ? "video" : "article"} you've seen?
+					{#if data.user?.isTeacher}
+						How useful would this entry be in supporting student understanding, compared to the
+						typical explanations you've used or seen on the topic?
+					{:else}
+						How valuable is this entry to the space of online math exposition, compared to the
+						typical {data.category === "video" ? "video" : "article"} you've seen?
+					{/if}
 					<button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
