@@ -1,4 +1,6 @@
+import { PUBLIC_REGISTRATION_START } from "$env/static/public";
 import * as fg from "formgator";
+import { formfail } from "formgator/sveltekit";
 import { z } from "zod";
 
 const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -132,6 +134,81 @@ export const NewEntrySchema = {
 	thumbnail: ThumbnailSchema,
 	rules: fg.checkbox({ required: true }),
 	copyright: fg.checkbox({ required: true }),
+};
+
+export const validateYtCreationDate = async (youtubeId: string) => {
+	const url = `https://youtube.com/watch?v=${youtubeId}`;
+	const r = await fetch(url, {
+		headers: {
+			accept:
+				"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+			"accept-language": "en-US,en;q=0.9",
+			"cache-control": "no-cache",
+			pragma: "no-cache",
+			priority: "u=0, i",
+			"sec-ch-ua": '"Not;A=Brand";v="99", "Brave";v="139", "Chromium";v="139"',
+			"sec-ch-ua-mobile": "?0",
+			"sec-ch-ua-platform": '"macOS"',
+			"sec-fetch-dest": "document",
+			"sec-fetch-mode": "navigate",
+			"sec-fetch-site": "none",
+			"sec-fetch-user": "?1",
+			"sec-gpc": "1",
+			"upgrade-insecure-requests": "1",
+		},
+		body: null,
+		method: "GET",
+		mode: "cors",
+		credentials: "omit",
+	});
+
+	if (!r.ok) {
+		console.log("[entry]: Failed to fetch the Youtube metadata", url);
+		return;
+	}
+
+	const html = await r.text();
+	const match = html.match(/ytInitialPlayerResponse\s*=\s*\{/);
+	if (!match) {
+		console.log("[entry]: couldn't parse yt metadata from", url);
+		return;
+	}
+
+	try {
+		const matchLength = match[0].length;
+		const matchIndex = match.index!;
+
+		let index = matchIndex + matchLength;
+		let open = 1;
+		let json = "{";
+
+		// manually ensure balanced braces
+		while (open > 0 && index < html.length) {
+			const char = html[index];
+			if (char === "{") {
+				open += 1;
+			} else if (char === "}") {
+				open -= 1;
+			}
+			json += char;
+			index++;
+		}
+
+		// var channel = JSON.parse(json).videoDetails.author;
+		var createdAt = JSON.parse(json).microformat.playerMicroformatRenderer.uploadDate;
+	} catch (error) {
+		if (error instanceof Error) {
+			console.log("[entry]: error wile parsing yt metadata", url, error.message);
+		}
+		return;
+	}
+
+	// Check whether content is too old
+	if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
+		formfail({
+			url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+		});
+	}
 };
 
 /**
