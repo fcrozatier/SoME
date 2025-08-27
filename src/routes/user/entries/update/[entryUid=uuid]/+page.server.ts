@@ -1,5 +1,4 @@
 import { dev } from "$app/environment";
-import { PUBLIC_REGISTRATION_START } from "$env/static/public";
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
@@ -18,7 +17,12 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
+import {
+	invalidTagsMessage,
+	levels,
+	NewEntrySchema,
+	validateYtCreationDate,
+} from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -87,55 +91,7 @@ export const actions = {
 
 			// Validate youtube entries creation date and channel identity
 			const id = data.url.match(YOUTUBE_EMBEDDABLE)?.groups?.id;
-			if (id) {
-				const r = await fetch(`https://youtube.com/watch?v=${id}`, {
-					headers: {
-						accept:
-							"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-						"accept-language": "en-US,en;q=0.9",
-						"cache-control": "no-cache",
-						pragma: "no-cache",
-						priority: "u=0, i",
-						"sec-ch-ua": '"Not;A=Brand";v="99", "Brave";v="139", "Chromium";v="139"',
-						"sec-ch-ua-mobile": "?0",
-						"sec-ch-ua-platform": '"macOS"',
-						"sec-fetch-dest": "document",
-						"sec-fetch-mode": "navigate",
-						"sec-fetch-site": "none",
-						"sec-fetch-user": "?1",
-						"sec-gpc": "1",
-						"upgrade-insecure-requests": "1",
-					},
-					body: null,
-					method: "GET",
-					mode: "cors",
-					credentials: "omit",
-				});
-				if (!r.ok) {
-					throw error(429, "Failed to fetch the Youtube metadata");
-				}
-
-				const html = await r.text();
-				const embeddedjson = html.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});/);
-				if (!embeddedjson) {
-					console.log("[update entry]: couldn't parse yt metadata from", data.url);
-				} else {
-					try {
-						const ytInitialPlayerResponse = embeddedjson[1]!;
-						// var channel = JSON.parse(ytInitialPlayerResponse).videoDetails.author;
-						var createdAt =
-							JSON.parse(ytInitialPlayerResponse).microformat.playerMicroformatRenderer.uploadDate;
-					} catch (error) {
-						console.log("[update entry]: error wile parsing yt metadata", error, data.url);
-					}
-					// Check whether content is too old
-					if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
-						return formfail({
-							url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
-						});
-					}
-				}
-			}
+			if (id) validateYtCreationDate(id);
 
 			const prevCoauthors: Pick<User, "username" | "uid">[] = await db.execute(
 				sql`
