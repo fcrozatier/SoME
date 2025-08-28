@@ -23,7 +23,7 @@ export const actions = {
 			username: data.username,
 			passwordHash: await auth.hash(data.password),
 			email: data.email,
-			isTeacher: data.isTeacher,
+			is_teacher: data.isTeacher,
 		};
 
 		// Email deliverability
