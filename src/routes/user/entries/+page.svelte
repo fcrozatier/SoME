@@ -73,6 +73,7 @@
 							{/snippet}
 						</LayoutSideBySide>
 					</div>
+					<hr class="my-8!" />
 				{/each}
 			</div>
 		{/each}
