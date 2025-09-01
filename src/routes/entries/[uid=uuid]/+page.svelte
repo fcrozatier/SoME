@@ -29,6 +29,19 @@
 	}
 
 	let { data } = $props();
+
+	const computeMedianScore = () => {
+		if (data.entry.final_score) return round(+data.entry.final_score, 1);
+		if (data.feedbacks.length === 0) return null;
+
+		const sortedScores = data.feedbacks.map((f) => Number(f.score)).toSorted();
+		const nbScores = sortedScores.length;
+		const scoreMin = sortedScores[Math.floor((nbScores - 1) / 2)]!;
+		const scoreMax = sortedScores[Math.floor(nbScores / 2)]!;
+
+		return round((scoreMin + scoreMax) / 2, 1);
+	};
+	const median = $derived(computeMedianScore());
 </script>
 
 <svelte:head>
@@ -40,11 +53,10 @@
 
 	{#if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>
-		{@const median = data.entry.final_score ? round(+data.entry.final_score, 1) : 0}
 		{@const comments = data.feedbacks.filter((f) => f.feedback !== "" && !f.maybe_rude)}
 		<div class="flex justify-center">
 			<div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 mb-10">
-				<Bento count={median} color={median <= 3 ? "danger" : median < 7 ? "warning" : "success"}>
+				<Bento count={median} color={true}>
 					Overall <a
 						href="/algorithm"
 						target="_blank"

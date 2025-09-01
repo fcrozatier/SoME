@@ -16,6 +16,10 @@ export const load = async (event) => {
       where uid=${uid}
     `);
 
+	if (!entry) {
+		throw error(404);
+	}
+
 	const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
 			select name from tags
 			inner join entry_to_tag on tag_id=id
@@ -27,10 +31,6 @@ export const load = async (event) => {
       from votes
       where entry_uid=${uid}
     `);
-
-	if (!entry) {
-		throw error(404);
-	}
 
 	return { entry, tags: entryTags.map((t) => t.name), feedbacks };
 };
