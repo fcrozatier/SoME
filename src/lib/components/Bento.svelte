@@ -10,9 +10,9 @@
 	let { count, color = "default", children }: Props = $props();
 </script>
 
-<div class={`rounded-4xl border-2 aspect-square w-36 sm:w-40 grid place-items-center ${color}`}>
+<div class={`rounded-3xl border-2 aspect-square w-32 grid place-items-center ${color}`}>
 	<div class="flex flex-col items-center gap-2">
-		<span class="text-5xl">
+		<span class="text-3xl">
 			{count ?? "-"}
 		</span>
 		<span>

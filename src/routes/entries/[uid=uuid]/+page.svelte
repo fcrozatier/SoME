@@ -41,7 +41,7 @@
 		{@const median = data.entry.final_score ? round(+data.entry.final_score, 1) : 0}
 		{@const comments = data.feedbacks.filter((f) => f.feedback !== "" && !f.maybe_rude)}
 		<div class="flex justify-center">
-			<div class="grid grid-cols-2 gap-x-8 gap-y-8 mb-10">
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 mb-10">
 				<Bento count={median} color={median <= 3 ? "danger" : median < 7 ? "warning" : "success"}>
 					Overall <a
 						href="/algorithm"
@@ -59,11 +59,13 @@
 			</div>
 		</div>
 
-		<div
-			use:hist={data.feedbacks.map((i) => ({
-				score: +i.score,
-			}))}
-		></div>
+		<div class="flex justify-center">
+			<div
+				use:hist={data.feedbacks.map((i) => ({
+					score: +i.score,
+				}))}
+			></div>
+		</div>
 
 		{#if comments.length > 0}
 			<h3>Comments</h3>
