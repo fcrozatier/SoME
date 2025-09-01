@@ -7,20 +7,10 @@ import { sql } from "drizzle-orm";
 export const load = async (event) => {
 	const uid = event.params.uid;
 
-	const [entry]: (
-		& Pick<
-			SelectEntry,
-			| "uid"
-			| "title"
-			| "description"
-			| "category"
-			| "thumbnail"
-			| "url"
-			| "rank"
-			| "final_score"
-		>
-		& { year: string }
-	)[] = await db.execute(sql`
+	const [entry]: (Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank" | "final_score"
+	> & { year: string })[] = await db.execute(sql`
       select uid, date_part('year', created_at) as year, title, description, category, thumbnail, url, rank, final_score
       from entries
       where uid=${uid}
@@ -32,8 +22,7 @@ export const load = async (event) => {
 			where entry_uid=${uid};
 		`);
 
-	const feedbacks: Pick<SelectVote, "score" | "feedback" | "maybe_rude">[] =
-		await db.execute(sql`
+	const feedbacks: Pick<SelectVote, "score" | "feedback" | "maybe_rude">[] = await db.execute(sql`
       select score, feedback, maybe_rude
       from votes
       where entry_uid=${uid}
