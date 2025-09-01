@@ -42,7 +42,7 @@
 	<h2>My votes</h2>
 	<p>Review all your votes. Update your feedbacks and scores during peer review</p>
 
-	{#each Object.entries(votesByYear) as [year, votes]}
+	{#each Object.entries(votesByYear).sort(([y1], [y2]) => Number(y2) - Number(y1)) as [year, votes]}
 		<section class="mt-10">
 			<h3>{year}</h3>
 			{#each votes!.sort((v1, v2) => Number(v2.score) - Number(v1.score)) as vote}
