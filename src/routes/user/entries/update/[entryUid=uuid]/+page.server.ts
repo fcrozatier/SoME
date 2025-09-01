@@ -91,7 +91,7 @@ export const actions = {
 
 			// Validate youtube entries creation date and channel identity
 			const id = data.url.match(YOUTUBE_EMBEDDABLE)?.groups?.id;
-			if (id) await validateYtCreationDate(id);
+			// if (id) await validateYtCreationDate(id);
 
 			const prevCoauthors: Pick<User, "username" | "uid">[] = await db.execute(
 				sql`

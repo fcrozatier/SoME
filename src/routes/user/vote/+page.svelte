@@ -21,9 +21,16 @@
 				<ul class="space-y-1!">
 					<li>
 						<strong>Score it</strong> on a continuous scale from 1 to 9. Use whole numbers, halves or
-						decimals, whatever feels right
+						decimals, whatever feels right.
 					</li>
-					<li class="mt-1!"><strong>Leave feedback</strong> for the creator</li>
+					<li class="mt-1!">
+						<strong>Leave feedback</strong> for the creator. You can use basic
+						<a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a> with
+						tables, fenced code blocks and
+						<a href="https://quickref.me/latex" target="_blank">LaTeX</a>
+						in your feedback. Wrap inline LaTeX formulas with&nbsp;<code>$</code>
+						and displayed formulas with&nbsp;<code class="text-nowrap">$$</code>
+					</li>
 				</ul>
 				<p>You can also:</p>
 				<ul class="space-y-1! my-0!">
@@ -59,6 +66,6 @@
 			</p>
 		{/if}
 	{:else}
-		<p>The vote is not open yet.</p>
+		<p>The vote is closed.</p>
 	{/if}
 </article>

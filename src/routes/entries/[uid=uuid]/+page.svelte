@@ -2,7 +2,9 @@
 	import Bento from "$lib/components/Bento.svelte";
 	import Display from "$lib/components/Display.svelte";
 	import Score from "$lib/components/Score.svelte";
+	import { currentYear } from "$lib/config.js";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { resultsAvailable } from "$lib/utils/time.js";
 	import { round } from "@fcrozatier/ts-helpers";
 	import * as Plot from "@observablehq/plot";
 
@@ -27,6 +29,19 @@
 	}
 
 	let { data } = $props();
+
+	const computeMedianScore = () => {
+		if (data.entry.final_score) return round(+data.entry.final_score, 1);
+		if (data.feedbacks.length === 0) return null;
+
+		const sortedScores = data.feedbacks.map((f) => Number(f.score)).toSorted();
+		const nbScores = sortedScores.length;
+		const scoreMin = sortedScores[Math.floor((nbScores - 1) / 2)]!;
+		const scoreMax = sortedScores[Math.floor(nbScores / 2)]!;
+
+		return round((scoreMin + scoreMax) / 2, 1);
+	};
+	const median = $derived(computeMedianScore());
 </script>
 
 <svelte:head>
@@ -38,18 +53,21 @@
 
 	{#if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>
-		{@const median = data.entry.final_score ? round(+data.entry.final_score, 1) : 0}
 		{@const comments = data.feedbacks.filter((f) => f.feedback !== "" && !f.maybe_rude)}
 		<div class="flex justify-center">
-			<div class="grid grid-cols-2 gap-x-8 gap-y-8 mb-10">
-				<Bento count={median} color={median <= 3 ? "danger" : median < 7 ? "warning" : "success"}>
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 mb-10">
+				<Bento count={median} color={true}>
 					Overall <a
 						href="/algorithm"
 						target="_blank"
 						class="no-underline hover:underline font-semibold">score*</a
 					>
 				</Bento>
-				<Bento count={data.entry.rank}>Rank</Bento>
+				<Bento
+					count={Number(data.entry.year) !== currentYear || resultsAvailable()
+						? data.entry.rank
+						: null}>Rank</Bento
+				>
 				<Bento count={data.feedbacks.length}>
 					Vote{data.feedbacks.length === 1 ? "" : "s"}
 				</Bento>
@@ -59,19 +77,23 @@
 			</div>
 		</div>
 
-		<div
-			use:hist={data.feedbacks.map((i) => ({
-				score: +i.score,
-			}))}
-		></div>
+		<div class="flex justify-center">
+			<div
+				use:hist={data.feedbacks.map((i) => ({
+					score: +i.score,
+				}))}
+			></div>
+		</div>
 
 		{#if comments.length > 0}
 			<h3>Comments</h3>
 
 			{#each comments as { feedback, score }}
-				<div class="grid grid-cols-[1fr_2rem] items-start border-b gap-x-4 first:border-t py-4">
-					<div class="prose">{@html feedback}</div>
-					<Score score={+score}></Score>
+				<div class="border-b first:border-t py-4">
+					<div class="float-right">
+						<Score score={+score}></Score>
+					</div>
+					<div class="prose wrap-anywhere">{@html feedback}</div>
 				</div>
 			{/each}
 		{/if}

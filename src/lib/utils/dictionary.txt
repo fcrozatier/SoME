@@ -27120,6 +27120,7 @@ buffing
 buffle
 bufflehead
 bufflehorn
+buffon
 buffont
 buffoon
 buffoonery
@@ -38507,6 +38508,7 @@ codify
 codilla
 codille
 codimension
+coding
 codiniac
 codirectional
 codirector
@@ -41733,6 +41735,7 @@ constringent
 construability
 construable
 construct
+constructed
 constructer
 constructible
 construction
@@ -45106,6 +45109,7 @@ createdness
 creatic
 creatine
 creatinephosphoric
+creating
 creatinine
 creatininemia
 creatinuria
@@ -74926,6 +74930,7 @@ galp
 galravage
 galravitch
 galt
+galton
 galtonia
 galtonian
 galuchat
@@ -79070,6 +79075,7 @@ goyin
 goyle
 gozell
 gozzard
+gpu
 gra
 graafian
 grab
@@ -131978,6 +131984,7 @@ orificial
 oriflamb
 oriflamme
 oriform
+origami
 origan
 origanized
 origanum
@@ -170160,6 +170167,7 @@ roboreous
 robot
 robotesque
 robotian
+robotics
 robotism
 robotistic
 robotization
@@ -229841,6 +229849,7 @@ wallflower
 wallful
 wallhick
 walling
+wallis
 wallise
 wallless
 wallman
