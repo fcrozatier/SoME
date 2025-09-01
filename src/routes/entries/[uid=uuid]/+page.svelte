@@ -69,9 +69,11 @@
 			<h3>Comments</h3>
 
 			{#each comments as { feedback, score }}
-				<div class="grid grid-cols-[1fr_2rem] items-start border-b gap-x-4 first:border-t py-4">
+				<div class="border-b first:border-t py-4">
+					<div class="float-right">
+						<Score score={+score}></Score>
+					</div>
 					<div class="prose wrap-anywhere">{@html feedback}</div>
-					<Score score={+score}></Score>
 				</div>
 			{/each}
 		{/if}
