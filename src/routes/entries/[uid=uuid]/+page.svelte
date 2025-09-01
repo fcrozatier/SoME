@@ -2,7 +2,9 @@
 	import Bento from "$lib/components/Bento.svelte";
 	import Display from "$lib/components/Display.svelte";
 	import Score from "$lib/components/Score.svelte";
+	import { currentYear } from "$lib/config.js";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { resultsAvailable } from "$lib/utils/time.js";
 	import { round } from "@fcrozatier/ts-helpers";
 	import * as Plot from "@observablehq/plot";
 
@@ -49,7 +51,11 @@
 						class="no-underline hover:underline font-semibold">score*</a
 					>
 				</Bento>
-				<Bento count={data.entry.rank}>Rank</Bento>
+				<Bento
+					count={Number(data.entry.year) !== currentYear || resultsAvailable()
+						? data.entry.rank
+						: null}>Rank</Bento
+				>
 				<Bento count={data.feedbacks.length}>
 					Vote{data.feedbacks.length === 1 ? "" : "s"}
 				</Bento>
