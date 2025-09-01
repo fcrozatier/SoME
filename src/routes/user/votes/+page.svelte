@@ -40,7 +40,10 @@
 
 <article class="layout-prose">
 	<h2>My votes</h2>
-	<p>Review all your votes. Update your feedbacks and scores during peer review</p>
+	<p>
+		Keep track of your votes. Adjust your scores and refine your feedback at any time during peer
+		review
+	</p>
 
 	{#each Object.entries(votesByYear).sort(([y1], [y2]) => Number(y2) - Number(y1)) as [year, votes]}
 		<section class="mt-10">
@@ -84,10 +87,7 @@
 			{/each}
 		</section>
 	{:else}
-		<p>No vote to display.</p>
-		<p>
-			The peer review starts on <strong><Time datetime={PUBLIC_VOTE_START} /></strong>.
-		</p>
+		<p>No votes to display.</p>
 	{/each}
 </article>
 

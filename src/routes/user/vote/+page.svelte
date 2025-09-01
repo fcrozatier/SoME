@@ -59,6 +59,6 @@
 			</p>
 		{/if}
 	{:else}
-		<p>The vote is not open yet.</p>
+		<p>The vote is closed.</p>
 	{/if}
 </article>
