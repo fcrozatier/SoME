@@ -4,16 +4,18 @@ import { sql } from "drizzle-orm";
 import * as fg from "formgator";
 import { loadgate } from "formgator/sveltekit";
 
+const DEFAULT_YEAR = 2024;
+
 export const load = loadgate(
 	{
-		year: fg.number({ min: 2021 }).optional(),
+		year: fg.number({ min: 2021, max: DEFAULT_YEAR }).optional(),
 		category: fg.select(["video", "non-video"]).optional(),
 		page: fg.number({ min: 1 }).optional(),
 	},
 	async ({ year, category, page }) => {
 		const limit = 50;
 
-		if (!year) year = 2024;
+		if (!year) year = DEFAULT_YEAR;
 		if (!category) category = "video";
 		if (!page) page = 1;
 
