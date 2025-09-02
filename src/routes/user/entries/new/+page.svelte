@@ -9,7 +9,7 @@
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
-	import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
+	import { invalidTagsMessage, levels, MAX_IMG_SIZE, NewEntrySchema } from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
@@ -85,7 +85,7 @@
 		method="post"
 		enctype="multipart/form-data"
 		use:enhance={disableSubmitterAndSetValidity({
-			before: ({ cancel }) => {
+			before: ({ cancel, formData, formElement }) => {
 				if (!data.user?.username) {
 					newToast({
 						type: "error",
@@ -94,6 +94,23 @@
 						duration: 5000,
 					});
 					cancel();
+				}
+				// This is important: without this in prod (only!) big images lead to 500 errors
+				if (formData.has("thumbnail")) {
+					const file = formData.get("thumbnail");
+
+					if (file instanceof File && file.size > MAX_IMG_SIZE) {
+						const thumbnail = document.querySelector<HTMLInputElement>("#thumbnail");
+						thumbnail?.setCustomValidity("Image too big: 1MB max");
+						thumbnail?.reportValidity();
+						thumbnail?.addEventListener("input", () => thumbnail.setCustomValidity(""), {
+							once: true,
+						});
+
+						const buttons = formElement.querySelectorAll("button");
+						buttons.forEach((b) => b.removeAttribute("disabled"));
+						cancel();
+					}
 				}
 			},
 			toast: { redirect: { type: "success", content: `Entry submitted!` } },
