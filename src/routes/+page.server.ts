@@ -16,9 +16,8 @@ export const load = async () => {
 	// 	 where active='t'
 	// 	 and date_part('year', entries.created_at)='2024'
 	// 	 order by final_score desc nulls last
-  //    limit 25;
+	//    limit 25;
 	// 	`);
-
 	// return { top };
 };
 

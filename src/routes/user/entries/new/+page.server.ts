@@ -7,24 +7,20 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import {
-	invalidTagsMessage,
-	levels,
-	NewEntrySchema,
-	validateYtCreationDate,
-} from "$lib/validation";
+import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 import { error, redirect } from "@sveltejs/kit";
 import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
 export const load = async ({ locals }) => {
-	if (!submissionsOpen()) {
-		throw error(403, "Submissions are closed");
+	const { user } = locals;
+	if (!user?.uid) {
+		throw redirect(302, "/login");
 	}
 
-	if (!locals?.user?.uid) {
-		throw redirect(302, "/login");
+	if (!submissionsOpen() && !user.isAdmin) {
+		throw error(403, "Submissions are closed");
 	}
 };
 
