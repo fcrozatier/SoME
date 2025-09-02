@@ -6,7 +6,7 @@
 		PUBLIC_VOTE_END,
 		PUBLIC_VOTE_START,
 	} from "$env/static/public";
-	import { phaseOpen, resultsAvailable, voteOpen } from "$lib/utils/time";
+	import { resultsAvailable, submissionsOpen, voteOpen } from "$lib/utils/time";
 	import Time from "./Time.svelte";
 	import { page } from "$app/state";
 
@@ -15,7 +15,7 @@
 			title: "Join and create",
 			description:
 				"Sign up as a participant or a judge. Creators begin working on their projects and can share progress, find collaborators, or ask for help in the Discord server.",
-			isOpen: phaseOpen(PUBLIC_REGISTRATION_START, PUBLIC_VOTE_END),
+			isOpen: submissionsOpen(),
 			dates: [PUBLIC_REGISTRATION_START, PUBLIC_REGISTRATION_END],
 		},
 		{
