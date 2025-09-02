@@ -25,7 +25,7 @@
 <Timeline></Timeline>
 
 <!-- Last year -->
-<section>
+<!-- <section>
 	<h2 class="mb-10 text-4xl font-black text-center">Discover the top 5 of the last edition</h2>
 
 	<div
@@ -37,9 +37,9 @@
 			</div>
 		{/each}
 	</div>
-</section>
+</section> -->
 
-<section>
+<!-- <section>
 	<div class="text-center">
 		<h2 class="mb-10 text-4xl font-black">All entries</h2>
 		<p>You can find the whole ranking of entries here:</p>
@@ -50,7 +50,7 @@
 			>
 		</div>
 	</div>
-</section>
+</section> -->
 
 <!-- Sponsors -->
 <section class="mt-10 pt-10 px-4">
