@@ -15,7 +15,28 @@
 <article class="layout-prose max-w-2xl!">
 	<h2>Login</h2>
 
-	<form class="space-y-2" method="post" use:enhance={disableSubmitterAndSetValidity()}>
+	<form
+		class="space-y-2"
+		method="post"
+		use:enhance={disableSubmitterAndSetValidity({
+			after: ({ result }) => {
+				// ensure that updating the password also remove the custom email validity
+				if (
+					result.type === "failure" &&
+					result.data?.issues !== null &&
+					typeof result.data?.issues === "object"
+				) {
+					const issues = result.data.issues;
+
+					if ("email" in issues) {
+						const email = document.getElementById("email") as HTMLInputElement;
+						const password = document.getElementById("password");
+						password?.addEventListener("input", () => email?.setCustomValidity(""), { once: true });
+					}
+				}
+			},
+		})}
+	>
 		<div class="form-control">
 			<label for="email" class="label">
 				<span class="label-text"> Email </span>
