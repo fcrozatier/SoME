@@ -35,7 +35,7 @@
 				<p>You can also:</p>
 				<ul class="space-y-1! my-0!">
 					<li><strong>Skip</strong> an entry</li>
-					<li><strong>Flag</strong> entries that break the rules</li>
+					<li><strong>Flag</strong> entries that break the rules. You can optionally submit your vote with a flag </li>
 					<li><strong>Switch categories</strong> (video or non-video) anytime by returning here</li>
 					<li class="mt-1!">
 						<strong>Update past votes</strong> anytime from the
