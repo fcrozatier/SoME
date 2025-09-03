@@ -23,7 +23,7 @@
 
 <div class="mb-12">
 	<div>
-		<p id="description-{id}" data-open={open} bind:this={description}>
+		<p id="description-{id}" class="wrap-anywhere" data-open={open} bind:this={description}>
 			{content}
 		</p>
 
