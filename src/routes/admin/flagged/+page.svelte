@@ -54,10 +54,7 @@
 			return async ({ update, result, action }) => {
 				buttons.forEach((b) => b.removeAttribute("disabled"));
 				if (result.type === "success") {
-					const content =
-						(selected.length === 1 ? "Entry" : "Entries") +
-						" " +
-						(action.search === "?/ignore" ? "ignored" : "deactivated");
+					const content = action.search === "?/ignore" ? "Ignored" : "Deactivated";
 
 					newToast({ type: "info", content });
 				}
