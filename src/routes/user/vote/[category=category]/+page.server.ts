@@ -174,6 +174,7 @@ export const actions = {
 			.delete(cache)
 			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
 
+		console.log("[new vote]");
 		return redirect(303, `/user/vote/${category}`);
 	}),
 	cache: formgate(CacheVoteSchema, async (data, { params, locals }) => {
