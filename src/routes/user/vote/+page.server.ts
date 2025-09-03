@@ -10,7 +10,7 @@ export const load = async ({ locals }) => {
 		sql`
       select count(*) from cache
       where user_uid=${uid}
-      union
+      union all
       select count(*) from user_to_tag
       where user_uid=${uid};
     `,
