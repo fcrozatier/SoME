@@ -24,6 +24,13 @@
 					Plot.tickX([9.5], { opacity: 0 }),
 					Plot.ruleX([1]),
 				],
+				y: {
+					// display horizontal rules
+					// grid: true,
+					// We don't expect more than 100 votes on an entry
+					ticks: Array.from({ length: 100 }, (_, i) => i + 1),
+					tickFormat: (d: number) => (Number.isInteger(d) ? d.toString() : ""),
+				},
 			}),
 		);
 	}
