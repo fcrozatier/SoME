@@ -20,7 +20,7 @@
 		method="post"
 		use:enhance={disableSubmitterAndSetValidity({
 			after: ({ result }) => {
-				// ensure that updating the password also remove the custom email validity
+				// ensure that updating the password also removes the custom email validity
 				if (
 					result.type === "failure" &&
 					result.data?.issues !== null &&
