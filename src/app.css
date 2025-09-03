@@ -77,7 +77,10 @@ textarea {
 dialog {
 	@apply shadow-2xl;
 
+	/* was problematic on firefox on linux  */
+	color: black;
 	background-color: white;
+
 	max-width: var(--container-3xl);
 	border-radius: var(--radius-xl);
 	padding: calc(var(--spacing) * 12);
