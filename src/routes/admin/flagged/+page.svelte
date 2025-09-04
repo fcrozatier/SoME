@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { toggleSelectAll } from "$lib/actions";
+	import { disableSubmitterAndSetValidity, toggleSelectAll } from "$lib/actions";
 	import { newToast } from "$lib/components/Toasts.svelte";
 
 	let { data } = $props();
@@ -33,7 +33,10 @@
 							bind:group={selected}
 						/></td
 					>
-					<td><a class="capitalize" href={entry.url} target="_blank">{entry.title}</a></td>
+					<td
+						><a class="capitalize" href={entry.url} target="_blank">{entry.title}</a>
+						<br />{entry.uid}</td
+					>
 					<td><span class="">{entry.reason}</span></td>
 				</tr>
 			{:else}
@@ -47,20 +50,14 @@
 	</table>
 	<form
 		method="post"
-		use:enhance={() => {
-			const buttons = document.querySelectorAll("button");
-			buttons.forEach((b) => b.setAttribute("disabled", "on"));
-
-			return async ({ update, result, action }) => {
-				buttons.forEach((b) => b.removeAttribute("disabled"));
+		use:enhance={disableSubmitterAndSetValidity({
+			after: ({ result, action }) => {
 				if (result.type === "success") {
 					const content = action.search === "?/ignore" ? "Ignored" : "Deactivated";
-
 					newToast({ type: "info", content });
 				}
-				await update();
-			};
-		}}
+			},
+		})}
 	>
 		{#each selected as uid}
 			<input type="hidden" name="selected" value={uid} />
