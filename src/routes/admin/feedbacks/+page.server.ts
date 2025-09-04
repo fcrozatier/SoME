@@ -1,10 +1,8 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
-import { AdminForm } from "$lib/validation";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
-import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
 	if (!locals.user?.isAdmin) return error(404);
@@ -29,22 +27,28 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-	keep: formgate(AdminForm, async (data) => {
+	keep: async ({ request, locals }) => {
+		if (!locals.user?.isAdmin) return error(403);
+
+		const formData = await request.formData();
+		const uids = Array.from(formData).map(([_, uid]) => (uid as string).split(","));
+
 		await db.execute(sql`
-				update votes set maybe_rude='false', reviewed='true' where (user_uid, entry_uid) in ${data.selected.map(
-					(s) => s.split(","),
-				)}
+				update votes set maybe_rude='false', reviewed='true' where (user_uid, entry_uid) in ${uids}
 			`);
 
 		return { success: true };
-	}),
-	remove: formgate(AdminForm, async (data) => {
+	},
+	remove: async ({ locals, request }) => {
+		if (!locals.user?.isAdmin) return error(403);
+
+		const formData = await request.formData();
+		const uids = Array.from(formData).map(([_, uid]) => (uid as string).split(","));
+
 		await db.execute(sql`
-				update votes set maybe_rude='true', reviewed='true' where (user_uid, entry_uid) in ${data.selected.map(
-					(s) => s.split(","),
-				)}
+				update votes set maybe_rude='true', reviewed='true' where (user_uid, entry_uid) in ${uids}
 			`);
 
 		return { success: true };
-	}),
+	},
 };
