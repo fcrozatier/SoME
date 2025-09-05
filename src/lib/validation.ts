@@ -21,6 +21,17 @@ const validationMessages: fg.Failures = {
 	type: "Invalid type",
 };
 
+/**
+ * Academic math level keywords for tags
+ */
+export const levels = [
+	"elementary-school",
+	"middle-school",
+	"high-school",
+	"undergraduate",
+	"graduate",
+];
+
 // Users
 
 const usernameRegex = /^[\p{Letter}0-9_.\-]+$/v;
@@ -66,7 +77,7 @@ export const ChangePasswordSchema = {
 export const UpdateProfileSchema = {
 	username: UsernameSchema,
 	isTeacher: TeacherSchema,
-	level: fg.multi({ min: 1 }),
+	level: fg.select(levels, { multiple: true, required: true }),
 	bio: fg.textarea({ required: false, maxlength: 500 }).trim(),
 };
 
@@ -210,17 +221,6 @@ export const validateYtCreationDate = async (youtubeId: string) => {
 		});
 	}
 };
-
-/**
- * Academic math level keywords for tags
- */
-export const levels = [
-	"elementary-school",
-	"middle-school",
-	"high-school",
-	"undergraduate",
-	"graduate",
-];
 
 export const invalidTagsMessage = "Pick at least one level from the provided list";
 

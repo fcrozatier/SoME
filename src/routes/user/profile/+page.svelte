@@ -184,7 +184,7 @@
 		{#if form?.id === "update" && (form?.issues || page.status !== 200)}
 			<p class="error-message mt-2">
 				Something went wrong. {form?.issues?.level
-					? "Please select at least one review level"
+					? "Please select at least one academic level to review"
 					: "Please correct the highlighted fields above"}
 			</p>
 		{/if}
