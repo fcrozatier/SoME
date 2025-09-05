@@ -294,7 +294,7 @@
 <style>
 	summary > a {
 		position: relative;
-		/* For some reason clicking the a doesn't open the summary  */
+		/* A click on an anchor nested inside a summary doesn't toggle the summary  */
 		pointer-events: none;
 
 		&::before {
