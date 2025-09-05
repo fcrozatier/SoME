@@ -14,7 +14,7 @@ export const load = async ({ locals }) => {
 	const flagged: (Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">)[] =
 		await db.execute(sql`
 			select uid, title, url, reason
-			from entries left join flags
+			from entries inner join flags
 			on uid=entry_uid
 			where entries.active='false'
 			and date_part('year', entries.created_at)=${currentYear}
