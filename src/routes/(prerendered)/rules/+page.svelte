@@ -31,7 +31,7 @@
 		<!-- Age -->
 		<details>
 			<summary id="minimum-age"
-				><a href="/rules#minimum-age">Is there a minimum age to participate?</a></summary
+				><a href="#minimum-age" tabindex="-1">Is there a minimum age to participate?</a></summary
 			>
 			<p>You must be at least 13 years old to create an account on the SoME platform.</p>
 			<p>
@@ -44,7 +44,8 @@
 		</details>
 		<!-- Deadline -->
 		<details>
-			<summary id="deadline"><a href="/rules#deadline">When is the submission deadline?</a></summary
+			<summary id="deadline"
+				><a href="#deadline" tabindex="-1">When is the submission deadline?</a></summary
 			>
 			<!-- <p>The competition is closed. Stay tuned for the next edition!</p> -->
 			<p>
@@ -73,7 +74,7 @@
 		<!-- Not a creator -->
 		<details>
 			<summary id="non-creators-are-welcome"
-				><a href="/rules#non-creators-are-welcome"
+				><a href="#non-creators-are-welcome" tabindex="-1"
 					>I'm not a creator, can I participate?
 				</a></summary
 			>
@@ -86,7 +87,7 @@
 		<!-- Topic -->
 		<details>
 			<summary id="topic-constraint"
-				><a href="/rules#topic-constraint">Is there a topic constraint? </a></summary
+				><a href="#topic-constraint" tabindex="-1">Is there a topic constraint? </a></summary
 			>
 			<p>It has to be about math or something related.</p>
 			<p>
@@ -101,7 +102,9 @@
 		</details>
 		<!-- Software -->
 		<details>
-			<summary id="software"><a href="/rules#software">What software should I use? </a></summary>
+			<summary id="software"
+				><a href="#software" tabindex="-1">What software should I use? </a></summary
+			>
 			<p>
 				You can use any software you're familiar with, there's no constraint. You can even use no
 				visualization software at all!
@@ -118,7 +121,7 @@
 		<!-- How many entries? -->
 		<details>
 			<summary id="how-many-entries"
-				><a href="/rules#how-many-entries">How many entries can I submit? </a></summary
+				><a href="#how-many-entries" tabindex="-1">How many entries can I submit? </a></summary
 			>
 			<p>
 				Only one entry is allowed per creator identity. This means one video per YouTube channel,
@@ -140,7 +143,7 @@
 		<!-- Can I submit a part of a series? -->
 		<details>
 			<summary id="no-series"
-				><a href="/rules#no-series">Can I submit a part of a series?</a></summary
+				><a href="#no-series" tabindex="-1">Can I submit a part of a series?</a></summary
 			>
 			<p>
 				Each entry should be self-contained, not part of a series, playlist, or larger project:
@@ -156,7 +159,7 @@
 		<!-- Can I use old material? -->
 		<details>
 			<summary id="only-new-content"
-				><a href="/rules#only-new-content">Can I use an old entry? </a></summary
+				><a href="#only-new-content" tabindex="-1">Can I use an old entry? </a></summary
 			>
 			<p>It has to be something new you make this summer</p>
 			<p>
@@ -169,7 +172,7 @@
 		<!-- Language -->
 		<details>
 			<summary id="in-english-or-with-translation"
-				><a href="/rules#in-english-or-with-translation"
+				><a href="#in-english-or-with-translation" tabindex="-1"
 					>Does it have to be in English?
 				</a></summary
 			>
@@ -183,7 +186,7 @@
 		<!-- Copyright -->
 		<details>
 			<summary id="copyrighted-material"
-				><a href="/rules#copyrighted-material">Can I use copyrighted material? </a></summary
+				><a href="#copyrighted-material" tabindex="-1">Can I use copyrighted material? </a></summary
 			>
 			<p>By registering as a creator you agree to the following copyright notice:</p>
 			<p class="indent-8 italic">
@@ -199,7 +202,7 @@
 		</details>
 		<!-- Ads -->
 		<details>
-			<summary id="ads"><a href="/rules#ads">Can my content include ads?</a></summary>
+			<summary id="ads"><a href="#ads" tabindex="-1">Can my content include ads?</a></summary>
 			<p>
 				Your entry can optionally include ads or sponsorships within the content itself. However ads
 				are not allowed in your entry's title or description, as the SoME website and archive do not
@@ -213,7 +216,8 @@
 		<!-- No paywall, login, download -->
 		<details>
 			<summary id="no-paywall"
-				><a href="/rules#no-paywall">Can my entry be behind a paywall or require an account?</a
+				><a href="#no-paywall" tabindex="-1"
+					>Can my entry be behind a paywall or require an account?</a
 				></summary
 			>
 			<p>
@@ -233,7 +237,7 @@
 		<!-- Winners -->
 		<details>
 			<summary id="winners-selection"
-				><a href="/rules#winners-selection">How will winners be selected?</a></summary
+				><a href="#winners-selection" tabindex="-1">How will winners be selected?</a></summary
 			>
 			<p>
 				Winners will be chosen through a peer review phase, with final results announced at the end
@@ -279,7 +283,7 @@
 			</ul>
 		</details>
 		<details>
-			<summary id="prize"> <a href="/rules#prize">Is there a prize?</a></summary>
+			<summary id="prize"><a href="#prize" tabindex="-1">Is there a prize?</a></summary>
 			<p>
 				Yes. You can read more about it on the <a href="/prize"> dedicated page </a>.
 			</p>
@@ -290,12 +294,15 @@
 <style>
 	summary > a {
 		position: relative;
+		/* For some reason clicking the a doesn't open the summary  */
+		pointer-events: none;
 
 		&::before {
+			pointer-events: all;
 			position: absolute;
 			left: calc(-4 * var(--spacing));
 			top: 0;
-			content: "#";
+			content: "#"/"";
 			opacity: 0.25;
 			font-size: 1rem;
 			transition: 200ms ease-out opacity;
