@@ -33,7 +33,10 @@
 							bind:group={selected}
 						/></td
 					>
-					<td><a class="capitalize" href={f.url} target="_blank">{f.title}</a></td>
+					<td
+						><a class="capitalize" href={f.url} target="_blank">{f.title}</a>
+						<br />{f.uid}</td
+					>
 					<td><span class="whitespace-pre-wrap">{f.feedback}</span></td>
 				</tr>
 			{:else}
