@@ -6,7 +6,7 @@
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
-	import { currentYear } from "$lib/config.js";
+	import { defaultYear } from "$lib/config.js";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
@@ -19,7 +19,7 @@
 	let year = $state(data.year);
 	let pageNumber = $state(data.page);
 
-	const years = Array.from({ length: currentYear - 1 - 2020 }, (_, i) => currentYear - 1 - i);
+	const years = Array.from({ length: defaultYear - 2020 }, (_, i) => defaultYear - i);
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
 	let entry: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();

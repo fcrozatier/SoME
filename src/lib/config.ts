@@ -8,6 +8,9 @@ export const categories = ["video", "non-video"] as const;
 export type Category = (typeof categories)[number];
 export const currentYear = new Date().getFullYear();
 
+// For the archive
+export const defaultYear = 2024;
+
 /**
  * Formats a list into a string
  *
