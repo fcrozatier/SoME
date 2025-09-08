@@ -19,13 +19,12 @@ export const load = async ({ params, locals, url }) => {
 
 	const limit = 50;
 
-	const entries:
-		(Pick<SelectEntry, "uid" | "title" | "description" | "category" | "url"> & {
-			overall_median: number | null;
-			teacher_median: number | null;
-			ranking: string;
-			pages: number;
-		})[] = await db.execute(sql`
+	const entries: (Pick<SelectEntry, "uid" | "title" | "description" | "category" | "url"> & {
+		overall_median: number | null;
+		teacher_median: number | null;
+		ranking: string;
+		pages: number;
+	})[] = await db.execute(sql`
 		with
 			overall_score as (
 				select entry_uid, percentile_cont(0.5) within group (order by score) as median
