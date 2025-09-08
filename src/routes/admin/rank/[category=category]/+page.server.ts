@@ -19,7 +19,10 @@ export const load = async ({ params, locals, url }) => {
 
 	const limit = 50;
 
-	const entries: (Pick<SelectEntry, "uid" | "title" | "description" | "category" | "url"> & {
+	const entries: (Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+	> & {
 		overall_median: number | null;
 		teacher_median: number | null;
 		ranking: string;
@@ -51,7 +54,7 @@ export const load = async ({ params, locals, url }) => {
 			),
 
 			paginated as (
-				select entries.uid, title, description, category, url, ranking, overall_median, teacher_score.median as teacher_median, count(*) over () as total_items
+				select entries.uid, title, description, category, url, thumbnail, ranking, overall_median, teacher_score.median as teacher_median, count(*) over () as total_items
 				from entries
 				right join rank on entries.uid=rank.uid
 				left join teacher_score on entries.uid=teacher_score.entry_uid
@@ -60,10 +63,10 @@ export const load = async ({ params, locals, url }) => {
 				offset ${(+page - 1) * limit}
 			)
 
-			select *, ceil(total_items / ${limit}) as pages from paginated;
+			select *, ceil(total_items::numeric / ${limit})::int as pages from paginated;
 		`);
 
-	return { entries };
+	return { entries, pages: entries[0]?.pages ?? 1 };
 };
 
 export const actions = {

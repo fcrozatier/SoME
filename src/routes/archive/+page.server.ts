@@ -18,30 +18,28 @@ export const load = loadgate(
 		if (!category) category = "video";
 		if (!page) page = 1;
 
-		const entries: Pick<
+		const entries: (Pick<
 			SelectEntry,
 			"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank"
-		>[] = await db.execute(sql`
-		 select uid, title, description, category, thumbnail, url, rank from entries
-		 where date_part('year', entries.created_at)=${year}
-		 and category=${category}
-		 order by rank asc nulls last
-     limit ${limit}
-     offset ${(page - 1) * limit}
+		> & { pages: number })[] = await db.execute(sql`
+			with paginated as (
+				select uid, title, description, category, thumbnail, url, rank, count(*) over () as total
+				from entries
+				where date_part('year', entries.created_at)=${year}
+				and category=${category}
+				order by rank asc nulls last
+				limit ${limit}
+				offset ${(page - 1) * limit}
+			)
+			select *, ceil(total::numeric / ${limit})::int as pages from paginated;
 		`);
-
-		const [total] = (await db.execute(sql`
-		 select count(*) from entries
-		 where date_part('year', entries.created_at)=${year}
-		 and category=${category}
-		`)) as { count: number }[];
 
 		return {
 			entries,
 			year,
 			category,
 			page,
-			pages: Math.ceil((total?.count ?? 0) / limit),
+			pages: entries[0]?.pages ?? 1,
 		};
 	},
 );

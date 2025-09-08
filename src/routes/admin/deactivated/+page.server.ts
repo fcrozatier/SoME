@@ -18,9 +18,7 @@ export const load = async ({ locals }) => {
 			on uid=entry_uid
 			where entries.active='false'
 			and date_part('year', entries.created_at)=${currentYear}
-			order by uid
-			limit all
-			offset 0;
+			order by uid;
 		`);
 
 	return { flagged };
