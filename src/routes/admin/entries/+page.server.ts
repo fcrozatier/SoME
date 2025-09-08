@@ -17,26 +17,24 @@ export const load = async ({ locals, url }) => {
 	}
 	const limit = 50;
 
-	const entries: Pick<
+	const entries: (Pick<
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-	>[] = await db.execute(sql`
-			select uid, title, description, category, url, thumbnail
-			from entries
-			where entries.active='true'
-			and date_part('year', entries.created_at)=${currentYear}
-			order by created_at
-			limit ${limit}
-			offset ${(+page - 1) * limit};
+	> & { pages: number })[] = await db.execute(sql`
+			with paginated as (
+				select uid, title, description, category, url, thumbnail, count(*) over () as total
+				from entries
+				where entries.active='true'
+				and date_part('year', entries.created_at)=${currentYear}
+				order by created_at
+				limit ${limit}
+				offset ${(+page - 1) * limit}
+			)
+
+			select *, ceil(total::numeric / ${limit})::int as pages from paginated;
 		`);
 
-	const [total] = (await db.execute(sql`
-		 select count(*) from entries
-		 where entries.active='true'
-		 and date_part('year', entries.created_at)=${currentYear};
-		`)) as { count: number }[];
-
-	return { entries, pages: Math.ceil((total?.count ?? 0) / limit) };
+	return { entries, pages: entries[0]?.pages ?? 1 };
 };
 
 export const actions = {

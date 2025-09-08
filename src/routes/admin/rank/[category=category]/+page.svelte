@@ -36,7 +36,7 @@
 
 	<div class="mb-10 mx-auto flex justify-center">
 		<Pagination
-			pages={data.entries[0]?.pages ?? 1}
+			pages={data.pages}
 			bind:pageNumber
 			onchange={() => {
 				page.url.searchParams.set("page", `${pageNumber}`);
