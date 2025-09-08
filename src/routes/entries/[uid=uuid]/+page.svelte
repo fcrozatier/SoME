@@ -118,14 +118,13 @@
 
 <style>
 	[id|="bio"] {
-		margin: 0;
+		margin-block: 1em;
 		padding: 1em;
-		inset: auto;
-		bottom: calc(anchor(top) + 8px);
-		justify-self: anchor-center;
+		position-area: top span-right;
 		background: white;
 		color: black;
 		outline: 1px solid var(--color-primary);
 		border-radius: 1em;
+		max-width: var(--w-prose);
 	}
 </style>
