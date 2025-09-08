@@ -66,6 +66,8 @@
 						// For some reason we need to tweak the offset
 						const delta = Math.abs(rawGrade - 5) / 100;
 						grade.value = rawGrade * (rawGrade > 5 ? 1 + 0.2 * delta : 1 - delta);
+						grade.value = Math.max(1, grade.value);
+						grade.value = Math.min(grade.value, 9);
 					}, 0);
 				},
 				{ once: true },

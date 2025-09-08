@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
+	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
+	import Media from "$lib/components/Media.svelte";
+	import Pagination from "$lib/components/Pagination.svelte";
+	import Score from "$lib/components/Score.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
 
 	let { data } = $props();
+
+	let pageNumber = $state(Number(page.url.searchParams.get("page") ?? "1"));
 </script>
 
 <article class="layout-prose">
@@ -27,33 +34,36 @@
 		<button class="btn-neutral btn" type="submit" disabled>Rank</button>
 	</form>
 
-	<table class="table w-full">
-		<thead>
-			<tr>
-				<th>Title</th>
-				<th>Rank</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.entries as { title, rank }}
-				<tr>
-					<td>{title}</td>
-					<td>{rank}</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+	<div class="mb-10 mx-auto flex justify-center">
+		<Pagination
+			pages={data.entries[0]?.pages ?? 1}
+			bind:pageNumber
+			onchange={() => {
+				page.url.searchParams.set("page", `${pageNumber}`);
+				goto(`?${page.url.searchParams.toString()}`, {
+					invalidateAll: true,
+					keepFocus: true,
+					noScroll: true,
+				});
+			}}
+		></Pagination>
+	</div>
+
+	{#each data.entries as { ranking, overall_median, teacher_median, ...entry }}
+		<LayoutSideBySide side="right" mainPanelMinWidth="75%" sidePanelMaxWidth="100px">
+			{#snippet mainPanel()}
+				<Media {...entry} thumbnailWidth="256px" gap={6}></Media>
+			{/snippet}
+			{#snippet sidePanel()}
+				<div class="grid grid-cols-2 gap-y-2 items-center">
+					<b>Rank</b> <span class="w-16 text-center text-sm">{ranking}</span>
+					<b>Overall</b>
+					<Score score={overall_median}></Score>
+					<b>Teachers</b>
+					<Score score={teacher_median}></Score>
+				</div>
+			{/snippet}
+		</LayoutSideBySide>
+		<hr class="my-8!" />
+	{/each}
 </article>
-
-<style>
-	tr {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 1rem;
-		align-items: start;
-	}
-
-	tr:nth-child(even) {
-		background-color: rgb(242, 242, 242);
-	}
-</style>
