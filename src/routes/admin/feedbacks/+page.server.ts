@@ -18,9 +18,7 @@ export const load = async ({ locals }) => {
 			and date_part('year', entries.created_at)=${currentYear}
 			and votes.reviewed='false'
 			and votes.maybe_rude='true'
-			order by uid
-			limit all
-			offset 0;
+			order by uid;
 		`);
 
 	return { feedbacks };
