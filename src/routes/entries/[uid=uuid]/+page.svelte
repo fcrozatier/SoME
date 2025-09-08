@@ -54,6 +54,7 @@
 
 	{#if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>
+		<!-- Only filter comments maybe_rude here -->
 		{@const comments = data.feedbacks.filter((f) => f.feedback !== "" && !f.maybe_rude)}
 		<div class="flex justify-center">
 			<div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 mb-10">
@@ -89,14 +90,42 @@
 		{#if comments.length > 0}
 			<h3>Comments</h3>
 
-			{#each comments as { feedback, score }}
+			{#each comments as { feedback, score, username, bio, is_teacher }, i}
 				<div class="border-b first:border-t py-4">
 					<div class="float-right">
 						<Score score={+score}></Score>
 					</div>
+					{#if data.isAdmin}
+						<div>
+							<button
+								class={{ "font-medium cursor-pointer": bio?.length }}
+								popovertarget={`bio-${i}`}
+								popovertargetaction="toggle"
+								disabled={!bio}>{username}</button
+							>
+							<div id={`bio-${i}`} popover>{bio}</div>
+							{#if is_teacher}
+								<span class="tag">teacher</span>
+							{/if}
+						</div>
+					{/if}
 					<div class="prose wrap-anywhere">{@html feedback}</div>
 				</div>
 			{/each}
 		{/if}
 	{/if}
 </article>
+
+<style>
+	[id|="bio"] {
+		margin: 0;
+		padding: 1em;
+		inset: auto;
+		bottom: calc(anchor(top) + 8px);
+		justify-self: anchor-center;
+		background: white;
+		color: black;
+		outline: 1px solid var(--color-primary);
+		border-radius: 1em;
+	}
+</style>

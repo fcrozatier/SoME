@@ -1,10 +1,11 @@
 import { db } from "$lib/server/db";
-import type { SelectTag } from "$lib/server/db/schema.js";
+import type { SelectTag, User } from "$lib/server/db/schema.js";
 import { type SelectEntry, type SelectVote } from "$lib/server/db/schema.js";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async (event) => {
+	const isAdmin = event.locals.user?.isAdmin ?? false;
 	const uid = event.params.uid;
 
 	const [entry]: (Pick<
@@ -26,11 +27,13 @@ export const load = async (event) => {
 			where entry_uid=${uid};
 		`);
 
-	const feedbacks: Pick<SelectVote, "score" | "feedback" | "maybe_rude">[] = await db.execute(sql`
-      select score, feedback, maybe_rude
+	const feedbacks: (Pick<SelectVote, "score" | "feedback" | "maybe_rude"> &
+		Pick<User, "username" | "bio" | "is_teacher">)[] = await db.execute(sql`
+      select score, feedback, maybe_rude, username, bio, is_teacher
       from votes
+			join users on votes.user_uid=users.uid
       where entry_uid=${uid}
     `);
 
-	return { entry, tags: entryTags.map((t) => t.name), feedbacks };
+	return { entry, tags: entryTags.map((t) => t.name), feedbacks, isAdmin };
 };
