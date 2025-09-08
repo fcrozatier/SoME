@@ -11,8 +11,7 @@
 	function hist(node: HTMLElement, arg: { score: number }[]) {
 		node.appendChild(
 			Plot.plot({
-				x: { domain: [1, 9.5] },
-				color: { scheme: "RdYlGn", domain: [1, 9.5] },
+				color: { scheme: "RdYlGn", type: "linear", domain: [1, 9.5] },
 				marks: [
 					Plot.rectY(arg, Plot.binX({ y: "count", fill: "x" }, { x: "score", interval: 0.5 })),
 					Plot.ruleY([0]),
