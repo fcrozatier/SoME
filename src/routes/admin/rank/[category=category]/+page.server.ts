@@ -58,7 +58,7 @@ export const load = async ({ params, locals, url }) => {
 				from entries
 				right join rank on entries.uid=rank.uid
 				left join teacher_score on entries.uid=teacher_score.entry_uid
-				order by rank asc
+				order by ranking asc
 				limit ${limit}
 				offset ${(+page - 1) * limit}
 			)
