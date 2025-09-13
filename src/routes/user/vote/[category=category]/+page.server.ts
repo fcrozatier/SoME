@@ -1,6 +1,6 @@
 import { dev } from "$app/environment";
 import type { Category } from "$lib/config";
-import { query3 } from "$lib/server/algo/queries";
+import { query2 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
 import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
@@ -50,7 +50,7 @@ export const load = async ({ locals, params }) => {
 	const [entry]: Pick<
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-	>[] = await db.execute(query3(userUid, category));
+	>[] = await db.execute(query2(userUid, category));
 
 	if (entry) {
 		await db.insert(cache).values({
