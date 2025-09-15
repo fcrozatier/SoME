@@ -1,6 +1,6 @@
 import { dev } from "$app/environment";
 import type { Category } from "$lib/config";
-import { query2 } from "$lib/server/algo/queries";
+import { query2, query4 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
 import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
@@ -47,10 +47,27 @@ export const load = async ({ locals, params }) => {
 			tags: entryTags.map((t) => t.name),
 		};
 	}
-	const [entry]: Pick<
+
+	let entry:
+		| Pick<SelectEntry, "uid" | "title" | "description" | "category" | "url" | "thumbnail">
+		| undefined;
+
+	const [entry4]: Pick<
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-	>[] = await db.execute(query2(userUid, category));
+	>[] = await db.execute(query4(userUid, category));
+	entry = entry4;
+
+	if (entry4) {
+		console.log("[vote]: found top entry with few votes", entry4);
+	} else {
+		console.log("[vote]: didn't found top entry with few votes");
+		const [entry2]: Pick<
+			SelectEntry,
+			"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+		>[] = await db.execute(query2(userUid, category));
+		entry = entry2;
+	}
 
 	if (entry) {
 		await db.insert(cache).values({
