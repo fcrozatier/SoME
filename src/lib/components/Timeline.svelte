@@ -28,7 +28,7 @@
 		{
 			title: "Results and Feedback",
 			description:
-				"The top entries and full rankings are revealed, along with the feedback that was shared.",
+				"The top entries and full rankings are revealed.",
 			isOpen: resultsAvailable(),
 			dates: [PUBLIC_RESULTS_AVAILABLE],
 		},
