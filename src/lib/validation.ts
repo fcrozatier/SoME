@@ -271,9 +271,15 @@ export const FlagSchema = {
 // Admin
 
 export const SurveySchema = {
-	some: fg.number({ required: true, min: 1, max: 9 }),
-	site: fg.number({ required: true, min: 1, max: 9 }),
+	some: fg.number({ required: true, min: 1, max: 9, step: 0.01 }),
+	site: fg.number({ required: true, min: 1, max: 9, step: 0.01 }),
 	feedback: FeedbackSchema,
+	peer_review: fg.radio(["yes", "no"]),
+	peer_review_feedback: FeedbackSchema,
+	ai: fg.radio(["yes", "no"]),
+	ai_feedback: FeedbackSchema,
+	a11y: fg.radio(["yes", "no"]),
+	a11y_feedback: FeedbackSchema,
 };
 
 export const AdminDeactivateForm = {
