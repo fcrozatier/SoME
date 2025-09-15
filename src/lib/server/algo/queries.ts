@@ -163,31 +163,45 @@ export function query3(token: string, category: string) {
 		`;
 }
 
-export function queryFeedbacks(token: string) {
+/**
+ * Select top entries at random with few votes
+ */
+export function query4(token: string, category: string) {
 	return sql`
-		with created as (
-			select entry_uid, title
-			from entries join user_to_entry
-			on entries.uid=user_to_entry.entry_uid
-			where user_uid=${token}
-		),
+			with median as (
+				select entry_uid,
+					percentile_cont(0.5) within group (order by score) as score
+				from votes
+				where date_part('year', created_at)=${currentYear}
+				group by entry_uid
+				having percentile_cont(0.5) within group (order by score) >= 6
+					and count(*) < 10
+			),
 
-		scores as (
-			select entry_uid, percentile_cont(0.5) within group (order by score) as median
-			from votes
-			where entry_uid in (select entry_uid from created)
-			group by entry_uid
-		),
+			selection as (
+				select uid, title, description, entries.category, url, thumbnail, coalesce(median.score, 9) as score
+				from entries
+				join median on entries.uid=median.entry_uid
+				left join entry_to_tag
+				on entries.uid=entry_to_tag.entry_uid
 
-		feedbacks as (
-			select votes.entry_uid, feedback, score, maybe_rude
-			from votes
-			where entry_uid in (select entry_uid from created)
-		)
+				where entries.category=${category}
+					and active='true'
+					and date_part('year', created_at)=${currentYear}
+					and uid not in (select entry_uid from votes where votes.user_uid=${token})
+					and uid not in (select entry_uid from skips where skips.user_uid=${token})
+					and uid not in (select entry_uid from flags where flags.user_uid=${token})
+					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${token})
+					and entry_to_tag.tag_id in (select tag_id from user_to_tag where user_uid=${token})
 
-		select created.entry_uid, title, score, median, feedback, maybe_rude from created left join (feedbacks join scores on scores.entry_uid=feedbacks.entry_uid)
-		on feedbacks.entry_uid=created.entry_uid;
-	`;
+				order by score nulls last
+			)
+
+			select *
+			from selection
+			order by random()
+			limit 1;
+		`;
 }
 
 export function rank(category: string) {
