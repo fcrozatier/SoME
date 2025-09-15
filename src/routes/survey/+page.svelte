@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
-	import { newToast } from "$lib/components/Toasts.svelte";
+	import { disableSubmitterAndSetValidity } from "$lib/actions";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { SurveySchema } from "$lib/validation";
 	import * as fg from "formgator";
@@ -10,7 +9,6 @@
 
 	let someValue = $state(5);
 	let siteValue = $state(5);
-	let feedback = $state("");
 </script>
 
 <svelte:head>
@@ -18,36 +16,27 @@
 </svelte:head>
 
 <article class="layout-prose">
-	{#if !form?.surveySuccess}
-		<h2>Survey</h2>
+	<h2>Survey</h2>
 
-		<form
-			method="post"
-			class="space-y-4"
-			use:enhance={({ submitter }) => {
-				submitter?.setAttribute("disabled", "on");
-				return async ({ update, result }) => {
-					if (result.type === "success") {
-						newToast({ type: "success", content: "Thank you for taking the survey! 🎉 🥳" });
-						await goto("/");
-					}
-					submitter?.removeAttribute("disabled");
-					await update();
-				};
-			}}
-		>
-			<div class="form-control gap-1">
-				<label for="some" class="label flex gap-2">
-					<span class="flex-1">
-						How satisfied are you with the SoME event (communication/organization)?
-					</span>
-				</label>
+	<form
+		method="post"
+		use:enhance={disableSubmitterAndSetValidity({
+			toast: { redirect: { type: "success", content: "Thank you! 🎉 🥳" } },
+		})}
+	>
+		<h3>General</h3>
+		<div class="space-y-8">
+			<div>
+				<label for="some" class="label">Event & Organization </label>
+				<p class="mt-0 mb-0 text-sm">
+					How satisfied are you with the SoME overall (<em>e.g.</em> communication, organization)?
+				</p>
 				<input
 					id="some"
 					name="some"
 					type="range"
 					step=".01"
-					class="range range-sm"
+					class="range range-sm w-full"
 					bind:value={someValue}
 					class:range-error={someValue <= 3}
 					class:range-success={someValue > 7}
@@ -61,22 +50,18 @@
 				</div>
 				<div class="w-full flex justify-between text-xs px-1">
 					<span>Not satisfied</span>
-
 					<span>Very satisfied</span>
 				</div>
 			</div>
-			<div class="form-control gap-1">
-				<label for="site" class="label flex gap-2">
-					<span class="flex-1">
-						How satisfied are you with the Peer Review website this year?
-					</span>
-				</label>
+			<div>
+				<label for="site" class="label">Website </label>
+				<p class="mt-0 mb-0 text-sm">How satisfied are you with the Peer Review website?</p>
 				<input
 					id="site"
 					name="site"
 					type="range"
 					step=".01"
-					class="range range-sm"
+					class="range range-sm w-full"
 					bind:value={siteValue}
 					class:range-error={siteValue <= 3}
 					class:range-success={siteValue > 7}
@@ -90,34 +75,153 @@
 				</div>
 				<div class="w-full flex justify-between text-xs px-1">
 					<span>Not satisfied</span>
-
 					<span>Very satisfied</span>
 				</div>
 			</div>
-			<div class="form-control">
-				<label for="feedback" class="label flex gap-2">
-					<span class="flex-1">
-						Do you have general feedback or ways you would like to see the Summer of Math Exposition
-						improved next year? If so, please write it here:
-					</span>
-				</label>
+			<div>
+				<label for="feedback" class="label">Future Improvements</label>
+				<p class="mt-0 mb-1 text-sm">
+					Do you have any general feedback or suggestions for how we could improve the Summer of
+					Math Exposition next year?
+				</p>
 				<textarea
-					name="feedback"
 					id="feedback"
-					class="textarea-bordered textarea text-base"
+					name="feedback"
+					class="textarea-bordered textarea text-base w-full"
 					cols="50"
 					rows="10"
-					bind:value={feedback}
 					{...fg.splat(SurveySchema.feedback.attributes)}
 				></textarea>
-				<div class="label justify-end">
-					<span class="label-text-alt">{feedback.length}/5000</span>
+			</div>
+		</div>
+
+		<h3>Peer Review</h3>
+		<div class="space-y-8">
+			<div>
+				<p class="mt-0 mb-1 text-sm">Did you participate in voting during the peer review?</p>
+				<div class="flex gap-4">
+					<label class="label">
+						<input
+							name="peer_review"
+							type="radio"
+							class="radio"
+							value="yes"
+							{...fg.splat(SurveySchema.peer_review.attributes)}
+						/> Yes
+					</label>
+					<label class="label">
+						<input
+							name="peer_review"
+							type="radio"
+							class="radio"
+							value="no"
+							{...fg.splat(SurveySchema.peer_review.attributes)}
+						/> No
+					</label>
 				</div>
 			</div>
-
-			<p>
-				<button class="btn btn-neutral">Submit survey</button>
+			<p class="mt-0 mb-1 text-sm">
+				If not, why? When would be the most convenient time for the peer review (<em>e.g.</em> late August,
+				early September, spanning both)?
 			</p>
-		</form>
-	{/if}
+			<textarea
+				name="peer_review_feedback"
+				class="textarea-bordered textarea text-base w-full"
+				cols="50"
+				rows="10"
+				{...fg.splat(SurveySchema.peer_review_feedback.attributes)}
+			></textarea>
+		</div>
+		<h3>AI</h3>
+		<div class="space-y-8">
+			<div>
+				<p class="mt-0 mb-1 text-sm">
+					Would you like us to expand our AI policy to allow more AI-generated content?
+				</p>
+				<div class="flex gap-4">
+					<label class="label">
+						<input
+							name="ai"
+							type="radio"
+							class="radio"
+							value="yes"
+							{...fg.splat(SurveySchema.ai.attributes)}
+						/> Yes
+					</label>
+					<label class="label">
+						<input
+							name="ai"
+							type="radio"
+							class="radio"
+							value="no"
+							{...fg.splat(SurveySchema.ai.attributes)}
+						/> No
+					</label>
+				</div>
+			</div>
+			<div>
+				<p class="mt-0 mb-1 text-sm">
+					If yes, in what form (<em>e.g.</em> thumbnails, voices, assets, editing, video content)?
+					<br />
+					If no, could you share your concerns?
+				</p>
+				<textarea
+					name="ai_feedback"
+					class="textarea-bordered textarea text-base w-full"
+					cols="50"
+					rows="10"
+					{...fg.splat(SurveySchema.ai_feedback.attributes)}
+				></textarea>
+			</div>
+		</div>
+		<h3>Accessibility</h3>
+		<div class="space-y-8">
+			<div>
+				<p class="mt-0 mb-1 text-sm">
+					Do you have any disability (<em>e.g.</em> low vision, color blindness, mobility impairment)?
+				</p>
+				<div class="flex gap-4">
+					<label class="label">
+						<input
+							name="a11y"
+							type="radio"
+							class="radio"
+							value="yes"
+							{...fg.splat(SurveySchema.a11y.attributes)}
+						/> Yes
+					</label>
+					<label class="label">
+						<input
+							name="a11y"
+							type="radio"
+							class="radio"
+							value="no"
+							{...fg.splat(SurveySchema.a11y.attributes)}
+						/> No
+					</label>
+				</div>
+			</div>
+			<div>
+				<p class="mt-0 mb-1 text-sm">If yes, how could we make the site more accessible for you?</p>
+				<textarea
+					name="a11y_feedback"
+					class="textarea-bordered textarea text-base w-full"
+					cols="50"
+					rows="10"
+					{...fg.splat(SurveySchema.a11y_feedback.attributes)}
+				></textarea>
+			</div>
+		</div>
+		<p>
+			<button class="btn btn-neutral">Submit survey</button>
+		</p>
+		{#if form?.issues}
+			<p>Something went wrong:</p>
+			<ul>
+				{#each Object.entries(form.issues) as [k, issue]}
+					<li class="text-error">{k}: {issue}</li>
+				{/each}
+			</ul>
+		{/if}
+	</form>
 </article>

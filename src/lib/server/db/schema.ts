@@ -3,6 +3,7 @@ import {
 	decimal,
 	index,
 	integer,
+	json,
 	pgTable,
 	primaryKey,
 	serial,
@@ -182,13 +183,11 @@ export const surveys = pgTable(
 	"surveys",
 	{
 		id: serial("id").primaryKey(),
-		userUid: uuid("user_uid").references(() => users.uid, {
-			onDelete: "cascade",
-		}),
+		userUid: uuid("user_uid").references(() => users.uid),
 		some: decimal("some", { precision: 4, scale: 2 }).notNull(),
 		site: decimal("site", { precision: 4, scale: 2 }).notNull(),
 		feedback: text("feedback"),
-		offSeason: boolean("off_season"),
+		json: json("json"),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
 	({ userUid }) => [index().on(userUid)],

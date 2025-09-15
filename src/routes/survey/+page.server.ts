@@ -1,4 +1,3 @@
-import { MAX_AGE } from "$lib/server/config";
 import { db } from "$lib/server/db";
 import { surveys } from "$lib/server/db/schema";
 import { SurveySchema } from "$lib/validation";
@@ -10,21 +9,23 @@ export const load = async () => {
 };
 
 export const actions: Actions = {
-	default: formgate(SurveySchema, async (data, { cookies }) => {
-		const token = cookies.get("token");
+	default: formgate(SurveySchema, async (data, { locals, cookies }) => {
+		const uid = locals.user?.uid;
 
 		await db.insert(surveys).values({
-			userUid: token,
+			userUid: uid,
 			some: data.some.toString(),
 			site: data.site.toString(),
 			feedback: data.feedback,
+			json: JSON.stringify(data),
 		});
 
 		cookies.set("survey", "true", {
 			path: "/",
-			maxAge: MAX_AGE,
+			httpOnly: true,
+			maxAge: 1000 * 60 * 60 * 24 * 30 * 4, // 4 month(s)
 		});
 
-		return { surveySuccess: true };
+		return redirect(303, "/");
 	}),
 };
