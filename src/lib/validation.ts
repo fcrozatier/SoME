@@ -278,6 +278,8 @@ export const SurveySchema = {
 	peer_review_feedback: FeedbackSchema,
 	ai: fg.radio(["yes", "no"]),
 	ai_feedback: FeedbackSchema,
+	creator_live_feedback: fg.radio(["live", "after"]),
+	creator_sharable_vote_link: FeedbackSchema,
 	a11y: fg.radio(["yes", "no"]),
 	a11y_feedback: FeedbackSchema,
 };

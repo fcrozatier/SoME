@@ -174,6 +174,52 @@
 				></textarea>
 			</div>
 		</div>
+		<h3>Creators</h3>
+		<p>This section is mainly for creators, feel free to skip it if you didn't submit an entry</p>
+		<div class="space-y-8">
+			<div>
+				<p class="mt-0 mb-1 text-sm">
+					Would you prefer to see your feedback, scores and comments immediately (live) or only
+					after the peer review ends?
+				</p>
+				<div class="flex gap-4">
+					<label class="label">
+						<input
+							name="creator_live_feedback"
+							type="radio"
+							class="radio"
+							value="live"
+							{...fg.splat(SurveySchema.creator_live_feedback.attributes)}
+						/> Live
+					</label>
+					<label class="label">
+						<input
+							name="creator_live_feedback"
+							type="radio"
+							class="radio"
+							value="after"
+							{...fg.splat(SurveySchema.creator_live_feedback.attributes)}
+						/> After peer review
+					</label>
+				</div>
+			</div>
+			<div>
+				<p class="mt-0 mb-1 text-sm">
+					We're considering providing you a direct voting link you could share (on your site,
+					YouTube description, or elsewhere). This link would be available as soon as submissions
+					open, allowing early votes on your entry before peer-review. After voting reviewers would
+					be directed to other entries, similar to the peer review process. This would bring in more
+					people, and increase the total number of votes. What do you think about this feature?
+				</p>
+				<textarea
+					name="creator_sharable_vote_link"
+					class="textarea-bordered textarea text-base w-full"
+					cols="50"
+					rows="10"
+					{...fg.splat(SurveySchema.creator_sharable_vote_link.attributes)}
+				></textarea>
+			</div>
+		</div>
 		<h3>Accessibility</h3>
 		<div class="space-y-8">
 			<div>
