@@ -35,5 +35,18 @@ export const load = async (event) => {
       where entry_uid=${uid}
     `);
 
-	return { entry, tags: entryTags.map((t) => t.name), feedbacks, isAdmin };
+	return {
+		entry,
+		tags: entryTags.map((t) => t.name),
+		// Don't leak data in UI
+		feedbacks: isAdmin
+			? feedbacks
+			: feedbacks.map((f) => ({
+					...f,
+					bio: null,
+					username: null,
+					is_teacher: null,
+				})),
+		isAdmin,
+	};
 };
