@@ -164,7 +164,7 @@ export function query3(token: string, category: string) {
 }
 
 /**
- * Select top entries at random with few votes
+ * Select top entries with few votes
  */
 export function query4(token: string, category: string) {
 	return sql`
