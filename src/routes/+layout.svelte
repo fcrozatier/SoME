@@ -153,7 +153,7 @@
 		</nav>
 
 		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
-			<!-- <Banner display={!data.surveyTaken} /> -->
+			<Banner display={!data.surveyTaken} />
 			<Timer display={submissionsOpen()}></Timer>
 
 			<h1 class="text-center">{FULL_NAME}</h1>

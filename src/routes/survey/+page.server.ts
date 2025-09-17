@@ -5,7 +5,7 @@ import { type Actions, redirect } from "@sveltejs/kit";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async () => {
-	return redirect(302, "/");
+	// return redirect(302, "/");
 };
 
 export const actions: Actions = {
