@@ -49,7 +49,6 @@ export const load = async ({ params, locals, url }) => {
 				from entries
 				right join overall_score on overall_score.entry_uid=entries.uid
 				where category=${category}
-				and active='t'
 				order by overall_median desc
 			),
 
