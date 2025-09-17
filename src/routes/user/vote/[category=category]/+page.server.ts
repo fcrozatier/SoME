@@ -48,26 +48,25 @@ export const load = async ({ locals, params }) => {
 		};
 	}
 
-	let entry:
-		| Pick<SelectEntry, "uid" | "title" | "description" | "category" | "url" | "thumbnail">
-		| undefined;
+	// let entry:
+	// 	| Pick<SelectEntry, "uid" | "title" | "description" | "category" | "url" | "thumbnail">
+	// 	| undefined;
 
-	const [entry4]: Pick<
+	// const [entry4]: Pick<
+	// 	SelectEntry,
+	// 	"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+	// >[] = await db.execute(query4(userUid, category));
+	// entry = entry4;
+
+	// if (entry4) {
+	// 	console.log("[vote]: found top entry with few votes", entry4);
+	// } else {
+	// 	console.log("[vote]: didn't found top entry with few votes");
+	// }
+	const [entry]: Pick<
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-	>[] = await db.execute(query4(userUid, category));
-	entry = entry4;
-
-	if (entry4) {
-		console.log("[vote]: found top entry with few votes", entry4);
-	} else {
-		console.log("[vote]: didn't found top entry with few votes");
-		const [entry2]: Pick<
-			SelectEntry,
-			"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-		>[] = await db.execute(query2(userUid, category));
-		entry = entry2;
-	}
+	>[] = await db.execute(query2(userUid, category));
 
 	if (entry) {
 		await db.insert(cache).values({
