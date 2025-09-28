@@ -9,7 +9,7 @@ export type Category = (typeof categories)[number];
 export const currentYear = new Date().getFullYear();
 
 // For the archive
-export const defaultYear = 2024;
+export const defaultYear = 2025;
 
 /**
  * Formats a list into a string

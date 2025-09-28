@@ -8,17 +8,18 @@ import { eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 
 export const load = async () => {
-	// const top: Pick<
-	// 	SelectEntry,
-	// 	"uid" | "title" | "description" | "category" | "thumbnail" | "url"
-	// >[] = await db.execute(sql`
-	// 	 select uid, title, description, category, thumbnail, url from entries
-	// 	 where active='t'
-	// 	 and date_part('year', entries.created_at)='2024'
-	// 	 order by final_score desc nulls last
-	//    limit 25;
-	// 	`);
-	// return { top };
+	const top: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url"
+	>[] = await db.execute(sql`
+		 select uid, title, description, category, thumbnail, url from entries
+		 where active='t'
+		 and date_part('year', entries.created_at)='2025'
+		 order by final_score desc nulls last
+	   limit 5;
+		`);
+
+	return { top };
 };
 
 export const actions: Actions = {
