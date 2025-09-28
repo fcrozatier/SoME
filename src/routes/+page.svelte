@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
-	import { FULL_NAME, SHORT_NAME } from "$lib/config";
+	import { currentYear, FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 
 	let { data } = $props();
@@ -25,8 +25,8 @@
 <Timeline></Timeline>
 
 <!-- Last year -->
-<!-- <section>
-	<h2 class="mb-10 text-4xl font-black text-center">Discover the top 5 of the last edition</h2>
+<section>
+	<h2 class="mb-10 text-4xl font-black text-center text-balance">Top Entries from This Year's Peer Review</h2>
 
 	<div
 		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
@@ -37,20 +37,22 @@
 			</div>
 		{/each}
 	</div>
-</section> -->
+</section>
 
-<!-- <section>
+<section>
 	<div class="text-center">
 		<h2 class="mb-10 text-4xl font-black">All entries</h2>
 		<p>You can find the whole ranking of entries here:</p>
 		<div class="flex gap-2 justify-center">
-			<a class="btn btn-neutral" href="/archive?category=video&year=2024&page=1">All videos</a>
-			<a class="btn btn-neutral" href="/archive?category=non-video&year=2024&page=1"
+			<a class="btn btn-neutral" href={`/archive?category=video&year=${currentYear}&page=1`}
+				>All videos</a
+			>
+			<a class="btn btn-neutral" href={`/archive?category=non-video&year=${currentYear}&page=1`}
 				>All non-videos</a
 			>
 		</div>
 	</div>
-</section> -->
+</section>
 
 <!-- Sponsors -->
 <section class="mt-10 pt-10 px-4">
