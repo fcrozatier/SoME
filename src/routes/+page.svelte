@@ -26,7 +26,9 @@
 
 <!-- Last year -->
 <section>
-	<h2 class="mb-10 text-4xl font-black text-center text-balance">Top Entries from This Year's Peer Review</h2>
+	<h2 class="mb-10 text-4xl font-black text-center text-balance">
+		Top Entries from This Year's Peer Review
+	</h2>
 
 	<div
 		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
