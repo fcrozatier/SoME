@@ -27,7 +27,7 @@ export const load = loadgate(
 				from entries
 				where date_part('year', entries.created_at)=${year}
 				and category=${category}
-				order by rank asc nulls last
+				order by (rank, created_at) asc nulls last
 				limit ${limit}
 				offset ${(page - 1) * limit}
 			)
