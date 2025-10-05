@@ -53,11 +53,11 @@ export const load = async ({ params, locals, url }) => {
 			),
 
 			paginated as (
-				select entries.uid, title, description, category, url, thumbnail, ranking, overall_median, teacher_score.median as teacher_median, count(*) over () as total_items
+				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, overall_median, teacher_score.median as teacher_median, count(*) over () as total_items
 				from entries
 				right join rank on entries.uid=rank.uid
 				left join teacher_score on entries.uid=teacher_score.entry_uid
-				order by ranking asc
+				order by (ranking, created_at) asc
 				limit ${limit}
 				offset ${(+page - 1) * limit}
 			)
