@@ -284,6 +284,16 @@ export const SurveySchema = {
 	a11y_feedback: FeedbackSchema,
 };
 
+export const SurveyFilterSchema = {
+	filter: fg.select([
+		"feedback",
+		"peer_review_feedback",
+		"ai_feedback",
+		"creator_sharable_vote_link",
+		"a11y_feedback",
+	]),
+};
+
 export const AdminDeactivateForm = {
 	uid: UidSchema,
 };
