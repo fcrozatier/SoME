@@ -3,14 +3,12 @@
 	import { page } from "$app/state";
 	import { PUBLIC_VOTE_START } from "$env/static/public";
 	import { clickOutside } from "$lib/actions";
-	import Banner from "$lib/components/Banner.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Time from "$lib/components/Time.svelte";
-	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { submissionsOpen, voteOpen } from "$lib/utils/time";
+	import { voteOpen } from "$lib/utils/time";
 	import { apply, isSupported } from "@oddbird/popover-polyfill/fn";
 	import { onMount } from "svelte";
 	import "../app.css";
@@ -153,8 +151,8 @@
 		</nav>
 
 		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
-			<Banner display={!data.surveyTaken} />
-			<Timer display={submissionsOpen()}></Timer>
+			<!-- <Banner display={!data.surveyTaken} /> -->
+			<!-- <Timer display={submissionsOpen()}></Timer> -->
 
 			<h1 class="text-center">{FULL_NAME}</h1>
 			{@render children()}
