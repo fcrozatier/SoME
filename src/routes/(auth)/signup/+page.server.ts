@@ -27,13 +27,13 @@ export const actions = {
 		};
 
 		// Email deliverability
-		if (!dev) {
-			const emailValidation = await validateEmail(user.email);
+		// if (!dev) {
+		// 	const emailValidation = await validateEmail(user.email);
 
-			if (emailValidation?.result !== "deliverable") {
-				return formfail({ email: "Undeliverable email" });
-			}
-		}
+		// 	if (emailValidation?.result !== "deliverable") {
+		// 		return formfail({ email: "Undeliverable email" });
+		// 	}
+		// }
 
 		// Unique username
 		const [other] = await db.select().from(users).where(eq(users.username, data.username));

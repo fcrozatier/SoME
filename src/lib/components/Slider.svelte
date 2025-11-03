@@ -36,7 +36,7 @@
 	const setReadyAttachment: Attachment = (node) => {
 		node.addEventListener("pointerdown", setReady, { once: true });
 
-		() => {
+		return () => {
 			node.removeEventListener("pointerdown", setReady);
 		};
 	};

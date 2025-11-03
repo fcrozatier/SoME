@@ -35,10 +35,10 @@ export const actions: Actions = {
 
 		if (!dev) {
 			// Validate email
-			const emailValidation = await validateEmail(email);
-			if (emailValidation?.result !== "deliverable") {
-				return formfail({ email: "Undeliverable email" });
-			}
+			// const emailValidation = await validateEmail(email);
+			// if (emailValidation?.result !== "deliverable") {
+			// 	return formfail({ email: "Undeliverable email" });
+			// }
 		}
 
 		const token = crypto.randomUUID();
