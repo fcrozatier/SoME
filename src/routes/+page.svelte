@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
-	import Timeline from "$lib/components/Timeline.svelte";
 	import { currentYear, FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 
@@ -24,21 +23,6 @@
 
 <!-- <Timeline></Timeline> -->
 
-<!-- Winners -->
-<section>
-	<h2 class="mb-10 text-4xl font-black text-center text-balance">SoME4 Winners</h2>
-
-	<div
-		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
-	>
-		{#each data.winners.slice(0, 5) as winner}
-			<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
-				<Media {...winner} thumbnailWidth="360px" gap={8}></Media>
-			</div>
-		{/each}
-	</div>
-</section>
-
 <!-- Last year -->
 <section>
 	<h2 class="mb-10 text-4xl font-black text-center text-balance">
@@ -51,6 +35,27 @@
 		{#each data.top.slice(0, 5) as top}
 			<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
 				<Media {...top} thumbnailWidth="360px" gap={8}></Media>
+			</div>
+		{/each}
+	</div>
+</section>
+
+<!-- Prize -->
+<section>
+	<header class="max-w-prose mx-auto">
+		<h2 class="mb-10 text-4xl text-center font-black text-balance">Teacher's Picks Award</h2>
+		<p class="">
+			These five entries received the SoME4 prize for providing classroom-ready material that is
+			especially helpful for teachers.
+		</p>
+	</header>
+
+	<div
+		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
+	>
+		{#each data.winners.slice(0, 5) as winner}
+			<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
+				<Media {...winner} thumbnailWidth="360px" gap={8}></Media>
 			</div>
 		{/each}
 	</div>
