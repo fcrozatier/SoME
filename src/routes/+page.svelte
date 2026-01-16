@@ -45,8 +45,11 @@
 	<header class="max-w-prose mx-auto">
 		<h2 class="mb-10 text-4xl text-center font-black text-balance">Teacher's Picks Award</h2>
 		<p class="">
-			These five entries received the SoME4 prize for providing classroom-ready material that is
-			especially helpful for teachers.
+			These five entries received the <a href="/prize">SoME4 prize</a> for providing classroom-ready
+			material that is particularly helpful to teachers.
+			<a href="https://3blue1brown.substack.com/p/some4-prizes" target="_blank"
+				>Read the announcement</a
+			>
 		</p>
 	</header>
 
