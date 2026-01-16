@@ -62,8 +62,8 @@
 			</p>
 			{#if submissionsOpen()}
 				<p>
-					Which means you still have <span class="tabular-nums">{remaining.formatted}</span> left to
-					submit an entry!
+					Which means you still have <span class="tabular-nums">{remaining.formatted}</span> left to submit
+					an entry!
 				</p>
 			{/if}
 			<p>
@@ -262,8 +262,8 @@
 			</p>
 			<ul>
 				<li>
-					<b>Motivation:</b> By the end of the introduction it should be clear why the topic matters
-					and why someone should be excited to learn about it.
+					<b>Motivation:</b> By the end of the introduction it should be clear why the topic matters and
+					why someone should be excited to learn about it.
 				</li>
 				<li>
 					<b> Clarity: </b> Jargon should be explained, the goals of the lesson should be easy to understand

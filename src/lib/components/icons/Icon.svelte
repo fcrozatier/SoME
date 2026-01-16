@@ -2,11 +2,10 @@
 	import type { SVGAttributes } from "svelte/elements";
 	import type { IconName } from "./Icons.svelte";
 
-	interface IconProps
-		extends Omit<
-			SVGAttributes<SVGSVGElement>,
-			"aria-hidden" | "class" | "fill" | "name" | "stroke" | "stroke-width" | "viewBox" | "xmlns"
-		> {
+	interface IconProps extends Omit<
+		SVGAttributes<SVGSVGElement>,
+		"aria-hidden" | "class" | "fill" | "name" | "stroke" | "stroke-width" | "viewBox" | "xmlns"
+	> {
 		class?: string;
 		name: IconName;
 	}
