@@ -7,7 +7,7 @@
 	<title>{makeTitle("Error")}</title>
 </svelte:head>
 
-<article class="layout-prose min-h-[100vh]">
+<article class="layout-prose min-h-screen">
 	<h2>{page.status}</h2>
 	<p>
 		{page.error?.message}

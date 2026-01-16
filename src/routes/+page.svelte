@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
-	import Timeline from "$lib/components/Timeline.svelte";
 	import { currentYear, FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 
@@ -22,7 +21,7 @@
 	</p>
 </section>
 
-<Timeline></Timeline>
+<!-- <Timeline></Timeline> -->
 
 <!-- Last year -->
 <section>
@@ -33,13 +32,76 @@
 	<div
 		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
 	>
-		{#each data.top.slice(0, 5) as winner}
+		{#each data.top.slice(0, 5) as top}
+			<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
+				<Media {...top} thumbnailWidth="360px" gap={8}></Media>
+			</div>
+		{/each}
+	</div>
+</section>
+
+<!-- Prize -->
+<section>
+	<header class="max-w-prose mx-auto">
+		<h2 class="mb-10 text-4xl text-center font-black text-balance">Teacher's Picks Award</h2>
+		<p class="">
+			These five entries received the <a href="/prize">SoME4 prize</a> for providing classroom-ready
+			material that is particularly helpful to teachers.
+			<a href="https://3blue1brown.substack.com/p/some4-prizes" target="_blank"
+				>Read the announcement</a
+			>
+		</p>
+	</header>
+
+	<div
+		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
+	>
+		{#each data.winners.slice(0, 5) as winner}
 			<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
 				<Media {...winner} thumbnailWidth="360px" gap={8}></Media>
 			</div>
 		{/each}
 	</div>
 </section>
+
+<!-- Honorable mentions -->
+<!-- <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
+	<div class="mx-auto max-w-prose">
+		<h2 class="my-0 text-5xl font-black" style:color="var(--light-gold)">
+			Last year's competition
+		</h2>
+		<p class="mt-8 font-light tracking-wider">
+			Discover the 5 winners of the last edition. <br />
+
+			The 20 honorable mentions as well as the full list of entries is available
+			<a class="font-light" style:color="var(--light-gold)" href="/previous">here</a>
+		</p>
+	</div>
+	<div class="mx-4">
+		<div
+			class="scrollbar mx-auto flex max-w-5xl snap-x snap-proximity snap-always items-center gap-10 overflow-x-scroll pb-2"
+			style:--scrollbar-thumb="var(--light-gold)"
+		>
+			{#each winners as winner}
+				<div class="snap-center">
+					{#if winner.video}
+						<Youtube src={winner.link}></Youtube>
+					{:else}
+						<a href={winner.link} target="_blank" class="inline-block w-[420px]">
+							<img
+								src={winner.thumbnail}
+								alt="Winner thumbnail"
+								width="420"
+								class="aspect-video rounded-lg"
+								loading="lazy"
+							/>
+						</a>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
+</section> -->
 
 <section>
 	<div class="text-center">

@@ -19,7 +19,21 @@ export const load = async () => {
 	   limit 5;
 		`);
 
-	return { top };
+	const winners: Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url"
+	>[] = await db.execute(sql`
+		 select uid, title, description, category, thumbnail, url from entries
+		 where uid in (
+		 	'e55b9384-641c-4709-8aef-3447c8d25e80',
+			'6ed691c3-cfef-49c9-b1ed-2adf66536c0b',
+			'c46f3c19-f1e2-402e-af55-8b4b61c508b3',
+			'd4dd701c-240a-48d3-ac87-cbba560afee5',
+			'b8300cb6-9de1-44d4-ac2a-fd1ca5b20819'
+			);
+		`);
+
+	return { top, winners };
 };
 
 export const actions: Actions = {
