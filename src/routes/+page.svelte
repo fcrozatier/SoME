@@ -25,9 +25,11 @@
 
 <!-- Last year -->
 <section>
-	<h2 class="mb-10 text-4xl font-black text-center text-balance">
-		Top Entries from This Year's Peer Review
-	</h2>
+	<header class="max-w-prose mx-auto">
+		<h2 class="mb-10 text-4xl font-black text-center text-balance">
+			Top 5 Entries from the Peer Review
+		</h2>
+	</header>
 
 	<div
 		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
@@ -44,7 +46,7 @@
 <section>
 	<header class="max-w-prose mx-auto">
 		<h2 class="mb-10 text-4xl text-center font-black text-balance">Teacher's Picks Award</h2>
-		<p class="">
+		<p>
 			These five entries received the <a href="/prize">SoME4 prize</a> for providing classroom-ready
 			material that is particularly helpful to teachers.
 			<a href="https://3blue1brown.substack.com/p/some4-prizes" target="_blank"
@@ -140,7 +142,7 @@
 				width="180"
 			/>
 		</a>
-		<a href="https://brilliant.org/" rel="nofollow sponsored" target="_blank">
+		<!-- <a href="https://brilliant.org/" rel="nofollow sponsored" target="_blank">
 			<img
 				class="opacity-20 hover:opacity-100 transition-opacity duration-200"
 				src="/sponsors/brilliant-logo.png"
@@ -148,6 +150,6 @@
 				title="Brilliant, Learn by doing"
 				width="60"
 			/>
-		</a>
+		</a> -->
 	</div>
 </section>
