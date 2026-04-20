@@ -27,7 +27,6 @@
 		"@sveltejs/vite-plugin-svelte": "^5.1.1",
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.2.2",
-		"@types/katex": "^0.16.8",
 		"@types/node": "^24.12.2",
 		"daisyui": "^5.5.19",
 		"drizzle-kit": "^0.30.6",
@@ -41,8 +40,7 @@
 		"tailwindcss": "^4.2.2",
 		"typescript": "^5.9.3",
 		"vite": "^6.4.2",
-		"vite-plugin-devtools-json": "^0.2.1",
-		"vitest": "^3.2.4"
+		"vite-plugin-devtools-json": "^0.2.1"
 	},
 	"type": "module",
 	"dependencies": {
