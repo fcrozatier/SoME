@@ -29,9 +29,6 @@ importers:
       form-data:
         specifier: ^4.0.5
         version: 4.0.5
-      katex:
-        specifier: ^0.16.45
-        version: 0.16.45
       mailgun.js:
         specifier: ^12.9.0
         version: 12.9.0

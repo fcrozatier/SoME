@@ -54,7 +54,6 @@
 		"@oddbird/popover-polyfill": "^0.6.1",
 		"drizzle-orm": "^0.41.0",
 		"form-data": "^4.0.5",
-		"katex": "^0.16.45",
 		"mailgun.js": "^12.9.0",
 		"openai": "^4.104.0",
 		"pluralize-esm": "^9.0.5",
