@@ -104,7 +104,7 @@ export function query2(token: string, category: string) {
 		`;
 }
 
-const multiplier_start_date = "2025-09-12";
+const multiplier_start_date = "2026-09-12";
 
 /**
  * Select entries at random with probability weighted by median score with a (utility) boost based on the std

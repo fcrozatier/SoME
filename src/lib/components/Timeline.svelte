@@ -44,7 +44,7 @@
 
 <!-- Timeline -->
 <section class="layout-prose pb-4">
-	<h2 class="mb-4 text-4xl font-black">Timeline</h2>
+	<h2 class="mb-4 text-4xl text-center font-black">Timeline</h2>
 	<p>The competition unfolds in three phases:</p>
 	<ul class="-ml-7 list-outside">
 		{#each phases as phase, i}
