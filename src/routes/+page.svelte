@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
-	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 
 	let { data } = $props();
@@ -14,10 +13,9 @@
 <section class="layout-prose">
 	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->
 
-	<p class=" mb-16 text-center text-3xl font-light">SoME5, summer 2026</p>
 	<p>
-		The {FULL_NAME} ({SHORT_NAME}) is an annual competition fostering the creation of excellent math
-		content online. You can participate as either a creator or judge.
+		The Summer of Math Exposition (SoME) is an annual competition fostering the creation of
+		excellent math content online. You can participate as either a creator or judge.
 		<a href="/rules" rel="terms-of-service">Learn more</a>
 	</p>
 </section>
@@ -28,7 +26,7 @@
 <section>
 	<header class="max-w-prose mx-auto">
 		<h2 class="mb-10 text-4xl font-black text-center text-balance">
-			Top 5 Entries from SoME4 Peer Review
+			Top 5 Entries from the SoME4 Peer Review
 		</h2>
 	</header>
 

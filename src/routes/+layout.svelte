@@ -154,7 +154,26 @@
 			<!-- <Banner display={!data.surveyTaken} /> -->
 			<!-- <Timer display={submissionsOpen()}></Timer> -->
 
-			<h1 class="text-center">{FULL_NAME}</h1>
+			<header>
+				<h1 class="text-center">{FULL_NAME}</h1>
+				<p class="mb-16 text-center text-lg font-light italic">
+					Presented by
+					<a
+						href="https://www.3blue1brown.com/"
+						class="no-underline"
+						rel="nofollow sponsored"
+						target="_blank"
+					>
+						<img
+							class="not-prose inline"
+							src="/sponsors/3b1b-logo.png"
+							alt="3Blue1Brown"
+							width="35"
+						/>
+						3blue1brown
+					</a>
+				</p>
+			</header>
 			{@render children()}
 		</main>
 	</div>
