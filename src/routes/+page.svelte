@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
-	import { currentYear, FULL_NAME, SHORT_NAME } from "$lib/config";
+	import Timeline from "$lib/components/Timeline.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 
 	let { data } = $props();
@@ -13,21 +13,20 @@
 <section class="layout-prose">
 	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->
 
-	<p class=" mb-16 text-center text-3xl font-light">SoME4, summer 2025</p>
 	<p>
-		The {FULL_NAME} ({SHORT_NAME}) is an annual competition fostering the creation of excellent math
-		content online. You can participate as either a creator or judge.
+		The Summer of Math Exposition (SoME) is an annual competition fostering the creation of
+		excellent math content online. You can participate as either a creator or judge.
 		<a href="/rules" rel="terms-of-service">Learn more</a>
 	</p>
 </section>
 
-<!-- <Timeline></Timeline> -->
+<Timeline></Timeline>
 
 <!-- Last year -->
 <section>
 	<header class="max-w-prose mx-auto">
 		<h2 class="mb-10 text-4xl font-black text-center text-balance">
-			Top 5 Entries from the Peer Review
+			Top 5 Entries from the SoME4 Peer Review
 		</h2>
 	</header>
 
@@ -43,7 +42,7 @@
 </section>
 
 <!-- Prize -->
-<section>
+<!-- <section>
 	<header class="max-w-prose mx-auto">
 		<h2 class="mb-10 text-4xl text-center font-black text-balance">Teacher's Picks Award</h2>
 		<p>
@@ -64,7 +63,7 @@
 			</div>
 		{/each}
 	</div>
-</section>
+</section> -->
 
 <!-- Honorable mentions -->
 <!-- <section class="text-ligh bg-black/95 pb-32 pt-24 text-center" style:color="var(--light-gold)">
@@ -110,18 +109,14 @@
 		<h2 class="mb-10 text-4xl font-black">All entries</h2>
 		<p>You can find the whole ranking of entries here:</p>
 		<div class="flex gap-2 justify-center">
-			<a class="btn btn-neutral" href={`/archive?category=video`}
-				>All videos</a
-			>
-			<a class="btn btn-neutral" href={`/archive?category=non-video`}
-				>All non-videos</a
-			>
+			<a class="btn btn-neutral" href={`/archive?category=video`}>All videos</a>
+			<a class="btn btn-neutral" href={`/archive?category=non-video`}>All non-videos</a>
 		</div>
 	</div>
 </section>
 
 <!-- Sponsors -->
-<section class="mt-10 pt-10 px-4">
+<!-- <section class="mt-10 pt-10 px-4">
 	<h2 class="text-center mb-4 text-2xl font-light">
 		Operations for this contest have been generously funded by
 	</h2>
@@ -142,7 +137,7 @@
 				width="180"
 			/>
 		</a>
-		<!-- <a href="https://brilliant.org/" rel="nofollow sponsored" target="_blank">
+		<a href="https://brilliant.org/" rel="nofollow sponsored" target="_blank">
 			<img
 				class="opacity-20 hover:opacity-100 transition-opacity duration-200"
 				src="/sponsors/brilliant-logo.png"
@@ -150,6 +145,6 @@
 				title="Brilliant, Learn by doing"
 				width="60"
 			/>
-		</a> -->
+		</a>
 	</div>
-</section>
+</section> -->
