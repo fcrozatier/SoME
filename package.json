@@ -24,7 +24,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^5.5.4",
 		"@sveltejs/kit": "^2.57.1",
-		"@sveltejs/vite-plugin-svelte": "^5.1.1",
+		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.2.2",
 		"@types/node": "^24.12.2",
@@ -39,8 +39,8 @@
 		"svelte-check": "^4.4.6",
 		"tailwindcss": "^4.2.2",
 		"typescript": "^5.9.3",
-		"vite": "^6.4.2",
-		"vite-plugin-devtools-json": "^0.2.1"
+		"vite": "^8.0.9",
+		"vite-plugin-devtools-json": "^1.0.0"
 	},
 	"type": "module",
 	"dependencies": {

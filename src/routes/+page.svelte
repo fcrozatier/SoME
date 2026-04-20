@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
-	import { currentYear, FULL_NAME, SHORT_NAME } from "$lib/config";
+	import { FULL_NAME, SHORT_NAME } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 
 	let { data } = $props();

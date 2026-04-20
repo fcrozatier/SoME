@@ -5,5 +5,8 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss(), devtoolsJson()],
+	build: {
+		target: "baseline-widely-available",
+	},
 	ssr: { noExternal: ["formgator"] },
 });
