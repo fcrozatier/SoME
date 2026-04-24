@@ -57,8 +57,7 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: var(--max-lines);
-		/* Turns out adding line-clamp breaks the return transition in Chrome */
-		/* line-clamp: var(--max-lines); */
+		line-clamp: var(--max-lines);
 
 		max-block-size: calc(var(--max-lines) * 1lh);
 
@@ -70,7 +69,7 @@
 
 		&[data-open="true"] {
 			-webkit-line-clamp: revert;
-			/* line-clamp: revert; */
+			line-clamp: revert;
 			max-block-size: max-content;
 
 			transition-delay: 0ms;
