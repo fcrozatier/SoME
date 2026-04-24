@@ -31,7 +31,7 @@
 		"daisyui": "^5.5.19",
 		"drizzle-kit": "^0.30.6",
 		"formgator": "^0.2.5",
-		"mdsvex": "0.12.3",
+		"mdsvex": "0.12.7",
 		"prettier": "^3.8.3",
 		"prettier-plugin-svelte": "^3.5.1",
 		"rehype-target-plugin": "^1.0.1",
@@ -52,7 +52,7 @@
 		"drizzle-orm": "^0.41.0",
 		"form-data": "^4.0.5",
 		"mailgun.js": "^13.0.0",
-		"openai": "^4.104.0",
+		"openai": "^6.34.0",
 		"pluralize-esm": "^9.0.5",
 		"postgres": "^3.4.9",
 		"rehype-katex": "^7.0.1",
@@ -65,7 +65,7 @@
 		"remark-smartypants": "^3.0.2",
 		"sharp": "^0.34.5",
 		"unified": "^11.0.5",
-		"zod": "^3.25.76"
+		"zod": "^4.3.6"
 	},
 	"browserslist": [
 		"cover 95% and last 10 versions and not dead"
