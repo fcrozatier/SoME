@@ -15,9 +15,9 @@
 
 	let pages = $derived(data.pages);
 
-	let category = $state(data.category);
-	let year = $state(data.year);
-	let pageNumber = $state(data.page);
+	let category = $derived(data.category);
+	let year = $derived(data.year);
+	let pageNumber = $derived(data.page);
 
 	const years = Array.from({ length: defaultYear - 2020 }, (_, i) => defaultYear - i);
 
