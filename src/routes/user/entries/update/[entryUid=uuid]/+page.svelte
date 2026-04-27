@@ -35,16 +35,16 @@
 		},
 	};
 
-	const entry = data.entry;
+	const entry = $derived(data.entry);
 
-	let usernames: string[] = $state(data.coauthors);
+	let usernames: string[] = $derived(data.coauthors);
 	let usernameStatuses: UsernameStatus[] = $state([]);
-	let category = $state(entry.category);
-	let title = $state(entry.title);
-	let description = $state(entry.description);
-	let url = $state(entry.url);
+	let category = $derived(entry.category);
+	let title = $derived(entry.title);
+	let description = $derived(entry.description);
+	let url = $derived(entry.url);
 	let tag = $state("");
-	let tags: Set<string> = $state(new SvelteSet<string>(data.tags));
+	let tags: Set<string> = $derived(new SvelteSet<string>(data.tags));
 	let invalidTags = $derived(tags.intersection(new Set(levels)).size === 0);
 	let newtag: HTMLInputElement | undefined = $state();
 	let showInvalidTagsMessage = $state(false);
@@ -138,7 +138,7 @@
 							<Icon name="x-circle" class="stroke-red-600 stroke-[1.5] z-10 ml-auto size-10 py-3"
 							></Icon>
 						{:else if usernameStatuses[i] === "pending"}
-							<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-[13px]"
+							<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-3.25"
 							></CircularProgress>
 						{/if}
 					</div>

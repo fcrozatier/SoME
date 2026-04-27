@@ -5,6 +5,7 @@
 	import { clickOutside, disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
+	import { newToast } from "$lib/components/Toasts.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { DeleteProfileSchema, levels, UpdateProfileSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
@@ -12,12 +13,13 @@
 
 	let { data, form } = $props();
 
-	let username = $state(data.user.username ?? "");
+	let username = $derived(data.user.username ?? "");
 	let usernameStatus: UsernameStatus = $state(undefined);
-	let tags: Set<string> = $state(new SvelteSet<string>(data.user.tags));
-	let bio = $state(data.user.bio ?? "");
+	let tags: Set<string> = $derived(new SvelteSet<string>(data.user.tags));
+	let bio = $derived(data.user.bio ?? "");
 
 	let deleteDialog: HTMLDialogElement | undefined = $state();
+	$inspect(usernameStatus);
 </script>
 
 <svelte:head>
@@ -34,6 +36,18 @@
 			toast: { success: "Profile updated" },
 			invalidateAll: true,
 			reset: false,
+			before: ({ cancel, submitter }) => {
+				if (
+					usernameStatus === "taken" ||
+					usernameStatus === "error" ||
+					usernameStatus === "pending"
+				) {
+					cancel();
+					newToast({ type: "error", content: "Username not available" });
+					submitter?.removeAttribute("disabled");
+					return;
+				}
+			},
 		})}
 	>
 		<div class="form-control">
@@ -65,7 +79,7 @@
 					<Icon name="x-circle" class="stroke-red-600 stroke-[1.5] z-10 ml-auto size-10 py-3"
 					></Icon>
 				{:else if usernameStatus === "pending"}
-					<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-[13px]"
+					<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-3.25"
 					></CircularProgress>
 				{/if}
 			</div>

@@ -145,7 +145,7 @@
 							<Icon name="x-circle" class="stroke-red-600 stroke-[1.5] z-10 ml-auto size-10 py-3"
 							></Icon>
 						{:else if usernameStatuses[i] === "pending"}
-							<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-[13px]"
+							<CircularProgress class="stroke-current stroke-[6px] z-10 ml-auto size-10 py-3.25"
 							></CircularProgress>
 						{/if}
 					</div>

@@ -6,8 +6,10 @@
 	}
 
 	let { datetime, time = true, options = undefined }: Props = $props();
+</script>
 
-	const intl = new Intl.DateTimeFormat(
+<time {datetime}>
+	{new Intl.DateTimeFormat(
 		navigator.language,
 		options ?? {
 			// weekday: 'long',
@@ -17,9 +19,5 @@
 			hour: time ? "numeric" : undefined,
 			minute: time ? "numeric" : undefined,
 		},
-	);
-</script>
-
-<time {datetime}>
-	{intl.format(Date.parse(datetime))}
+	).format(Date.parse(datetime))}
 </time>
