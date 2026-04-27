@@ -38,10 +38,4 @@ Operations for this contest have been generously funded by:
   <a href="https://www.3blue1brown.com/" style="margin: 0 16px;">
     <img src="static/sponsors/3b1b-logo.png" width="85" alt="3b1b">
   </a>
-  <a href="https://www.janestreet.com/" style="margin: 0 16px;">
-    <img src="static/sponsors/jane-street-logo.png" width="300" alt="Jane Street">
-  </a>
-  <a href="https://brilliant.org/" style="margin: 0 16px;">
-    <img src="static/sponsors/brilliant-logo.png" width="90" alt="Brilliant">
-  </a>
 </p>
