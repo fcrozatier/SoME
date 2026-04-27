@@ -26,15 +26,15 @@
 	let flagDialog: HTMLDialogElement | undefined = $state();
 	let guidelines: HTMLDialogElement | undefined = $state();
 
-	let ready = $state(!!data.score);
-	let score = $state(data.score ? Number(data.score) : 5);
-	let feedback = $state(data.feedback_unsafe_md ?? "");
+	let ready = $derived(!!data.score);
+	let score = $derived(data.score ? Number(data.score) : 5);
+	let feedback = $derived(data.feedback_unsafe_md ?? "");
 
 	let targetTime: number;
 	let remaining = $state(TIMER);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
 
-	let example = $state(
+	let example = $derived(
 		data.user?.isTeacher
 			? teacherRotatingPairs[randint(0, teacherRotatingPairs.length - 1)]!
 			: rotatingPairs[randint(0, rotatingPairs.length - 1)]!,
