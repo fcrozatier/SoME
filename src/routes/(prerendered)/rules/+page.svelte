@@ -282,12 +282,12 @@
 				</li>
 			</ul>
 		</details>
-		<details>
+		<!-- <details>
 			<summary id="prize"><a href="#prize" tabindex="-1">Is there a prize?</a></summary>
 			<p>
 				Yes. You can read more about it on the <a href="/prize"> dedicated page </a>.
 			</p>
-		</details>
+		</details> -->
 	</section>
 </article>
 
