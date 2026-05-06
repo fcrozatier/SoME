@@ -4,7 +4,7 @@
 	import Score from "$lib/components/Score.svelte";
 	import { currentYear } from "$lib/config.js";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
-	import { resultsAvailable } from "$lib/utils/time.js";
+	import { resultsAvailable, voteOpen } from "$lib/utils/time.js";
 	import { round } from "@fcrozatier/ts-helpers";
 	import * as Plot from "@observablehq/plot";
 
@@ -52,7 +52,12 @@
 <article class="layout-prose">
 	<Display data={{ ...data.entry, tags: data.tags }}></Display>
 
-	{#if data.feedbacks.length !== 0}
+	<!-- Only show feedback when results are available -->
+	{#if !data.isAdmin && data.entry.year === currentYear && !resultsAvailable()}
+		{#if voteOpen()}
+			<p>Peer review results results are not available yet</p>
+		{/if}
+	{:else if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>
 		<!-- Only filter comments maybe_rude here -->
 		{@const comments = data.feedbacks.filter((f) => f.feedback !== "" && !f.maybe_rude)}
