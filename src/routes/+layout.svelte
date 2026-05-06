@@ -161,8 +161,8 @@
 			{/if}
 
 			<header>
-				<h1 class="text-center">{FULL_NAME}</h1>
-				<p class="mb-16 text-center text-lg font-light italic">
+				<h1 class="text-center mb-2">{FULL_NAME}</h1>
+				<p class="mt-0 mb-16 text-center text-lg font-light italic">
 					Presented by
 					<a
 						href="https://www.3blue1brown.com/"
