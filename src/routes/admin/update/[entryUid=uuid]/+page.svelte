@@ -69,16 +69,6 @@
 	<title>{makeTitle("New Entry")}</title>
 </svelte:head>
 
-{#snippet input()}
-	<button><selectedcontent></selectedcontent></button>
-{/snippet}
-{#snippet iconVideo()}
-	<Icon name="video" class="icon size-6" /> video
-{/snippet}
-{#snippet iconNonVideo()}
-	<Icon name="file-text" class="size-6" /> non-video
-{/snippet}
-
 <article class="layout-prose max-w-2xl!">
 	<h2>Update an entry</h2>
 
@@ -164,11 +154,13 @@
 				bind:value={category}
 				{...fg.splat(NewEntrySchema["category"].attributes)}
 			>
-				{@render input()}
-				<option value={"video"} onclick={() => (category = "video")}>{@render iconVideo()}</option>
-				<option value={"non-video"} onclick={() => (category = "non-video")}
-					>{@render iconNonVideo()}</option
-				>
+				<button><selectedcontent></selectedcontent></button>
+				<option value={"video"} onclick={() => (category = "video")}>
+					<Icon name="video" class="icon size-6" /> video
+				</option>
+				<option value={"non-video"} onclick={() => (category = "non-video")}>
+					<Icon name="file-text" class="size-6" /> non-video
+				</option>
 			</select>
 			{#if form?.issues?.category}
 				<span class="error-message">{form.issues.category.message}</span>

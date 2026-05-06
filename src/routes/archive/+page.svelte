@@ -54,16 +54,6 @@
 	<title>{makeTitle("Archive")}</title>
 </svelte:head>
 
-{#snippet input()}
-	<button><selectedcontent></selectedcontent></button>
-{/snippet}
-{#snippet iconVideo()}
-	<Icon name="video" class="icon size-6" /> video
-{/snippet}
-{#snippet iconNonVideo()}
-	<Icon name="file-text" class="size-6" /> non-video
-{/snippet}
-
 <section class="layout-prose">
 	<p class=" mb-16 text-center text-3xl font-light">Archive</p>
 	<form
@@ -97,9 +87,9 @@
 				<span class="label-text"> Category </span>
 			</label>
 			<select class="select-bordered select" bind:value={category} name="category" id="category">
-				{@render input()}
-				<option value={"video"}>{@render iconVideo()}</option>
-				<option value={"non-video"}>{@render iconNonVideo()}</option>
+				<button><selectedcontent></selectedcontent></button>
+				<option value={"video"}><Icon name="video" class="icon size-6" /> video</option>
+				<option value={"non-video"}><Icon name="file-text" class="size-6" /> non-video</option>
 			</select>
 		</div>
 	</form>
