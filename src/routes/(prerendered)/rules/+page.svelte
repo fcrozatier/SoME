@@ -6,9 +6,9 @@
 	import { resultsAvailable, submissionsOpen, timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
 
+	let interval: NodeJS.Timeout | undefined;
 	let remaining = timeLeft();
 
-	let interval: NodeJS.Timeout | undefined;
 	onMount(() => {
 		interval = setInterval(() => {
 			remaining = timeLeft();
@@ -164,6 +164,16 @@
 				to try something new you otherwise might not have.
 			</p>
 		</details>
+		<!-- Can I edit? -->
+		<details>
+			<summary id="no-edits"
+				><a href="#no-edits" tabindex="-1">Can I edit my entry after submitting it? </a></summary
+			>
+			<p>
+				Edits are not allowed when the vote is open, but you can edit your entry before the peer
+				review phase starts.
+			</p>
+		</details>
 		<!-- Language -->
 		<details>
 			<summary id="in-english-or-with-translation"
@@ -277,6 +287,7 @@
 				</li>
 			</ul>
 		</details>
+		<!-- Prize -->
 		<!-- <details>
 			<summary id="prize"><a href="#prize" tabindex="-1">Is there a prize?</a></summary>
 			<p>
