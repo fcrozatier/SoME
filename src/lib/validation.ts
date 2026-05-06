@@ -3,8 +3,7 @@ import * as fg from "formgator";
 import { formfail } from "formgator/sveltekit";
 import { z } from "zod";
 
-const uuid4 =
-	/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export const uuid = (str: string | null) => !!str && uuid4.test(str);
 
@@ -13,11 +12,9 @@ const validationMessages: fg.Failures = {
 	custom: "Invalid value",
 	invalid: "Invalid value",
 	max: ({ max }) => `Value must be less than or equal to ${max}.`,
-	maxlength: ({ maxlength }) =>
-		`Please shorten this text to ${maxlength} characters or less`,
+	maxlength: ({ maxlength }) => `Please shorten this text to ${maxlength} characters or less`,
 	min: ({ min }) => `Value must be greater than or equal to ${min}.`,
-	minlength: ({ minlength }) =>
-		`Please lengthen this text to ${minlength} characters or more`,
+	minlength: ({ minlength }) => `Please lengthen this text to ${minlength} characters or more`,
 	pattern: "Please match the requested format",
 	required: "Please fill out this field.",
 	step: ({ step }) => `Please enter a value in steps of ${step}`,
@@ -40,26 +37,16 @@ export const levels = [
 const usernameRegex = /^[\p{Letter}0-9_.\-]+$/v;
 
 export const UsernameSchema = fg
-	.text(
-		{ minlength: 3, maxlength: 32, required: true, pattern: usernameRegex },
-		validationMessages,
-	)
+	.text({ minlength: 3, maxlength: 32, required: true, pattern: usernameRegex }, validationMessages)
 	.enrich({ title: "letters, digits, _-." });
 
-export const EmailSchema = fg.email(
-	{ required: true, maxlength: 128 },
-	validationMessages,
-);
+export const EmailSchema = fg.email({ required: true, maxlength: 128 }, validationMessages);
 
 // 8 chars, lower, upper and number
-export const passwordRegex =
-	/^(?=.{8,})(?=.*\p{Lowercase})(?=.*\p{Uppercase})(?=.*\d).*$/v;
+export const passwordRegex = /^(?=.{8,})(?=.*\p{Lowercase})(?=.*\p{Uppercase})(?=.*\d).*$/v;
 
 export const PasswordSchema = fg
-	.password(
-		{ minlength: 8, required: true, pattern: passwordRegex },
-		validationMessages,
-	)
+	.password({ minlength: 8, required: true, pattern: passwordRegex }, validationMessages)
 	.enrich({
 		title: "8 characters minimum, with lowercase, uppercase and number",
 	});
@@ -131,8 +118,7 @@ const UrlSchema = fg
 		{ required: true },
 		{
 			required: "A link to your entry is required",
-			invalid:
-				"Invalid url, please provide the full url with the https:// prefix",
+			invalid: "Invalid url, please provide the full url with the https:// prefix",
 		},
 	)
 	.refine((str) => !str.includes("playlist"), "Playlists are not allowed");
@@ -146,10 +132,7 @@ const ThumbnailSchema = fg
 		multiple: false,
 		accept: SHARP_IMAGE_INPUT_TYPES,
 	})
-	.refine(
-		(file) => !file || file.size < MAX_IMG_SIZE,
-		"Image too big: 1MB max",
-	);
+	.refine((file) => !file || file.size < MAX_IMG_SIZE, "Image too big: 1MB max");
 
 export const NewEntrySchema = {
 	usernames: fg.multi({ min: 0 }),
@@ -224,15 +207,10 @@ export const validateYtCreationDate = async (youtubeId: string) => {
 		}
 
 		// var channel = JSON.parse(json).videoDetails.author;
-		var createdAt =
-			JSON.parse(json).microformat.playerMicroformatRenderer.uploadDate;
+		var createdAt = JSON.parse(json).microformat.playerMicroformatRenderer.uploadDate;
 	} catch (error) {
 		if (error instanceof Error) {
-			console.log(
-				"[entry]: error wile parsing yt metadata",
-				url,
-				error.message,
-			);
+			console.log("[entry]: error wile parsing yt metadata", url, error.message);
 		}
 		return;
 	}
@@ -240,14 +218,12 @@ export const validateYtCreationDate = async (youtubeId: string) => {
 	// Check whether content is too old
 	if (new Date(createdAt) < new Date(PUBLIC_REGISTRATION_START)) {
 		formfail({
-			url:
-				`This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
+			url: `This entry is too old to be eligible. Only recent work can be submitted for SoME. See the rules for more details`,
 		});
 	}
 };
 
-export const invalidTagsMessage =
-	"Pick at least one level from the provided list";
+export const invalidTagsMessage = "Pick at least one level from the provided list";
 
 // Votes
 
