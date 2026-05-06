@@ -144,6 +144,7 @@ export const NewEntrySchema = {
 	url: UrlSchema,
 	thumbnail: ThumbnailSchema,
 	rules: fg.checkbox({ required: true }),
+	participation: fg.checkbox({ required: true }),
 	copyright: fg.checkbox({ required: true }),
 };
 
