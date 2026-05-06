@@ -8,11 +8,12 @@
 	import Time from "$lib/components/Time.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/config";
-	import { voteOpen } from "$lib/utils/time";
+	import { submissionsOpen, voteOpen } from "$lib/utils/time";
 	import { apply, isSupported } from "@oddbird/popover-polyfill/fn";
 	import { onMount } from "svelte";
 	import "../app.css";
 	import "../math.css";
+	import Timer from "$lib/components/Timer.svelte";
 
 	let { data, children } = $props();
 
@@ -64,6 +65,9 @@
 					class="text-nowrap"
 					aria-current={page.url.pathname === "/user/votes" ? "page" : null}>My Votes</a
 				>
+			</li>
+			<li>
+				<a href="/rules" aria-current={page.url.pathname === "/rules" ? "page" : null}>Rules</a>
 			</li>
 			<li class="mt-2 ml-1">
 				<a
@@ -152,7 +156,9 @@
 
 		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
 			<!-- <Banner display={!data.surveyTaken} /> -->
-			<!-- <Timer display={submissionsOpen()}></Timer> -->
+			{#if submissionsOpen()}
+				<Timer></Timer>
+			{/if}
 
 			<header>
 				<h1 class="text-center">{FULL_NAME}</h1>
