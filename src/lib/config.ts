@@ -13,8 +13,7 @@ export const currentYear = new Date().getFullYear();
 // For the archive
 export const defaultYear = () => {
 	// If the results are available and we're in the same year as the competition then use the latest data, otherwise use data from last year
-	return resultsAvailable() &&
-			currentYear === new Date(PUBLIC_RESULTS_AVAILABLE).getFullYear()
+	return resultsAvailable() && currentYear === new Date(PUBLIC_RESULTS_AVAILABLE).getFullYear()
 		? currentYear
 		: currentYear - 1;
 };

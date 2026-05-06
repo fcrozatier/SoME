@@ -18,19 +18,10 @@ export const load = loadgate(
 		if (!category) category = "video";
 		if (!page) page = 1;
 
-		const entries: (
-			& Pick<
-				SelectEntry,
-				| "uid"
-				| "title"
-				| "description"
-				| "category"
-				| "thumbnail"
-				| "url"
-				| "rank"
-			>
-			& { pages: number }
-		)[] = await db.execute(sql`
+		const entries: (Pick<
+			SelectEntry,
+			"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "rank"
+		> & { pages: number })[] = await db.execute(sql`
 			with paginated as (
 				select uid, title, description, category, thumbnail, url, rank, count(*) over () as total
 				from entries
