@@ -19,7 +19,7 @@
 	let year = $derived(data.year);
 	let pageNumber = $derived(data.page);
 
-	const years = Array.from({ length: defaultYear - 2020 }, (_, i) => defaultYear - i);
+	const years = Array.from({ length: defaultYear() - 2020 }, (_, i) => defaultYear() - i);
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
 	let entry: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();

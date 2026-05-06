@@ -15,7 +15,7 @@ export const load = async () => {
 	>[] = await db.execute(sql`
 		 select uid, title, description, category, thumbnail, url from entries
 		 where active='t'
-		 and date_part('year', entries.created_at)=${defaultYear}
+		 and date_part('year', entries.created_at)=${defaultYear()}
 		 order by final_score desc nulls last
 	   limit 5;
 		`);
