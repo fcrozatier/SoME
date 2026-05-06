@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { PUBLIC_VOTE_START } from "$env/static/public";
+	import { page } from "$app/state";
 	import { clickOutside, disableSubmitterAndSetValidity } from "$lib/actions";
 	import Display from "$lib/components/Display.svelte";
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Score from "$lib/components/Score.svelte";
 	import Slider from "$lib/components/Slider.svelte";
-	import Time from "$lib/components/Time.svelte";
 	import { currentYear } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { voteOpen } from "$lib/utils/time";
@@ -19,6 +18,12 @@
 	const votesByYear = $derived(
 		Object.groupBy(data.votes, (x) => new Date(x.created_at!).getFullYear()),
 	);
+	const years = $derived(
+		Object.keys(votesByYear)
+			.map(Number)
+			.sort((a, b) => b - a),
+	);
+	let year = $derived(years[0]);
 
 	let currentVote: (typeof data)["votes"][0] | undefined = $state();
 	let feedback = $state("");
@@ -45,11 +50,29 @@
 		review
 	</p>
 
-	{#each Object.entries(votesByYear).sort(([y1], [y2]) => Number(y2) - Number(y1)) as [year, votes]}
+	{#if years.length > 1}
+		<form class="flex gap-3 justify-center">
+			<div>
+				<label for="year" class="label">
+					<span class="label-text"> Year </span>
+				</label>
+				<select class="select-bordered select" bind:value={year} name="year" id="year">
+					{#each years as year}
+						<option value={year} selected={page.url.searchParams.get("year") === `${year}`}>
+							{year}
+						</option>
+					{/each}
+				</select>
+			</div>
+		</form>
+	{/if}
+
+	{#if !year}
+		<p>No votes to display.</p>
+	{:else}
 		<section class="mt-10">
 			<h3>{year}</h3>
-			{#each votes!.sort((v1, v2) => Number(v2.score) - Number(v1.score)) as vote}
-				{@const created_at = vote.created_at!}
+			{#each votesByYear[year]?.sort((v1, v2) => Number(v2.score) - Number(v1.score)) as vote}
 				{@const score = +vote.score}
 				<div>
 					<Media {...vote} thumbnailWidth="256px" gap={6}></Media>
@@ -86,9 +109,7 @@
 				</div>
 			{/each}
 		</section>
-	{:else}
-		<p>No votes to display.</p>
-	{/each}
+	{/if}
 </article>
 
 <dialog class="m-auto" bind:this={updateVote} closedby="none">
