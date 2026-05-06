@@ -3,8 +3,6 @@
 
 	let { ready = $bindable(false), score = $bindable(5) } = $props();
 
-	const values = Array.from({ length: 9 }, (_, i) => i + 1);
-
 	const grade = {
 		get value() {
 			return score;
@@ -89,7 +87,6 @@
 		id="score"
 		name="score"
 		type="range"
-		list="values"
 		min="1"
 		max="9"
 		step="0.01"
@@ -101,17 +98,12 @@
 		<span id="thumb"></span>
 		<span id="grade">{displayGrade}</span>
 	{/if}
-	<datalist id="values">
-		{#each values as value}
-			<option {value}>{value}</option>
-		{/each}
-	</datalist>
 </div>
 
 <div id="labels" class="w-full flex justify-between text-xs px-1 pb-2">
 	<label
 		for="score"
-		class="-left-0.5 sm:-left-0"
+		class="-left-0.5 sm:left-0"
 		onpointerdown={() => (grade.value = 1)}
 		{@attach setReadyAttachment}>Notably worse</label
 	>
@@ -135,7 +127,7 @@
 	>
 	<label
 		for="score"
-		class="-right-1 sm:-right-0"
+		class="-right-1 sm:right-0"
 		onpointerdown={() => (grade.value = 9)}
 		{@attach setReadyAttachment}>Outstanding</label
 	>
