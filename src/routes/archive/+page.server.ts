@@ -7,14 +7,14 @@ import { loadgate } from "formgator/sveltekit";
 
 export const load = loadgate(
 	{
-		year: fg.number({ min: 2021, max: defaultYear }).optional(),
+		year: fg.number({ min: 2021, max: defaultYear() }).optional(),
 		category: fg.select(["video", "non-video"]).optional(),
 		page: fg.number({ min: 1 }).optional(),
 	},
 	async ({ year, category, page }) => {
 		const limit = 50;
 
-		if (!year) year = defaultYear;
+		if (!year) year = defaultYear();
 		if (!category) category = "video";
 		if (!page) page = 1;
 
