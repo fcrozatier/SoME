@@ -400,6 +400,16 @@
 		</div>
 
 		<div class="form-control">
+			<label for="participation" class="label gap-4">
+				<input id="participation" type="checkbox" name="participation" class="checkbox" required />
+				<span class="label-text"> I will contribute at least 5 peer reviews </span>
+			</label>
+			{#if form?.issues?.participation}
+				<span class="error-message">{form.issues.participation.message}</span>
+			{/if}
+		</div>
+
+		<div class="form-control">
 			<label class="label gap-4">
 				<input type="checkbox" name="copyright" class="checkbox" required />
 				I agree to the following policies:
