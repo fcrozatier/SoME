@@ -47,7 +47,7 @@ export const actions: Actions = {
 			console.log("validate your password reset here:");
 			console.log(`localhost:5176/change-password/${emailToken}`);
 		} else {
-			await sendEmail(email, "registration", { token: emailToken });
+			await sendEmail(email, "change-password", { token: emailToken });
 		}
 
 		return { success: true };

@@ -1,6 +1,6 @@
 import * as auth from "$lib/server/auth.js";
 import { client } from "$lib/server/db";
-import { type Handle, redirect } from "@sveltejs/kit";
+import { type Handle } from "@sveltejs/kit";
 
 process.on("sveltekit:shutdown", (reason) => {
 	console.log("\nclosing db connections, reason", reason);

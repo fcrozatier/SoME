@@ -29,22 +29,8 @@ export const conjunctionFormatter = new Intl.ListFormat("en", {
  * The value is the template email subject
  */
 export const emailTemplates = {
-	"end of peer review": {
-		subject: `The ${FULL_NAME} Peer Review is now over!`,
-		variables: ["token"],
-	},
-	"top 100": {
-		subject: `Summer of Math Exposition top 100 notification`,
-		variables: ["token"],
-	},
-	token_reminder: {
-		subject: `${FULL_NAME} vote is starting soon`,
-		variables: ["token"],
-	},
-	registration: { subject: `Confirm your new password`, variables: ["token"] },
-	update: { subject: `How to update your entry`, variables: ["token"] },
-	resend_token: {
-		subject: `Your link for the ${FULL_NAME}`,
+	"change-password": {
+		subject: `SoME password reset`,
 		variables: ["token"],
 	},
 } as const;
