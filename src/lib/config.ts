@@ -1,6 +1,5 @@
 // The competition name
 export const FULL_NAME = "Summer of Math Exposition";
-export const SHORT_NAME = "SoME";
 
 // The different possible categories for entries
 // No space as the strings are used in vote url
@@ -24,15 +23,3 @@ export const conjunctionFormatter = new Intl.ListFormat("en", {
 	style: "long",
 	type: "conjunction",
 });
-
-/**
- * The value is the template email subject
- */
-export const emailTemplates = {
-	"change-password": {
-		subject: `SoME password reset`,
-		variables: ["token"],
-	},
-} as const;
-
-export type TemplateName = keyof typeof emailTemplates;

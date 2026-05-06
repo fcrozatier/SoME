@@ -2,16 +2,27 @@ import formData from "form-data";
 import Mailgun from "mailgun.js";
 import type { MailgunMessageData } from "mailgun.js/definitions";
 import { DOMAIN, MAILGUN_API_KEY } from "$env/static/private";
-import { emailTemplates, type TemplateName } from "$lib/config";
-
-const from = "SoME <some@3blue1brown.com>";
 
 /**
  * https://github.com/mailgun/mailgun.js
  */
 const mailgun = new Mailgun(formData);
 
-export const mg = mailgun.client({ username: "api", key: MAILGUN_API_KEY });
+const mg = mailgun.client({ username: "api", key: MAILGUN_API_KEY });
+
+const from = "SoME <some@3blue1brown.com>";
+
+/**
+ * The value is the template email subject
+ */
+const emailTemplates = {
+	"change-password": {
+		subject: `SoME password reset`,
+		variables: ["token"],
+	},
+} as const;
+
+type TemplateName = keyof typeof emailTemplates;
 
 // https://documentation.mailgun.com/en/latest/api-email-validation.html
 type Validation = {
