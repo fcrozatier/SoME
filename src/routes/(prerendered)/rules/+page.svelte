@@ -3,7 +3,7 @@
 	import Time from "$lib/components/Time.svelte";
 	import { FULL_NAME } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle";
-	import { submissionsOpen, timeLeft } from "$lib/utils/time";
+	import { resultsAvailable, submissionsOpen, timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
 
 	let remaining = timeLeft();
@@ -14,9 +14,7 @@
 			remaining = timeLeft();
 		}, 1000);
 
-		return () => {
-			clearInterval(interval);
-		};
+		return () => clearInterval(interval);
 	});
 </script>
 
@@ -47,29 +45,26 @@
 			<summary id="deadline"
 				><a href="#deadline" tabindex="-1">When is the submission deadline?</a></summary
 			>
-			<!-- <p>The competition is closed. Stay tuned for the next edition!</p> -->
-			<p>
-				Creators or group of Creators can submit an entry until <span class=""
-					>September 1st at 11:59 PM (UTC-12)</span
-				>.
-			</p>
-			<p>
-				In your specific timezone (yes just yours) this deadline corresponds to <span
-					class="font-mono font-semibold badge badge-outline p-4"
-				>
-					<Time datetime={PUBLIC_REGISTRATION_END} />
-				</span>.
-			</p>
-			{#if submissionsOpen()}
+			{#if resultsAvailable()}
+				<p>The competition is closed. Stay tuned for the next edition!</p>
+			{:else}
 				<p>
-					Which means you still have <span class="tabular-nums">{remaining.formatted}</span> left to submit
-					an entry!
+					In your specific timezone (yes just yours) creators or group of Creators can submit an
+					entry until <span class="font-mono font-semibold badge badge-outline p-4">
+						<Time datetime={PUBLIC_REGISTRATION_END} />
+					</span>.
+				</p>
+				{#if submissionsOpen()}
+					<p>
+						Which means you still have <span class="tabular-nums">{remaining.formatted}</span> left to
+						submit an entry!
+					</p>
+				{/if}
+				<p>
+					If you want to participate as a judge you can register at any time, even after the vote
+					has open.
 				</p>
 			{/if}
-			<p>
-				If you want to participate as a judge you can register at any time, even after the vote has
-				open.
-			</p>
 		</details>
 		<!-- Not a creator -->
 		<details>

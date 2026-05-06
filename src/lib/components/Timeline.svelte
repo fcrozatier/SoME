@@ -34,12 +34,13 @@
 		},
 	] as const;
 
-	const dateFormat = {
+	const dateFormat: Intl.DateTimeFormatOptions = {
+		year: "numeric",
 		month: "short",
 		day: "2-digit",
 		hour: "numeric",
 		minute: "numeric",
-	} as const;
+	};
 </script>
 
 <!-- Timeline -->
