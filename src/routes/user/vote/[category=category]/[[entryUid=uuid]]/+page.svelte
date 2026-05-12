@@ -9,7 +9,7 @@
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
-	import { debounce, randint } from "@fcrozatier/ts-helpers";
+	import { debounce, randomItem } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
 	import { toastsWithFeedback, toastsWithoutFeedback } from "../config";
 
@@ -115,8 +115,8 @@
 						const feedback = formData.get("feedback");
 						const toast =
 							feedback && typeof feedback === "string" && feedback.length > 0
-								? toastsWithFeedback[randint(0, toastsWithFeedback.length - 1)]!
-								: toastsWithoutFeedback[randint(0, toastsWithoutFeedback.length - 1)]!;
+								? randomItem(toastsWithFeedback)
+								: randomItem(toastsWithoutFeedback);
 						newToast({ type: "success", content: toast });
 					}
 				};
