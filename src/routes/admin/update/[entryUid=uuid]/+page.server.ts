@@ -176,16 +176,6 @@ export const actions = {
 				normalizedLink = normalizeYoutubeLink(url);
 			}
 
-			if (oldUrl !== normalizedLink) {
-				if (!submissionsOpen()) {
-					return fail(422, {
-						message: "You can't update the link once the vote is open",
-					});
-				}
-				// Remove all votes in case the link was changed
-				await db.delete(votes).where(eq(votes.entryUid, entryUid));
-			}
-
 			// Update entry
 			await db
 				.update(entries)
