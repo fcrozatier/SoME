@@ -70,6 +70,20 @@ export const userToEntry = pgTable(
 	({ entryUid, userUid }) => [primaryKey({ columns: [userUid, entryUid] })],
 );
 
+export const userToWatchlist = pgTable(
+	"user_to_watchlist",
+	{
+		userUid: uuid("user_uid").references(() => users.uid, {
+			onDelete: "cascade",
+		}),
+		entryUid: uuid("entry_uid").references(() => entries.uid, {
+			onDelete: "cascade",
+		}),
+		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+	},
+	({ entryUid, userUid }) => [primaryKey({ columns: [userUid, entryUid] })],
+);
+
 export const tags = pgTable("tags", {
 	id: serial("id").primaryKey(),
 	name: text("name").unique().notNull(),
