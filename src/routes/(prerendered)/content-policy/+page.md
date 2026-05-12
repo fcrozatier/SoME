@@ -171,6 +171,8 @@ For this contest, we are making a distinction between _general_ AI and _generati
 
 This is a slightly nuanced issue, so we will provide our justification for this statement here, along with examples of appropriate usage.
 
+When an entry is flagged for non-appropriate genAI use, creators will have to provide proof that the pieces are either not genAI-generated; or genAI, but fair use. Final judgement lies with the organizers.
+
 ### Justification
 
 The main reason we forbid the usage of generative AI models in the final submissions for the
