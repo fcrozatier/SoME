@@ -111,15 +111,22 @@
 
 					await update({ reset: false, invalidateAll: true });
 
-					if (action.search === "?/skip") {
-						newToast({ type: "info", content: "Entry skipped" });
-					} else {
-						const feedback = formData.get("feedback");
-						const toast =
-							feedback && typeof feedback === "string" && feedback.length > 0
-								? randomItem(toastsWithFeedback)
-								: randomItem(toastsWithoutFeedback);
-						newToast({ type: "success", content: toast });
+					switch (action.search) {
+						case "?/skip":
+							newToast({ type: "info", content: "Entry skipped" });
+							break;
+						case "?/watchlist":
+							newToast({ type: "info", content: "Entry added to watchlist" });
+							break;
+						case "?/vote": {
+							const feedback = formData.get("feedback");
+							const toast =
+								feedback && typeof feedback === "string" && feedback.length > 0
+									? randomItem(toastsWithFeedback)
+									: randomItem(toastsWithoutFeedback);
+							newToast({ type: "success", content: toast });
+							break;
+						}
 					}
 				};
 			}}
