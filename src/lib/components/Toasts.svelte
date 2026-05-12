@@ -3,7 +3,7 @@
 		/**
 		 * The innerHTML or innerText string
 		 */
-		content: string;
+		content?: string;
 		duration?: number;
 		type?: "info" | "success" | "error";
 	}
@@ -24,6 +24,8 @@
 	 * @param config.variant defaults to 'info'
 	 */
 	export async function newToast(config: ToastConfig) {
+		if (!config.content) return;
+
 		id = (id + 1) % Number.MAX_SAFE_INTEGER;
 		const toastId = id;
 		toasts.push({ ...config, id: toastId, type: config.type ?? "info" });
