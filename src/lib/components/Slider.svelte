@@ -96,11 +96,11 @@
 	{#if ready}
 		<span id="track"></span>
 		<span id="thumb"></span>
-		<span id="grade">{displayGrade}</span>
+		<span id="grade" class="text-xs">{displayGrade}</span>
 	{/if}
 </div>
 
-<div id="labels" class="w-full flex justify-between text-xs px-1 pb-2">
+<div id="labels" class="w-full flex justify-between text-sm px-1 pb-2">
 	<label
 		for="score"
 		class="-left-0.5 sm:left-0"
