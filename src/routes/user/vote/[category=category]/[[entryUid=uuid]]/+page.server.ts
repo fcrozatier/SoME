@@ -21,6 +21,8 @@ export const load = async ({ locals, params }) => {
 		return redirect(302, "/user/vote/");
 	}
 
+	console.log(params);
+
 	const { category } = params;
 	const userUid = locals.user.uid;
 

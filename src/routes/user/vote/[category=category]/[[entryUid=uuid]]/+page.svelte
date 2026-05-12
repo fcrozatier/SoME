@@ -11,7 +11,7 @@
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 	import { debounce, randint } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
-	import { formAction, toastsWithFeedback, toastsWithoutFeedback } from "./config";
+	import { toastsWithFeedback, toastsWithoutFeedback } from "../config";
 
 	const TIMER = 29;
 
@@ -26,7 +26,7 @@
 
 	let targetTime: number;
 	let remaining = $state(TIMER);
-	let interval: ReturnType<typeof setInterval> | undefined = $state();
+	let interval: NodeJS.Timeout | undefined = $state();
 
 	const visibilitychange = () => {
 		if (document.visibilityState === "visible") {
@@ -86,36 +86,30 @@
 			action="?/vote"
 			class="space-y-4"
 			use:enhance={({ cancel, action, formData }) => {
-				if (
-					remaining > 0 &&
-					!(action.search === formAction("skip") || action.search === formAction("cache"))
-				) {
+				if (remaining > 0 && !(action.search === "?/skip" || action.search === "?/cache")) {
 					newToast({ type: "error", content: "Please do not rush the review process" });
 					return cancel();
 				}
-				if (
-					!ready &&
-					!(action.search === formAction("skip") || action.search === formAction("cache"))
-				) {
+				if (!ready && !(action.search === "?/skip" || action.search === "?/cache")) {
 					newToast({ type: "error", content: "Please do not forget to grade the entry" });
 					return cancel();
 				}
-				if (action.search !== formAction("cache")) {
+				if (action.search !== "?/cache") {
 					var buttons = document.querySelectorAll("button");
 					buttons.forEach((b) => b.setAttribute("disabled", "on"));
 				}
-				if (!ready && action.search === formAction("cache")) {
+				if (!ready && action.search === "?/cache") {
 					formData.delete("score");
 				}
 
 				return async ({ update, action }) => {
-					if (action.search === formAction("cache")) return;
+					if (action.search === "?/cache") return;
 
 					buttons.forEach((b) => b.removeAttribute("disabled"));
 
 					await update({ reset: false, invalidateAll: true });
 
-					if (action.search === formAction("skip")) {
+					if (action.search === "?/skip") {
 						newToast({ type: "info", content: "Entry skipped" });
 					} else {
 						const feedback = formData.get("feedback");
@@ -164,8 +158,8 @@
 					<h4 class="mb-0 mt-2">Feedback</h4>
 				</label>
 				<p>
-					Your constructive feedback helps creators learn what inspired people, what
-					could be improved, and what to build next. <button
+					Your constructive feedback helps creators learn what inspired people, what could be
+					improved, and what to build next. <button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
 						commandfor="guidelines"
@@ -200,14 +194,18 @@
 						<span class="tabular-nums">{Math.floor(remaining)}</span>
 					{/if}
 				</button>
-				<div class="relative mr-auto inline-flex flex-row-reverse">
-					<button
-						type="submit"
-						formaction={"?/skip"}
-						class="btn btn-outline hover:btn-neutral"
-						disabled={feedback.length > 0}>Skip</button
-					>
-				</div>
+
+				<button
+					type="submit"
+					formaction={"?/watchlist"}
+					class="btn btn-outline hover:btn-neutral mr-auto">Add to watchlist</button
+				>
+				<button
+					type="submit"
+					formaction={"?/skip"}
+					class="btn btn-outline hover:btn-neutral mr-auto"
+					disabled={feedback.length > 0}>Skip</button
+				>
 				<button
 					type="button"
 					class="btn btn-outline btn-error"

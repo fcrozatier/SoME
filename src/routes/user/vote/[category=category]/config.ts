@@ -1,12 +1,3 @@
-const action = {
-	skip: "skip",
-	cache: "cache",
-};
-
-export const formAction = (key: keyof typeof action) => {
-	return "?/" + action[key];
-};
-
 export const rotatingPairs: { prompt: string; placeholder: string }[] = [
 	{
 		prompt: "What worked well? What could be improved? Suggest one actionable improvement",
@@ -127,7 +118,6 @@ export const toastsWithFeedback = [
 ];
 
 export const toastsWithoutFeedback = [
-
 	"Please consider adding a quick comment next time",
 	"A sentence or two can help the author improve",
 	"Next time, please share what stood out, even briefly",
