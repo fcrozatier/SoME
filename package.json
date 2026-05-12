@@ -13,7 +13,6 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"format": "prettier --write .",
-		"drizzle:drop": "drizzle-kit drop --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:generate": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:migrate": "drizzle-kit migrate --config=src/lib/server/db/drizzle.config.ts",
 		"drizzle:up": "drizzle-kit up --config=src/lib/server/db/drizzle.config.ts"
