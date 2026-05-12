@@ -67,6 +67,13 @@
 				>
 			</li>
 			<li>
+				<a
+					href="/user/watchlist"
+					class="text-nowrap"
+					aria-current={page.url.pathname === "/user/watchlist" ? "page" : null}>My Watchlist</a
+				>
+			</li>
+			<li>
 				<a href="/rules" aria-current={page.url.pathname === "/rules" ? "page" : null}>Rules</a>
 			</li>
 			<li class="mt-2 ml-1">
@@ -149,7 +156,7 @@
 				<Icon name="menu" class="size-6 stroke-[1.5px]" /> Menu
 			</button>
 
-			<div class="hidden lg:block lg:pt-10">
+			<div class="hidden lg:block lg:pt-4">
 				{@render menu()}
 			</div>
 		</nav>

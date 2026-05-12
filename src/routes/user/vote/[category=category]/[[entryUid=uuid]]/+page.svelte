@@ -9,9 +9,9 @@
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
-	import { debounce, randint } from "@fcrozatier/ts-helpers";
+	import { debounce, randomItem } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
-	import { formAction, toastsWithFeedback, toastsWithoutFeedback } from "./config";
+	import { toastsWithFeedback, toastsWithoutFeedback } from "../config";
 
 	const TIMER = 29;
 
@@ -26,7 +26,7 @@
 
 	let targetTime: number;
 	let remaining = $state(TIMER);
-	let interval: ReturnType<typeof setInterval> | undefined = $state();
+	let interval: NodeJS.Timeout | undefined = $state();
 
 	const visibilitychange = () => {
 		if (document.visibilityState === "visible") {
@@ -86,44 +86,47 @@
 			action="?/vote"
 			class="space-y-4"
 			use:enhance={({ cancel, action, formData }) => {
-				if (
-					remaining > 0 &&
-					!(action.search === formAction("skip") || action.search === formAction("cache"))
-				) {
-					newToast({ type: "error", content: "Please do not rush the review process" });
-					return cancel();
+				if (action.search === "?/vote") {
+					if (remaining > 0) {
+						newToast({ type: "error", content: "Please do not rush the review process" });
+						return cancel();
+					} else if (!ready) {
+						newToast({ type: "error", content: "Please do not forget to grade the entry" });
+						return cancel();
+					}
 				}
-				if (
-					!ready &&
-					!(action.search === formAction("skip") || action.search === formAction("cache"))
-				) {
-					newToast({ type: "error", content: "Please do not forget to grade the entry" });
-					return cancel();
-				}
-				if (action.search !== formAction("cache")) {
+
+				if (action.search !== "?/cache") {
 					var buttons = document.querySelectorAll("button");
 					buttons.forEach((b) => b.setAttribute("disabled", "on"));
 				}
-				if (!ready && action.search === formAction("cache")) {
+				if (!ready && action.search === "?/cache") {
 					formData.delete("score");
 				}
 
 				return async ({ update, action }) => {
-					if (action.search === formAction("cache")) return;
+					if (action.search === "?/cache") return;
 
 					buttons.forEach((b) => b.removeAttribute("disabled"));
 
 					await update({ reset: false, invalidateAll: true });
 
-					if (action.search === formAction("skip")) {
-						newToast({ type: "info", content: "Entry skipped" });
-					} else {
-						const feedback = formData.get("feedback");
-						const toast =
-							feedback && typeof feedback === "string" && feedback.length > 0
-								? toastsWithFeedback[randint(0, toastsWithFeedback.length - 1)]!
-								: toastsWithoutFeedback[randint(0, toastsWithoutFeedback.length - 1)]!;
-						newToast({ type: "success", content: toast });
+					switch (action.search) {
+						case "?/skip":
+							newToast({ type: "info", content: "Entry skipped" });
+							break;
+						case "?/watchlist":
+							newToast({ type: "info", content: "Entry added to watchlist" });
+							break;
+						case "?/vote": {
+							const feedback = formData.get("feedback");
+							const toast =
+								feedback && typeof feedback === "string" && feedback.length > 0
+									? randomItem(toastsWithFeedback)
+									: randomItem(toastsWithoutFeedback);
+							newToast({ type: "success", content: toast });
+							break;
+						}
 					}
 				};
 			}}
@@ -164,8 +167,8 @@
 					<h4 class="mb-0 mt-2">Feedback</h4>
 				</label>
 				<p>
-					Your constructive feedback helps creators learn what inspired people, what
-					could be improved, and what to build next. <button
+					Your constructive feedback helps creators learn what inspired people, what could be
+					improved, and what to build next. <button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
 						commandfor="guidelines"
@@ -192,22 +195,30 @@
 					<span>{feedback.length}/{FeedbackSchema.attributes.maxlength}</span>
 				</div>
 			</div>
-			<div class="flex gap-4 items-center flex-row-reverse mt-8">
-				<button class="btn btn-neutral inline-flex gap-4">
-					<span class={[{ hidden: remaining > 0 }, "sm:block"]}>Vote</span>
-
+			<div class="flex gap-4 flex-col sm:flex-row-reverse mt-8">
+				<button class="btn btn-neutral">
+					<span>Vote</span>
 					{#if remaining > 0}
-						<span class="tabular-nums">{Math.floor(remaining)}</span>
+						<span class="tabular-nums">in {Math.floor(remaining)}s</span>
 					{/if}
 				</button>
-				<div class="relative mr-auto inline-flex flex-row-reverse">
+				<div class="mr-auto"></div>
+				<!-- Only show this action if not already in the watchlist -->
+				{#if !page.params.entryUid}
 					<button
 						type="submit"
-						formaction={"?/skip"}
-						class="btn btn-outline hover:btn-neutral"
-						disabled={feedback.length > 0}>Skip</button
+						formaction={"?/watchlist"}
+						formnovalidate
+						class="btn btn-outline hover:btn-neutral">Add to watchlist</button
 					>
-				</div>
+				{/if}
+				<button
+					type="submit"
+					formaction={"?/skip"}
+					formnovalidate
+					class="btn btn-outline hover:btn-neutral"
+					disabled={feedback.length > 0}>Skip</button
+				>
 				<button
 					type="button"
 					class="btn btn-outline btn-error"
@@ -220,8 +231,8 @@
 		</form>
 
 		<p class="pt-8 text-sm">
-			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it
-			and we will review it manually. <br /> You can also skip an entry
+			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it and
+			we will review it manually. You can also skip an entry.
 		</p>
 	{/if}
 </article>

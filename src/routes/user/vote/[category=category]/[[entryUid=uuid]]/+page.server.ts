@@ -2,7 +2,14 @@ import { dev } from "$app/environment";
 import { type Category, currentYear } from "$lib/config";
 import { query2, query4 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
-import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
+import {
+	cache,
+	flags,
+	type SelectEntry,
+	skips,
+	userToWatchlist,
+	votes,
+} from "$lib/server/db/schema";
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
 import { maybeRude } from "$lib/server/moderation.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
@@ -11,6 +18,15 @@ import { CacheVoteSchema, FlagSchema, SkipSchema, VoteSchema } from "$lib/valida
 import { redirect } from "@sveltejs/kit";
 import { and, eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
+
+async function getEntryTags(entryUid: string): Promise<string[]> {
+	const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
+		select name from tags
+		inner join entry_to_tag on tag_id=id
+		where entry_uid=${entryUid};
+	`);
+	return entryTags.map((t) => t.name);
+}
 
 export const load = async ({ locals, params }) => {
 	if (!locals.user) {
@@ -23,16 +39,50 @@ export const load = async ({ locals, params }) => {
 
 	const { category } = params;
 	const userUid = locals.user.uid;
+	const entryUid = params.entryUid;
 
-	const userEntries = await db.execute(sql`
+	const isCreator =
+		(
+			await db.execute(sql`
 			select entry_uid
 			from user_to_entry
 			join entries on uid=entry_uid
 			where user_uid=${userUid}
 			and date_part('year', created_at)=${currentYear};
-		`);
+		`)
+		).count > 0;
 
-	const isCreator = userEntries.count > 0;
+	if (entryUid) {
+		const isInWatchlist =
+			(
+				await db.execute(sql`
+			select * from user_to_watchlist
+			where user_uid=${userUid}
+			and entry_uid=${entryUid}
+			and date_part('year', created_at)=${currentYear}
+			`)
+			).count > 0;
+
+		if (isInWatchlist) {
+			const [entry]: Pick<
+				SelectEntry,
+				"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+			>[] = await db.execute(sql`
+					select uid, title, description, category, url, thumbnail
+					from entries
+					where uid=${entryUid}
+				`);
+
+			const tags = await getEntryTags(entryUid);
+
+			return {
+				...entry,
+				score: null,
+				tags,
+				isCreator,
+			};
+		}
+	}
 
 	const [cachedEntry]: (Pick<
 		SelectEntry,
@@ -46,15 +96,12 @@ export const load = async ({ locals, params }) => {
 		`);
 
 	if (cachedEntry) {
-		const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
-			select name from tags
-			inner join entry_to_tag on tag_id=id
-			where entry_uid=${cachedEntry.uid};
-		`);
+		const tags = await getEntryTags(cachedEntry.uid);
+
 		return {
 			...cachedEntry,
 			score: cachedEntry.score ? Number(cachedEntry.score) : null,
-			tags: entryTags.map((t) => t.name),
+			tags,
 			isCreator,
 		};
 	}
@@ -86,20 +133,12 @@ export const load = async ({ locals, params }) => {
 			entryUid: entry.uid,
 		});
 
-		const entryTags: Pick<SelectTag, "name">[] = await db.execute(sql`
-			select name from tags
-			inner join entry_to_tag on tag_id=id
-			where entry_uid=${entry.uid};
-		`);
+		const tags = await getEntryTags(entry.uid);
 
 		return {
-			title: entry.title,
-			description: entry.description,
-			category: entry.category,
-			url: entry.url,
-			thumbnail: entry.thumbnail,
-			uid: entry.uid,
-			tags: entryTags.map((t) => t.name),
+			...entry,
+			score: null,
+			tags,
 			isCreator,
 		};
 	}
@@ -168,7 +207,7 @@ export const actions = {
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
-		const token = locals.user.uid;
+		const userUid = locals.user.uid;
 		const { category } = params;
 
 		let maybe_rude = false;
@@ -183,7 +222,7 @@ export const actions = {
 			.insert(votes)
 			.values({
 				entryUid: data.uid,
-				userUid: token,
+				userUid: userUid,
 				score: String(data.score),
 				feedback: feedbackSafe,
 				feedback_unsafe_md: data.feedback,
@@ -200,9 +239,35 @@ export const actions = {
 
 		await db
 			.delete(cache)
-			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+			.where(and(eq(cache.userUid, userUid), eq(cache.category, category as Category)));
+
+		await db
+			.delete(userToWatchlist)
+			.where(and(eq(userToWatchlist.userUid, userUid), eq(userToWatchlist.entryUid, data.uid)));
 
 		console.log("[new vote]");
+		return redirect(303, `/user/vote/${category}`);
+	}),
+	watchlist: formgate(SkipSchema, async (data, { params, locals }) => {
+		if (!locals.user) {
+			return redirect(302, "/login");
+		}
+
+		const userUid = locals.user.uid;
+		const { category } = params;
+
+		await db
+			.insert(userToWatchlist)
+			.values({
+				userUid: userUid,
+				entryUid: data.uid,
+			})
+			.onConflictDoNothing();
+
+		await db
+			.delete(cache)
+			.where(and(eq(cache.userUid, userUid), eq(cache.category, category as Category)));
+
 		return redirect(303, `/user/vote/${category}`);
 	}),
 	cache: formgate(CacheVoteSchema, async (data, { params, locals }) => {
@@ -223,20 +288,24 @@ export const actions = {
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
-		const token = locals.user.uid;
+		const userUid = locals.user.uid;
 		const { category } = params;
 
 		await db
 			.insert(skips)
 			.values({
+				userUid: userUid,
 				entryUid: data.uid,
-				userUid: token,
 			})
 			.onConflictDoNothing();
 
 		await db
 			.delete(cache)
-			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+			.where(and(eq(cache.userUid, userUid), eq(cache.category, category as Category)));
+
+		await db
+			.delete(userToWatchlist)
+			.where(and(eq(userToWatchlist.userUid, userUid), eq(userToWatchlist.entryUid, data.uid)));
 
 		return redirect(303, `/user/vote/${category}`);
 	}),

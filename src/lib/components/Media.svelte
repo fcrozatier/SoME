@@ -16,9 +16,27 @@
 		 */
 		thumbnailWidth: `${number}px`;
 		gap?: number;
+		/**
+		 * Whether the title link redirects to the /entries or /vote page
+		 */
+		redirect?: "/entries" | "/vote";
 	};
 
-	let { category, uid, url, title, description, thumbnail, thumbnailWidth, gap }: Props = $props();
+	let {
+		category,
+		uid,
+		url,
+		title,
+		description,
+		thumbnail,
+		thumbnailWidth,
+		gap,
+		redirect = "/entries",
+	}: Props = $props();
+
+	const href = () => {
+		return redirect === "/vote" ? `/user/vote/${category}/${uid}` : `/entries/${uid}`;
+	};
 </script>
 
 <LayoutSideBySide side="left" sidePanelMaxWidth={thumbnailWidth} mainPanelMinWidth="40%" {gap}>
@@ -36,7 +54,7 @@
 		{/if}
 	{/snippet}
 	{#snippet mainPanel()}
-		<a class="no-underline hover:underline" href={`/entries/${uid}`}>
+		<a class="no-underline hover:underline" href={href()}>
 			<h3 class="mt-0 text-trim text-balance line-clamp-2 leading-snug mb-3">{title}</h3>
 		</a>
 		{#if description}
