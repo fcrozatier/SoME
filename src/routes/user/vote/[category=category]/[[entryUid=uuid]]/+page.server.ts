@@ -14,12 +14,7 @@ import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
 import { maybeRude } from "$lib/server/moderation.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 import { voteOpen } from "$lib/utils/time";
-import {
-	CacheVoteSchema,
-	FlagSchema,
-	SkipSchema,
-	VoteSchema,
-} from "$lib/validation";
+import { CacheVoteSchema, FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
 import { redirect } from "@sveltejs/kit";
 import { and, eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -46,25 +41,27 @@ export const load = async ({ locals, params }) => {
 	const userUid = locals.user.uid;
 	const entryUid = params.entryUid;
 
-	const isCreator = (
-		await db.execute(sql`
+	const isCreator =
+		(
+			await db.execute(sql`
 			select entry_uid
 			from user_to_entry
 			join entries on uid=entry_uid
 			where user_uid=${userUid}
 			and date_part('year', created_at)=${currentYear};
 		`)
-	).count > 0;
+		).count > 0;
 
 	if (entryUid) {
-		const isInWatchlist = (
-			await db.execute(sql`
+		const isInWatchlist =
+			(
+				await db.execute(sql`
 			select * from user_to_watchlist
 			where user_uid=${userUid}
 			and entry_uid=${entryUid}
 			and date_part('year', created_at)=${currentYear}
 			`)
-		).count > 0;
+			).count > 0;
 
 		if (isInWatchlist) {
 			const [entry]: Pick<
@@ -87,13 +84,11 @@ export const load = async ({ locals, params }) => {
 		}
 	}
 
-	const [cachedEntry]: (
-		& Pick<
-			SelectEntry,
-			"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-		>
-		& Pick<SelectCache, "score" | "feedback_unsafe_md">
-	)[] = await db.execute(sql`
+	const [cachedEntry]: (Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+	> &
+		Pick<SelectCache, "score" | "feedback_unsafe_md">)[] = await db.execute(sql`
 			select uid, title, description, entries.category, url, thumbnail, score, feedback_unsafe_md
 			from cache join entries on cache.entry_uid=entries.uid
 			where cache.user_uid=${userUid}
@@ -204,12 +199,7 @@ export const actions = {
 
 		await db
 			.delete(cache)
-			.where(
-				and(
-					eq(cache.userUid, uid),
-					eq(cache.category, event.params.category as Category),
-				),
-			);
+			.where(and(eq(cache.userUid, uid), eq(cache.category, event.params.category as Category)));
 
 		return { success: true };
 	}),
@@ -249,21 +239,11 @@ export const actions = {
 
 		await db
 			.delete(cache)
-			.where(
-				and(
-					eq(cache.userUid, userUid),
-					eq(cache.category, category as Category),
-				),
-			);
+			.where(and(eq(cache.userUid, userUid), eq(cache.category, category as Category)));
 
 		await db
 			.delete(userToWatchlist)
-			.where(
-				and(
-					eq(userToWatchlist.userUid, userUid),
-					eq(userToWatchlist.entryUid, data.uid),
-				),
-			);
+			.where(and(eq(userToWatchlist.userUid, userUid), eq(userToWatchlist.entryUid, data.uid)));
 
 		console.log("[new vote]");
 		return redirect(303, `/user/vote/${category}`);
@@ -286,12 +266,7 @@ export const actions = {
 
 		await db
 			.delete(cache)
-			.where(
-				and(
-					eq(cache.userUid, userUid),
-					eq(cache.category, category as Category),
-				),
-			);
+			.where(and(eq(cache.userUid, userUid), eq(cache.category, category as Category)));
 
 		return redirect(303, `/user/vote/${category}`);
 	}),
@@ -326,21 +301,11 @@ export const actions = {
 
 		await db
 			.delete(cache)
-			.where(
-				and(
-					eq(cache.userUid, userUid),
-					eq(cache.category, category as Category),
-				),
-			);
+			.where(and(eq(cache.userUid, userUid), eq(cache.category, category as Category)));
 
 		await db
 			.delete(userToWatchlist)
-			.where(
-				and(
-					eq(userToWatchlist.userUid, userUid),
-					eq(userToWatchlist.entryUid, data.uid),
-				),
-			);
+			.where(and(eq(userToWatchlist.userUid, userUid), eq(userToWatchlist.entryUid, data.uid)));
 
 		return redirect(303, `/user/vote/${category}`);
 	}),
