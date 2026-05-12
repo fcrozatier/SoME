@@ -86,14 +86,16 @@
 			action="?/vote"
 			class="space-y-4"
 			use:enhance={({ cancel, action, formData }) => {
-				if (remaining > 0 && !(action.search === "?/skip" || action.search === "?/cache")) {
-					newToast({ type: "error", content: "Please do not rush the review process" });
-					return cancel();
+				if (action.search === "?/vote") {
+					if (remaining > 0) {
+						newToast({ type: "error", content: "Please do not rush the review process" });
+						return cancel();
+					} else if (!ready) {
+						newToast({ type: "error", content: "Please do not forget to grade the entry" });
+						return cancel();
+					}
 				}
-				if (!ready && !(action.search === "?/skip" || action.search === "?/cache")) {
-					newToast({ type: "error", content: "Please do not forget to grade the entry" });
-					return cancel();
-				}
+
 				if (action.search !== "?/cache") {
 					var buttons = document.querySelectorAll("button");
 					buttons.forEach((b) => b.setAttribute("disabled", "on"));
@@ -186,24 +188,25 @@
 					<span>{feedback.length}/{FeedbackSchema.attributes.maxlength}</span>
 				</div>
 			</div>
-			<div class="flex gap-4 items-center flex-row-reverse mt-8">
-				<button class="btn btn-neutral inline-flex gap-4">
-					<span class={[{ hidden: remaining > 0 }, "sm:block"]}>Vote</span>
-
+			<div class="flex gap-4 flex-col sm:flex-row-reverse mt-8">
+				<button class="btn btn-neutral">
+					<span>Vote</span>
 					{#if remaining > 0}
-						<span class="tabular-nums">{Math.floor(remaining)}</span>
+						<span class="tabular-nums">in {Math.floor(remaining)}s</span>
 					{/if}
 				</button>
-
+				<div class="mr-auto"></div>
 				<button
 					type="submit"
 					formaction={"?/watchlist"}
-					class="btn btn-outline hover:btn-neutral mr-auto">Add to watchlist</button
+					formnovalidate
+					class="btn btn-outline hover:btn-neutral">Add to watchlist</button
 				>
 				<button
 					type="submit"
 					formaction={"?/skip"}
-					class="btn btn-outline hover:btn-neutral mr-auto"
+					formnovalidate
+					class="btn btn-outline hover:btn-neutral"
 					disabled={feedback.length > 0}>Skip</button
 				>
 				<button
@@ -219,7 +222,7 @@
 
 		<p class="pt-8 text-sm">
 			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it
-			and we will review it manually. <br /> You can also skip an entry
+			and we will review it manually. You can also skip an entry.
 		</p>
 	{/if}
 </article>
