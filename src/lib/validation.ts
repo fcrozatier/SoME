@@ -230,7 +230,6 @@ export const invalidTagsMessage = "Pick at least one level from the provided lis
 export const FeedbackSchema = fg
 	.textarea(
 		{
-			required: false,
 			maxlength: 10_000,
 		},
 		{ ...validationMessages, maxlength: "Feedback too long" },

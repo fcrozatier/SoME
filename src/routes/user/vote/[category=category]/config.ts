@@ -127,11 +127,11 @@ export const toastsWithFeedback = [
 ];
 
 export const toastsWithoutFeedback = [
-	"Thanks for voting! Next time, a short note can mean a lot",
-	"Score cast! Consider adding a quick comment next time",
-	"Your vote is in! A sentence or two can help the author improve",
-	"Thanks! Next time, please share what stood out, even briefly",
-	"All set! Authors love hearing why you scored the way you did",
-	"Nicely done! Next time, consider sprinkling in a comment too",
-	"All good! What would’ve made this better? Let them know next time",
+
+	"Please consider adding a quick comment next time",
+	"A sentence or two can help the author improve",
+	"Next time, please share what stood out, even briefly",
+	"Authors love hearing why you scored the way you did",
+	"Next time, consider sprinkling in a comment too",
+	"What would’ve made this better? Let them know next time",
 ];
