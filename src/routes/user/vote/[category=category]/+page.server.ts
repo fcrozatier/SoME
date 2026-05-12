@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import type { Category } from "$lib/config";
+import { type Category, currentYear } from "$lib/config";
 import { query2, query4 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
 import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
@@ -24,6 +24,16 @@ export const load = async ({ locals, params }) => {
 	const { category } = params;
 	const userUid = locals.user.uid;
 
+	const userEntries = await db.execute(sql`
+			select entry_uid
+			from user_to_entry
+			join entries on uid=entry_uid
+			where user_uid=${userUid}
+			and date_part('year', created_at)=${currentYear};
+		`);
+
+	const isCreator = userEntries.count > 0;
+
 	const [cachedEntry]: (Pick<
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
@@ -45,6 +55,7 @@ export const load = async ({ locals, params }) => {
 			...cachedEntry,
 			score: cachedEntry.score ? Number(cachedEntry.score) : null,
 			tags: entryTags.map((t) => t.name),
+			isCreator,
 		};
 	}
 
@@ -89,6 +100,7 @@ export const load = async ({ locals, params }) => {
 			thumbnail: entry.thumbnail,
 			uid: entry.uid,
 			tags: entryTags.map((t) => t.name),
+			isCreator,
 		};
 	}
 

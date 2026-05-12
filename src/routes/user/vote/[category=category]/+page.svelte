@@ -11,13 +11,7 @@
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 	import { debounce, randint } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
-	import {
-		formAction,
-		rotatingPairs,
-		teacherRotatingPairs,
-		toastsWithFeedback,
-		toastsWithoutFeedback,
-	} from "./config";
+	import { formAction, toastsWithFeedback, toastsWithoutFeedback } from "./config";
 
 	const TIMER = 29;
 
@@ -33,12 +27,6 @@
 	let targetTime: number;
 	let remaining = $state(TIMER);
 	let interval: ReturnType<typeof setInterval> | undefined = $state();
-
-	let example = $derived(
-		data.user?.isTeacher
-			? teacherRotatingPairs[randint(0, teacherRotatingPairs.length - 1)]!
-			: rotatingPairs[randint(0, rotatingPairs.length - 1)]!,
-	);
 
 	const visibilitychange = () => {
 		if (document.visibilityState === "visible") {
@@ -60,9 +48,6 @@
 		feedback = data.feedback_unsafe_md ?? "";
 		targetTime = Date.now() + TIMER * 1000;
 		remaining = TIMER;
-		example = data.user?.isTeacher
-			? teacherRotatingPairs[randint(0, teacherRotatingPairs.length - 1)]!
-			: rotatingPairs[randint(0, rotatingPairs.length - 1)]!;
 
 		document.addEventListener("visibilitychange", visibilitychange);
 		interval = setInterval(() => {
@@ -178,10 +163,9 @@
 				<label for="feedback" class="label flex gap-2">
 					<h4 class="mb-0 mt-2">Feedback</h4>
 				</label>
-				<p class="flex-1 mt-2">
-					{example.prompt}
-					<br />For inspiration, you can pick ideas from the
-					<button
+				<p>
+					Your constructive feedback helps creators learn what inspired people, what
+					could be improved, and what to build next. <button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
 						commandfor="guidelines"
@@ -189,7 +173,7 @@
 						onclick={() => {
 							guidelines?.showModal();
 							guidelines?.scrollTo({ top: 0 });
-						}}>Guidelines*</button
+						}}>Help*</button
 					>
 				</p>
 				<textarea
@@ -198,10 +182,11 @@
 					class="block textarea-bordered textarea w-full"
 					cols="50"
 					rows="10"
-					placeholder={example.placeholder}
+					placeholder={"Your constructive feedback"}
 					bind:value={feedback}
 					oninput={cacheVote}
 					{...fg.splat(FeedbackSchema.attributes)}
+					required={data.isCreator}
 				></textarea>
 				<div class="flex text-sm text-gray-500">
 					<span>{feedback.length}/{FeedbackSchema.attributes.maxlength}</span>
@@ -244,6 +229,23 @@
 <dialog id="guidelines" class="m-auto" bind:this={guidelines} closedby="any">
 	<article use:clickOutside={() => guidelines?.close()}>
 		<h2 id="guidlines" class="text-center mt-0 mb-8">Guidelines</h2>
+
+		<p>When leaving feedback you might consider these questions:</p>
+
+		<ul>
+			<li>What worked well? What could be improved? Suggest one actionable improvement</li>
+			<li>What’s one thing you especially liked?</li>
+			<li>Which part of the exposition was most engaging?</li>
+			<li>Was there anything confusing or unclear?</li>
+			<li>How did this exposition make you feel?</li>
+			<li>What’s something new you learned?</li>
+			<li>What’s one part you’d like expanded?</li>
+			<li>Did the visuals help?</li>
+			<li>What motivated you to finish reading or watching?</li>
+			<li>Did the pacing feel right?</li>
+			<li>Was there a key connection that stood out to you?</li>
+			<li>What’s one thing you found especially impressive or well-done?</li>
+		</ul>
 
 		<p>When scoring an entry you might consider the following principles:</p>
 
