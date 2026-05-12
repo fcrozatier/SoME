@@ -2,12 +2,24 @@ import { dev } from "$app/environment";
 import { type Category, currentYear } from "$lib/config";
 import { query2, query4 } from "$lib/server/algo/queries";
 import { db } from "$lib/server/db";
-import { cache, flags, type SelectEntry, skips, votes } from "$lib/server/db/schema";
+import {
+	cache,
+	flags,
+	type SelectEntry,
+	skips,
+	userToWatchlist,
+	votes,
+} from "$lib/server/db/schema";
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
 import { maybeRude } from "$lib/server/moderation.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 import { voteOpen } from "$lib/utils/time";
-import { CacheVoteSchema, FlagSchema, SkipSchema, VoteSchema } from "$lib/validation";
+import {
+	CacheVoteSchema,
+	FlagSchema,
+	SkipSchema,
+	VoteSchema,
+} from "$lib/validation";
 import { redirect } from "@sveltejs/kit";
 import { and, eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -36,11 +48,13 @@ export const load = async ({ locals, params }) => {
 
 	const isCreator = userEntries.count > 0;
 
-	const [cachedEntry]: (Pick<
-		SelectEntry,
-		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-	> &
-		Pick<SelectCache, "score" | "feedback_unsafe_md">)[] = await db.execute(sql`
+	const [cachedEntry]: (
+		& Pick<
+			SelectEntry,
+			"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+		>
+		& Pick<SelectCache, "score" | "feedback_unsafe_md">
+	)[] = await db.execute(sql`
 			select uid, title, description, entries.category, url, thumbnail, score, feedback_unsafe_md
 			from cache join entries on cache.entry_uid=entries.uid
 			where cache.user_uid=${userUid}
@@ -162,7 +176,12 @@ export const actions = {
 
 		await db
 			.delete(cache)
-			.where(and(eq(cache.userUid, uid), eq(cache.category, event.params.category as Category)));
+			.where(
+				and(
+					eq(cache.userUid, uid),
+					eq(cache.category, event.params.category as Category),
+				),
+			);
 
 		return { success: true };
 	}),
@@ -170,7 +189,7 @@ export const actions = {
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
-		const token = locals.user.uid;
+		const userUid = locals.user.uid;
 		const { category } = params;
 
 		let maybe_rude = false;
@@ -185,7 +204,7 @@ export const actions = {
 			.insert(votes)
 			.values({
 				entryUid: data.uid,
-				userUid: token,
+				userUid: userUid,
 				score: String(data.score),
 				feedback: feedbackSafe,
 				feedback_unsafe_md: data.feedback,
@@ -202,9 +221,41 @@ export const actions = {
 
 		await db
 			.delete(cache)
-			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+			.where(
+				and(
+					eq(cache.userUid, userUid),
+					eq(cache.category, category as Category),
+				),
+			);
+
+		await db
+			.delete(userToWatchlist)
+			.where(
+				and(
+					eq(userToWatchlist.userUid, userUid),
+					eq(userToWatchlist.entryUid, data.uid),
+				),
+			);
 
 		console.log("[new vote]");
+		return redirect(303, `/user/vote/${category}`);
+	}),
+	watchlist: formgate(SkipSchema, async (data, { params, locals }) => {
+		if (!locals.user) {
+			return redirect(302, "/login");
+		}
+
+		const userUid = locals.user.uid;
+		const { category } = params;
+
+		await db
+			.insert(userToWatchlist)
+			.values({
+				userUid: userUid,
+				entryUid: data.uid,
+			})
+			.onConflictDoNothing();
+
 		return redirect(303, `/user/vote/${category}`);
 	}),
 	cache: formgate(CacheVoteSchema, async (data, { params, locals }) => {
@@ -225,20 +276,34 @@ export const actions = {
 		if (!locals.user) {
 			return redirect(302, "/login");
 		}
-		const token = locals.user.uid;
+		const userUid = locals.user.uid;
 		const { category } = params;
 
 		await db
 			.insert(skips)
 			.values({
+				userUid: userUid,
 				entryUid: data.uid,
-				userUid: token,
 			})
 			.onConflictDoNothing();
 
 		await db
 			.delete(cache)
-			.where(and(eq(cache.userUid, token), eq(cache.category, category as Category)));
+			.where(
+				and(
+					eq(cache.userUid, userUid),
+					eq(cache.category, category as Category),
+				),
+			);
+
+		await db
+			.delete(userToWatchlist)
+			.where(
+				and(
+					eq(userToWatchlist.userUid, userUid),
+					eq(userToWatchlist.entryUid, data.uid),
+				),
+			);
 
 		return redirect(303, `/user/vote/${category}`);
 	}),
