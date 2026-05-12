@@ -256,6 +256,15 @@ export const actions = {
 			})
 			.onConflictDoNothing();
 
+		await db
+			.delete(cache)
+			.where(
+				and(
+					eq(cache.userUid, userUid),
+					eq(cache.category, category as Category),
+				),
+			);
+
 		return redirect(303, `/user/vote/${category}`);
 	}),
 	cache: formgate(CacheVoteSchema, async (data, { params, locals }) => {
