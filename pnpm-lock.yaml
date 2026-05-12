@@ -12,8 +12,8 @@ importers:
         specifier: ^3.1032.0
         version: 3.1032.0
       '@fcrozatier/ts-helpers':
-        specifier: ^2.10.0
-        version: 2.10.0
+        specifier: ^2.11.0
+        version: 2.11.0
       '@node-rs/argon2':
         specifier: ^2.0.2
         version: 2.0.2
@@ -764,8 +764,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fcrozatier/ts-helpers@2.10.0':
-    resolution: {integrity: sha512-4UihxvX7zCw/66B0s6XaNSDciTWftPx7DaVxXjF16XD/t9wL2ti80B0IWcqHhinyt/4RoPFaQMSPvxHB7a/+UQ==}
+  '@fcrozatier/ts-helpers@2.11.0':
+    resolution: {integrity: sha512-mE6MGcUwJl2U8hIrzIF8SbVTqsy82x1lQRW/rCL7r9q1gKwaePE+nzxGy0vif5JHEPMiuhQP3ymd/aqJOfcPsQ==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -2709,6 +2709,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.8.0:
+    resolution: {integrity: sha512-AcM7dV/5ul4EekoQ29Agm5vri8JNqRyj39o0qpX6vDF2GZrtutZl5RwgD1XnZjiTAfncsJhMI48QQH3sN87YNA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   set-cookie-parser@3.1.0:
     resolution: {integrity: sha512-kjnC1DXBHcxaOaOXBHBeRtltsDG2nUiUni+jP92M9gYdW12rsmx92UsfpH7o5tDRs7I1ZZPSQJQGv3UaRfCiuw==}
 
@@ -3662,7 +3667,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.7':
     optional: true
 
-  '@fcrozatier/ts-helpers@2.10.0': {}
+  '@fcrozatier/ts-helpers@2.11.0': {}
 
   '@img/colour@1.1.0': {}
 
@@ -4942,7 +4947,7 @@ snapshots:
       '@petamoriken/float16': 3.9.3
       debug: 4.4.3
       env-paths: 3.0.0
-      semver: 7.7.4
+      semver: 7.8.0
       shell-quote: 1.8.3
       which: 4.0.0
     transitivePeerDependencies:
@@ -5762,6 +5767,9 @@ snapshots:
   safer-buffer@2.1.2: {}
 
   semver@7.7.4: {}
+
+  semver@7.8.0:
+    optional: true
 
   set-cookie-parser@3.1.0: {}
 
