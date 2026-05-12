@@ -203,12 +203,15 @@
 					{/if}
 				</button>
 				<div class="mr-auto"></div>
-				<button
-					type="submit"
-					formaction={"?/watchlist"}
-					formnovalidate
-					class="btn btn-outline hover:btn-neutral">Add to watchlist</button
-				>
+				<!-- Only show this action if not already in the watchlist -->
+				{#if !page.params.entryUid}
+					<button
+						type="submit"
+						formaction={"?/watchlist"}
+						formnovalidate
+						class="btn btn-outline hover:btn-neutral">Add to watchlist</button
+					>
+				{/if}
 				<button
 					type="submit"
 					formaction={"?/skip"}
