@@ -9,7 +9,13 @@
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
-	import { invalidTagsMessage, levels, MAX_IMG_SIZE, NewEntrySchema } from "$lib/validation";
+	import {
+		invalidTagsMessage,
+		levels,
+		MAX_IMG_SIZE,
+		NewEntrySchema,
+		urlRegex,
+	} from "$lib/validation";
 	import * as fg from "formgator";
 	import { tick } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
@@ -335,8 +341,8 @@
 				<span class="label-text"> Link </span>
 			</label>
 			<p class="mt-2 mb-4">
-				Ensure your submission is publicly accessible via the link provided: it should not be
-				private or restricted.
+				Ensure your submission is publicly and freely accessible via the link provided: it should
+				not be private or restricted.
 			</p>
 			<p>
 				<em
@@ -356,6 +362,13 @@
 			/>
 			{#if form?.issues?.url}
 				<span id="url-error" class="error-message">{form.issues.url.message}</span>
+			{/if}
+			{#if url !== "" && url.match(urlRegex) === null}
+				<span id="url-error" class="error-message"
+					>Entries should be freely accessible. Please see the <a href="/rules#no-paywall"
+						>no-paywall rule</a
+					> for Medium.com alternatives
+				</span>
 			{/if}
 		</div>
 

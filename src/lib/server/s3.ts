@@ -1,7 +1,8 @@
-import { PutObjectCommand, DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { S3_KEY, S3_REGION, S3_SECRET } from "$env/static/private";
 import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 import sharp from "sharp";
+import { dev } from "$app/environment";
 
 const client = new S3Client({
 	region: S3_REGION,
@@ -20,6 +21,11 @@ const client = new S3Client({
  * @param key The name of the file on the bucket
  */
 export async function saveThumbnail(thumbnail: File, key: string) {
+	if (dev) {
+		console.log("Saving thumbnail", thumbnail, key);
+		return;
+	}
+
 	const input = await thumbnail.arrayBuffer();
 	const output = await sharp(input)
 		.resize({
