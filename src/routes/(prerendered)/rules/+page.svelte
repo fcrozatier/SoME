@@ -231,6 +231,15 @@
 				on a third-party platform.
 			</p>
 			<p>
+				Posts should not be hosted on platforms like <a href="https://medium.com">Medium.com</a>
+				which limit the number of freely accessible monthly articles. Prefer alternatives allowing unlimited
+				free access like
+				<a href="https://substack.com/">Substack</a>, <a href="https://www.notion.com/">Notion</a>,
+				<a href="https://wordpress.com/">Wordpress</a>,
+				<a href="https://www.docs.google.com/">Google Docs</a> or
+				<a href="https://github.com/">GitHub</a>.
+			</p>
+			<p>
 				Additionally, your entry should not require viewers to download or install anything to
 				access the content. It should work directly in a modern web browser without extra steps.
 			</p>

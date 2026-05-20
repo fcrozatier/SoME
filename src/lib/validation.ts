@@ -113,9 +113,12 @@ const DescriptionSchema = fg
 	)
 	.trim();
 
+// not hosted on medium
+export const urlRegex = /^(?!.*medium\.com).*$/v;
+
 const UrlSchema = fg
 	.url(
-		{ required: true },
+		{ required: true, pattern: urlRegex },
 		{
 			required: "A link to your entry is required",
 			invalid: "Invalid url, please provide the full url with the https:// prefix",
