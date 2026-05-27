@@ -92,7 +92,7 @@
 			</p>
 			<p>
 				The topic could be at any level, whether that's basic math for young children or
-				higher-level math.
+				higher-level math. Of course the content must be accurate and mathematically correct.
 			</p>
 		</details>
 		<!-- Software -->
