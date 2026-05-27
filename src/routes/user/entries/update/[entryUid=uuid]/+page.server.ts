@@ -17,12 +17,7 @@ import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
-import {
-	invalidTagsMessage,
-	levels,
-	NewEntrySchema,
-	validateYtCreationDate,
-} from "$lib/validation";
+import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -76,7 +71,7 @@ export const load = async ({ locals, params }) => {
 };
 
 export const actions = {
-	default: formgate(NewEntrySchema, async (data, { locals, params, fetch }) => {
+	default: formgate(NewEntrySchema, async (data, { locals, params }) => {
 		try {
 			const { user } = locals;
 			const { entryUid } = params;

@@ -3,22 +3,13 @@ import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
-import {
-	entries,
-	entryToTag,
-	nonTags,
-	tags,
-	users,
-	userToEntry,
-	votes,
-} from "$lib/server/db/schema.js";
+import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
-import { submissionsOpen } from "$lib/utils/time.js";
 import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
@@ -158,7 +149,7 @@ export const actions = {
 				throw new Error("Entry not found");
 			}
 
-			const { oldThumbnail, oldUrl } = entry;
+			const { oldThumbnail } = entry;
 			const { thumbnail, url } = data;
 
 			let normalizedLink = url;
