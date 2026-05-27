@@ -4,6 +4,7 @@ import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
+import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
@@ -122,12 +123,15 @@ export const actions = {
 				normalizedURL = normalizeYoutubeLink(url);
 			}
 
+			const description = await parseAndSanitizeMarkdown(data.description);
+
 			// Save entry
 			await db.insert(entries).values({
 				uid: entryUid,
 				category: data.category,
 				title: data.title,
-				description: data.description,
+				description,
+				description_md: data.description,
 				url: normalizedURL,
 				thumbnail: thumbnailKey,
 			});
