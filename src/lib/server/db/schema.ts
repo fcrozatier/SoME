@@ -48,7 +48,7 @@ export const entries = pgTable("entries", {
 	uid: uuid("uid").primaryKey(),
 	title: varchar("title", { length: 128 }).notNull(),
 	description: text("description").notNull(),
-	description_md: text("description_md"),
+	description_md: text("description_md").notNull(),
 	category: text("category", { enum: categories }).notNull(),
 	url: text("url").unique().notNull(),
 	thumbnail: text("thumbnail"),

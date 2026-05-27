@@ -1,0 +1,1 @@
+ALTER TABLE "entries" ALTER COLUMN "description_md" SET NOT NULL;
