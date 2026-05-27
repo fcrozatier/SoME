@@ -22,9 +22,9 @@ export const load = async ({ params, locals }) => {
 
 	const [entry]: Pick<
 		SelectEntry,
-		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+		"uid" | "title" | "description_md" | "category" | "url" | "thumbnail"
 	>[] = await db.execute(sql`
-    select uid, title, description, category, url, thumbnail from entries
+    select uid, title, description_md, category, url, thumbnail from entries
     inner join entry_to_tag on entry_to_tag.entry_uid=entries.uid
     where entries.uid=${entryUid};
   `);
