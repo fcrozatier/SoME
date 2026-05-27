@@ -283,7 +283,7 @@
 				placeholder="Comma separated tags (letters and dash only)"
 				class="input-bordered input w-full"
 				aria-errormessage="newtag-error"
-				aria-invalid={`${invalidTags}`}
+				aria-invalid={invalidTags}
 				bind:value={tag}
 				bind:this={newtag}
 				onkeyup={(e) => {
