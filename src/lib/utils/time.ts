@@ -46,15 +46,33 @@ const padStartZero = (number: number) => {
  * Remaining time to submit an entry
  */
 export function timeLeft() {
-	const ms = Date.parse(PUBLIC_REGISTRATION_END) - Date.now();
-	const d = Math.floor(ms / (1000 * 60 * 60 * 24));
-	const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-	const min = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-	const sec = Math.floor((ms % (1000 * 60)) / 1000);
+	try {
+		// Compare dates using UTC projection
+		const now = Temporal.Now.zonedDateTimeISO("UTC");
+		const then = Temporal.Instant.from(PUBLIC_REGISTRATION_END)
+			.toZonedDateTimeISO("UTC");
 
-	const days = `${d > 0 ? d.toString() + ` day${d > 1 ? "s" : ""} ` : ""}`;
-	return {
-		ms,
-		formatted: `${days}${h}h ${padStartZero(min)}min ${padStartZero(sec)}s`,
-	};
+		const { days: d, hours, minutes, seconds } = now.until(then, {
+			smallestUnit: "seconds",
+			largestUnit: "days",
+			roundingMode: "trunc",
+		});
+
+		const days = d > 0 ? d + ` day${d > 1 ? "s" : ""} ` : "";
+		return `${days}${hours}h ${padStartZero(minutes)}min ${
+			padStartZero(seconds)
+		}s`;
+	} catch (e) {
+		if (!(e instanceof ReferenceError)) throw e;
+
+		// Temporal API not available
+		const ms = Date.parse(PUBLIC_REGISTRATION_END) - Date.now();
+		const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+		const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		const min = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+		const sec = Math.floor((ms % (1000 * 60)) / 1000);
+
+		const days = d > 0 ? d + ` day${d > 1 ? "s" : ""} ` : "";
+		return `${days}${h}h ${padStartZero(min)}min ${padStartZero(sec)}s`;
+	}
 }

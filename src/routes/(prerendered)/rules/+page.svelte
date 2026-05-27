@@ -10,9 +10,7 @@
 	let remaining = timeLeft();
 
 	onMount(() => {
-		interval = setInterval(() => {
-			remaining = timeLeft();
-		}, 1000);
+		interval = setInterval(() => (remaining = timeLeft()), 1000);
 
 		return () => clearInterval(interval);
 	});
@@ -56,8 +54,8 @@
 				</p>
 				{#if submissionsOpen()}
 					<p>
-						Which means you still have <span class="tabular-nums">{remaining.formatted}</span> left to
-						submit an entry!
+						Which means you still have <span class="tabular-nums">{remaining}</span> left to submit an
+						entry!
 					</p>
 				{/if}
 				<p>
