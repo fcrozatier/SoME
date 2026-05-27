@@ -41,7 +41,7 @@
 	let usernameStatuses: UsernameStatus[] = $state([]);
 	let category = $derived(entry.category);
 	let title = $derived(entry.title);
-	let description = $derived(entry.description_md ?? "");
+	let description = $derived(entry.description_md);
 	let url = $derived(entry.url);
 	let tag = $state("");
 	let tags: Set<string> = $derived(new SvelteSet(data.tags));
@@ -66,7 +66,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("New Entry")}</title>
+	<title>{makeTitle("Update Entry")}</title>
 </svelte:head>
 
 <article class="layout-prose max-w-2xl!">
@@ -189,6 +189,14 @@
 			<label for="description" class="label">
 				<span class="label-text">Description</span>
 			</label>
+			<p class="mt-2 mb-4">
+				The description can contain basic
+				<a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a> with
+				tables, fenced code blocks and
+				<a href="https://quickref.me/latex" target="_blank">LaTeX</a>. Wrap inline LaTeX formulas
+				with&nbsp;<code>$</code>
+				and displayed formulas with&nbsp;<code class="text-nowrap">$$</code>
+			</p>
 			<textarea
 				id="description"
 				name="description"
