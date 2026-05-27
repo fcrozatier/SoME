@@ -41,7 +41,7 @@
 	let usernameStatuses: UsernameStatus[] = $state([]);
 	let category = $derived(entry.category);
 	let title = $derived(entry.title);
-	let description = $derived(entry.description);
+	let description = $derived(entry.description_md ?? "");
 	let url = $derived(entry.url);
 	let tag = $state("");
 	let tags: Set<string> = $derived(new SvelteSet(data.tags));

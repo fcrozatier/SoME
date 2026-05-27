@@ -23,9 +23,14 @@
 
 <div class="mb-12">
 	<div>
-		<p id="description-{id}" class="wrap-anywhere" data-open={open} bind:this={description}>
-			{content}
-		</p>
+		<div
+			id="description-{id}"
+			class="description prose wrap-anywhere"
+			data-open={open}
+			bind:this={description}
+		>
+			{@html content}
+		</div>
 
 		<div class={"flex justify-between items-center "} bind:this={more}>
 			<hr />
@@ -49,7 +54,7 @@
 		background-color: var(--color-gray-50);
 	}
 
-	p {
+	.description {
 		--max-lines: 3;
 		--transition-duration: 200ms;
 

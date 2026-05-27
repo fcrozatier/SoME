@@ -225,6 +225,13 @@
 			"when": 1778596950175,
 			"tag": "0031_absent_bushwacker",
 			"breakpoints": true
+		},
+		{
+			"idx": 32,
+			"version": "7",
+			"when": 1779875985577,
+			"tag": "0032_slim_green_goblin",
+			"breakpoints": true
 		}
 	]
 }

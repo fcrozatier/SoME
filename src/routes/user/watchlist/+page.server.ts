@@ -1,8 +1,7 @@
 import { db } from "$lib/server/db/index.js";
-import type { SelectEntry, SelectVote } from "$lib/server/db/schema";
-import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
+import type { SelectEntry } from "$lib/server/db/schema";
 import { voteOpen } from "$lib/utils/time.js";
-import { SkipSchema, VoteSchema } from "$lib/validation";
+import { SkipSchema } from "$lib/validation";
 import { type Actions, error, redirect } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";

@@ -6,6 +6,7 @@ import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
 import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
+import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
@@ -21,9 +22,9 @@ export const load = async ({ params, locals }) => {
 
 	const [entry]: Pick<
 		SelectEntry,
-		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+		"uid" | "title" | "description_md" | "category" | "url" | "thumbnail"
 	>[] = await db.execute(sql`
-    select uid, title, description, category, url, thumbnail from entries
+    select uid, title, description_md, category, url, thumbnail from entries
     inner join entry_to_tag on entry_to_tag.entry_uid=entries.uid
     where entries.uid=${entryUid};
   `);
@@ -167,12 +168,15 @@ export const actions = {
 				normalizedLink = normalizeYoutubeLink(url);
 			}
 
+			const description = await parseAndSanitizeMarkdown(data.description);
+
 			// Update entry
 			await db
 				.update(entries)
 				.set({
 					category: data.category,
-					description: data.description,
+					description,
+					description_md: data.description,
 					title: data.title,
 					url: normalizedLink,
 					thumbnail: thumbnailKey,
