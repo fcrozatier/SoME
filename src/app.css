@@ -65,6 +65,11 @@ a:not(:where(.btn)) {
 
 /* Inputs */
 
+:user-invalid {
+	border-color: var(--color-error);
+	outline-color: var(--color-error);
+}
+
 textarea {
 	@apply text-sm;
 
