@@ -51,12 +51,13 @@ export const actions = {
 			return redirect(302, "/login");
 		} catch (error) {
 			console.log("[signup]:", error);
+			const cause = error instanceof Error && error.cause;
 
 			if (
-				error instanceof postgres.PostgresError &&
-				error.code === postgresErrorCode.unique_violation
+				cause instanceof postgres.PostgresError &&
+				cause.code === postgresErrorCode.unique_violation
 			) {
-				if (error.constraint_name === "users_email_unique") {
+				if (cause.constraint_name === "users_email_unique") {
 					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
 
 					// Check whether it's a legacy profile (no pwd) and update
