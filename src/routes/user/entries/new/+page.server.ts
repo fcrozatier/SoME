@@ -1,6 +1,7 @@
 import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
+import { entriesHistory } from "$lib/server/db/schema.js";
 import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
@@ -27,15 +28,17 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	default: formgate(NewEntrySchema, async (data, { locals }) => {
-		if (!locals.user) {
+		const { user } = locals;
+
+		if (!user) {
 			throw error(401, "You must be logged in");
 		}
 
-		if (!locals.user.username) {
+		if (!user.username) {
 			throw error(401, "Please choose a username on your Profile page before submitting");
 		}
 
-		if (!submissionsOpen() && !locals.user.isAdmin) {
+		if (!submissionsOpen() && !user.isAdmin) {
 			throw error(403, "Submissions are closed");
 		}
 
@@ -43,7 +46,7 @@ export const actions = {
 		const id = data.url.match(YOUTUBE_EMBEDDABLE)?.groups?.id;
 		// if (id) await validateYtCreationDate(id);
 
-		const usernames = [...new Set([...data.usernames, locals.user.username])];
+		const usernames = [...new Set([...data.usernames, user.username])];
 		const teamSize = usernames.length;
 
 		// The distinct team members
@@ -134,6 +137,17 @@ export const actions = {
 				description_md: data.description,
 				url: normalizedURL,
 				thumbnail: thumbnailKey,
+			});
+
+			// Update entry history
+			await db.insert(entriesHistory).values({
+				entry_uid: entryUid,
+				category: data.category,
+				description_md: data.description,
+				title: data.title,
+				url: normalizedURL,
+				thumbnail: thumbnailKey,
+				editedBy: user.uid,
 			});
 
 			// Save the thumbnail after the entry: we know it's not a duplicate

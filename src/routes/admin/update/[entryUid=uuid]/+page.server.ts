@@ -3,7 +3,15 @@ import { conjunctionFormatter } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
-import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
+import {
+	entries,
+	entriesHistory,
+	entryToTag,
+	nonTags,
+	tags,
+	users,
+	userToEntry,
+} from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
@@ -25,7 +33,6 @@ export const load = async ({ params, locals }) => {
 		"uid" | "title" | "description_md" | "category" | "url" | "thumbnail"
 	>[] = await db.execute(sql`
     select uid, title, description_md, category, url, thumbnail from entries
-    inner join entry_to_tag on entry_to_tag.entry_uid=entries.uid
     where entries.uid=${entryUid};
   `);
 
@@ -53,7 +60,9 @@ export const load = async ({ params, locals }) => {
 };
 
 export const actions = {
-	default: formgate(NewEntrySchema, async (data, { params }) => {
+	default: formgate(NewEntrySchema, async (data, { params, locals }) => {
+		if (!locals.user?.isAdmin) return error(400);
+
 		try {
 			const { entryUid } = params;
 
@@ -182,6 +191,17 @@ export const actions = {
 					thumbnail: thumbnailKey,
 				})
 				.where(eq(entries.uid, entryUid));
+
+			// Update entry history
+			await db.insert(entriesHistory).values({
+				entry_uid: entryUid,
+				category: data.category,
+				description_md: data.description,
+				title: data.title,
+				url: normalizedLink,
+				thumbnail: thumbnailKey,
+				editedBy: locals.user.uid,
+			});
 
 			// Save the thumbnail after the entry: we know it's not a duplicate
 			if (!dev && thumbnail && thumbnailKey) {

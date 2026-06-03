@@ -239,6 +239,20 @@
 			"when": 1779878715148,
 			"tag": "0033_chilly_invaders",
 			"breakpoints": true
+		},
+		{
+			"idx": 34,
+			"version": "7",
+			"when": 1780497598076,
+			"tag": "0034_charming_mephistopheles",
+			"breakpoints": true
+		},
+		{
+			"idx": 35,
+			"version": "7",
+			"when": 1780498164712,
+			"tag": "0035_tiresome_puck",
+			"breakpoints": true
 		}
 	]
 }

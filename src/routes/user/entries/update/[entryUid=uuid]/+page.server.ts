@@ -5,6 +5,7 @@ import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
 import {
 	entries,
+	entriesHistory,
 	entryToTag,
 	nonTags,
 	tags,
@@ -224,6 +225,17 @@ export const actions = {
 					thumbnail: thumbnailKey,
 				})
 				.where(eq(entries.uid, entryUid));
+
+			// Update entry history
+			await db.insert(entriesHistory).values({
+				entry_uid: entryUid,
+				category: data.category,
+				description_md: data.description,
+				title: data.title,
+				url: normalizedLink,
+				thumbnail: thumbnailKey,
+				editedBy: user.uid,
+			});
 
 			// Save the thumbnail after the entry: we know it's not a duplicate
 			if (!dev && thumbnail && thumbnailKey) {
