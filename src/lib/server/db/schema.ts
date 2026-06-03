@@ -58,6 +58,20 @@ export const entries = pgTable("entries", {
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 });
 
+export const entriesHistory = pgTable("entries_history", {
+	uid: uuid("uid").primaryKey().defaultRandom(),
+	entry_uid: uuid("entry_uid")
+		.references(() => entries.uid, { onDelete: "cascade" }).notNull(),
+	title: varchar("title", { length: 128 }).notNull(),
+	description_md: text("description_md").notNull(),
+	category: text("category", { enum: categories }).notNull(),
+	url: text("url").unique().notNull(),
+	thumbnail: text("thumbnail"),
+	editedAt: timestamp("edited_at", { mode: "string" }).defaultNow(),
+	editedBy: uuid("edited_by")
+		.references(() => users.uid, { onDelete: "set null" }),
+}, ({ entry_uid }) => [index().on(entry_uid)]);
+
 export const userToEntry = pgTable(
 	"user_to_entry",
 	{
@@ -157,7 +171,9 @@ export const flags = pgTable(
 		reason: text("reason").notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const skips = pgTable(
@@ -171,7 +187,9 @@ export const skips = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const cache = pgTable(
