@@ -23,6 +23,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			<!-- Data is already sorted -->
 			{#each data.flagged as entry}
 				<tr class="px-6 py-2">
 					<td class="flex items-center"
@@ -39,13 +40,37 @@
 					</td>
 					<td
 						><span class=""
-							>{data.authors
+							>{data.entry_authors
 								.filter(({ uid }) => uid === entry.uid)
 								.map(({ username }) => username)
 								.join(", ")}</span
 						></td
 					>
-					<td><span class="">{entry.reason}</span></td>
+					<td>
+						<form
+							action="?/update_reason"
+							method="post"
+							class="focus-within:[&>input]:input hover:[&>input]:input hover:[&>button]:block focus-within:[&>button]:block flex items-center gap-2"
+							use:enhance={() => {
+								const buttons = document.querySelectorAll("button");
+								buttons.forEach((b) => b.setAttribute("disabled", "on"));
+
+								return async ({ update, result }) => {
+									buttons.forEach((b) => b.removeAttribute("disabled"));
+
+									if (result.type === "success") {
+										newToast({ type: "info", content: "Reason updated" });
+									}
+									await update();
+								};
+							}}
+						>
+							<input type="hidden" name="entry_uid" value={entry.uid} />
+							<input type="hidden" name="user_uid" value={entry.user_uid} />
+							<input type="text" class="input-sm" name="reason" value={entry.reason} required />
+							<button class="hidden btn btn-sm flex-0">update</button>
+						</form>
+					</td>
 				</tr>
 			{:else}
 				<tr>

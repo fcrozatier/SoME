@@ -304,3 +304,9 @@ export const AdminDeactivateForm = {
 export const AdminForm = {
 	selected: fg.multi().pipe(z.array(z.string().uuid())),
 };
+
+export const UpdateFlagReason = {
+	user_uid: UidSchema,
+	entry_uid: UidSchema,
+	reason: fg.text(),
+};
