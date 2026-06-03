@@ -1,5 +1,6 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
+import { flags } from "$lib/server/db/schema";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { AdminDeactivateForm } from "$lib/validation";
 import { error } from "@sveltejs/kit";
@@ -39,11 +40,19 @@ export const load = async ({ locals, url }) => {
 
 export const actions = {
 	deactivate: formgate(AdminDeactivateForm, async (data, { locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		const { user } = locals;
+
+		if (!user?.isAdmin) return error(403);
 
 		await db.execute(sql`
 			update entries set active='false' where uid=${data.uid};
 		`);
+
+		await db.insert(flags).values({
+			entryUid: data.uid,
+			userUid: user.uid,
+			reason: "",
+		});
 
 		return { success: true };
 	}),
