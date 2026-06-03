@@ -18,7 +18,7 @@
 					<input id="all" type="checkbox" class="checkbox" use:toggleSelectAll />
 				</th>
 				<th class="text-left">Entry</th>
-				<th class="text-left">Id</th>
+				<th class="text-left">Authors</th>
 				<th class="text-left">Reason</th>
 			</tr>
 		</thead>
@@ -34,8 +34,17 @@
 							bind:group={selected}
 						/></td
 					>
-					<td><a class="capitalize" href={entry.url} target="_blank">{entry.title}</a></td>
-					<td><span class="font-mono">{entry.uid}</span></td>
+					<td>
+						<a class="capitalize" href={`/entries/${entry.uid}`} target="_blank">{entry.title}</a>
+					</td>
+					<td
+						><span class=""
+							>{data.authors
+								.filter(({ uid }) => uid === entry.uid)
+								.map(({ username }) => username)
+								.join(", ")}</span
+						></td
+					>
 					<td><span class="">{entry.reason}</span></td>
 				</tr>
 			{:else}
@@ -71,7 +80,7 @@
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: auto 1fr 320px 1fr;
+		grid-template-columns: auto 320px 100px 1fr;
 		gap: 1rem;
 		align-items: start;
 	}
