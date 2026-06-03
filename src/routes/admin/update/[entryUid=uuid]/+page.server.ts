@@ -25,7 +25,6 @@ export const load = async ({ params, locals }) => {
 		"uid" | "title" | "description_md" | "category" | "url" | "thumbnail"
 	>[] = await db.execute(sql`
     select uid, title, description_md, category, url, thumbnail from entries
-    inner join entry_to_tag on entry_to_tag.entry_uid=entries.uid
     where entries.uid=${entryUid};
   `);
 
