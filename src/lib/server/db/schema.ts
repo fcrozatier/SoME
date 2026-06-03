@@ -68,7 +68,7 @@ export const entriesHistory = pgTable(
 		title: varchar("title", { length: 128 }).notNull(),
 		description_md: text("description_md").notNull(),
 		category: text("category", { enum: categories }).notNull(),
-		url: text("url").unique().notNull(),
+		url: text("url").notNull(),
 		thumbnail: text("thumbnail"),
 		editedAt: timestamp("edited_at", { mode: "string" }).defaultNow(),
 		editedBy: uuid("edited_by").references(() => users.uid, { onDelete: "set null" }),

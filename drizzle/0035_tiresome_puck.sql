@@ -1,0 +1,1 @@
+ALTER TABLE "entries_history" DROP CONSTRAINT "entries_history_url_unique";
