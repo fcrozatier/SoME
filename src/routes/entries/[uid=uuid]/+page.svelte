@@ -52,6 +52,15 @@
 <article class="layout-prose">
 	<Display data={{ ...data.entry, tags: data.tags }}></Display>
 
+	{#if data.user?.isAdmin}
+		<div class="mt-4 flex flex-col ml-auto text-sm">
+			<div class="ml-auto">
+				Quick action (admin):
+				<a href={`/admin/update/${data.entry.uid}`} class="btn btn-sm">Update entry</a>
+			</div>
+		</div>
+	{/if}
+
 	<!-- Only show feedback when results are available -->
 	{#if !data.isAdmin && data.entry.year === currentYear && !resultsAvailable()}
 		{#if voteOpen()}
