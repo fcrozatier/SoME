@@ -1,6 +1,6 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
-import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
+import { type SelectEntry, type SelectFlag, type User } from "$lib/server/db/schema";
 import { AdminForm } from "$lib/validation";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -21,7 +21,14 @@ export const load = async ({ locals }) => {
 			order by uid;
 		`);
 
-	return { flagged };
+	const authors: (Pick<SelectEntry, "uid"> & Pick<User, "username">)[] = await db.execute(sql`
+		select username, entry_uid as uid
+		from users join user_to_entry
+		on users.uid=user_to_entry.user_uid
+		where entry_uid in ${flagged.map((entries) => entries.uid)}
+		`);
+
+	return { flagged, authors };
 };
 
 export const actions = {
