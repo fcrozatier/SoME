@@ -1,10 +1,6 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
-import {
-	type SelectEntry,
-	type SelectFlag,
-	type User,
-} from "$lib/server/db/schema";
+import { type SelectEntry, type SelectFlag, type User } from "$lib/server/db/schema";
 import { AdminForm } from "$lib/validation";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -15,10 +11,8 @@ export const load = async ({ locals }) => {
 
 	// Turn the left join into an inner join to hide entries deactivated (by admins) without being flagged
 
-	const flagged: (
-		& Pick<SelectEntry, "uid" | "title" | "url">
-		& Pick<SelectFlag, "reason">
-	)[] = await db.execute(sql`
+	const flagged: (Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">)[] =
+		await db.execute(sql`
 			select uid, title, url, reason
 			from entries left join flags
 			on uid=entry_uid
@@ -27,10 +21,7 @@ export const load = async ({ locals }) => {
 			order by uid;
 		`);
 
-	const authors: (
-		& Pick<SelectEntry, "uid">
-		& Pick<User, "username">
-	)[] = await db.execute(sql`
+	const authors: (Pick<SelectEntry, "uid"> & Pick<User, "username">)[] = await db.execute(sql`
 		select username, entry_uid as uid
 		from users join user_to_entry
 		on users.uid=user_to_entry.user_uid
