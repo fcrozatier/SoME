@@ -162,12 +162,13 @@ export const actions = {
 			return redirect(303, "/user/entries");
 		} catch (error) {
 			console.log("[new entry]:", error);
+			const cause = error instanceof Error && error.cause;
 
 			if (
-				error instanceof postgres.PostgresError &&
-				error.code === postgresErrorCode.unique_violation
+				cause instanceof postgres.PostgresError &&
+				cause.code === postgresErrorCode.unique_violation
 			) {
-				if (error.constraint_name === "entries_url_unique") {
+				if (cause.constraint_name === "entries_url_unique") {
 					return formfail({ link: `Entry already exists` });
 				}
 			}

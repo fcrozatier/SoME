@@ -33,16 +33,13 @@
 
 <article class="layout-prose max-w-2xl!">
 	<h2>Join the competition</h2>
-	<p>
-		Create an account to participate as a creator or judge. If you registered in a previous edition,
-		this will upgrade your profile.
-	</p>
+	<p>Create an account to participate as a creator or judge.</p>
 
 	<form
 		class="space-y-2"
 		method="post"
 		use:enhance={disableSubmitterAndSetValidity({
-			toast: { redirect: { type: "success", content: `You can now log in as ${email}.` } },
+			toast: { redirect: { type: "success", content: `Account created.` } },
 		})}
 	>
 		<!-- Firefox hack to prevent showing the manage password popup on the username field -->
