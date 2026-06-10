@@ -239,7 +239,7 @@ export const FeedbackSchema = fg
 	)
 	.trim();
 
-const UidSchema = fg.hidden().pipe(z.string().uuid());
+const UidSchema = fg.hidden().pipe(z.uuid());
 
 export const VoteSchema = {
 	score: fg.range({ min: 1, max: 9, step: 0.01 }),
@@ -302,7 +302,7 @@ export const AdminDeactivateForm = {
 };
 
 export const AdminForm = {
-	selected: fg.multi().pipe(z.array(z.string().uuid())),
+	selected: fg.multi().pipe(z.array(z.uuid())),
 };
 
 export const UpdateFlagReason = {

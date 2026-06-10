@@ -19,7 +19,6 @@
 	let bio = $derived(data.user.bio ?? "");
 
 	let deleteDialog: HTMLDialogElement | undefined = $state();
-	$inspect(usernameStatus);
 </script>
 
 <svelte:head>

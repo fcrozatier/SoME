@@ -81,6 +81,7 @@
 	<form
 		class="space-y-2"
 		method="post"
+		action="?/update"
 		enctype="multipart/form-data"
 		use:enhance={disableSubmitterAndSetValidity({
 			before: ({ formData, formElement, cancel }) => {
@@ -433,18 +434,56 @@
 			{/if}
 		</div>
 
-		<p>
-			<button class="btn-neutral btn block"> Update Entry</button>
-			{#if form?.issues || page.status !== 200}
-				<span class="error-message mt-2">
-					Something went wrong. {form?.issues
-						? "Please correct the highlighted fields above"
-						: "There was a network error. Please try again later"}
-				</span>
-			{/if}
+		<p class="flex gap-4">
+			<button class="btn-neutral btn"> Update Entry</button>
+			<button type="button" class="btn-error btn" commandfor="delete-dialog" command="show-modal">
+				Delete Entry</button
+			>
 		</p>
+		{#if form?.issues}
+			<span class="error-message mt-2">
+				Something went wrong. {form?.issues ? "Please correct the highlighted fields above" : ""}
+			</span>
+		{/if}
 	</form>
 </article>
+
+<dialog id="delete-dialog" class="m-auto" closedby="any">
+	<form
+		method="post"
+		class="space-y-2"
+		action="?/delete"
+		use:enhance={disableSubmitterAndSetValidity({
+			toast: {
+				redirect: {
+					type: "info",
+					content: "Entry deleted",
+					duration: 5000,
+				},
+				failure: "Could not delete entry",
+			},
+			invalidateAll: true,
+			reset: false,
+		})}
+	>
+		<h2 class="mt-0">Are you sure?</h2>
+		<p class="text-gray-700">
+			You're about to delete your entry <span class="font-bold">{title}</span>
+		</p>
+
+		<p class="mb-0 mt-8 flex justify-between items-center gap-2">
+			<button
+				type="button"
+				class="btn-outline btn"
+				commandfor="delete-dialog"
+				command="request-close">Cancel</button
+			>
+			<button type="submit" class="btn-outline btn-error btn" name="entryUid" value={entry.uid}
+				>Delete my entry</button
+			>
+		</p>
+	</form>
+</dialog>
 
 <style>
 	label {

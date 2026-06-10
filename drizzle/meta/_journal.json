@@ -253,6 +253,27 @@
 			"when": 1780498164712,
 			"tag": "0035_tiresome_puck",
 			"breakpoints": true
+		},
+		{
+			"idx": 36,
+			"version": "7",
+			"when": 1781081532400,
+			"tag": "0036_fair_grim_reaper",
+			"breakpoints": true
+		},
+		{
+			"idx": 37,
+			"version": "7",
+			"when": 1781082243037,
+			"tag": "0037_public_sprite",
+			"breakpoints": true
+		},
+		{
+			"idx": 38,
+			"version": "7",
+			"when": 1781084118132,
+			"tag": "0038_skinny_kang",
+			"breakpoints": true
 		}
 	]
 }

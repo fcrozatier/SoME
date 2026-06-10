@@ -28,6 +28,7 @@ export function query1(token: string, category: string) {
 
 				where entries.category=${category}
 					and active='true'
+					and deleted_at is null
 					and date_part('year', entries.created_at)=${currentYear}
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
@@ -79,6 +80,7 @@ export function query2(token: string, category: string) {
 
 				where entries.category=${category}
 					and active='true'
+					and deleted_at is null
 					and date_part('year', created_at)=${currentYear}
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
@@ -138,6 +140,7 @@ export function query3(token: string, category: string) {
 
 				where entries.category=${category}
 					and active='true'
+					and deleted_at is null
 					and date_part('year', created_at)=${currentYear}
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
@@ -187,6 +190,7 @@ export function query4(token: string, category: string) {
 
 				where entries.category=${category}
 					and active='true'
+					and deleted_at is null
 					and date_part('year', created_at)=${currentYear}
 					and uid not in (select entry_uid from votes where votes.user_uid=${token})
 					and uid not in (select entry_uid from skips where skips.user_uid=${token})
@@ -218,6 +222,7 @@ export function rank(category: string) {
 			from (scores join entries on scores.entry_uid=entries.uid)
 			where category=${category}
 			and active='t'
+			and deleted_at is null
 			order by median desc
 		)
 

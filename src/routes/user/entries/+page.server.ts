@@ -16,6 +16,7 @@ export const load = async ({ locals }) => {
       inner join user_to_entry
       on entries.uid=user_to_entry.entry_uid
       where user_to_entry.user_uid=${locals.user.uid}
+			and deleted_at is null
       order by entries.created_at desc
     `);
 

@@ -24,6 +24,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
+import z from "zod";
 
 export const load = async ({ locals, params }) => {
 	if (!submissionsOpen()) {
@@ -73,7 +74,7 @@ export const load = async ({ locals, params }) => {
 };
 
 export const actions = {
-	default: formgate(NewEntrySchema, async (data, { locals, params }) => {
+	update: formgate(NewEntrySchema, async (data, { locals, params }) => {
 		try {
 			const { user } = locals;
 			const { entryUid } = params;
@@ -303,4 +304,34 @@ export const actions = {
 			throw error;
 		}
 	}),
+	delete: async ({ locals, request }) => {
+		const user = locals.user;
+		if (!user) throw redirect(302, "/login");
+
+		const formData = await request.formData();
+		const zodResult = z.uuid().safeParse(formData.get("entryUid"));
+
+		if (!zodResult.success) return fail(422);
+
+		const entryUid = zodResult.data;
+
+		// Make sure user is the creator first
+		const isCreator =
+			(
+				await db.execute(
+					sql`select * from user_to_entry where user_uid=${user.uid} and entry_uid=${entryUid};`,
+				)
+			).count > 0;
+
+		if (!isCreator) return fail(422);
+
+		await db.execute(
+			sql`
+				update entries
+				set deleted_by=${user.uid}, deleted_at=now()
+				where uid=${entryUid};
+			`,
+		);
+		return redirect(303, "/user/entries");
+	},
 };
