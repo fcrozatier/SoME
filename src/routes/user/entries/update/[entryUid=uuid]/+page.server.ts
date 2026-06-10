@@ -323,9 +323,14 @@ export const actions = {
 				)
 			).count > 0;
 
-		if (isCreator) {
-			await db.execute(sql`delete from entries where uid=${entryUid};`);
-		}
+		if (!isCreator) return fail(422);
+
+		await db.transaction(async (tx) => {
+			await tx.execute(
+				sql`update entries_history set deleted_by=${user.uid} where entry_uid=${entryUid};`,
+			);
+			await tx.execute(sql`delete from entries where uid=${entryUid};`);
+		});
 
 		return redirect(303, "/user/entries");
 	},

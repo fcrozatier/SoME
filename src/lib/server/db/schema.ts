@@ -62,16 +62,19 @@ export const entriesHistory = pgTable(
 	"entries_history",
 	{
 		uid: uuid("uid").primaryKey().defaultRandom(),
-		entry_uid: uuid("entry_uid")
-			.references(() => entries.uid, { onDelete: "cascade" })
-			.notNull(),
+		entry_uid: uuid("entry_uid").references(() => entries.uid, { onDelete: "set null" }),
 		title: varchar("title", { length: 128 }).notNull(),
 		description_md: text("description_md").notNull(),
 		category: text("category", { enum: categories }).notNull(),
 		url: text("url").notNull(),
 		thumbnail: text("thumbnail"),
 		editedAt: timestamp("edited_at", { mode: "string" }).defaultNow(),
-		editedBy: uuid("edited_by").references(() => users.uid, { onDelete: "set null" }),
+		editedBy: uuid("edited_by").references(() => users.uid, {
+			onDelete: "set null",
+		}),
+		deleteBy: uuid("deleted_by").references(() => users.uid, {
+			onDelete: "set null",
+		}),
 	},
 	({ entry_uid }) => [index().on(entry_uid)],
 );
