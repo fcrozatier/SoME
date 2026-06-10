@@ -56,13 +56,19 @@ export const entries = pgTable("entries", {
 	rank: integer("rank"),
 	final_score: decimal("final_score"),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+	deletedAt: timestamp("deleted_at", { mode: "string" }),
+	deletedBy: uuid("deleted_by").references(() => users.uid, {
+		onDelete: "set null",
+	}),
 });
 
 export const entriesHistory = pgTable(
 	"entries_history",
 	{
 		uid: uuid("uid").primaryKey().defaultRandom(),
-		entry_uid: uuid("entry_uid").references(() => entries.uid, { onDelete: "no action" }),
+		entry_uid: uuid("entry_uid").references(() => entries.uid, {
+			onDelete: "cascade",
+		}),
 		title: varchar("title", { length: 128 }).notNull(),
 		description_md: text("description_md").notNull(),
 		category: text("category", { enum: categories }).notNull(),
@@ -70,9 +76,6 @@ export const entriesHistory = pgTable(
 		thumbnail: text("thumbnail"),
 		editedAt: timestamp("edited_at", { mode: "string" }).defaultNow(),
 		editedBy: uuid("edited_by").references(() => users.uid, {
-			onDelete: "set null",
-		}),
-		deleteBy: uuid("deleted_by").references(() => users.uid, {
 			onDelete: "set null",
 		}),
 	},
