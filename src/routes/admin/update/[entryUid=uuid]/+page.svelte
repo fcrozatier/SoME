@@ -201,8 +201,7 @@
 				id="description"
 				name="description"
 				placeholder="Description of your entry, audience..."
-				class="textarea-bordered block w-full textarea text-base"
-				rows="8"
+				class="textarea-bordered block w-full textarea text-base min-h-[8lh]"
 				bind:value={description}
 				aria-errormessage="description-error"
 				aria-invalid={!!form?.issues?.description}
