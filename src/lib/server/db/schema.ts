@@ -62,7 +62,7 @@ export const entriesHistory = pgTable(
 	"entries_history",
 	{
 		uid: uuid("uid").primaryKey().defaultRandom(),
-		entry_uid: uuid("entry_uid").references(() => entries.uid, { onDelete: "set null" }),
+		entry_uid: uuid("entry_uid").references(() => entries.uid, { onDelete: "no action" }),
 		title: varchar("title", { length: 128 }).notNull(),
 		description_md: text("description_md").notNull(),
 		category: text("category", { enum: categories }).notNull(),
