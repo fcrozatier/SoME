@@ -151,9 +151,8 @@
 					<textarea
 						id="feedback"
 						name="feedback"
-						class="block textarea-bordered textarea w-full"
+						class="block textarea-bordered textarea w-full min-h-[10lh]"
 						cols="50"
-						rows="10"
 						bind:value={feedback}
 						{...fg.splat(FeedbackSchema.attributes)}
 					></textarea>

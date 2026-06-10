@@ -87,9 +87,8 @@
 				<textarea
 					id="feedback"
 					name="feedback"
-					class="textarea-bordered textarea text-base w-full"
+					class="textarea-bordered textarea text-base w-full min-h-[10lh]"
 					cols="50"
-					rows="10"
 					{...fg.splat(SurveySchema.feedback.attributes)}
 				></textarea>
 			</div>
@@ -126,9 +125,8 @@
 			</p>
 			<textarea
 				name="peer_review_feedback"
-				class="textarea-bordered textarea text-base w-full"
+				class="textarea-bordered textarea text-base w-full min-h-[10lh]"
 				cols="50"
-				rows="10"
 				{...fg.splat(SurveySchema.peer_review_feedback.attributes)}
 			></textarea>
 		</div>
@@ -167,9 +165,8 @@
 				</p>
 				<textarea
 					name="ai_feedback"
-					class="textarea-bordered textarea text-base w-full"
+					class="textarea-bordered textarea text-base w-full min-h-[10lh]"
 					cols="50"
-					rows="10"
 					{...fg.splat(SurveySchema.ai_feedback.attributes)}
 				></textarea>
 			</div>
@@ -213,9 +210,8 @@
 				</p>
 				<textarea
 					name="creator_sharable_vote_link"
-					class="textarea-bordered textarea text-base w-full"
+					class="textarea-bordered textarea text-base w-full min-h-[10lh]"
 					cols="50"
-					rows="10"
 					{...fg.splat(SurveySchema.creator_sharable_vote_link.attributes)}
 				></textarea>
 			</div>
@@ -251,9 +247,8 @@
 				<p class="mt-0 mb-1 text-sm">If yes, how could we make the site more accessible for you?</p>
 				<textarea
 					name="a11y_feedback"
-					class="textarea-bordered textarea text-base w-full"
+					class="textarea-bordered textarea text-base w-full min-h-[10lh]"
 					cols="50"
-					rows="10"
 					{...fg.splat(SurveySchema.a11y_feedback.attributes)}
 				></textarea>
 			</div>

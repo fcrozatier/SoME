@@ -50,7 +50,7 @@
 						<form
 							action="?/update_reason"
 							method="post"
-							class="focus-within:[&>input]:input hover:[&>input]:input hover:[&>button]:block focus-within:[&>button]:block flex items-center gap-2"
+							class="flex items-start gap-2"
 							use:enhance={() => {
 								const buttons = document.querySelectorAll("button");
 								buttons.forEach((b) => b.setAttribute("disabled", "on"));
@@ -67,8 +67,11 @@
 						>
 							<input type="hidden" name="entry_uid" value={entry.uid} />
 							<input type="hidden" name="user_uid" value={entry.user_uid} />
-							<input type="text" class="input-sm" name="reason" value={entry.reason} required />
-							<button class="hidden btn btn-sm flex-0">update</button>
+							<textarea
+								class="flex-1 resize-none self-stretch focus-within:outline-current outline-offset-2"
+								name="reason">{entry.reason}</textarea
+							>
+							<button class="btn btn-sm flex-0 whitespace-nowrap">update reason</button>
 						</form>
 					</td>
 				</tr>
