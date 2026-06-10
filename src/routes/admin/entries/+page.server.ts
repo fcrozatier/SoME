@@ -26,6 +26,7 @@ export const load = async ({ locals, url }) => {
 				select uid, title, description, category, url, thumbnail, count(*) over () as total
 				from entries
 				where entries.active='true'
+				and deleted_at is null
 				and date_part('year', entries.created_at)=${currentYear}
 				order by created_at
 				limit ${limit}

@@ -15,6 +15,7 @@ export const load = async ({ locals }) => {
 			from entries join votes
 			on uid=entry_uid
 			where entries.active='true'
+			and deleted_at is null
 			and date_part('year', entries.created_at)=${currentYear}
 			and votes.reviewed='false'
 			and votes.maybe_rude='true'

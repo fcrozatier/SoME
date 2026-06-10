@@ -26,6 +26,7 @@ selection as (
     else
       entries.category='video'
       and active='true'
+      and deleted_at is null
       and date_part('year', created_at)='2024'
       and uid not in (select entry_uid from votes where votes.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')
       and uid not in (select entry_uid from skips where skips.user_uid='70601724-87ef-4b68-87dc-c9cbb06159fc')

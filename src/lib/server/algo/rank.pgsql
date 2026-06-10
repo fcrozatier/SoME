@@ -10,6 +10,7 @@ sort as (
   from (scores join entries on scores.entry_uid=entries.uid)
   where category='video'
   and active='t'
+  and deleted_at is null
   order by median desc
 )
 

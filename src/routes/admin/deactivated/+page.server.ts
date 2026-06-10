@@ -17,6 +17,7 @@ export const load = async ({ locals }) => {
 			from entries left join flags
 			on uid=entry_uid
 			where entries.active='false'
+			and deleted_at is null
 			and date_part('year', entries.created_at)=${currentYear}
 			order by uid;
 		`);
