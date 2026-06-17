@@ -82,9 +82,11 @@ export const actions: Actions = {
 		DeleteProfileSchema,
 		async (data, event) => {
 			const { locals } = event;
-			if (!locals.user?.uid) throw redirect(302, "/login");
+			const uid = locals.user?.uid;
 
-			const [user] = await db.select().from(users).where(eq(users.uid, locals.user.uid));
+			if (!uid) throw redirect(302, "/login");
+
+			const [user] = await db.select().from(users).where(eq(users.uid, uid));
 
 			if (!user?.passwordHash) {
 				return fail(401);
@@ -104,7 +106,15 @@ export const actions: Actions = {
 			await auth.invalidateSession(locals.session.id);
 			auth.deleteSessionTokenCookie(event);
 
-			await db.delete(users).where(eq(users.uid, locals.user.uid));
+			const random = Math.trunc(Math.random() * 10 ** 4);
+
+			await db.execute(sql`
+					update users
+					set username=${"deleted-user-" + random},
+							email=${"deleted-user-" + random + "@some.3b1b.co"},
+							deleted_at=now()
+					where uid=${uid};
+				`);
 
 			event.setHeaders({ "Clear-Site-Data": "*" });
 
