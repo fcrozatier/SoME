@@ -274,6 +274,13 @@
 			"when": 1781084118132,
 			"tag": "0038_skinny_kang",
 			"breakpoints": true
+		},
+		{
+			"idx": 39,
+			"version": "7",
+			"when": 1781682142675,
+			"tag": "0039_fixed_havok",
+			"breakpoints": true
 		}
 	]
 }
