@@ -8,7 +8,7 @@ with cached as (
 ),
 
 median as (
-  select entry_uid, percentile_cont(0.5) within group (order by score) as score
+  select entry_uid, percentile_disc(0.5) within group (order by score) as score
   from (select entry_uid, score from votes where date_part('year', created_at)='2024') as Q
   group by entry_uid
 ),

@@ -1,5 +1,5 @@
 with median_scores as (
-  select entry_uid, percentile_cont(0.5) within group (order by score) as score
+  select entry_uid, percentile_disc(0.5) within group (order by score) as score
   from (
     select entry_uid, score
     from votes join entries on votes.entry_uid=entries.uid
@@ -26,7 +26,7 @@ nb_skips as (
 ),
 
 quartile as (
-  select percentile_cont(0.20) within group (order by score) as value
+  select percentile_disc(0.20) within group (order by score) as value
   from median_scores
 )
 
