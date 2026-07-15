@@ -208,25 +208,55 @@ export function query4(token: string, category: string) {
 		`;
 }
 
+/**
+ * Approximate the canonical majority judgment tie-breaking rule by sorting lexicographically according to:
+ * (percentile_disc(0.5), percentile_disc(0.5 - δ), percentile_disc(0.5 + δ), percentile_disc(0.5 - 2δ), percentile_disc(0.5 + 2δ), ...)
+ */
+
+const delta = 0.01;
+const depth = 10;
+const percentiles = [
+	"percentile_disc(0.5) within group (order by score) as m0",
+];
+
+for (let i = 1; i <= depth; i++) {
+	percentiles.push(
+		`percentile_disc(${0.5 - i * delta}) within group (order by score) as m${
+			2 * i - 1
+		}`,
+	);
+	percentiles.push(
+		`percentile_disc(${0.5 + i * delta}) within group (order by score) as m${
+			2 * i
+		}`,
+	);
+}
+
+const tieBreaker = `(${
+	Array.from({ length: depth * 2 + 1 }).map((_, i) => "m" + i).join(",")
+})`;
+
 export function rank(category: string) {
 	return sql`
 		with scores as (
-			select entry_uid, percentile_disc(0.5) within group (order by score) as median
+			select entry_uid, ${sql.raw(percentiles.join(","))}
 			from votes
 			where date_part('year', created_at)=${currentYear}
 			group by entry_uid
 		),
 
 		sort as (
-			select entry_uid, median, dense_rank() over (order by median desc) as ranking
+			select entry_uid, m0, dense_rank() over (order by ${
+		sql.raw(tieBreaker)
+	} desc) as ranking
 			from (scores join entries on scores.entry_uid=entries.uid)
 			where category=${category}
 			and active='t'
 			and deleted_at is null
-			order by median desc
+			order by ${sql.raw(tieBreaker)} desc
 		)
 
-		update entries set rank=ranking, final_score=median
+		update entries set rank=ranking, final_score=m0
 		from sort
 		where sort.entry_uid=entries.uid;
 	`;
