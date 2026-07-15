@@ -1,13 +1,13 @@
 with
   overall_score as (
-    select entry_uid, percentile_cont(0.5) within group (order by score) as median
+    select entry_uid, percentile_disc(0.5) within group (order by score) as median
     from votes
     where date_part('year', created_at)='2025'
     group by entry_uid
   ),
 
   teacher_score as (
-    select entry_uid, percentile_cont(0.5) within group (order by score) as median
+    select entry_uid, percentile_disc(0.5) within group (order by score) as median
     from votes join users on votes.user_uid=users.uid
     where date_part('year', votes.created_at)='2025'
     and is_teacher='t'

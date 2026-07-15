@@ -65,7 +65,7 @@ export function query1(token: string, category: string) {
 export function query2(token: string, category: string) {
 	return sql`
 			with median as (
-				select entry_uid, percentile_cont(0.5) within group (order by score) as score
+				select entry_uid, percentile_disc(0.5) within group (order by score) as score
 				from (select entry_uid, score from votes where date_part('year', created_at)=${currentYear}) as Q
 				group by entry_uid
 			),
@@ -115,7 +115,7 @@ const multiplier_start_date = "2026-09-12";
 export function query3(token: string, category: string) {
 	return sql`
 			with scores as (
-				select entry_uid, count(*), percentile_cont(0.5) within group (order by score) as median,
+				select entry_uid, count(*), percentile_disc(0.5) within group (order by score) as median,
 				stddev_samp(score) as std
 				from (select entry_uid, score from votes where date_part('year', created_at)=${currentYear}) as Q
 				group by entry_uid
@@ -173,11 +173,11 @@ export function query4(token: string, category: string) {
 	return sql`
 			with median as (
 				select entry_uid,
-					percentile_cont(0.5) within group (order by score) as score
+					percentile_disc(0.5) within group (order by score) as score
 				from votes
 				where date_part('year', created_at)=${currentYear}
 				group by entry_uid
-				having percentile_cont(0.5) within group (order by score) >= 6
+				having percentile_disc(0.5) within group (order by score) >= 6
 					and count(*) < 10
 			),
 
@@ -211,7 +211,7 @@ export function query4(token: string, category: string) {
 export function rank(category: string) {
 	return sql`
 		with scores as (
-			select entry_uid, percentile_cont(0.5) within group (order by score) as median
+			select entry_uid, percentile_disc(0.5) within group (order by score) as median
 			from votes
 			where date_part('year', created_at)=${currentYear}
 			group by entry_uid

@@ -7,7 +7,7 @@ with created as (
 ),
 
 scores as (
-  select entry_uid, percentile_cont(0.5) within group (order by score) as median
+  select entry_uid, percentile_disc(0.5) within group (order by score) as median
   from votes
   where entry_uid in (select entry_uid from created)
   group by entry_uid

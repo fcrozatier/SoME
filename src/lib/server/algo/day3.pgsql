@@ -8,7 +8,7 @@ with cached as (
 ),
 
 scores as (
-  select entry_uid, count(*), percentile_cont(0.5) within group (order by score) as median,
+  select entry_uid, count(*), percentile_disc(0.5) within group (order by score) as median,
   stddev_samp(score) as std
   from (select entry_uid, score from votes where date_part('year', created_at)='2024') as Q
   group by entry_uid
