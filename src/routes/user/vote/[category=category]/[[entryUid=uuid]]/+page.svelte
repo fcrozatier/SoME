@@ -136,13 +136,8 @@
 				<h3 class="">Vote</h3>
 				<h4 class="mb-0 mt-2">Ranking</h4>
 				<p class="mb-4">
-					{#if data.user?.isTeacher}
-						How useful would this entry be in supporting student understanding, compared to the
-						typical explanations you've used or seen on the topic?
-					{:else}
-						How valuable is this entry to the space of online math exposition, compared to the
-						typical {data.category === "video" ? "video" : "article"} you've seen?
-					{/if}
+					How valuable is this entry to the space of online math exposition, compared to the
+					typical {data.category === "video" ? "video" : "article"} you've seen?
 					<button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
