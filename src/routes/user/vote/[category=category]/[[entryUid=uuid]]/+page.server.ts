@@ -140,7 +140,7 @@ export const load = async ({ locals, params }) => {
 				const [entryMain]: EntryDisplayFields[] = await db.execute(
 					voteMain(userUid, category, {
 						skips_to_votes_ratio: "4",
-						percentile: String(voteTimeElapsedPercent()),
+						percentile: String(voteTimeElapsedPercent(0.95)),
 					}),
 				);
 				entry = entryMain;
