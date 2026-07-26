@@ -78,3 +78,14 @@ export function timeLeft() {
 		return `${days}${h}h ${padStartZero(min)}min ${padStartZero(sec)}s`;
 	}
 }
+
+/**
+ * Returns a number from 0.0 to 1.0 representing how much relative time has elapsed since the beginning of the vote
+ */
+export function voteTimeElapsedPercent() {
+	const t2 = Temporal.Instant.from(PUBLIC_VOTE_END);
+	const t1 = Temporal.Instant.from(PUBLIC_VOTE_START);
+	const now = Temporal.Now.instant();
+
+	return now.since(t1).seconds / t2.since(t1).seconds;
+}

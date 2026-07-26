@@ -98,27 +98,27 @@ export function voteMain(
 	options = { skips_to_votes_ratio: "4", percentile: "0.0" },
 ) {
 	const explorationQuery: QueryFragment = {
-		order: 'random()'
+		order: "random()",
 	};
 	const byNbVotesQuery: QueryFragment = {
-		poolSelect: ', nb_votes.count as nb_votes_count',
-		order: '-ln(1 - random()) / (1::numeric / nb_votes_count)'
+		poolSelect: ", nb_votes.count as nb_votes_count",
+		order: "-ln(1 - random()) / (1::numeric / nb_votes_count)",
 	};
 	const byMedianQuery: QueryFragment = {
-		poolSelect: ', median',
+		poolSelect: ", median",
 		poolJoin: `
 			left join medians
 			on entries.uid=medians.entry_uid
 		`,
-		order: '-ln(1 - random()) / median'
+		order: "-ln(1 - random()) / median",
 	};
 	const bySpreadQuery: QueryFragment = {
-		poolSelect: ', (std / nb_votes.count) as spread_to_votes',
+		poolSelect: ", (std / nb_votes.count) as spread_to_votes",
 		poolJoin: `
 			left join medians
 			on entries.uid=medians.entry_uid
 		`,
-		order: '-ln(1 - random()) / (0.01 + spread_to_votes)'
+		order: "-ln(1 - random()) / (0.01 + spread_to_votes)",
 	};
 	const byNbTiesQuery: QueryFragment = {
 		cte: `
@@ -126,15 +126,15 @@ export function voteMain(
 				select entry_uid, count(*) over (partition by median) as tie_group_size
 				from medians
 			),`,
-		poolSelect: ', coalesce(tie_group_size, 1) as nb_ties',
+		poolSelect: ", coalesce(tie_group_size, 1) as nb_ties",
 		poolJoin: `
 			left join ties
 			on entries.uid=ties.entry_uid
 		`,
-		order: '-ln(1 - random()) / nb_ties'
+		order: "-ln(1 - random()) / nb_ties",
 	};
 
-	const query: QueryFragment|undefined = randomItem([
+	const query: QueryFragment | undefined = randomItem([
 		explorationQuery,
 		byNbVotesQuery,
 		byMedianQuery,
@@ -142,7 +142,9 @@ export function voteMain(
 		byNbTiesQuery,
 	]);
 
-	if(!query) throw new Error("Can't make vote sql query with an empty query fragment");
+	if (!query) {
+		throw new Error("Can't make vote sql query with an empty query fragment");
+	}
 
 	return sql`
 			with nb_votes as (
@@ -174,7 +176,7 @@ export function voteMain(
 			),
 
 			pool as (
-				select distinct uid, ${sql.raw(entry_columns)} ${sql.raw(query.poolSelect ?? '') }
+				select distinct uid, ${sql.raw(entry_columns)} ${sql.raw(query.poolSelect ?? "")}
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid

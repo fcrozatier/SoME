@@ -17,7 +17,7 @@ import {
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
 import { maybeRude } from "$lib/server/moderation.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
-import { voteOpen } from "$lib/utils/time";
+import { voteOpen, voteTimeElapsedPercent } from "$lib/utils/time";
 import {
 	CacheVoteSchema,
 	FlagSchema,
@@ -129,13 +129,24 @@ export const load = async ({ locals, params }) => {
 	if (!entry) {
 		console.log("[vote]: main phase");
 
-		try {
-			const [entryMain]: EntryDisplayFields[] = await db.execute(
-				voteMain(userUid, category),
+		if (Math.random() < 0.01) {
+			const [entryFallback]: EntryDisplayFields[] = await db.execute(
+				voteFallback(userUid, category),
 			);
-			entry = entryMain;
-		} catch (error) {
-			console.error("[vote]: sql error in main phase", error);
+
+			entry = entryFallback;
+		} else {
+			try {
+				const [entryMain]: EntryDisplayFields[] = await db.execute(
+					voteMain(userUid, category, {
+						skips_to_votes_ratio: "4",
+						percentile: String(voteTimeElapsedPercent()),
+					}),
+				);
+				entry = entryMain;
+			} catch (error) {
+				console.error("[vote]: sql error in main phase", error);
+			}
 		}
 	}
 
