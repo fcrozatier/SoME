@@ -136,13 +136,8 @@
 				<h3 class="">Vote</h3>
 				<h4 class="mb-0 mt-2">Ranking</h4>
 				<p class="mb-4">
-					{#if data.user?.isTeacher}
-						How useful would this entry be in supporting student understanding, compared to the
-						typical explanations you've used or seen on the topic?
-					{:else}
-						How valuable is this entry to the space of online math exposition, compared to the
-						typical {data.category === "video" ? "video" : "article"} you've seen?
-					{/if}
+					How valuable is this entry to the space of online math exposition, compared to the
+					typical {data.category === "video" ? "video" : "article"} you've seen?
 					<button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
@@ -184,7 +179,7 @@
 					name="feedback"
 					class="block textarea-bordered textarea w-full min-h-[10lh]"
 					cols="50"
-					placeholder={"Your constructive feedback"}
+					placeholder={"Constructive feedback"}
 					bind:value={feedback}
 					oninput={cacheVote}
 					{...fg.splat(FeedbackSchema.attributes)}
@@ -231,7 +226,7 @@
 
 		<p class="pt-8 text-sm">
 			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it and
-			we will review it manually. You can also skip an entry.
+			we will review it manually. You can also skip an entry to not see it again, or add it to your watchlist to review it later.
 		</p>
 	{/if}
 </article>
