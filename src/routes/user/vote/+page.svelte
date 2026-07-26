@@ -17,14 +17,24 @@
 			<section class="space-y-2!">
 				<p>You're about to cast your first vote. Here's how it works.</p>
 
-				<p>You'll review entries one by one. For each entry, you'll:</p>
+				<p>
+					You'll review entries one by one, with this question in mind: <em>
+						"How valuable is this entry to the space of online math exposition, compared to the
+						typical video or article you've seen?"
+					</em>. For each entry:
+				</p>
 				<ul class="space-y-1!">
 					<li>
-						<strong>Score it</strong> on a continuous scale from 1 to 9. Use whole numbers, halves or
-						decimals, whatever feels right.
+						<b>Score it</b> on a continuous scale from 1 to 9, corresponding to the labels: Notably
+						worse, Not as good, About the same, Better than most, Outstanding.
+
+						<p>
+							It's a <b>continuous</b> scale, feel free to position the cursor wherever it feels right
+							on the scale.
+						</p>
 					</li>
 					<li class="mt-1!">
-						<strong>Leave feedback</strong> for the creator. You can use basic
+						<b>Leave feedback</b> for the creator. You can use basic
 						<a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a> with
 						tables, fenced code blocks and
 						<a href="https://quickref.me/latex" target="_blank">LaTeX</a>
@@ -34,15 +44,20 @@
 				</ul>
 				<p>You can also:</p>
 				<ul class="space-y-1! my-0!">
-					<li><strong>Skip</strong> an entry</li>
-					<li>
-						<strong>Flag</strong> entries that break the rules. You can optionally submit your vote with
-						a flag
-					</li>
-					<li><strong>Switch categories</strong> (video or non-video) anytime by returning here</li>
+					<li><b>Skip</b> an entry. You won't see it again in the vote.</li>
 					<li class="mt-1!">
-						<strong>Update past votes</strong> anytime from the
-						<a href="/user/votes">My Votes</a> page
+						<b>Add to your Watchlist</b> entries you want to save for later. This is useful for
+						example when you know reviewing an entry will take more time than you currently have,
+						want to save it for later but still keep voting. You can find these entries in
+						<a href="/user/watchlist">My Watchlist</a> page
+					</li>
+					<li>
+						<b>Flag</b> entries that break the rules. You can optionally submit your vote with a flag.
+					</li>
+					<li><b>Switch categories</b> (video or non-video) anytime by returning here.</li>
+					<li class="mt-1!">
+						<b>Update past votes</b> anytime from
+						<a href="/user/votes">My Votes</a> page.
 					</li>
 				</ul>
 

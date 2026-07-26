@@ -179,7 +179,7 @@
 					name="feedback"
 					class="block textarea-bordered textarea w-full min-h-[10lh]"
 					cols="50"
-					placeholder={"Your constructive feedback"}
+					placeholder={"Constructive feedback"}
 					bind:value={feedback}
 					oninput={cacheVote}
 					{...fg.splat(FeedbackSchema.attributes)}
@@ -226,7 +226,7 @@
 
 		<p class="pt-8 text-sm">
 			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it and
-			we will review it manually. You can also skip an entry.
+			we will review it manually. You can also skip an entry to not see it again, or add it to your watchlist to review it later.
 		</p>
 	{/if}
 </article>
