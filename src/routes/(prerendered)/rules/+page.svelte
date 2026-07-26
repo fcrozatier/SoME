@@ -253,23 +253,19 @@
 			>
 			<p>
 				Winners will be chosen through a peer review phase, with final results announced at the end
-				of the competition. Curious about how the voting works? You can learn more about it <a
+				of the competition. Curious about how the voting system works? You can learn more about it <a
 					href="/algorithm">here</a
 				>.
 			</p>
 			<p>
-				Peer review basics: Judges will review entries one by one, scoring each on a continuous
-				scale from 1 to 9. The guiding question is: "How valuable is this entry to the space of
-				online math exposition, compared to the typical math video/post you've seen?"
+				Peer review basics: Judges review entries one by one, scoring each one on a continuous
+				scale from 1 to 9. The guiding question is: <em>
+					"How valuable is this entry to the space of
+					online math exposition, compared to the typical video/post you've seen?"
+				</em>
 			</p>
 			<p>
-				Think of it like a more thoughtful version of a thumbs-up or thumbs-down. Voting should feel
-				natural: you can round to whole numbers, half-points, go to the first decimal place or even
-				to the second decimal place if you want finer control. And if you change your mind later? No
-				problem, you're free to update earlier votes anytime.
-			</p>
-			<p>
-				To help you with the review process, here are some broad guidelines for what we're hoping to
+				Here are some broad guidelines for what we're hoping to
 				see:
 			</p>
 			<ul>

@@ -57,7 +57,7 @@
 					<li><b>Switch categories</b> (video or non-video) anytime by returning here.</li>
 					<li class="mt-1!">
 						<b>Update past votes</b> anytime from
-						<a href="/user/votes">My Votes</a> page.
+						<a href="/user/votes">My Votes</a> page, if you change your mind on an entry, or want to fine tune scores after a few votes.
 					</li>
 				</ul>
 
