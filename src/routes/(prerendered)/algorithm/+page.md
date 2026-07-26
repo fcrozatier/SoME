@@ -49,7 +49,7 @@ The idea is simple: you're presented with two entries, and a vote consists of ch
 
 While this was a good starting point, the interface was hard to customize, the algorithm was slow, and most importantly, the benchmark revealed that it wasn't as accurate as desired.
 
-#### Expander graph with PageRank (SoME3)
+#### Expander Graph with PageRank (SoME3)
 
 For the third edition of the competition, we decided to redesign the algorithm from the ground up, while keeping the pairwise ranking approach, which seemed promising as comparing two entries seemed easy.
 
