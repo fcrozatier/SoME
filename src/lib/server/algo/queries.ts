@@ -255,6 +255,9 @@ export function rank(category: string) {
 	 * (percentile_disc(0.5), percentile_disc(0.5 - δ), percentile_disc(0.5 + δ), percentile_disc(0.5 - 2δ), percentile_disc(0.5 + 2δ), ...)
 	 */
 
+	/**
+	 * This corresponds to the smallest step between two entry scores over all entries
+	 */
 	const delta = 0.01;
 	const depth = 10;
 	const percentiles = [
