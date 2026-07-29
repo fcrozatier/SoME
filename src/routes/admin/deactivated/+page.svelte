@@ -38,14 +38,14 @@
 					<td>
 						<a class="capitalize" href={`/entries/${entry.uid}`} target="_blank">{entry.title}</a>
 					</td>
-					<td
-						><span class=""
-							>{data.entry_authors
+					<td class="overflow-scroll">
+						<span>
+							{data.entry_authors
 								.filter(({ uid }) => uid === entry.uid)
 								.map(({ username }) => username)
-								.join(", ")}</span
-						></td
-					>
+								.join(", ")}
+						</span>
+					</td>
 					<td>
 						<form
 							action="?/update_reason"
@@ -108,7 +108,7 @@
 <style>
 	tr {
 		display: grid;
-		grid-template-columns: auto 320px 100px 1fr;
+		grid-template-columns: auto 320px 120px 1fr;
 		gap: 1rem;
 		align-items: start;
 	}

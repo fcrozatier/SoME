@@ -159,24 +159,22 @@ export const load = async ({ locals, params }) => {
 		entry = entryFallback;
 	}
 
-	if (entry) {
-		await db.insert(cache).values({
-			userUid: userUid,
-			category: entry.category,
-			entryUid: entry.uid,
-		});
+	if (!entry) return { stopVote: true };
 
-		const tags = await getEntryTags(entry.uid);
+	await db.insert(cache).values({
+		userUid: userUid,
+		category: entry.category,
+		entryUid: entry.uid,
+	});
 
-		return {
-			...entry,
-			score: null,
-			tags,
-			isCreator,
-		};
-	}
+	const tags = await getEntryTags(entry.uid);
 
-	return { stopVote: true };
+	return {
+		...entry,
+		score: null,
+		tags,
+		isCreator,
+	};
 };
 
 export const actions = {
