@@ -256,7 +256,7 @@ export function rank(category: string) {
 	 */
 
 	/**
-	 * This corresponds to the smallest step between two entry scores over all entries
+	 * This corresponds to the smallest step between two entry scores over all entries, which is also the slider resolution and storage resolution
 	 */
 	const delta = 0.01;
 	const depth = 10;
