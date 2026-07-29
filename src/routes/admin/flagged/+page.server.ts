@@ -1,6 +1,6 @@
 import { currentYear } from "$lib/config";
 import { db } from "$lib/server/db";
-import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
+import { ENTRY_STATE, type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
 import { AdminForm } from "$lib/validation";
 import { error } from "@sveltejs/kit";
 import { type Actions } from "@sveltejs/kit";
@@ -16,6 +16,7 @@ export const load = async ({ locals }) => {
 			from entries join flags
 			on uid=entry_uid
 			where entries.active='true'
+			and state=${ENTRY_STATE.Flagged}
 			and deleted_at is null
 			and date_part('year', entries.created_at)=${currentYear}
 			order by uid;
@@ -27,7 +28,7 @@ export const load = async ({ locals }) => {
 export const actions: Actions = {
 	ignore: formgate(AdminForm, async (data) => {
 		await db.execute(sql`
-			delete from flags where entry_uid in ${data.selected};
+			update entries set state=${ENTRY_STATE.Active} where uid in ${data.selected};
 		`);
 
 		return { success: true };

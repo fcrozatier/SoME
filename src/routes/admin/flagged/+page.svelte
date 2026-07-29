@@ -51,7 +51,9 @@
 	<form
 		method="post"
 		use:enhance={disableSubmitterAndSetValidity({
-			after: ({ result, action }) => {
+			after: async ({ result, action, update }) => {
+				await update({ invalidateAll: true });
+
 				if (result.type === "success") {
 					const content = action.search === "?/ignore" ? "Ignored" : "Deactivated";
 					newToast({ type: "info", content });

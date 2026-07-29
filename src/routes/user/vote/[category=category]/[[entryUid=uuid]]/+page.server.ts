@@ -9,6 +9,7 @@ import {
 import { db } from "$lib/server/db";
 import {
 	cache,
+	ENTRY_STATE,
 	flags,
 	type SelectEntry,
 	skips,
@@ -218,6 +219,12 @@ export const actions = {
 					},
 				});
 		}
+
+		await db.execute(sql`
+			update entries
+			set state=${ENTRY_STATE.Flagged}
+			where uid=${data.uid};
+		`);
 
 		await db
 			.insert(flags)
