@@ -1,11 +1,7 @@
 import { currentYear } from "$lib/config";
 import { db } from "$lib/server/db";
-import {
-	ENTRY_STATE,
-	type SelectEntry,
-	type SelectFlag,
-} from "$lib/server/db/schema";
-import { AdminDeactivateForm } from "$lib/validation";
+import { ENTRY_STATE, type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
+import { AdminActionRequiredForm, AdminDeactivateForm } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions, error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -14,9 +10,8 @@ import { formgate } from "formgator/sveltekit";
 export const load = async ({ locals }) => {
 	if (!locals.user?.isAdmin) return error(404);
 
-	const flags: (Prettify<
-		Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">
-	>)[] = await db.execute(sql`
+	const flags: Prettify<Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">>[] =
+		await db.execute(sql`
 			select uid, title, url, reason
 			from entries join flags
 			on uid=entry_uid

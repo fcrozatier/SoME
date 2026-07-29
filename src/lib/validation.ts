@@ -301,6 +301,12 @@ export const AdminDeactivateForm = {
 	uid: UidSchema,
 };
 
+export const AdminActionRequiredForm = {
+	uid: UidSchema,
+	reason: fg.text({ required: true }).trim(),
+	note: fg.textarea({ required: true }).trim(),
+};
+
 export const AdminForm = {
 	selected: fg.multi().pipe(z.array(z.uuid())),
 };
