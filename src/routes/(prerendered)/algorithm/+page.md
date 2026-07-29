@@ -16,7 +16,7 @@ The Summer of Math Exposition has its own custom voting system, since none of th
 Here's how the current voting system works and selects the next entry to review:
 
 1. **Warm-up Phase.** The competition starts with a warm-up phase where entries are first picked at random. Once all entries have received a few votes, we can start computing medians and standard deviations and enter the main phase.
-2. **Main Phase.** The goal of the competition is to discover the top entries. To achieve this goal, entries are picked from a dynamic pool in such a way that votes are forwarded where they are more useful.
+2. **Main Phase.** The goal of the competition is to discover the top entries. To achieve this goal, entries are picked from a dynamic pool in such a way that votes are forwarded where they are most useful.
 
 The dynamic pool of entries is the basis. It's a dynamic window that shrinks as time goes by, focusing more and more on top entries.
 

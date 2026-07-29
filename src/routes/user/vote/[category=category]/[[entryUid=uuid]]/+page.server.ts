@@ -1,6 +1,7 @@
 import { dev } from "$app/environment";
 import { type Category, currentYear } from "$lib/config";
 import {
+	computeBottomPercentile,
 	voteFallback,
 	voteMain,
 	voteWarmup,
@@ -17,7 +18,7 @@ import {
 import type { SelectCache, SelectTag } from "$lib/server/db/schema.js";
 import { maybeRude } from "$lib/server/moderation.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
-import { voteOpen, voteTimeElapsedPercent } from "$lib/utils/time";
+import { voteOpen } from "$lib/utils/time";
 import {
 	CacheVoteSchema,
 	FlagSchema,
@@ -140,7 +141,7 @@ export const load = async ({ locals, params }) => {
 				const [entryMain]: EntryDisplayFields[] = await db.execute(
 					voteMain(userUid, category, {
 						skips_to_votes_ratio: "4",
-						percentile: String(voteTimeElapsedPercent(0.95)),
+						percentile: String(computeBottomPercentile()),
 					}),
 				);
 				entry = entryMain;

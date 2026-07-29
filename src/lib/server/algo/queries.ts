@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import { userToEntry } from "../db/schema";
 import { currentYear } from "$lib/config";
 import { randomItem, round } from "@fcrozatier/ts-helpers";
+import { voteTimeElapsedPercent } from "$lib/utils/time";
 
 const entry_columns = "title, description, entries.category, url, thumbnail";
 
@@ -9,8 +10,6 @@ const entry_columns = "title, description, entries.category, url, thumbnail";
  * Vote warmup phase
  *
  * Pick an entry at random from all entries with less than 4 votes and 12 skips
- *
- * Entries must all have at least one vote before the main phase
  */
 export function voteWarmup(
 	user_uid: string,
@@ -33,12 +32,8 @@ export function voteWarmup(
 			),
 
 			pool as (
-				select distinct uid, ${
-		sql.raw(entry_columns)
-	}, coalesce(nb_skips.count, 0) as nb_skips_count,
-					(${
-		sql.raw(options.nb_votes_max)
-	} - coalesce(nb_votes.count, 0)) as weight
+				select distinct uid, ${sql.raw(entry_columns)}, coalesce(nb_skips.count, 0) as nb_skips_count,
+					(${sql.raw(options.nb_votes_max)} - coalesce(nb_votes.count, 0)) as weight
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid
@@ -74,22 +69,38 @@ type QueryFragment = {
 };
 
 /**
+ * The relative cumulated sum of votes almost follow a square root function
+ * The evolution of the percentile of the dynamic pool should match this rate
+ */
+const VOTE_RATE_EXPONENT = 0.55;
+
+/**
+ * The bottom percentile of the dynamic pool of entries as a function of time.
+ * It follows the rate at which information flows in the system
+ */
+export function computeBottomPercentile() {
+	return voteTimeElapsedPercent() ** VOTE_RATE_EXPONENT;
+}
+
+/**
  * Main voting phase
  *
- * Pick a random entry, weighted by nb votes (priorises fewer votes)
+ * 1. Define the dynamic pool of entries by:
+ * - median score in the top X %
+ * - skips to votes ratio less than 4
  *
- * 2. Focus votes on entries with scores in the top X % with skips to votes ratio less than 4 and choose at random from
- * [
- * 	entries in the top X % with no additional constraint (explore)
- * 	entries weighted by score (double check top entries)
- * 	entries weighted by spread to votes ratio (increase consensus)
- * 	entries weighted by tie-group size (break ties)
- * 	entries weighted by 1 / nb votes (priorises entries with few votes)
- * ]
+ * Where X goes from 0 to 1 over the duration of the vote.
  *
- * Where X goes from 0 to 99 over the duration of the vote
+ * 2. Pick an entry at random from this pool, with probability weights depending on the strategy:
  *
- * Weighted Random Sampling is done with A-Res with `order by -ln(1 - random()) / weight`
+ * - exploration: uniform weights
+ * - visibility: weight by 1 / nb votes, to priorise entries with fewer votes
+ * - quality: weight by median score, to test the score robustness to higher scrutiny
+ * - consensus: weight by spread / nb votes, to increase consensus
+ * - ties: weight by tie-group size, to break ties
+ *
+ * Implementation note:
+ * Weighted Random Sampling is done using A-Res with `order by -ln(1 - random()) / weight`
  * https://utopia.duth.gr/~pefraimi/research/data/2007EncOfAlg.pdf
  */
 export function voteMain(
