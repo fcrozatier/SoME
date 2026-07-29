@@ -49,8 +49,7 @@ export function timeLeft() {
 	try {
 		// Compare dates using UTC projection
 		const now = Temporal.Now.zonedDateTimeISO("UTC");
-		const then = Temporal.Instant.from(PUBLIC_REGISTRATION_END)
-			.toZonedDateTimeISO("UTC");
+		const then = Temporal.Instant.from(PUBLIC_REGISTRATION_END).toZonedDateTimeISO("UTC");
 
 		const {
 			days: d,
@@ -64,9 +63,7 @@ export function timeLeft() {
 		});
 
 		const days = d > 0 ? d + ` day${d > 1 ? "s" : ""} ` : "";
-		return `${days}${hours}h ${padStartZero(minutes)}min ${
-			padStartZero(seconds)
-		}s`;
+		return `${days}${hours}h ${padStartZero(minutes)}min ${padStartZero(seconds)}s`;
 	} catch (e) {
 		if (!(e instanceof ReferenceError)) throw e;
 

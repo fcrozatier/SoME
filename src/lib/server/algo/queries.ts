@@ -32,12 +32,8 @@ export function voteWarmup(
 			),
 
 			pool as (
-				select distinct uid, ${
-		sql.raw(entry_columns)
-	}, coalesce(nb_skips.count, 0) as nb_skips_count,
-					(${
-		sql.raw(options.nb_votes_max)
-	} - coalesce(nb_votes.count, 0)) as weight
+				select distinct uid, ${sql.raw(entry_columns)}, coalesce(nb_skips.count, 0) as nb_skips_count,
+					(${sql.raw(options.nb_votes_max)} - coalesce(nb_votes.count, 0)) as weight
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid
@@ -159,11 +155,7 @@ export function voteMain(
 		order: "-ln(1 - random()) / nb_ties",
 	};
 
-	const endGameQueries = [
-		byNbVotesQuery,
-		bySpreadQuery,
-		byNbTiesQuery,
-	];
+	const endGameQueries = [byNbVotesQuery, bySpreadQuery, byNbTiesQuery];
 
 	const query: QueryFragment | undefined = randomItem([
 		explorationQuery,
@@ -203,9 +195,7 @@ export function voteMain(
 			),
 
 			pool as (
-				select distinct uid, ${sql.raw(entry_columns)} ${
-		sql.raw(query.poolSelect ?? "")
-	}
+				select distinct uid, ${sql.raw(entry_columns)} ${sql.raw(query.poolSelect ?? "")}
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid
@@ -280,26 +270,23 @@ export function rank(category: string) {
 	 */
 	const delta = 0.01;
 	const depth = 10;
-	const percentiles = [
-		"percentile_disc(0.5) within group (order by score) as m0",
-	];
+	const percentiles = ["percentile_disc(0.5) within group (order by score) as m0"];
 
 	for (let i = 1; i <= depth; i++) {
 		percentiles.push(
-			`percentile_disc(${
-				round(0.5 - i * delta, 3)
-			}) within group (order by score) as m${2 * i - 1}`,
+			`percentile_disc(${round(
+				0.5 - i * delta,
+				3,
+			)}) within group (order by score) as m${2 * i - 1}`,
 		);
 		percentiles.push(
-			`percentile_disc(${
-				round(0.5 + i * delta, 3)
-			}) within group (order by score) as m${2 * i}`,
+			`percentile_disc(${round(0.5 + i * delta, 3)}) within group (order by score) as m${2 * i}`,
 		);
 	}
 
-	const tieBreaker = `(${
-		Array.from({ length: depth * 2 + 1 }).map((_, i) => "m" + i).join(",")
-	})`;
+	const tieBreaker = `(${Array.from({ length: depth * 2 + 1 })
+		.map((_, i) => "m" + i)
+		.join(",")})`;
 
 	return sql`
 		with scores as (
@@ -310,9 +297,7 @@ export function rank(category: string) {
 		),
 
 		sort as (
-			select entry_uid, m0, dense_rank() over (order by ${
-		sql.raw(tieBreaker)
-	} desc) as ranking
+			select entry_uid, m0, dense_rank() over (order by ${sql.raw(tieBreaker)} desc) as ranking
 			from (scores join entries on scores.entry_uid=entries.uid)
 			where category=${category}
 			and active='t'

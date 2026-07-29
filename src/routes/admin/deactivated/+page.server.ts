@@ -1,10 +1,6 @@
 import { currentYear } from "$lib/config.js";
 import { db } from "$lib/server/db";
-import {
-	type SelectEntry,
-	type SelectFlag,
-	type User,
-} from "$lib/server/db/schema";
+import { type SelectEntry, type SelectFlag, type User } from "$lib/server/db/schema";
 import { AdminForm, UpdateFlagReason } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { error } from "@sveltejs/kit";
@@ -16,11 +12,9 @@ export const load = async ({ locals }) => {
 
 	// Turn the left join into an inner join to hide entries deactivated (by admins) without being flagged
 
-	const flagged: (Prettify<
-		& Pick<SelectEntry, "uid" | "title" | "url">
-		& Pick<SelectFlag, "reason">
-		& { user_uid: string }
-	>)[] = await db.execute(sql`
+	const flagged: Prettify<
+		Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason"> & { user_uid: string }
+	>[] = await db.execute(sql`
 			select uid, title, url, reason, user_uid
 			from entries left join flags
 			on uid=entry_uid
@@ -30,11 +24,8 @@ export const load = async ({ locals }) => {
 			order by uid;
 		`);
 
-	const entry_authors: (Prettify<
-		& Pick<SelectEntry, "uid">
-		& Pick<User, "username">
-	>)[] = await db
-		.execute(sql`
+	const entry_authors: Prettify<Pick<SelectEntry, "uid"> & Pick<User, "username">>[] =
+		await db.execute(sql`
 		select username, entry_uid as uid
 		from users join user_to_entry
 		on users.uid=user_to_entry.user_uid

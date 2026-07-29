@@ -258,16 +258,13 @@
 				>.
 			</p>
 			<p>
-				Peer review basics: Judges review entries one by one, scoring each one on a continuous
-				scale from 1 to 9. The guiding question is: <em>
-					"How valuable is this entry to the space of
-					online math exposition, compared to the typical video/post you've seen?"
+				Peer review basics: Judges review entries one by one, scoring each one on a continuous scale
+				from 1 to 9. The guiding question is: <em>
+					"How valuable is this entry to the space of online math exposition, compared to the
+					typical video/post you've seen?"
 				</em>
 			</p>
-			<p>
-				Here are some broad guidelines for what we're hoping to
-				see:
-			</p>
+			<p>Here are some broad guidelines for what we're hoping to see:</p>
 			<ul>
 				<li>
 					<b>Motivation:</b> By the end of the introduction it should be clear why the topic matters and

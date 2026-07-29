@@ -21,6 +21,7 @@ Here's how the current voting system works and selects the next entry to review:
 The dynamic pool of entries is the basis. It's a dynamic window that shrinks as time goes by, focusing more and more on top entries.
 
 From this dynamic pool, the next entry is picked at random with a weighted probability, corresponding to one of these strategies:
+
 - **Exploration**. The entry is picked at random from the pool of entries with a uniform probability and no additional constraints
 - **Visibility**. Entries with fewer votes are more likely to be picked
 - **Quality & Robustness**. Entries with a high median score are more likely to be picked, to test their quality and the robustness of their score to higher scrutiny.

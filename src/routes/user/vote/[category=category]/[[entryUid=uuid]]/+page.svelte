@@ -136,8 +136,10 @@
 				<h3 class="">Vote</h3>
 				<h4 class="mb-0 mt-2">Ranking</h4>
 				<p class="mb-4">
-					How valuable is this entry to the space of online math exposition, compared to the
-					typical {data.category === "video" ? "video" : "article"} you've seen?
+					How valuable is this entry to the space of online math exposition, compared to the typical {data.category ===
+					"video"
+						? "video"
+						: "article"} you've seen?
 					<button
 						class="font-semibold hover:underline cursor-pointer"
 						type="button"
@@ -226,7 +228,8 @@
 
 		<p class="pt-8 text-sm">
 			If an entry is inappropriate or does not follow the <a href="/rules">rules</a> you can flag it and
-			we will review it manually. You can also skip an entry to not see it again, or add it to your watchlist to review it later.
+			we will review it manually. You can also skip an entry to not see it again, or add it to your watchlist
+			to review it later.
 		</p>
 	{/if}
 </article>
