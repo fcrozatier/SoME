@@ -32,8 +32,12 @@ export function voteWarmup(
 			),
 
 			pool as (
-				select distinct uid, ${sql.raw(entry_columns)}, coalesce(nb_skips.count, 0) as nb_skips_count,
-					(${sql.raw(options.nb_votes_max)} - coalesce(nb_votes.count, 0)) as weight
+				select distinct uid, ${
+		sql.raw(entry_columns)
+	}, coalesce(nb_skips.count, 0) as nb_skips_count,
+					(${
+		sql.raw(options.nb_votes_max)
+	} - coalesce(nb_votes.count, 0)) as weight
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid
@@ -80,6 +84,16 @@ const VOTE_RATE_EXPONENT = 0.55;
  */
 export function computeBottomPercentile() {
 	return voteTimeElapsedPercent() ** VOTE_RATE_EXPONENT;
+}
+
+/**
+ * We enter the end game when the votes rate drops.
+ * The rate is like x ** a, so we target a x ** (a - 1) = 1
+ */
+const END_GAME_THRESHOLD = VOTE_RATE_EXPONENT ** (1 / (1 - VOTE_RATE_EXPONENT));
+
+function isEndGame() {
+	return voteTimeElapsedPercent() > END_GAME_THRESHOLD;
 }
 
 /**
@@ -145,17 +159,19 @@ export function voteMain(
 		order: "-ln(1 - random()) / nb_ties",
 	};
 
-	const query: QueryFragment | undefined = randomItem([
-		explorationQuery,
+	const endGameQueries = [
 		byNbVotesQuery,
-		byMedianQuery,
 		bySpreadQuery,
 		byNbTiesQuery,
+	];
+
+	const query: QueryFragment | undefined = randomItem([
+		explorationQuery,
+		byMedianQuery,
+		...(isEndGame() ? endGameQueries : []),
 	]);
 
-	if (!query) {
-		throw new Error("Can't make vote sql query with an empty query fragment");
-	}
+	if (!query) throw new Error("[voteMain]: empty QueryFragment");
 
 	return sql`
 			with nb_votes as (
@@ -187,7 +203,9 @@ export function voteMain(
 			),
 
 			pool as (
-				select distinct uid, ${sql.raw(entry_columns)} ${sql.raw(query.poolSelect ?? "")}
+				select distinct uid, ${sql.raw(entry_columns)} ${
+		sql.raw(query.poolSelect ?? "")
+	}
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid
@@ -225,6 +243,8 @@ export function voteMain(
  * Pick an entry at random from all entries
  */
 export function voteFallback(user_uid: string, category: string) {
+	console.log("[vote]: fallback strategy");
+
 	return sql`
 		with pool as (
 			select distinct uid, ${sql.raw(entry_columns)}
