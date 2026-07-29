@@ -45,6 +45,14 @@ export const sessions = pgTable("sessions", {
 	expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
 });
 
+export const ENTRY_STATE = {
+	Active: "active",
+	Flagged: "flagged",
+	ActionRequired: "action_required",
+	WaitingForReview: "waiting_for_review",
+	Inactive: "inactive",
+};
+
 export const entries = pgTable("entries", {
 	uid: uuid("uid").primaryKey(),
 	title: varchar("title", { length: 128 }).notNull(),
@@ -54,6 +62,7 @@ export const entries = pgTable("entries", {
 	url: text("url").unique().notNull(),
 	thumbnail: text("thumbnail"),
 	active: boolean("active").default(true),
+	state: text("state").default(ENTRY_STATE.Active),
 	rank: integer("rank"),
 	final_score: decimal("final_score"),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
@@ -182,7 +191,9 @@ export const flags = pgTable(
 		reason: text("reason").notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const skips = pgTable(
@@ -196,7 +207,9 @@ export const skips = pgTable(
 			.notNull(),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
-	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+	(
+		{ userUid, entryUid },
+	) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
 export const cache = pgTable(
