@@ -12,7 +12,7 @@ import {
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { CATEGORIES, ENTRY_STATE } from "$lib/config";
+import { CATEGORIES, ENTRY_STATE } from "$lib/constants";
 
 export const users = pgTable(
 	"users",

@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { userToEntry } from "../db/schema";
-import { CURRENT_YEAR } from "$lib/config";
+import { CURRENT_YEAR } from "$lib/constants";
 import { randomItem, round } from "@fcrozatier/ts-helpers";
 import { voteTimeElapsedPercent } from "$lib/utils/time";
 

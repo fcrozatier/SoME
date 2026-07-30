@@ -1,4 +1,4 @@
-import { CATEGORIES } from "$lib/config";
+import { CATEGORIES } from "$lib/constants";
 import type { ParamMatcher } from "@sveltejs/kit";
 
 export const match = ((param) => {

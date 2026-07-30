@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CATEGORIES } from "$lib/config";
+	import { CATEGORIES } from "$lib/constants";
 	import { page } from "$app/state";
 
 	interface Props {

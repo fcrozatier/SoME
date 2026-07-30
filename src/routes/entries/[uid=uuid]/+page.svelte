@@ -2,7 +2,7 @@
 	import Bento from "$lib/components/Bento.svelte";
 	import Display from "$lib/components/Display.svelte";
 	import Score from "$lib/components/Score.svelte";
-	import { CURRENT_YEAR } from "$lib/config.js";
+	import { CURRENT_YEAR } from "$lib/constants";
 	import { makeTitle } from "$lib/utils/makeTitle.js";
 	import { resultsAvailable, voteOpen } from "$lib/utils/time.js";
 	import { round } from "@fcrozatier/ts-helpers";

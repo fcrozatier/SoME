@@ -6,7 +6,7 @@
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
-	import { defaultYear } from "$lib/config.js";
+	import { defaultYear } from "$lib/constants";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";

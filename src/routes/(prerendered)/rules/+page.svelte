@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
 	import Time from "$lib/components/Time.svelte";
-	import { FULL_NAME } from "$lib/config";
+	import { FULL_NAME } from "$lib/constants";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { resultsAvailable, submissionsOpen, timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
