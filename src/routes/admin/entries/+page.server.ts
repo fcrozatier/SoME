@@ -1,7 +1,6 @@
-import { CURRENT_YEAR } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
-import { flags } from "$lib/server/db/schema";
-import { type SelectEntry } from "$lib/server/db/schema";
+import { flags, type SelectEntry } from "$lib/server/db/schema";
 import { AdminDeactivateForm } from "$lib/validation";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";

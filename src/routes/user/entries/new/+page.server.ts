@@ -1,4 +1,4 @@
-import { conjunctionFormatter } from "$lib/config.js";
+import { conjunctionFormatter } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { entriesHistory } from "$lib/server/db/schema.js";

@@ -1,4 +1,4 @@
-import { CURRENT_YEAR } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import type { SelectTag, User } from "$lib/server/db/schema.js";
 import { type SelectEntry, type SelectVote } from "$lib/server/db/schema.js";

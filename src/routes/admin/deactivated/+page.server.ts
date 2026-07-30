@@ -1,4 +1,4 @@
-import { CURRENT_YEAR } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, type User } from "$lib/server/db/schema";
 import { AdminForm, UpdateFlagReason } from "$lib/validation";

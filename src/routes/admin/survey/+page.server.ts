@@ -1,11 +1,8 @@
-import { CURRENT_YEAR } from "$lib/config";
+import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { type SelectSurveys } from "$lib/server/db/schema";
-import { SurveyFilterSchema } from "$lib/validation";
-import type { Actions } from "@sveltejs/kit";
 import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
-import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
 	if (!locals.user?.isAdmin) return error(404);

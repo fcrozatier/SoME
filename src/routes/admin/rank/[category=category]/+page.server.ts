@@ -1,4 +1,4 @@
-import { CURRENT_YEAR } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/constants.js";
 import { rank } from "$lib/server/algo/queries.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";

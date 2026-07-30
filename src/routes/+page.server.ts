@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { defaultYear } from "$lib/config";
+import { defaultYear } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry, users } from "$lib/server/db/schema";
 import { addToMailingList } from "$lib/server/email";
