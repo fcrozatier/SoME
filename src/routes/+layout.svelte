@@ -194,7 +194,8 @@
 	<footer class="mt-auto mx-4">
 		<!-- Links -->
 		<section
-			class="bg-black text-sm px-8 text-light-gold py-4 flex flex-wrap justify-center gap-x-20 -mx-4 gap-y-10"
+			class="bg-black text-sm px-8 text-light-gold py-4 flex flex-wrap justify-center gap-x-10 -mx-4 gap-y-5"
+			style="flex-wrap: balance;"
 		>
 			<a class="text-trim" href="/algorithm" rel="about"> Voting System </a>
 			<a class="text-trim" href="/contact"> Contact </a>
