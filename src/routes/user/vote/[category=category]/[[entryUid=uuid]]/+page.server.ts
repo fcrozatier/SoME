@@ -2,6 +2,7 @@ import { dev } from "$app/environment";
 import { type Category, currentYear } from "$lib/config";
 import {
 	computeBottomPercentile,
+	SKIPS_TO_VOTES_THRESHOLD,
 	voteFallback,
 	voteMain,
 	voteWarmup,
@@ -137,8 +138,8 @@ export const load = async ({ locals, params }) => {
 			try {
 				const [entryMain]: EntryDisplayFields[] = await db.execute(
 					voteMain(userUid, category, {
-						skips_to_votes_ratio: "4",
-						percentile: String(computeBottomPercentile()),
+						skips_to_votes_ratio: SKIPS_TO_VOTES_THRESHOLD,
+						percentile: computeBottomPercentile(),
 					}),
 				);
 				entry = entryMain;

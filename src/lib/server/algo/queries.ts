@@ -93,6 +93,11 @@ function isEndGame() {
 }
 
 /**
+ * This value filters out 15% of entries, in the tail of the skips to votes distribution
+ */
+export const SKIPS_TO_VOTES_THRESHOLD = 4.1;
+
+/**
  * Main voting phase
  *
  * 1. Define the dynamic pool of entries by:
@@ -116,7 +121,7 @@ function isEndGame() {
 export function voteMain(
 	user_uid: string,
 	category: string,
-	options = { skips_to_votes_ratio: "4", percentile: "0.0" },
+	options = { skips_to_votes_ratio: SKIPS_TO_VOTES_THRESHOLD, percentile: 0 },
 ) {
 	const explorationQuery: QueryFragment = {
 		order: "random()",

@@ -42,8 +42,8 @@
 						and displayed formulas with&nbsp;<code class="text-nowrap">$$</code>
 
 						<p>
-							Help the creators understand your grade by being constructive about what you liked in their
-							entry and what's to be improved.
+							Help the creators understand your grade by being constructive about what you liked in
+							their entry and what's to be improved.
 						</p>
 					</li>
 				</ul>
@@ -76,8 +76,8 @@
 				{/if}
 
 				<p>
-					The competition features {data.nbEntries} entries this year, so you can only reasonably vote on
-					a fraction of these. If you make 5 to 10 votes, that would already be a great contribution!
+					The competition features {data.nbEntries} entries this year, so you can only reasonably vote
+					on a fraction of these. If you make 5 to 10 votes, that would already be a great contribution!
 				</p>
 			</section>
 		{/if}
