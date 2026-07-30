@@ -288,6 +288,13 @@
 			"when": 1785318211576,
 			"tag": "0040_vengeful_pyro",
 			"breakpoints": true
+		},
+		{
+			"idx": 41,
+			"version": "7",
+			"when": 1785402626004,
+			"tag": "0041_amused_storm",
+			"breakpoints": true
 		}
 	]
 }

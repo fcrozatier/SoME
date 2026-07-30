@@ -8,24 +8,30 @@
 	let requireActionDialog: HTMLDialogElement | undefined = $state();
 
 	const selectedEntry = $state({ uid: "", title: "" });
+	let selectedReason: keyof typeof reasons | undefined | null = $state();
 
-	function createNote(reason: string) {
-		return `Your entry was flagged for the following reason: ${reason}. It has been temporarily removed from the competition. You can update your entry, and when you're ready to ask for a review by admins, click the 'Ask for review' button.`;
-	}
-
-	const reasons: Record<string, string> = {
+	const reasons = {
 		ai: "it contains AI assets",
+		duplicate: "multiple entries are not allowed",
 		inappropriate: "it contains inappropriate content",
 		scope: "it is out of scope (not math related)",
 		inaccurate: "it contains inaccurate math statements",
-		other: "(fill me in)",
+		other: "(custom reason)",
 	};
 
-	let selectedReason = $state("");
+	function createNote(title: string, reason: keyof typeof reasons) {
+		switch (reason) {
+			case "duplicate":
+				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You should remove duplicate entries to only keep a single one. When you're ready to ask for a review by admins, click the 'Ask for review' button.`;
+
+			default:
+				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You can update your entry, and when you're ready to ask for a review by admins, click the 'Ask for review' button.`;
+		}
+	}
 
 	function closeDialog() {
 		requireActionDialog?.close();
-		selectedReason = "";
+		selectedReason = null;
 		selectedEntry.title = "";
 		selectedEntry.uid = "";
 	}
@@ -155,9 +161,9 @@
 		<input type="hidden" name="uid" value={selectedEntry.uid} />
 
 		<div>
-			<label for="note" class="label">Note to creators (to help them take action):</label>
+			<label for="note" class="label text-sm">Note to creators (to help them take action):</label>
 			<textarea id="note" name="note" class="textarea w-full" required
-				>{selectedReason ? createNote(reasons[selectedReason]!) : ""}</textarea
+				>{selectedReason ? createNote(selectedEntry.title, selectedReason) : ""}</textarea
 			>
 		</div>
 

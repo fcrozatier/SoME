@@ -194,6 +194,22 @@ export const flags = pgTable(
 	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
+export const strikes = pgTable(
+	"strikes",
+	{
+		userUid: uuid("user_uid")
+			.references(() => users.uid, { onDelete: "cascade" })
+			.notNull(),
+		entryUid: uuid("entry_uid")
+			.references(() => entries.uid, { onDelete: "cascade" })
+			.notNull(),
+		reason: text("reason").notNull(),
+		note: text("note").notNull(),
+		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+	},
+	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
+);
+
 export const skips = pgTable(
 	"skips",
 	{
