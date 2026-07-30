@@ -22,10 +22,10 @@
 	function createNote(title: string, reason: keyof typeof reasons) {
 		switch (reason) {
 			case "duplicate":
-				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You should remove duplicate entries to only keep a single one. When you're ready to ask for a review by admins, click the 'Ask for review' button.`;
+				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You should remove duplicate entries to only keep a single one. When you're ready to ask for a review by admins, click the "Ask for review" button.`;
 
 			default:
-				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You can update your entry, and when you're ready to ask for a review by admins, click the 'Ask for review' button.`;
+				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You can update your entry, and when you're ready to ask for a review by admins, click the "Ask for review" button.`;
 		}
 	}
 
