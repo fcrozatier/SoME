@@ -247,9 +247,8 @@
 			<label for="new-tag" class="label"> Tags </label>
 
 			<p class="mt-2 mb-4">
-				Add tags to your entry for simple categorization, such as topic and level. For the topic,
-				choose a relevant theme, concept or chapter if applicable. For the level, you can pick from
-				the following list:
+				Add one or more relevant levels to your entry from the following list. You can also add tags
+				for simple categorization, such as topic, theme or concept if applicable.
 			</p>
 			<div class="flex flex-wrap gap-2 mb-6">
 				{#each levels as level}
