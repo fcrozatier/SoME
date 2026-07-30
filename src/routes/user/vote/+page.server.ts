@@ -3,6 +3,11 @@ import { db } from "$lib/server/db";
 import { redirect } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
+const [nbEntries]: { count: string }[] = await db.execute(sql`
+		select count(*) from entries
+		where date_part('year', created_at)=${currentYear};
+	`);
+
 export const load = async ({ locals }) => {
 	const uid = locals.user?.uid;
 	if (!uid) redirect(302, "/login");
@@ -20,5 +25,6 @@ export const load = async ({ locals }) => {
 	return {
 		firstVote: Number(userVotes?.count) === 0,
 		hasPreferences: Number(userPreferences?.count) > 0,
+		nbEntries: Number(nbEntries?.count),
 	};
 };
