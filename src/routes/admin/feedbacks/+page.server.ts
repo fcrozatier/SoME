@@ -1,4 +1,4 @@
-import { currentYear } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { error } from "@sveltejs/kit";
@@ -16,7 +16,7 @@ export const load = async ({ locals }) => {
 			on uid=entry_uid
 			where entries.active='true'
 			and deleted_at is null
-			and date_part('year', entries.created_at)=${currentYear}
+			and date_part('year', entries.created_at)=${CURRENT_YEAR}
 			and votes.reviewed='false'
 			and votes.maybe_rude='true'
 			order by uid;

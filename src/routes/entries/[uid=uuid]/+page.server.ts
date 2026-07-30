@@ -1,4 +1,4 @@
-import { currentYear } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import type { SelectTag, User } from "$lib/server/db/schema.js";
 import { type SelectEntry, type SelectVote } from "$lib/server/db/schema.js";
@@ -44,7 +44,7 @@ export const load = async (event) => {
 		// Only admins see the profile info, and feedbacks are only displayed when the results are available
 		feedbacks: isAdmin
 			? feedbacks
-			: entry.year === currentYear && !resultsAvailable()
+			: entry.year === CURRENT_YEAR && !resultsAvailable()
 				? []
 				: feedbacks.map((f) => ({
 						...f,

@@ -1,4 +1,4 @@
-import { currentYear } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import { flags } from "$lib/server/db/schema";
 import { type SelectEntry } from "$lib/server/db/schema";
@@ -27,7 +27,7 @@ export const load = async ({ locals, url }) => {
 				from entries
 				where entries.active='true'
 				and deleted_at is null
-				and date_part('year', entries.created_at)=${currentYear}
+				and date_part('year', entries.created_at)=${CURRENT_YEAR}
 				order by created_at
 				limit ${limit}
 				offset ${(+page - 1) * limit}

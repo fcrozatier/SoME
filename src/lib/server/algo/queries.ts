@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { userToEntry } from "../db/schema";
-import { currentYear } from "$lib/config";
+import { CURRENT_YEAR } from "$lib/config";
 import { randomItem, round } from "@fcrozatier/ts-helpers";
 import { voteTimeElapsedPercent } from "$lib/utils/time";
 
@@ -20,14 +20,14 @@ export function voteWarmup(
 			with nb_votes as (
 				select entry_uid, count(*) as count
 				from votes
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			nb_skips as (
 				select entry_uid, count(*) as count
 				from skips
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
@@ -42,7 +42,7 @@ export function voteWarmup(
 				left join entry_to_tag
 				on entries.uid=entry_to_tag.entry_uid
 
-				where date_part('year', entries.created_at)=${currentYear}
+				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
 					and active='true'
 					and deleted_at is null
@@ -174,21 +174,21 @@ export function voteMain(
 			with nb_votes as (
 				select entry_uid, count(*)
 				from votes
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			nb_skips as (
 				select entry_uid, count(*)
 				from skips
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			medians as (
 				select entry_uid, percentile_disc(0.5) within group (order by score) as median, coalesce(stddev_samp(score), 0) as std
 				from votes
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
@@ -212,7 +212,7 @@ export function voteMain(
 				on entries.uid=entry_to_tag.entry_uid
 				${sql.raw(query.poolJoin ?? "")}
 
-				where date_part('year', entries.created_at)=${currentYear}
+				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
 					and active='true'
 					and deleted_at is null
@@ -247,7 +247,7 @@ export function voteFallback(user_uid: string, category: string) {
 			left join entry_to_tag
 			on entries.uid=entry_to_tag.entry_uid
 
-			where date_part('year', entries.created_at)=${currentYear}
+			where date_part('year', entries.created_at)=${CURRENT_YEAR}
 			and entries.category=${category}
 			and active='true'
 			and deleted_at is null
@@ -297,7 +297,7 @@ export function rank(category: string) {
 		with scores as (
 			select entry_uid, ${sql.raw(percentiles.join(","))}
 			from votes
-			where date_part('year', created_at)=${currentYear}
+			where date_part('year', created_at)=${CURRENT_YEAR}
 			group by entry_uid
 		),
 

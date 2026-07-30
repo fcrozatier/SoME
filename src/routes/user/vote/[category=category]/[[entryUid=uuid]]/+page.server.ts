@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { type Category, currentYear, ENTRY_STATE } from "$lib/config";
+import { type Category, CURRENT_YEAR, ENTRY_STATE } from "$lib/config";
 import {
 	computeBottomPercentile,
 	SKIPS_TO_VOTES_THRESHOLD,
@@ -61,7 +61,7 @@ export const load = async ({ locals, params }) => {
 			from user_to_entry
 			join entries on uid=entry_uid
 			where user_uid=${userUid}
-			and date_part('year', created_at)=${currentYear};
+			and date_part('year', created_at)=${CURRENT_YEAR};
 		`)
 		).count > 0;
 
@@ -72,7 +72,7 @@ export const load = async ({ locals, params }) => {
 			select * from user_to_watchlist
 			where user_uid=${userUid}
 			and entry_uid=${entryUid}
-			and date_part('year', created_at)=${currentYear}
+			and date_part('year', created_at)=${CURRENT_YEAR}
 			`)
 			).count > 0;
 

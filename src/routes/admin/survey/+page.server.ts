@@ -1,4 +1,4 @@
-import { currentYear } from "$lib/config";
+import { CURRENT_YEAR } from "$lib/config";
 import { db } from "$lib/server/db";
 import { type SelectSurveys } from "$lib/server/db/schema";
 import { SurveyFilterSchema } from "$lib/validation";
@@ -14,7 +14,7 @@ export const load = async ({ locals }) => {
 		await db.execute(sql`
 			select "some", site, feedback, json
 			from surveys
-			where date_part('year', created_at)=${currentYear};
+			where date_part('year', created_at)=${CURRENT_YEAR};
 		`);
 
 	return { surveys };

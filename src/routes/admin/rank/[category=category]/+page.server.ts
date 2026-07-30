@@ -1,4 +1,4 @@
-import { currentYear } from "$lib/config.js";
+import { CURRENT_YEAR } from "$lib/config.js";
 import { rank } from "$lib/server/algo/queries.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
@@ -32,14 +32,14 @@ export const load = async ({ params, locals, url }) => {
 			overall_score as (
 				select entry_uid, percentile_disc(0.5) within group (order by score) as median
 				from votes
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			teacher_score as (
 				select entry_uid, percentile_disc(0.5) within group (order by score) as median
 				from votes join users on votes.user_uid=users.uid
-				where date_part('year', votes.created_at)=${currentYear}
+				where date_part('year', votes.created_at)=${CURRENT_YEAR}
 				and is_teacher='t'
 				group by entry_uid
 			),

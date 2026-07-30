@@ -7,7 +7,7 @@
 	import Media from "$lib/components/Media.svelte";
 	import Score from "$lib/components/Score.svelte";
 	import Slider from "$lib/components/Slider.svelte";
-	import { currentYear } from "$lib/config";
+	import { CURRENT_YEAR } from "$lib/config";
 	import { makeTitle } from "$lib/utils/makeTitle";
 	import { voteOpen } from "$lib/utils/time";
 	import { FeedbackSchema } from "$lib/validation.js";
@@ -91,7 +91,7 @@
 						{#snippet sidePanel()}
 							<div class="flex items-center justify-end sm:flex-col text-xs flex-wrap gap-4">
 								<Score {score}></Score>
-								{#if Number(year) === currentYear && voteOpen()}
+								{#if Number(year) === CURRENT_YEAR && voteOpen()}
 									<button
 										class="btn btn-sm"
 										onclick={() => {

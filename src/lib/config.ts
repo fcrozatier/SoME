@@ -7,8 +7,8 @@ export const FULL_NAME = "Summer of Math Exposition";
 // The different possible categories for entries
 // No space as the strings are used in vote url
 export const CATEGORIES = ["video", "non-video"] as const;
+
 export type Category = (typeof CATEGORIES)[number];
-export const currentYear = new Date().getFullYear();
 
 export const ENTRY_STATE = {
 	Active: "active",
@@ -17,14 +17,17 @@ export const ENTRY_STATE = {
 	WaitingForReview: "waiting_for_review",
 	Inactive: "inactive",
 } as const;
+
 export type EntryState = (typeof ENTRY_STATE)[keyof typeof ENTRY_STATE];
+
+export const CURRENT_YEAR = new Date().getFullYear();
 
 // For the archive
 export const defaultYear = () => {
 	// If the results are available and we're in the same year as the competition then use the latest data, otherwise use data from last year
-	return resultsAvailable() && currentYear === new Date(PUBLIC_RESULTS_AVAILABLE).getFullYear()
-		? currentYear
-		: currentYear - 1;
+	return resultsAvailable() && CURRENT_YEAR === new Date(PUBLIC_RESULTS_AVAILABLE).getFullYear()
+		? CURRENT_YEAR
+		: CURRENT_YEAR - 1;
 };
 
 /**

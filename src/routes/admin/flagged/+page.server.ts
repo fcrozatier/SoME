@@ -1,9 +1,9 @@
-import { currentYear, ENTRY_STATE } from "$lib/config";
+import { CURRENT_YEAR, ENTRY_STATE } from "$lib/config";
 import { db } from "$lib/server/db";
-import { ENTRY_STATE, strikes, type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
+import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
 import { AdminActionRequiredForm, AdminDeactivateForm } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
-import { error, type Actions } from "@sveltejs/kit";
+import { type Actions, error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
@@ -18,7 +18,7 @@ export const load = async ({ locals }) => {
 			where entries.active='true'
 			and state=${ENTRY_STATE.Flagged}
 			and deleted_at is null
-			and date_part('year', entries.created_at)=${currentYear}
+			and date_part('year', entries.created_at)=${CURRENT_YEAR}
 			order by uid;
 		`);
 
@@ -65,6 +65,7 @@ export const actions: Actions = {
 		await db.insert(strikes).values(strikesData);
 
 		// Notify creators
+		// TODO
 		console.log(data.uid, data.reason);
 		console.log(data.note);
 
