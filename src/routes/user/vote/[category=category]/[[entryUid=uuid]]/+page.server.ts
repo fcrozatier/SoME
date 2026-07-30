@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { type Category, currentYear } from "$lib/config";
+import { type Category, currentYear, ENTRY_STATE } from "$lib/config";
 import {
 	computeBottomPercentile,
 	SKIPS_TO_VOTES_THRESHOLD,
@@ -10,7 +10,6 @@ import {
 import { db } from "$lib/server/db";
 import {
 	cache,
-	ENTRY_STATE,
 	flags,
 	type SelectEntry,
 	skips,

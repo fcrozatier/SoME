@@ -12,7 +12,7 @@ import {
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { categories } from "../../config";
+import { categories, ENTRY_STATE } from "$lib/config";
 
 export const users = pgTable(
 	"users",
@@ -44,14 +44,6 @@ export const sessions = pgTable("sessions", {
 		}),
 	expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
 });
-
-export const ENTRY_STATE = {
-	Active: "active",
-	Flagged: "flagged",
-	ActionRequired: "action_required",
-	WaitingForReview: "waiting_for_review",
-	Inactive: "inactive",
-};
 
 export const entries = pgTable("entries", {
 	uid: uuid("uid").primaryKey(),

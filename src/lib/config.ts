@@ -10,6 +10,15 @@ export const categories = ["video", "non-video"] as const;
 export type Category = (typeof categories)[number];
 export const currentYear = new Date().getFullYear();
 
+export const ENTRY_STATE = {
+	Active: "active",
+	Flagged: "flagged",
+	ActionRequired: "action_required",
+	WaitingForReview: "waiting_for_review",
+	Inactive: "inactive",
+} as const;
+export type EntryState = (typeof ENTRY_STATE)[keyof typeof ENTRY_STATE];
+
 // For the archive
 export const defaultYear = () => {
 	// If the results are available and we're in the same year as the competition then use the latest data, otherwise use data from last year

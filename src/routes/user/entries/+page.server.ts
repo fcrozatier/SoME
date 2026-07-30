@@ -1,3 +1,4 @@
+import { currentYear, ENTRY_STATE, type EntryState } from "$lib/config.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { redirect } from "@sveltejs/kit";

@@ -1,4 +1,4 @@
-import { currentYear } from "$lib/config";
+import { currentYear, ENTRY_STATE } from "$lib/config";
 import { db } from "$lib/server/db";
 import { ENTRY_STATE, strikes, type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
 import { AdminActionRequiredForm, AdminDeactivateForm } from "$lib/validation";
