@@ -12,7 +12,7 @@ import {
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { categories, ENTRY_STATE } from "$lib/config";
+import { CATEGORIES, ENTRY_STATE } from "$lib/config";
 
 export const users = pgTable(
 	"users",
@@ -50,7 +50,7 @@ export const entries = pgTable("entries", {
 	title: varchar("title", { length: 128 }).notNull(),
 	description: text("description").notNull(),
 	description_md: text("description_md").notNull(),
-	category: text("category", { enum: categories }).notNull(),
+	category: text("category", { enum: CATEGORIES }).notNull(),
 	url: text("url").unique().notNull(),
 	thumbnail: text("thumbnail"),
 	active: boolean("active").default(true),
@@ -73,7 +73,7 @@ export const entriesHistory = pgTable(
 		}),
 		title: varchar("title", { length: 128 }).notNull(),
 		description_md: text("description_md").notNull(),
-		category: text("category", { enum: categories }).notNull(),
+		category: text("category", { enum: CATEGORIES }).notNull(),
 		url: text("url").notNull(),
 		thumbnail: text("thumbnail"),
 		editedAt: timestamp("edited_at", { mode: "string" }).defaultNow(),
@@ -222,7 +222,7 @@ export const cache = pgTable(
 		userUid: uuid("user_uid")
 			.references(() => users.uid, { onDelete: "cascade" })
 			.notNull(),
-		category: text("category", { enum: categories }).notNull(),
+		category: text("category", { enum: CATEGORIES }).notNull(),
 		entryUid: uuid("entry_uid")
 			.references(() => entries.uid, { onDelete: "cascade" })
 			.notNull(),

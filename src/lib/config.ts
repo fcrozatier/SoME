@@ -6,8 +6,8 @@ export const FULL_NAME = "Summer of Math Exposition";
 
 // The different possible categories for entries
 // No space as the strings are used in vote url
-export const categories = ["video", "non-video"] as const;
-export type Category = (typeof categories)[number];
+export const CATEGORIES = ["video", "non-video"] as const;
+export type Category = (typeof CATEGORIES)[number];
 export const currentYear = new Date().getFullYear();
 
 export const ENTRY_STATE = {

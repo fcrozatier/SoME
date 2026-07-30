@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { categories } from "$lib/config";
+	import { CATEGORIES } from "$lib/config";
 	import { page } from "$app/state";
 
 	interface Props {
@@ -16,7 +16,7 @@
 	<p>Or change category:</p>
 {/if}
 <p class="flex">
-	{#each categories as category}
+	{#each CATEGORIES as category}
 		{#if category !== page.params.category}
 			<!-- Force reload to grab a new entry -->
 			<a class="btn" href={`/user/vote/${category}?screen=ok`} data-sveltekit-reload
