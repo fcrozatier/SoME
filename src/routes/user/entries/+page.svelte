@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { enhance } from "$app/forms";
 	import { PUBLIC_REGISTRATION_END, PUBLIC_REGISTRATION_START } from "$env/static/public";
+	import { disableSubmitterAndSetValidity } from "$lib/actions";
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Time from "$lib/components/Time.svelte";
@@ -15,6 +17,16 @@
 
 <article class="layout-prose">
 	<h2>My entries</h2>
+
+	{#if data.strike}
+		<div class="alert alert-warning">
+			{#if data.strike.state === ENTRY_STATE.ActionRequired}
+				{data.strike.note}
+			{:else if data.strike.state === ENTRY_STATE.WaitingForReview}
+				Your entry "{data.strike.title}" is being reviewed by admins...
+			{/if}
+		</div>
+	{/if}
 
 	<p>
 		{#if new Date() < new Date(PUBLIC_REGISTRATION_START)}
@@ -41,7 +53,7 @@
 			<div class="max-w-3xl mx-auto">
 				{#each entries! as { uid, title, description, category, thumbnail, url, createdAt }}
 					<div>
-						<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
+						<LayoutSideBySide side="right" mainPanelMinWidth="83%" sidePanelMaxWidth="64px">
 							{#snippet mainPanel()}
 								<Media
 									{uid}
@@ -55,7 +67,7 @@
 								></Media>
 							{/snippet}
 							{#snippet sidePanel()}
-								<div class="flex items-center text-xs flex-wrap gap-4">
+								<div class="flex items-center text-xs flex-wrap gap-2">
 									<span class="text-center text-trim">
 										<Time
 											datetime={createdAt}
@@ -69,6 +81,19 @@
 									<a class="btn btn-sm ml-auto sm:ml-0" href={`/entries/${uid}`}> details </a>
 									{#if new Date(createdAt) > new Date(PUBLIC_REGISTRATION_START) && new Date(createdAt) < new Date(PUBLIC_REGISTRATION_END)}
 										<a class="btn btn-sm" href={`/user/entries/update/${uid}`}> update </a>
+									{/if}
+									{#if data.strike?.entry_uid === uid}
+										<form
+											method="post"
+											action="?/ask_review"
+											use:enhance={disableSubmitterAndSetValidity({
+												toast: {
+													success: { type: "info", content: "Admins notified" },
+												},
+											})}
+										>
+											<button class="btn btn-sm font-medium text-nowrap">Ask for review</button>
+										</form>
 									{/if}
 								</div>
 							{/snippet}
