@@ -239,7 +239,7 @@ export const FeedbackSchema = fg
 	)
 	.trim();
 
-const UidSchema = fg.hidden().pipe(z.uuid());
+export const UidSchema = fg.hidden().pipe(z.uuid());
 
 export const VoteSchema = {
 	score: fg.range({ min: 1, max: 9, step: 0.01 }),
