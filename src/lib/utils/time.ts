@@ -89,3 +89,31 @@ export function voteTimeElapsedPercent() {
 
 	return now.since(start).seconds / end.since(start).seconds;
 }
+
+const DIVISIONS = [
+	{ amount: 60, unit: "second" },
+	{ amount: 60, unit: "minute" },
+	{ amount: 24, unit: "hour" },
+	{ amount: 7, unit: "day" },
+	{ amount: 4.34524, unit: "week" },
+	{ amount: 12, unit: "month" },
+	{ amount: Infinity, unit: "year" },
+] as const;
+
+const rtf = new Intl.RelativeTimeFormat("en", {
+	numeric: "auto",
+});
+
+export function relativeTime(date: string | Date): string {
+	let duration = (new Date(date).getTime() - Date.now()) / 1000;
+
+	for (const { amount, unit } of DIVISIONS) {
+		if (Math.abs(duration) < amount) {
+			return rtf.format(Math.round(duration), unit);
+		}
+		duration /= amount;
+	}
+
+	// Unreachable because of Infinity
+	return "";
+}

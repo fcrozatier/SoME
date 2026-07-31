@@ -17,8 +17,7 @@ export const load = async ({ locals }) => {
 			select uid, title, url, reason
 			from entries join flags
 			on uid=entry_uid
-			where entries.active='true'
-			and state=${ENTRY_STATE.Flagged}
+			where state=${ENTRY_STATE.Flagged}
 			and deleted_at is null
 			and date_part('year', entries.created_at)=${CURRENT_YEAR}
 			order by uid;
