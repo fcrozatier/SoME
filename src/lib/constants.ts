@@ -20,6 +20,13 @@ export const ENTRY_STATE = {
 
 export type EntryState = (typeof ENTRY_STATE)[keyof typeof ENTRY_STATE];
 
+export const STRIKE_STATE = {
+	Open: "open",
+	Closed: "closed",
+} as const;
+
+export type StrikeState = (typeof ENTRY_STATE)[keyof typeof ENTRY_STATE];
+
 export const CURRENT_YEAR = new Date().getFullYear();
 
 // For the archive

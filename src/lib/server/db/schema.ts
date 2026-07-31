@@ -12,7 +12,7 @@ import {
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { CATEGORIES, ENTRY_STATE } from "$lib/constants";
+import { CATEGORIES, ENTRY_STATE, STRIKE_STATE } from "$lib/constants";
 
 export const users = pgTable(
 	"users",
@@ -197,6 +197,7 @@ export const strikes = pgTable(
 			.notNull(),
 		reason: text("reason").notNull(),
 		note: text("note").notNull(),
+		state: text("state").default(STRIKE_STATE.Open),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
 	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
