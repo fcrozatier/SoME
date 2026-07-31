@@ -1,4 +1,4 @@
-import { assertIsAdmin } from "$lib/authorizations";
+import { assertIsAdmin } from "$lib/authorization";
 import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { type SelectSurveys } from "$lib/server/db/schema";

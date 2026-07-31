@@ -1,4 +1,4 @@
-import { assertIsAdmin } from "$lib/authorizations";
+import { assertIsAdmin } from "$lib/authorization";
 import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
