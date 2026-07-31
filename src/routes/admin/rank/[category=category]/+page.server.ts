@@ -6,7 +6,7 @@ import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ params, locals, url }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	if (!locals.user?.isAdmin) return error(403);
 
 	const { category } = params;
 
@@ -69,7 +69,9 @@ export const load = async ({ params, locals, url }) => {
 };
 
 export const actions = {
-	rank: async ({ params }) => {
+	rank: async ({ params, locals }) => {
+		if (!locals.user?.isAdmin) return error(403);
+
 		const { category } = params;
 
 		await db.execute(rank(category));

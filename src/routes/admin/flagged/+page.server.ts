@@ -9,7 +9,7 @@ import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	if (!locals.user?.isAdmin) return error(403);
 
 	const flags: Prettify<Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">>[] =
 		await db.execute(sql`
@@ -29,7 +29,9 @@ export const load = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	ignore_flags: formgate(AdminDeactivateForm, async (data) => {
+	ignore_flags: formgate(AdminDeactivateForm, async (data, { locals }) => {
+		if (!locals.user?.isAdmin) return error(403);
+
 		// Update entry state
 		await db.execute(sql`
 			update entries
@@ -39,7 +41,9 @@ export const actions: Actions = {
 
 		return { success: true };
 	}),
-	action_required: formgate(AdminActionRequiredForm, async (data) => {
+	action_required: formgate(AdminActionRequiredForm, async (data, { locals }) => {
+		if (!locals.user?.isAdmin) return error(403);
+
 		const entry_uid = data.uid;
 
 		// Retrieve entry creators

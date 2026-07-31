@@ -56,7 +56,7 @@ export const actions = {
 		const user_uid = locals.user.uid;
 		const entry_uid = data.uid;
 
-		// Make sure user is creator of entry
+		// Make sure user is the creator of entry
 		const isCreator =
 			(
 				await db.execute(sql`
@@ -64,8 +64,6 @@ export const actions = {
 			where user_uid=${user_uid} and entry_uid=${entry_uid};
 		`)
 			).count > 0;
-
-		console.log("is creator", isCreator);
 
 		if (!isCreator) {
 			return fail(422, { message: "You're not the creator of this entry" });

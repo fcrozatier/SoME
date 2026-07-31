@@ -8,12 +8,15 @@ import { sql } from "drizzle-orm";
 import * as fg from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	if (!locals.user?.isAdmin) return error(403);
 
 	// Turn the left join into an inner join to hide entries deactivated (by admins) without being flagged
 
 	const flagged: Prettify<
-		Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason"> & { user_uid: string }
+		Pick<SelectEntry, "uid" | "title" | "url"> &
+			Pick<SelectFlag, "reason"> & {
+				user_uid: string;
+			}
 	>[] = await db.execute(sql`
 			select uid, title, url, reason, user_uid
 			from entries left join flags
@@ -36,14 +39,18 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-	reactivate: fg.formgate(AdminForm, async (data) => {
+	reactivate: fg.formgate(AdminForm, async (data, { locals }) => {
+		if (!locals.user?.isAdmin) return error(403);
+
 		await db.execute(sql`
 			update entries set active='true' where uid in ${data.selected};
 		`);
 
 		return { flag: true };
 	}),
-	update_reason: fg.formgate(UpdateFlagReason, async (data) => {
+	update_reason: fg.formgate(UpdateFlagReason, async (data, { locals }) => {
+		if (!locals.user?.isAdmin) return error(403);
+
 		await db.execute(sql`
 			update flags set reason=${data.reason} where (user_uid, entry_uid)=(${data.user_uid}, ${data.entry_uid});
 		`);

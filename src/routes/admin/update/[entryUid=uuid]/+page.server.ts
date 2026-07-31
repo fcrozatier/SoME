@@ -24,7 +24,7 @@ import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 
 export const load = async ({ params, locals }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	if (!locals.user?.isAdmin) return error(403);
 
 	const { entryUid } = params;
 
@@ -61,7 +61,7 @@ export const load = async ({ params, locals }) => {
 
 export const actions = {
 	default: formgate(NewEntrySchema, async (data, { params, locals }) => {
-		if (!locals.user?.isAdmin) return error(400);
+		if (!locals.user?.isAdmin) return error(403);
 
 		try {
 			const { entryUid } = params;

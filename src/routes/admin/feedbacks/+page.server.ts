@@ -5,7 +5,7 @@ import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	if (!locals.user?.isAdmin) return error(403);
 
 	const feedbacks: (Pick<SelectEntry, "uid" | "title" | "url"> & {
 		feedback: string;

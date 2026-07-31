@@ -7,7 +7,7 @@ import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals, url }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	if (!locals.user?.isAdmin) return error(403);
 
 	let page = url.searchParams.get("page");
 
@@ -40,9 +40,7 @@ export const load = async ({ locals, url }) => {
 
 export const actions = {
 	deactivate: formgate(AdminDeactivateForm, async (data, { locals }) => {
-		const { user } = locals;
-
-		if (!user?.isAdmin) return error(403);
+		if (!locals.user?.isAdmin) return error(403);
 
 		await db.execute(sql`
 			update entries set active='false' where uid=${data.uid};
@@ -50,7 +48,7 @@ export const actions = {
 
 		await db.insert(flags).values({
 			entryUid: data.uid,
-			userUid: user.uid,
+			userUid: locals.user.uid,
 			reason: "",
 		});
 
