@@ -8,7 +8,7 @@
 	import Score from "$lib/components/Score.svelte";
 	import Slider from "$lib/components/Slider.svelte";
 	import { CURRENT_YEAR } from "$lib/constants";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { voteOpen } from "$lib/utils/time";
 	import { FeedbackSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("My Votes")}</title>
+	<title>{formatTitle("My Votes")}</title>
 </svelte:head>
 
 <article class="layout-prose">

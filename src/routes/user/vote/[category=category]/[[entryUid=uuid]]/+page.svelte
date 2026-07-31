@@ -7,7 +7,7 @@
 	import NewVote from "$lib/components/NewVote.svelte";
 	import Slider from "$lib/components/Slider.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting";
 	import { FeedbackSchema, FlagSchema } from "$lib/validation";
 	import { debounce, randomItem } from "@fcrozatier/ts-helpers";
 	import * as fg from "formgator";
@@ -66,7 +66,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Vote")}</title>
+	<title>{formatTitle("Vote")}</title>
 </svelte:head>
 
 <article class="layout-prose">

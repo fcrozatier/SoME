@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { CATEGORIES } from "$lib/constants";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { voteOpen } from "$lib/utils/time";
 
 	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Vote")}</title>
+	<title>{formatTitle("Vote")}</title>
 </svelte:head>
 
 <article class="layout-prose">

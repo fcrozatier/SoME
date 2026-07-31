@@ -4,7 +4,7 @@
 	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { NewUserSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 	import { resetUsernameStatus, type UsernameStatus } from "../../api/check-username/fetch.js";
@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Signup")}</title>
+	<title>{formatTitle("Signup")}</title>
 </svelte:head>
 
 <article class="layout-prose max-w-2xl!">

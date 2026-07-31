@@ -6,7 +6,7 @@
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { DeleteProfileSchema, levels, UpdateProfileSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
 	import { SvelteSet } from "svelte/reactivity";
@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Profile")}</title>
+	<title>{formatTitle("Profile")}</title>
 </svelte:head>
 
 <article class="layout-prose">

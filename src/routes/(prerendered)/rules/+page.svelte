@@ -2,7 +2,7 @@
 	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
 	import Time from "$lib/components/Time.svelte";
 	import { FULL_NAME } from "$lib/constants";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting";
 	import { resultsAvailable, submissionsOpen, timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
 
@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Rules")}</title>
+	<title>{formatTitle("Rules")}</title>
 </svelte:head>
 
 <article class="layout-prose">

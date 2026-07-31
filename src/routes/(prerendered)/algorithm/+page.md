@@ -1,12 +1,12 @@
 <script>
 	import { FULL_NAME } from '$lib/constants';
 	import Youtube from '$lib/components/Youtube.svelte';
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting";
 </script>
 
 <svelte:head>
 
-<title>{makeTitle("Algorithm")}</title>
+<title>{formatTitle("Algorithm")}</title>
 </svelte:head>
 
 ## Voting System

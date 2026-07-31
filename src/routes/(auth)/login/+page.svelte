@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { LoginSchema } from "$lib/validation";
 	import * as fg from "formgator";
 
@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Login")}</title>
+	<title>{formatTitle("Login")}</title>
 </svelte:head>
 
 <article class="layout-prose max-w-2xl!">

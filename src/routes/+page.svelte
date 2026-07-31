@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 
 	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Home")}</title>
+	<title>{formatTitle("Home")}</title>
 </svelte:head>
 
 <section class="layout-prose">

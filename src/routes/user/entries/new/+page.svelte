@@ -6,7 +6,7 @@
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
 	import {
@@ -70,7 +70,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("New Entry")}</title>
+	<title>{formatTitle("New Entry")}</title>
 </svelte:head>
 
 <article class="layout-prose max-w-2xl!">

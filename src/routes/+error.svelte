@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting";
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Error")}</title>
+	<title>{formatTitle("Error")}</title>
 </svelte:head>
 
 <article class="layout-prose min-h-screen">

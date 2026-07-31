@@ -29,17 +29,3 @@ export const defaultYear = () => {
 		? CURRENT_YEAR
 		: CURRENT_YEAR - 1;
 };
-
-/**
- * Formats a list into a string
- *
- * @example
- *
- * ```ts
- * conjunctionFormatter.format(list)
- * ```
- */
-export const conjunctionFormatter = new Intl.ListFormat("en", {
-	style: "long",
-	type: "conjunction",
-});

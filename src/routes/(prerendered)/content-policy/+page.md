@@ -1,11 +1,11 @@
 <script>
 	import { FULL_NAME } from '$lib/constants';
-  import { makeTitle } from "$lib/utils/makeTitle";
+  import { formatTitle } from "$lib/utils/formatting";
 </script>
 
 <svelte:head>
 
-<title>{makeTitle("Content Policy")}</title>
+<title>{formatTitle("Content Policy")}</title>
 </svelte:head>
 
 ## Content Policy
