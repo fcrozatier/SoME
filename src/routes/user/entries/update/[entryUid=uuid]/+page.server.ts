@@ -25,7 +25,7 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 import z from "zod";
-import { assertIsLoggedIn } from "$lib/authorization.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 
 export const load = async ({ locals, params }) => {
 	if (!submissionsOpen()) {

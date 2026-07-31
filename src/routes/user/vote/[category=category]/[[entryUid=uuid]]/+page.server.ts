@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { assertIsLoggedIn } from "$lib/authorization.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { type Category, CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import {
 	computeBottomPercentile,

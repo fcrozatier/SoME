@@ -1,3 +1,3 @@
-import { assertIsLoggedIn } from "$lib/authorization.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 
 export const load = ({ locals }) => assertIsLoggedIn(locals);

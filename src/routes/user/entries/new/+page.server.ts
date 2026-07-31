@@ -14,7 +14,7 @@ import { error, redirect } from "@sveltejs/kit";
 import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
-import { assertIsLoggedIn } from "$lib/authorization";
+import { assertIsLoggedIn } from "$lib/server/authorization";
 
 export const load = async ({ locals }) => {
 	assertIsLoggedIn(locals);

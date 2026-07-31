@@ -1,4 +1,4 @@
-import { assertIsAdmin } from "$lib/authorization";
+import { assertIsAdmin } from "$lib/server/authorization";
 import { CURRENT_YEAR } from "$lib/constants.js";
 import { rank } from "$lib/server/algo/queries.js";
 import { db } from "$lib/server/db";

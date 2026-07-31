@@ -1,4 +1,4 @@
-import { assertIsLoggedIn } from "$lib/authorization.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { CURRENT_YEAR, ENTRY_STATE, type EntryState, STRIKE_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema.js";

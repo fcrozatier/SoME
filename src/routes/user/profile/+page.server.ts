@@ -1,4 +1,4 @@
-import { assertIsLoggedIn } from "$lib/authorization.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db/index.js";
 import { userToTag } from "$lib/server/db/schema.js";

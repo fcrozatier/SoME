@@ -22,7 +22,7 @@ import { error, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
-import { assertIsAdmin } from "$lib/authorization";
+import { assertIsAdmin } from "$lib/server/authorization";
 
 export const load = async ({ params, locals }) => {
 	assertIsAdmin(locals);

@@ -1,4 +1,4 @@
-import { assertIsLoggedIn } from "$lib/authorization.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db/index.js";
 import type { SelectEntry, SelectVote } from "$lib/server/db/schema";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
