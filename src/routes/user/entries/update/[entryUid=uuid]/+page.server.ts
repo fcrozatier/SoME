@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { conjunctionFormatter } from "$lib/utils/formatting.js";
+import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
@@ -15,6 +15,7 @@ import {
 } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
+import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
@@ -25,7 +26,6 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 import z from "zod";
-import { assertIsLoggedIn } from "$lib/server/authorization.js";
 
 export const load = async ({ locals, params }) => {
 	if (!submissionsOpen()) {
@@ -306,9 +306,9 @@ export const actions = {
 		}
 	}),
 	delete: async ({ locals, request }) => {
-		const user = locals.user;
-		if (!user) throw redirect(302, "/login");
+		assertIsLoggedIn(locals);
 
+		const user = locals.user;
 		const formData = await request.formData();
 		const zodResult = z.uuid().safeParse(formData.get("entryUid"));
 
@@ -317,14 +317,7 @@ export const actions = {
 		const entryUid = zodResult.data;
 
 		// Make sure user is the creator first
-		const isCreator =
-			(
-				await db.execute(
-					sql`select * from user_to_entry where user_uid=${user.uid} and entry_uid=${entryUid};`,
-				)
-			).count > 0;
-
-		if (!isCreator) return fail(422);
+		await assertIsCreator({ userUid: user.uid, entryUid });
 
 		await db.execute(
 			sql`

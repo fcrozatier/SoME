@@ -1,5 +1,5 @@
-import { assertIsAdmin } from "$lib/server/authorization";
 import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
+import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";

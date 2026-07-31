@@ -1,4 +1,4 @@
-import { assertIsLoggedIn } from "$lib/server/authorization.js";
+import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
 import { CURRENT_YEAR, ENTRY_STATE, type EntryState, STRIKE_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema.js";
@@ -54,26 +54,15 @@ export const actions = {
 	ask_review: formgate({ uid: UidSchema }, async (data, { locals }) => {
 		assertIsLoggedIn(locals);
 
-		const user_uid = locals.user.uid;
-		const entry_uid = data.uid;
+		const entryUid = data.uid;
 
 		// Make sure user is the creator of entry
-		const isCreator =
-			(
-				await db.execute(sql`
-			select * from user_to_entry
-			where user_uid=${user_uid} and entry_uid=${entry_uid};
-		`)
-			).count > 0;
-
-		if (!isCreator) {
-			return fail(422, { message: "You're not the creator of this entry" });
-		}
+		await assertIsCreator({ userUid: locals.user.uid, entryUid });
 
 		// Update entry state
 		await db.execute(sql`
 			update entries set state=${ENTRY_STATE.WaitingForReview}
-			where uid=${entry_uid};
+			where uid=${entryUid};
 		`);
 
 		return { success: true };
