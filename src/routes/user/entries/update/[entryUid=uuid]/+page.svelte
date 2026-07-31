@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 	import { enhance } from "$app/forms";
-	import { page } from "$app/state";
 	import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
@@ -425,7 +424,7 @@
 					<a href="/content-policy#fair-use">Copyrighted Material Policy</a>
 				</li>
 				<li><a href="/content-policy#cc">Creative Commons Guidelines</a></li>
-				<li><a href="/content-policy#ai">AI Content Policy</a></li>
+				<li><a href="/ai-policy">AI Policy</a></li>
 			</ul>
 			{#if form?.issues?.copyright}
 				<span class="error-message">{form.issues.copyright.message} </span>

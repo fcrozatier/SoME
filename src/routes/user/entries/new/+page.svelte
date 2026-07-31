@@ -430,7 +430,7 @@
 					<a href="/content-policy#fair-use">Copyrighted Material Policy</a>
 				</li>
 				<li><a href="/content-policy#cc">Creative Commons Guidelines</a></li>
-				<li><a href="/content-policy#ai">AI Content Policy</a></li>
+				<li><a href="/ai-policy">AI Policy</a></li>
 			</ul>
 			{#if form?.issues?.copyright}
 				<span class="error-message">{form.issues.copyright.message} </span>
