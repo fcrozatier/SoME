@@ -1,13 +1,13 @@
-import { CURRENT_YEAR, ENTRY_STATE, type EntryState } from "$lib/constants";
+import { CURRENT_YEAR, ENTRY_STATE, type EntryState, STRIKE_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema.js";
-import { redirect } from "@sveltejs/kit";
+import { UidSchema } from "$lib/validation";
+import { fail, redirect } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
+import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user) {
-		return redirect(302, "/login");
-	}
+	if (!locals.user) return redirect(302, "/login");
 
 	const user_uid = locals.user.uid;
 
@@ -29,14 +29,15 @@ export const load = async ({ locals }) => {
 		note: string;
 		state: EntryState;
 	}[] = await db.execute(sql`
-		select entry_uid, title, note, state
+		select entry_uid, title, note, entries.state
 		from entries
 		join strikes
 		on entries.uid=strikes.entry_uid
 		where strikes.user_uid=${user_uid}
-		and date_part('year', entries.created_at)=${CURRENT_YEAR}
+		and strikes.state=${STRIKE_STATE.Open}
 		and entries.state=${ENTRY_STATE.ActionRequired}
 		and entries.deleted_at is null
+		and date_part('year', entries.created_at)=${CURRENT_YEAR}
 		order by strikes.created_at desc
 		limit 1;
 	`);
@@ -46,4 +47,36 @@ export const load = async ({ locals }) => {
 		userEntries: userEntries.map((e) => ({ ...e, createdAt: e.created_at })),
 		strike,
 	};
+};
+
+export const actions = {
+	ask_review: formgate({ uid: UidSchema }, async (data, { locals }) => {
+		if (!locals.user) return redirect(302, "/login");
+
+		const user_uid = locals.user.uid;
+		const entry_uid = data.uid;
+
+		// Make sure user is creator of entry
+		const isCreator =
+			(
+				await db.execute(sql`
+			select * from user_to_entry
+			where user_uid=${user_uid} and entry_uid=${entry_uid};
+		`)
+			).count > 0;
+
+		console.log("is creator", isCreator);
+
+		if (!isCreator) {
+			return fail(422, { message: "You're not the creator of this entry" });
+		}
+
+		// Update entry state
+		await db.execute(sql`
+			update entries set state=${ENTRY_STATE.WaitingForReview}
+			where uid=${entry_uid};
+		`);
+
+		return { success: true };
+	}),
 };

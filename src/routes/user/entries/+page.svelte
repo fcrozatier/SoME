@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { PUBLIC_REGISTRATION_END, PUBLIC_REGISTRATION_START } from "$env/static/public";
-	import { disableSubmitterAndSetValidity } from "$lib/actions";
+	import { clickOutside } from "$lib/actions";
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Time from "$lib/components/Time.svelte";
+	import { newToast } from "$lib/components/Toasts.svelte";
 	import { ENTRY_STATE } from "$lib/constants";
 	import { submissionsOpen } from "$lib/utils/time.js";
 
@@ -13,17 +14,20 @@
 	const entriesByYear = $derived(
 		Object.groupBy(data.userEntries, (x) => new Date(x.createdAt).getFullYear()),
 	);
+
+	let askReviewDialog: HTMLDialogElement | undefined = $state();
+	let askReviewUid: string | undefined = $state();
 </script>
 
 <article class="layout-prose">
 	<h2>My entries</h2>
 
 	{#if data.strike}
-		<div class="alert alert-warning">
+		<div class="alert alert-warning [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
 			{#if data.strike.state === ENTRY_STATE.ActionRequired}
-				{data.strike.note}
+				{@html data.strike.note}
 			{:else if data.strike.state === ENTRY_STATE.WaitingForReview}
-				Your entry "{data.strike.title}" is being reviewed by admins...
+				Your entry <em>"{data.strike.title}"</em> is being reviewed by admins...
 			{/if}
 		</div>
 	{/if}
@@ -83,17 +87,16 @@
 										<a class="btn btn-sm" href={`/user/entries/update/${uid}`}> update </a>
 									{/if}
 									{#if data.strike?.entry_uid === uid}
-										<form
-											method="post"
-											action="?/ask_review"
-											use:enhance={disableSubmitterAndSetValidity({
-												toast: {
-													success: { type: "info", content: "Admins notified" },
-												},
-											})}
+										<button
+											type="button"
+											class="btn btn-sm font-medium text-nowrap"
+											commandfor="ask-review-dialog"
+											command="show-modal"
+											onclick={() => {
+												askReviewUid = uid;
+												askReviewDialog?.showModal();
+											}}>Ask for review</button
 										>
-											<button class="btn btn-sm font-medium text-nowrap">Ask for review</button>
-										</form>
 									{/if}
 								</div>
 							{/snippet}
@@ -109,3 +112,54 @@
 		</div>
 	{/if}
 </section>
+
+<dialog id={`ask-review-dialog`} class="m-auto" bind:this={askReviewDialog} closedby="any">
+	<form
+		method="post"
+		class="space-y-2"
+		action="?/ask_review"
+		use:clickOutside={() => askReviewDialog?.close()}
+		use:enhance={() => {
+			const buttons = document.querySelectorAll("button");
+			buttons.forEach((b) => b.setAttribute("disabled", "on"));
+
+			return async ({ result, update }) => {
+				await update({ invalidateAll: true });
+				buttons.forEach((b) => b.removeAttribute("disabled"));
+
+				if (result.type === "success") {
+					askReviewDialog?.close();
+					newToast({ type: "info", content: "Admins notified" });
+				} else if (
+					result.type === "failure" &&
+					result.data?.issues !== null &&
+					typeof result.data?.issues === "object"
+				) {
+					const message = Object.values(result.data.issues)?.[0]?.message ?? "";
+					if (message) {
+						newToast({ type: "error", content: message });
+					}
+				}
+			};
+		}}
+	>
+		<h2 class="mt-0">Are you sure?</h2>
+		<p class="text-gray-700 mb-0">
+			You're about to ask admins to review your entry. Have you made all the required updates to
+			your submission?
+		</p>
+
+		<input type="hidden" name="uid" value={askReviewUid} />
+
+		<p class="mb-0 mt-8 flex items-center justify-end gap-2">
+			<button
+				type="button"
+				class="btn-outline btn"
+				commandfor="flag"
+				command="request-close"
+				onclick={() => askReviewDialog?.close()}>Cancel</button
+			>
+			<button type="submit" class="btn-primary btn">Ask for review</button>
+		</p>
+	</form>
+</dialog>
