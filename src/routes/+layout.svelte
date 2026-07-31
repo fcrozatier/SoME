@@ -6,6 +6,7 @@
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Time from "$lib/components/Time.svelte";
+	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/constants";
 	import { submissionsOpen, voteOpen } from "$lib/utils/time";
@@ -13,7 +14,6 @@
 	import { onMount } from "svelte";
 	import "../app.css";
 	import "../math.css";
-	import Timer from "$lib/components/Timer.svelte";
 
 	let { data, children } = $props();
 
@@ -200,6 +200,7 @@
 			<a class="text-trim" href="/algorithm" rel="about"> Voting System </a>
 			<a class="text-trim" href="/contact"> Contact </a>
 			<a class="text-trim" href="/content-policy"> Content Policy </a>
+			<a class="text-trim" href="/ai-policy"> AI Policy </a>
 			<a class="text-trim" href="/gdpr" rel="privacy-policy"> GDPR </a>
 			<a class="text-trim" href="/rules" rel="terms-of-service">Rules</a>
 		</section>
