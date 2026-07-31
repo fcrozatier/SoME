@@ -25,15 +25,14 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
 import z from "zod";
+import { assertIsLoggedIn } from "$lib/authorization.js";
 
 export const load = async ({ locals, params }) => {
 	if (!submissionsOpen()) {
 		throw error(403, "Submissions are closed");
 	}
 
-	if (!locals?.user?.uid) {
-		throw redirect(302, "/login");
-	}
+	assertIsLoggedIn(locals);
 
 	const { entryUid } = params;
 	const { user } = locals;
@@ -76,12 +75,10 @@ export const load = async ({ locals, params }) => {
 export const actions = {
 	update: formgate(NewEntrySchema, async (data, { locals, params }) => {
 		try {
+			assertIsLoggedIn(locals);
+
 			const { user } = locals;
 			const { entryUid } = params;
-
-			if (!user || !user.username) {
-				throw error(401, "You must be logged in");
-			}
 
 			if (!submissionsOpen() && !user.isAdmin) {
 				throw error(403, "Submissions are closed");

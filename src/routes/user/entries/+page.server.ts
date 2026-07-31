@@ -1,13 +1,14 @@
+import { assertIsLoggedIn } from "$lib/authorization.js";
 import { CURRENT_YEAR, ENTRY_STATE, type EntryState, STRIKE_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema.js";
 import { UidSchema } from "$lib/validation";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user) return redirect(302, "/login");
+	assertIsLoggedIn(locals);
 
 	const user_uid = locals.user.uid;
 
@@ -51,7 +52,7 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	ask_review: formgate({ uid: UidSchema }, async (data, { locals }) => {
-		if (!locals.user) return redirect(302, "/login");
+		assertIsLoggedIn(locals);
 
 		const user_uid = locals.user.uid;
 		const entry_uid = data.uid;

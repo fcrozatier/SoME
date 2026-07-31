@@ -1,4 +1,5 @@
 import { dev } from "$app/environment";
+import { assertIsLoggedIn } from "$lib/authorization.js";
 import { type Category, CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import {
 	computeBottomPercentile,
@@ -42,9 +43,7 @@ async function getEntryTags(entryUid: string): Promise<string[]> {
 // Vote
 
 export const load = async ({ locals, params }) => {
-	if (!locals.user) {
-		return redirect(302, "/login");
-	}
+	assertIsLoggedIn(locals);
 
 	if (!voteOpen()) {
 		return redirect(302, "/user/vote/");

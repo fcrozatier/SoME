@@ -1,3 +1,4 @@
+import { assertIsLoggedIn } from "$lib/authorization.js";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db/index.js";
 import { userToTag } from "$lib/server/db/schema.js";
@@ -8,7 +9,7 @@ import { eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user) return redirect(302, "/login");
+	assertIsLoggedIn(locals);
 
 	const uid = locals.user.uid;
 
@@ -45,8 +46,8 @@ export const actions: Actions = {
 	update: formgate(
 		UpdateProfileSchema,
 		async (data, { locals }) => {
-			const uid = locals.user?.uid;
-			if (!uid) throw redirect(301, "/login");
+			assertIsLoggedIn(locals);
+			const uid = locals.user.uid;
 
 			await db
 				.update(users)
@@ -82,10 +83,9 @@ export const actions: Actions = {
 		DeleteProfileSchema,
 		async (data, event) => {
 			const { locals } = event;
+			assertIsLoggedIn(locals);
+
 			const uid = locals.user?.uid;
-
-			if (!uid) throw redirect(302, "/login");
-
 			const [user] = await db.select().from(users).where(eq(users.uid, uid));
 
 			if (!user?.passwordHash) {
