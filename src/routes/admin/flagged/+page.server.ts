@@ -1,6 +1,7 @@
 import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
+import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 import { AdminActionRequiredForm, AdminDeactivateForm } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions, error } from "@sveltejs/kit";
@@ -54,11 +55,14 @@ export const actions: Actions = {
 			where uid=${entry_uid};
 		`);
 
+		// Generate HTML
+		const note = await parseAndSanitizeMarkdown(data.note);
+
 		const strikesData = creators.map((c) => ({
 			userUid: c.user_uid,
 			entryUid: entry_uid,
 			reason: data.reason,
-			note: data.note,
+			note,
 		}));
 
 		// Save strikes

@@ -2,6 +2,7 @@
 	import { enhance } from "$app/forms";
 	import { clickOutside, disableSubmitterAndSetValidity } from "$lib/actions";
 	import { newToast } from "$lib/components/Toasts.svelte";
+	import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 
 	let { data } = $props();
 
@@ -9,9 +10,11 @@
 
 	const selectedEntry = $state({ uid: "", title: "" });
 	let selectedReason: keyof typeof reasons | undefined | null = $state();
+	let note = $derived(selectedReason ? createNote(selectedEntry.title, selectedReason) : "");
 
 	const reasons = {
-		ai: "it contains AI assets",
+		ai: "it doesn't respect the [AI Policy](/ai-policy)",
+		visibility: "it is not publicly accessible",
 		duplicate: "multiple entries are not allowed",
 		inappropriate: "it contains inappropriate content",
 		scope: "it is out of scope (not math related)",
@@ -22,10 +25,13 @@
 	function createNote(title: string, reason: keyof typeof reasons) {
 		switch (reason) {
 			case "duplicate":
-				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You should remove duplicate entries to only keep a single one. When you're ready to ask for a review by admins, click the "Ask for review" button.`;
+				return `Your entry _"${title}"_ was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You should remove duplicate entries to only keep a single one. When you're ready to ask for a review by admins, click the "Ask for review" button.`;
+
+			case "visibility":
+				return `Your entry _"${title}"_ was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. Please update your entry so that it is publicly accessible. When you're ready to ask for a review by admins, click the "Ask for review" button.`;
 
 			default:
-				return `Your entry "${title}" was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You can update your entry, and when you're ready to ask for a review by admins, click the "Ask for review" button.`;
+				return `Your entry _"${title}"_ was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You can update your entry, and when you're ready to ask for a review by admins, click the "Ask for review" button.`;
 		}
 	}
 
@@ -151,9 +157,10 @@
 		</p>
 
 		<p>
-			<select class="select-bordered select" name="reason" bind:value={selectedReason} required>
-				{#each Object.entries(reasons) as [value, content]}
-					<option {value}>{content}</option>
+			<label for="reason" class="label text-sm block">Reason</label>
+			<select class="select" name="reason" bind:value={selectedReason} required>
+				{#each Object.keys(reasons) as value}
+					<option {value}>{value}</option>
 				{/each}
 			</select>
 		</p>
@@ -162,9 +169,19 @@
 
 		<div>
 			<label for="note" class="label text-sm">Note to creators (to help them take action):</label>
-			<textarea id="note" name="note" class="textarea w-full" required
-				>{selectedReason ? createNote(selectedEntry.title, selectedReason) : ""}</textarea
+			<textarea id="note" name="note" class="textarea w-full" bind:value={note} required
+				>{note}</textarea
 			>
+			<span class="text-sm">You can edit this note with markdown</span>
+		</div>
+
+		<div>
+			{#if note}
+				<span class="text-sm font-semibold">Preview:</span>
+				<div class="alert [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
+					{@html await parseAndSanitizeMarkdown(note)}
+				</div>
+			{/if}
 		</div>
 
 		<p class="mb-0 mt-8 flex items-center justify-end gap-2">
