@@ -1,5 +1,5 @@
 <script>
-	import { FULL_NAME } from '$lib/config';
+	import { FULL_NAME } from '$lib/constants';
 	import Youtube from '$lib/components/Youtube.svelte';
 	import { makeTitle } from "$lib/utils/makeTitle";
 </script>
