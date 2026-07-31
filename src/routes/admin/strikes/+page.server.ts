@@ -2,7 +2,7 @@ import { CURRENT_YEAR, ENTRY_STATE, STRIKE_STATE } from "$lib/constants";
 import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
-import { AdminActionRequiredForm, AdminDeactivateForm } from "$lib/validation";
+import { UidSchema } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -28,31 +28,33 @@ export const load = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	remove_strike: formgate(AdminDeactivateForm, async (data, { locals }) => {
+	remove_strike: formgate({ entry_uid: UidSchema }, async (data, { locals }) => {
 		assertIsAdmin(locals);
 
-		const entry_uid = data.uid;
+		const entry_uid = data.entry_uid;
 
+		await db.transaction(async (tx) => {
 		// Update entry state
-		await db.execute(sql`
+			await tx.execute(sql`
 			update entries
 			set state=${ENTRY_STATE.Active}
 			where uid=${entry_uid};
 		`);
 
 		// Remove strike
-		await db.execute(sql`
+			await tx.execute(sql`
 			update strikes
 			set state=${STRIKE_STATE.Closed}
 			where entry_uid=${entry_uid};
 		`);
+		});
 
 		return { success: true };
 	}),
-	deactivate_entry: formgate(AdminActionRequiredForm, async (data, { locals }) => {
+	deactivate_entry: formgate({ entry_uid: UidSchema }, async (data, { locals }) => {
 		assertIsAdmin(locals);
 
-		const entry_uid = data.uid;
+		const entry_uid = data.entry_uid;
 
 		// Update entry state
 		await db.execute(sql`
@@ -62,9 +64,7 @@ export const actions: Actions = {
 		`);
 
 		// Notify creators
-		// TODO !
-		console.log(data.uid, data.reason);
-		console.log(data.note);
+		// TODO
 
 		return { success: true };
 	}),
