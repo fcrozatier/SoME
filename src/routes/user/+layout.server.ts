@@ -1,7 +1,3 @@
-import { redirect } from "@sveltejs/kit";
+import { assertIsLoggedIn } from "$lib/authorization.js";
 
-export const load = async ({ locals }) => {
-	if (!locals.user) {
-		return redirect(302, "/login");
-	}
-};
+export const load = ({ locals }) => assertIsLoggedIn(locals);

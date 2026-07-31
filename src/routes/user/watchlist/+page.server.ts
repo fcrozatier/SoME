@@ -1,3 +1,4 @@
+import { assertIsLoggedIn } from "$lib/authorization.js";
 import { db } from "$lib/server/db/index.js";
 import type { SelectEntry } from "$lib/server/db/schema";
 import { voteOpen } from "$lib/utils/time.js";
@@ -7,9 +8,7 @@ import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user) {
-		return redirect(302, "/login");
-	}
+	assertIsLoggedIn(locals);
 
 	const watchlist: Pick<
 		SelectEntry,
@@ -24,9 +23,7 @@ export const load = async ({ locals }) => {
 
 export const actions: Actions = {
 	remove: formgate(SkipSchema, async (data, { locals }) => {
-		if (!locals.user) {
-			return redirect(302, "/login");
-		}
+		assertIsLoggedIn(locals);
 
 		if (!voteOpen()) {
 			return error(400);
