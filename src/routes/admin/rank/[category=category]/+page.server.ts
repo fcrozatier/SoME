@@ -1,12 +1,12 @@
+import { assertIsAdmin } from "$lib/authorizations";
 import { CURRENT_YEAR } from "$lib/constants.js";
 import { rank } from "$lib/server/algo/queries.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
-import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ params, locals, url }) => {
-	if (!locals.user?.isAdmin) return error(403);
+	assertIsAdmin(locals);
 
 	const { category } = params;
 
@@ -70,7 +70,7 @@ export const load = async ({ params, locals, url }) => {
 
 export const actions = {
 	rank: async ({ params, locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		const { category } = params;
 

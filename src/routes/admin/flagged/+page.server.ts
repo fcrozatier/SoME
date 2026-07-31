@@ -1,15 +1,16 @@
+import { assertIsAdmin } from "$lib/authorizations";
 import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 import { AdminActionRequiredForm, AdminDeactivateForm } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
-import { type Actions, error } from "@sveltejs/kit";
+import { type Actions } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) return error(403);
+	assertIsAdmin(locals);
 
 	const flags: Prettify<Pick<SelectEntry, "uid" | "title" | "url"> & Pick<SelectFlag, "reason">>[] =
 		await db.execute(sql`
@@ -30,7 +31,7 @@ export const load = async ({ locals }) => {
 
 export const actions: Actions = {
 	ignore_flags: formgate(AdminDeactivateForm, async (data, { locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		// Update entry state
 		await db.execute(sql`
@@ -42,7 +43,7 @@ export const actions: Actions = {
 		return { success: true };
 	}),
 	action_required: formgate(AdminActionRequiredForm, async (data, { locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		const entry_uid = data.uid;
 

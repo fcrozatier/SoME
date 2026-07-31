@@ -1,13 +1,13 @@
+import { assertIsAdmin } from "$lib/authorizations";
 import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { flags, type SelectEntry } from "$lib/server/db/schema";
 import { AdminDeactivateForm } from "$lib/validation";
-import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals, url }) => {
-	if (!locals.user?.isAdmin) return error(403);
+	assertIsAdmin(locals);
 
 	let page = url.searchParams.get("page");
 
@@ -40,7 +40,7 @@ export const load = async ({ locals, url }) => {
 
 export const actions = {
 	deactivate: formgate(AdminDeactivateForm, async (data, { locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		await db.execute(sql`
 			update entries set active='false' where uid=${data.uid};

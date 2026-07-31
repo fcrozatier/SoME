@@ -22,9 +22,10 @@ import { error, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
+import { assertIsAdmin } from "$lib/authorizations";
 
 export const load = async ({ params, locals }) => {
-	if (!locals.user?.isAdmin) return error(403);
+	assertIsAdmin(locals);
 
 	const { entryUid } = params;
 
@@ -61,7 +62,7 @@ export const load = async ({ params, locals }) => {
 
 export const actions = {
 	default: formgate(NewEntrySchema, async (data, { params, locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		try {
 			const { entryUid } = params;

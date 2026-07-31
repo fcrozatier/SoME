@@ -1,14 +1,14 @@
+import { assertIsAdmin } from "$lib/authorizations.js";
 import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, type User } from "$lib/server/db/schema";
 import { AdminForm, UpdateFlagReason } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
-import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import * as fg from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) return error(403);
+	assertIsAdmin(locals);
 
 	// Turn the left join into an inner join to hide entries deactivated (by admins) without being flagged
 
@@ -40,7 +40,7 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	reactivate: fg.formgate(AdminForm, async (data, { locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		await db.execute(sql`
 			update entries set active='true' where uid in ${data.selected};
@@ -49,7 +49,7 @@ export const actions = {
 		return { flag: true };
 	}),
 	update_reason: fg.formgate(UpdateFlagReason, async (data, { locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		await db.execute(sql`
 			update flags set reason=${data.reason} where (user_uid, entry_uid)=(${data.user_uid}, ${data.entry_uid});
