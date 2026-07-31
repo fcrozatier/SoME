@@ -80,6 +80,10 @@ export const actions = {
 			const { user } = locals;
 			const { entryUid } = params;
 
+			if (!user.username) {
+				throw error(401, "Please choose a username on your Profile page before submitting");
+			}
+
 			if (!submissionsOpen() && !user.isAdmin) {
 				throw error(403, "Submissions are closed");
 			}
