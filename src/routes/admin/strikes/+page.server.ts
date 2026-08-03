@@ -65,12 +65,21 @@ export const actions: Actions = {
 
 		const entry_uid = data.entry_uid;
 
+		await db.transaction(async (tx) => {
 		// Update entry state
-		await db.execute(sql`
+			await tx.execute(sql`
 			update entries
 			set state=${ENTRY_STATE.Inactive}
 			where uid=${entry_uid};
 		`);
+
+			// Remove strike
+			await tx.execute(sql`
+				update strikes
+				set state=${STRIKE_STATE.Closed}
+				where entry_uid=${entry_uid};
+			`);
+		});
 
 		// Notify creators
 		// TODO
