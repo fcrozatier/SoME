@@ -190,6 +190,7 @@ export const actions = {
 					title: data.title,
 					url: normalizedLink,
 					thumbnail: thumbnailKey,
+					updatedAt: new Date().toISOString(),
 				})
 				.where(eq(entries.uid, entryUid));
 

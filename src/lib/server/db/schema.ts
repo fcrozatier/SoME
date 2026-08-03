@@ -58,6 +58,7 @@ export const entries = pgTable("entries", {
 	rank: integer("rank"),
 	final_score: decimal("final_score"),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+	updatedAt: timestamp("updated_at", { mode: "string" }),
 	deletedAt: timestamp("deleted_at", { mode: "string" }),
 	deletedBy: uuid("deleted_by").references(() => users.uid, {
 		onDelete: "set null",

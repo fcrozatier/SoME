@@ -302,6 +302,13 @@
 			"when": 1785492145124,
 			"tag": "0042_modern_veda",
 			"breakpoints": true
+		},
+		{
+			"idx": 43,
+			"version": "7",
+			"when": 1785741314448,
+			"tag": "0043_even_the_leader",
+			"breakpoints": true
 		}
 	]
 }
