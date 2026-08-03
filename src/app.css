@@ -113,6 +113,13 @@ dialog {
 			background-color 50ms ease-out;
 		transition-behavior: allow-discrete;
 	}
+
+	/* non scrollable background page */
+	overscroll-behavior: contain;
+	&::backdrop {
+		overflow: hidden;
+		overscroll-behavior: contain;
+	}
 }
 
 dialog[open] {
