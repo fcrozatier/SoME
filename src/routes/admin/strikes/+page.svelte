@@ -16,23 +16,25 @@
 			<tr class="px-6">
 				<th class="text-left">Entry</th>
 				<th class="text-left">Striked</th>
+				<th class="text-left">Updated</th>
 				<th class="text-left">Reason</th>
 				<th class="text-left">State</th>
 				<th class="text-left">Action</th>
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.strikes as { title, url, uid, state, reason, created_at }}
+			{#each data.strikes as { title, url, uid, state, reason, created_at, updated_at }}
 				<tr class="px-6 py-2">
 					<td>
 						<div>
 							<a class="capitalize" href={url} target="_blank">{title}</a>
-							<br />{uid}
+							<br /><span class="text-nowrap">{uid}</span>
 						</div>
 					</td>
-					<td>{relativeTime(created_at)}</td>
+					<td class="text-nowrap">{relativeTime(created_at)}</td>
+					<td class="text-nowrap">{relativeTime(updated_at) ?? "not updated"}</td>
 					<td>{reason}</td>
-					<td class="flex items-baseline gap-1.5">
+					<td class="flex items-baseline gap-1.5 text-nowrap">
 						<span
 							class="w-1.5 inline-block aspect-square rounded-full"
 							class:bg-yellow-500={state === ENTRY_STATE.ActionRequired}

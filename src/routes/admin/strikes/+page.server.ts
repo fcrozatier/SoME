@@ -13,9 +13,18 @@ export const load = async ({ locals }) => {
 
 	const strikes: Prettify<
 		Pick<SelectEntry, "uid" | "title" | "url" | "state"> &
-			Pick<SelectFlag, "reason"> & { created_at: string }
+			Pick<SelectFlag, "reason"> & {
+				/**
+				 * When was the strike created
+				 */
+				created_at: SelectFlag["createdAt"];
+				/**
+				 * When was the entry last updated
+				 */
+				updated_at: SelectEntry["updatedAt"];
+			}
 	>[] = await db.execute(sql`
-			select distinct uid, title, url, entries.state, reason, strikes.created_at
+			select distinct uid, title, url, entries.state, updated_at, reason, strikes.created_at
 			from entries join strikes
 			on entries.uid=strikes.entry_uid
 			where entries.state in ${[ENTRY_STATE.ActionRequired, ENTRY_STATE.WaitingForReview]}

@@ -104,7 +104,8 @@ const rtf = new Intl.RelativeTimeFormat("en", {
 	numeric: "auto",
 });
 
-export function relativeTime(date: string | Date): string {
+export function relativeTime(date: string | Date | null): string | null {
+	if (!date) return null;
 	let duration = (new Date(date).getTime() - Date.now()) / 1000;
 
 	for (const { amount, unit } of DIVISIONS) {
