@@ -22,13 +22,9 @@
 <article class="layout-prose">
 	<h2>My entries</h2>
 
-	{#if data.strike}
+	{#if data.strike?.state === ENTRY_STATE.ActionRequired}
 		<div class="alert alert-warning [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
-			{#if data.strike.state === ENTRY_STATE.ActionRequired}
-				{@html data.strike.note}
-			{:else if data.strike.state === ENTRY_STATE.WaitingForReview}
-				Your entry <em>"{data.strike.title}"</em> is being reviewed by admins...
-			{/if}
+			{@html data.strike.note}
 		</div>
 	{/if}
 
@@ -55,7 +51,7 @@
 		{#each Object.entries(entriesByYear).sort(([y1], [y2]) => Number(y2) - Number(y1)) as [year, entries]}
 			<h3>{year}</h3>
 			<div class="max-w-3xl mx-auto">
-				{#each entries! as { uid, title, description, category, thumbnail, url, createdAt }}
+				{#each entries! as { uid, title, description, category, thumbnail, url, state, createdAt }}
 					<div>
 						<LayoutSideBySide side="right" mainPanelMinWidth="83%" sidePanelMaxWidth="64px">
 							{#snippet mainPanel()}
@@ -86,7 +82,7 @@
 									{#if new Date(createdAt) > new Date(PUBLIC_REGISTRATION_START) && new Date(createdAt) < new Date(PUBLIC_REGISTRATION_END)}
 										<a class="btn btn-sm" href={`/user/entries/update/${uid}`}> update </a>
 									{/if}
-									{#if data.strike?.entry_uid === uid}
+									{#if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.ActionRequired}
 										<button
 											type="button"
 											class="btn btn-sm font-medium text-nowrap"
@@ -97,6 +93,10 @@
 												askReviewDialog?.showModal();
 											}}>Ask for review</button
 										>
+									{:else if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.WaitingForReview}
+										<span class="badge badge-sm badge-primary">under review</span>
+									{:else if state === ENTRY_STATE.Inactive}
+										<span class="badge badge-sm badge-primary">inactive</span>
 									{/if}
 								</div>
 							{/snippet}
@@ -129,7 +129,10 @@
 
 				if (result.type === "success") {
 					askReviewDialog?.close();
-					newToast({ type: "info", content: "Admins notified" });
+					newToast({
+						type: "info",
+						content: "Your entry will be reviewed by admins",
+					});
 				} else if (
 					result.type === "failure" &&
 					result.data?.issues !== null &&
@@ -145,8 +148,8 @@
 	>
 		<h2 class="mt-0">Are you sure?</h2>
 		<p class="text-gray-700 mb-0">
-			You're about to ask admins to review your entry. Have you made all the required updates to
-			your submission?
+			You're about to ask admins to review your entry. Make sure you made all the mandatory updates
+			before
 		</p>
 
 		<input type="hidden" name="uid" value={askReviewUid} />

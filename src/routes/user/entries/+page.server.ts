@@ -3,7 +3,6 @@ import { CURRENT_YEAR, ENTRY_STATE, type EntryState, STRIKE_STATE } from "$lib/c
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema.js";
 import { UidSchema } from "$lib/validation";
-import { fail } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
@@ -14,9 +13,9 @@ export const load = async ({ locals }) => {
 
 	const userEntries: Pick<
 		SelectEntry,
-		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "createdAt"
+		"uid" | "title" | "description" | "category" | "thumbnail" | "url" | "state" | "createdAt"
 	>[] = await db.execute(sql`
-      select uid, title, description, category, thumbnail, url, created_at from entries
+      select uid, title, description, category, thumbnail, url, state, created_at from entries
       inner join user_to_entry
       on entries.uid=user_to_entry.entry_uid
       where user_to_entry.user_uid=${user_uid}
@@ -36,9 +35,9 @@ export const load = async ({ locals }) => {
 		on entries.uid=strikes.entry_uid
 		where strikes.user_uid=${user_uid}
 		and strikes.state=${STRIKE_STATE.Open}
-		and entries.state=${ENTRY_STATE.ActionRequired}
+		and entries.state in ${[ENTRY_STATE.ActionRequired, ENTRY_STATE.WaitingForReview]}
 		and entries.deleted_at is null
-		and date_part('year', entries.created_at)=${CURRENT_YEAR}
+		and date_part('year', strikes.created_at)=${CURRENT_YEAR}
 		order by strikes.created_at desc
 		limit 1;
 	`);
