@@ -299,7 +299,7 @@ export const SurveyFilterSchema = {
 
 export const AdminFlagForm = {
 	uid: UidSchema,
-	reason: fg.text({ required: true }).trim(),
+	reason: fg.textarea({ required: true }).trim(),
 };
 
 export const AdminIgnoreFlagForm = {
