@@ -1,20 +1,28 @@
-import { conjunctionFormatter } from "$lib/utils/formatting.js";
+import { CURRENT_YEAR } from "$lib/constants.js";
+import { assertIsLoggedIn } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
-import { entriesHistory } from "$lib/server/db/schema.js";
-import { entries, entryToTag, nonTags, tags, users, userToEntry } from "$lib/server/db/schema.js";
+import {
+	entries,
+	entriesHistory,
+	entryToTag,
+	nonTags,
+	tags,
+	users,
+	userToEntry,
+} from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
+import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
 import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
-import { error, redirect } from "@sveltejs/kit";
-import { inArray } from "drizzle-orm";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
-import { assertIsLoggedIn } from "$lib/server/authorization";
 
 export const load = async ({ locals }) => {
 	assertIsLoggedIn(locals);
@@ -44,6 +52,28 @@ export const actions = {
 
 		const usernames = [...new Set([...data.usernames, user.username])];
 		const teamSize = usernames.length;
+
+		// No duplicate solo entries
+		if (usernames.length === 1) {
+			const [soloEntries]: { count: number }[] = await db.execute(sql`
+				with solo_entries as (
+					select entry_uid
+					from user_to_entry join entries on entries.uid=user_to_entry.entry_uid
+					where date_part('year', entries.created_at)=${CURRENT_YEAR}
+					and user_uid=${user.uid}
+					and entries.deleted_at is null
+					group by entry_uid
+					having count(user_uid)=1
+				)
+				select count(*)::int from solo_entries;
+			`);
+
+			if (soloEntries?.count !== 0) {
+				return fail(422, {
+					noDuplicateSoloEntries: true,
+				});
+			}
+		}
 
 		// The distinct team members
 		const team = await db
