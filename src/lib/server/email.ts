@@ -1,3 +1,4 @@
+import { dev } from "$app/environment";
 import { DOMAIN, MAILGUN_API_KEY } from "$env/static/private";
 import { formatDateTime } from "$lib/utils/formatting";
 import formData from "form-data";
@@ -48,7 +49,16 @@ export async function sendGenericTemplateEmail({
 	to: string;
 	data: EmailData;
 }) {
-	await mg.messages.create(DOMAIN, {
+	if (dev) {
+		console.log("[message received]");
+		console.log("from:", FROM);
+		console.log("to:", to);
+		console.log("subject:", subject);
+		console.log("body:", body);
+		return;
+	}
+
+	return await mg.messages.create(DOMAIN, {
 		from: FROM,
 		to,
 		subject,
