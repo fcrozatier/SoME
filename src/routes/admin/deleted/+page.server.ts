@@ -2,10 +2,8 @@ import { CURRENT_YEAR } from "$lib/constants.js";
 import { assertIsAdmin } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, type SelectStrike } from "$lib/server/db/schema";
-import { AdminForm, UpdateFlagReason } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { sql } from "drizzle-orm";
-import * as fg from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
 	assertIsAdmin(locals);
@@ -59,25 +57,4 @@ export const load = async ({ locals }) => {
 	const withFlags = Object.groupBy(flags, ({ entry_uid }) => entry_uid);
 
 	return { inactiveEntries: deletedEntries, withFlags, withStrikes };
-};
-
-export const actions = {
-	reactivate: fg.formgate(AdminForm, async (data, { locals }) => {
-		assertIsAdmin(locals);
-
-		await db.execute(sql`
-			update entries set active='true' where uid in ${data.selected};
-		`);
-
-		return { flag: true };
-	}),
-	update_reason: fg.formgate(UpdateFlagReason, async (data, { locals }) => {
-		assertIsAdmin(locals);
-
-		await db.execute(sql`
-			update flags set reason=${data.reason} where (user_uid, entry_uid)=(${data.user_uid}, ${data.entry_uid});
-		`);
-
-		return { flag: true };
-	}),
 };

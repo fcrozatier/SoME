@@ -3,7 +3,7 @@ import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
-import { AdminActionRequiredForm, AdminDeactivateForm } from "$lib/validation";
+import { AdminActionRequiredForm, AdminIgnoreFlagForm } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -29,7 +29,7 @@ export const load = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	ignore_flags: formgate(AdminDeactivateForm, async (data, { locals }) => {
+	ignore_flags: formgate(AdminIgnoreFlagForm, async (data, { locals }) => {
 		assertIsAdmin(locals);
 
 		// Update entry state
