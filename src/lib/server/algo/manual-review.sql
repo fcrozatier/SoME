@@ -19,7 +19,7 @@ with
     from entries
     right join overall_score on overall_score.entry_uid=entries.uid
     where category='video'
-    and active='t'
+    and entries.state='active'
     and deleted_at is null
     order by overall_median desc
   ),

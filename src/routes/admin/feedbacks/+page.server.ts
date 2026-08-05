@@ -1,5 +1,5 @@
 import { assertIsAdmin } from "$lib/server/authorization";
-import { CURRENT_YEAR } from "$lib/constants.js";
+import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
 import { sql } from "drizzle-orm";
@@ -14,7 +14,7 @@ export const load = async ({ locals }) => {
 			select uid, title, url, user_uid, feedback
 			from entries join votes
 			on uid=entry_uid
-			where entries.active='true'
+			where entries.state=${ENTRY_STATE.Active}
 			and deleted_at is null
 			and date_part('year', entries.created_at)=${CURRENT_YEAR}
 			and votes.reviewed='false'
