@@ -83,7 +83,7 @@ export const EMAILS = {
 		body: `<p>Your entry <em>"${entryTitle}"</em> was flagged by admins and is temporarily inactive.</p>
 		<p>Please go to <a href="https://some.3b1b.co/user/entries">"My Entries"</a> to see why and update your entry to resolve the issue <strong>before ${formatDateTime(
 			deadline,
-			{ includeTime: false },
+			{ includeTime: false, dateStyle: "full" },
 		)}</strong>.</p>
 		<p>Thanks</p>
 		`,
