@@ -104,7 +104,7 @@ const rtf = new Intl.RelativeTimeFormat("en", {
 	numeric: "auto",
 });
 
-export function relativeTime(date: string | Date | null): string | null {
+export function formatRelativeTime(date: string | Date | null): string | null {
 	if (!date) return null;
 	let duration = (new Date(date).getTime() - Date.now()) / 1000;
 
@@ -117,4 +117,9 @@ export function relativeTime(date: string | Date | null): string | null {
 
 	// Unreachable because of Infinity
 	return "";
+}
+
+export function relativeTime(duration: Temporal.DurationLike) {
+	const now = Temporal.Now.plainDateTimeISO();
+	return now.add(Temporal.Duration.from(duration));
 }
