@@ -109,7 +109,7 @@
 	</div>
 </article>
 
-<dialog id="flag-dialog" class="m-auto" bind:this={flagDialog} closedby="any">
+<dialog id="flag-dialog" class="m-auto w-[65ch]" bind:this={flagDialog} closedby="any">
 	<form
 		method="post"
 		class="space-y-2"
@@ -148,7 +148,7 @@
 
 		<p>
 			<label for="reason" class="label text-sm block">Reason</label>
-			<input type="text" name="reason" class="input" required />
+			<textarea name="reason" id="reason" class="textarea w-full" required></textarea>
 		</p>
 
 		<p class="mb-0 mt-8 flex items-center justify-end gap-2">
