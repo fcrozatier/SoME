@@ -5,9 +5,10 @@
 	<ul>
 		<li><a href="/admin/entries">All Entries</a></li>
 		<li><a href="/admin/flagged">Flagged entries</a></li>
-		<li><a href="/admin/strikes">Strikes</a></li>
+		<li><a href="/admin/strikes">Striked entries</a></li>
+		<li><a href="/admin/deactivated">Inactive entries</a></li>
+		<li><a href="/admin/deleted">Deleted entries</a></li>
 		<li><a href="/admin/feedbacks">Feedbacks</a></li>
-		<li><a href="/admin/deactivated">Deactivated entries</a></li>
 	</ul>
 	<h3>Ranking</h3>
 	<ul>

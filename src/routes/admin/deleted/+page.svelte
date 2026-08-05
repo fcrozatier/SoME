@@ -5,7 +5,7 @@
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl overflow-x-auto">
-	<h2>Deactivated entries</h2>
+	<h2>Deleted entries</h2>
 
 	<div class="overflow-x-auto">
 		<table class="w-full">

@@ -10,7 +10,7 @@ import * as fg from "formgator/sveltekit";
 export const load = async ({ locals }) => {
 	assertIsAdmin(locals);
 
-	const inactiveEntries: Prettify<
+	const deletedEntries: Prettify<
 		Pick<SelectEntry, "uid" | "title" | "url"> & {
 			/**
 			 * When was the entry created
@@ -28,11 +28,11 @@ export const load = async ({ locals }) => {
 	>[] = await db.execute(sql`
 				select uid, title, url, created_at, updated_at, deleted_at
 				from entries
-				where entries.state=${ENTRY_STATE.Inactive}
-				and date_part('year', entries.created_at)=${CURRENT_YEAR};
+				where date_part('year', entries.created_at)=${CURRENT_YEAR}
+				and deleted_at is not null;
 		`);
 
-	const uids = inactiveEntries.map((entry) => entry.uid);
+	const uids = deletedEntries.map((entry) => entry.uid);
 
 	const strikes: Prettify<
 		Pick<SelectStrike, "reason" | "note" | "state"> & {
@@ -58,7 +58,7 @@ export const load = async ({ locals }) => {
 	const withStrikes = Object.groupBy(strikes, ({ entry_uid }) => entry_uid);
 	const withFlags = Object.groupBy(flags, ({ entry_uid }) => entry_uid);
 
-	return { inactiveEntries, withFlags, withStrikes };
+	return { inactiveEntries: deletedEntries, withFlags, withStrikes };
 };
 
 export const actions = {
