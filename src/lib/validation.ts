@@ -312,6 +312,11 @@ export const AdminActionRequiredForm = {
 	note: fg.textarea({ required: true }).trim(),
 };
 
+export const AdminFollowUpActionRequiredForm = {
+	uid: UidSchema,
+	note: fg.textarea({ required: true }).trim(),
+};
+
 export const AdminForm = {
 	selected: fg.multi().pipe(z.array(z.uuid())),
 };

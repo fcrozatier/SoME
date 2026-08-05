@@ -80,18 +80,36 @@ export const EMAILS = {
 	}),
 	ActionRequired: ({ entryTitle, deadline }: { entryTitle: string; deadline: string }) => ({
 		subject: "[action required] Entry flagged. Please update your entry",
-		body: `<p>Your entry <em>"${entryTitle}"</em> was flagged by admins and is temporarily inactive.</p>
+		body: `
+		<p>Your entry <em>"${entryTitle}"</em> was flagged by admins and is temporarily inactive.</p>
+
 		<p>Please go to <a href="https://some.3b1b.co/user/entries">"My Entries"</a> to see why and update your entry to resolve the issue <strong>before ${formatDateTime(
 			deadline,
 			{ includeTime: false, dateStyle: "full" },
 		)}</strong>.</p>
+
+		<p>Thanks</p>
+		`,
+	}),
+	FollowUpActionRequired: ({ entryTitle, deadline }: { entryTitle: string; deadline: string }) => ({
+		subject: "[ongoing issue] Entry still flagged. Please update your entry",
+		body: `
+		<p>Your entry <em>"${entryTitle}"</em> was reviewed by admins. It is still flagged and temporarily inactive.</p>
+
+		<p>Please go to <a href="https://some.3b1b.co/user/entries">"My Entries"</a> to see what follow-up action is required to resolve the issue <strong>before ${formatDateTime(
+			deadline,
+			{ includeTime: false, dateStyle: "full" },
+		)}</strong>.</p>
+
 		<p>Thanks</p>
 		`,
 	}),
 	StrikeResolved: ({ entryTitle }: { entryTitle: string }) => ({
 		subject: "[issue resolved] Entry unflagged",
-		body: `<p>The flag on your entry <em>"${entryTitle}"</em> was removed by admins. You don't have anything else to do.</p>
-			<p>Thank you</p>
+		body: `
+		<p>The flag on your entry <em>"${entryTitle}"</em> was removed by admins. You don't have anything else to do.</p>
+
+		<p>Thank you</p>
 		`,
 	}),
 	EntryInactive: ({ entryTitle }: { entryTitle: string }) => ({
