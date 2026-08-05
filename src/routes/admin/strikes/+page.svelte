@@ -4,7 +4,7 @@
 	import Time from "$lib/components/Time.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
 	import { ENTRY_STATE } from "$lib/constants.js";
-	import { relativeTime } from "$lib/utils/time.js";
+	import { formatRelativeTime } from "$lib/utils/time.js";
 
 	let { data } = $props();
 </script>
@@ -34,8 +34,8 @@
 								<br /><span class="text-nowrap">{uid}</span>
 							</div>
 						</td>
-						<td class="text-nowrap">{relativeTime(created_at)}</td>
-						<td class="text-nowrap">{relativeTime(updated_at) ?? "-"}</td>
+						<td class="text-nowrap">{formatRelativeTime(created_at)}</td>
+						<td class="text-nowrap">{formatRelativeTime(updated_at) ?? "-"}</td>
 						<td class="text-nowrap">
 							{#if deleted_at}
 								<Time datetime={deleted_at} includeTime={false}></Time>

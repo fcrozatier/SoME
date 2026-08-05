@@ -49,7 +49,7 @@ export const actions: Actions = {
 		} else {
 			await sendGenericTemplateEmail({
 				to: email,
-				data: EMAILS.ChangePassword(emailToken),
+				data: EMAILS.ChangePassword({ token: emailToken }),
 			});
 		}
 
