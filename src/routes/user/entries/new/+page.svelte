@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resetUsernameStatus, type UsernameStatus } from "$api/check-username/fetch.js";
 	import { enhance } from "$app/forms";
-	import { page } from "$app/state";
 	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
@@ -438,13 +437,12 @@
 		</div>
 
 		<p class="mt-8">
-			<button class="btn-neutral btn block"> Submit Entry</button>
-			{#if form?.issues || page.status !== 200}
-				<span class="error-message mt-2">
-					Something went wrong. {form?.issues
-						? "Please correct the highlighted fields above"
-						: "There was a network error. Please try again later"}
-				</span>
+			<button class="btn-neutral btn block">Submit Entry</button>
+			{#if form?.issues}
+				<span class="error-message mt-2">Please fix the highlighted fields above </span>
+			{/if}
+			{#if form?.noDuplicateSoloEntries}
+				<span class="error-message mt-2">Only one solo entry is allowed.</span>
 			{/if}
 		</p>
 	</form>
