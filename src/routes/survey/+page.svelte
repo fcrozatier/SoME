@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { disableSubmitterAndSetValidity } from "$lib/actions";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { SurveySchema } from "$lib/validation";
 	import * as fg from "formgator";
 
@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Survey")}</title>
+	<title>{formatTitle("Survey")}</title>
 </svelte:head>
 
 <article class="layout-prose">

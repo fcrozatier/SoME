@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { userToEntry } from "../db/schema";
-import { currentYear } from "$lib/config";
+import { CURRENT_YEAR } from "$lib/constants";
 import { randomItem, round } from "@fcrozatier/ts-helpers";
 import { voteTimeElapsedPercent } from "$lib/utils/time";
 
@@ -20,14 +20,14 @@ export function voteWarmup(
 			with nb_votes as (
 				select entry_uid, count(*) as count
 				from votes
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			nb_skips as (
 				select entry_uid, count(*) as count
 				from skips
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
@@ -42,7 +42,7 @@ export function voteWarmup(
 				left join entry_to_tag
 				on entries.uid=entry_to_tag.entry_uid
 
-				where date_part('year', entries.created_at)=${currentYear}
+				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
 					and active='true'
 					and deleted_at is null
@@ -83,6 +83,21 @@ export function computeBottomPercentile() {
 }
 
 /**
+ * We enter the end game when the votes rate drops.
+ * The rate is like x ** a, so we target a x ** (a - 1) = 1
+ */
+const END_GAME_THRESHOLD = VOTE_RATE_EXPONENT ** (1 / (1 - VOTE_RATE_EXPONENT));
+
+function isEndGame() {
+	return voteTimeElapsedPercent() > END_GAME_THRESHOLD;
+}
+
+/**
+ * This value filters out 15% of entries, in the tail of the skips to votes distribution
+ */
+export const SKIPS_TO_VOTES_THRESHOLD = 4.1;
+
+/**
  * Main voting phase
  *
  * 1. Define the dynamic pool of entries by:
@@ -106,7 +121,7 @@ export function computeBottomPercentile() {
 export function voteMain(
 	user_uid: string,
 	category: string,
-	options = { skips_to_votes_ratio: "4", percentile: "0.0" },
+	options = { skips_to_votes_ratio: SKIPS_TO_VOTES_THRESHOLD, percentile: 0 },
 ) {
 	const explorationQuery: QueryFragment = {
 		order: "random()",
@@ -145,37 +160,35 @@ export function voteMain(
 		order: "-ln(1 - random()) / nb_ties",
 	};
 
+	const endGameQueries = [byNbVotesQuery, bySpreadQuery, byNbTiesQuery];
+
 	const query: QueryFragment | undefined = randomItem([
 		explorationQuery,
-		byNbVotesQuery,
 		byMedianQuery,
-		bySpreadQuery,
-		byNbTiesQuery,
+		...(isEndGame() ? endGameQueries : []),
 	]);
 
-	if (!query) {
-		throw new Error("Can't make vote sql query with an empty query fragment");
-	}
+	if (!query) throw new Error("[voteMain]: empty QueryFragment");
 
 	return sql`
 			with nb_votes as (
 				select entry_uid, count(*)
 				from votes
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			nb_skips as (
 				select entry_uid, count(*)
 				from skips
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			medians as (
 				select entry_uid, percentile_disc(0.5) within group (order by score) as median, coalesce(stddev_samp(score), 0) as std
 				from votes
-				where date_part('year', created_at)=${currentYear}
+				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
@@ -199,7 +212,7 @@ export function voteMain(
 				on entries.uid=entry_to_tag.entry_uid
 				${sql.raw(query.poolJoin ?? "")}
 
-				where date_part('year', entries.created_at)=${currentYear}
+				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
 					and active='true'
 					and deleted_at is null
@@ -225,6 +238,8 @@ export function voteMain(
  * Pick an entry at random from all entries
  */
 export function voteFallback(user_uid: string, category: string) {
+	console.log("[vote]: fallback strategy");
+
 	return sql`
 		with pool as (
 			select distinct uid, ${sql.raw(entry_columns)}
@@ -232,7 +247,7 @@ export function voteFallback(user_uid: string, category: string) {
 			left join entry_to_tag
 			on entries.uid=entry_to_tag.entry_uid
 
-			where date_part('year', entries.created_at)=${currentYear}
+			where date_part('year', entries.created_at)=${CURRENT_YEAR}
 			and entries.category=${category}
 			and active='true'
 			and deleted_at is null
@@ -255,41 +270,39 @@ export function rank(category: string) {
 	 * (percentile_disc(0.5), percentile_disc(0.5 - δ), percentile_disc(0.5 + δ), percentile_disc(0.5 - 2δ), percentile_disc(0.5 + 2δ), ...)
 	 */
 
+	/**
+	 * This corresponds to the smallest step between two entry scores over all entries, which is also the slider resolution and storage resolution
+	 */
 	const delta = 0.01;
 	const depth = 10;
-	const percentiles = [
-		"percentile_disc(0.5) within group (order by score) as m0",
-	];
+	const percentiles = ["percentile_disc(0.5) within group (order by score) as m0"];
 
 	for (let i = 1; i <= depth; i++) {
 		percentiles.push(
-			`percentile_disc(${
-				round(0.5 - i * delta, 3)
-			}) within group (order by score) as m${2 * i - 1}`,
+			`percentile_disc(${round(
+				0.5 - i * delta,
+				3,
+			)}) within group (order by score) as m${2 * i - 1}`,
 		);
 		percentiles.push(
-			`percentile_disc(${
-				round(0.5 + i * delta, 3)
-			}) within group (order by score) as m${2 * i}`,
+			`percentile_disc(${round(0.5 + i * delta, 3)}) within group (order by score) as m${2 * i}`,
 		);
 	}
 
-	const tieBreaker = `(${
-		Array.from({ length: depth * 2 + 1 }).map((_, i) => "m" + i).join(",")
-	})`;
+	const tieBreaker = `(${Array.from({ length: depth * 2 + 1 })
+		.map((_, i) => "m" + i)
+		.join(",")})`;
 
 	return sql`
 		with scores as (
 			select entry_uid, ${sql.raw(percentiles.join(","))}
 			from votes
-			where date_part('year', created_at)=${currentYear}
+			where date_part('year', created_at)=${CURRENT_YEAR}
 			group by entry_uid
 		),
 
 		sort as (
-			select entry_uid, m0, dense_rank() over (order by ${
-		sql.raw(tieBreaker)
-	} desc) as ranking
+			select entry_uid, m0, dense_rank() over (order by ${sql.raw(tieBreaker)} desc) as ranking
 			from (scores join entries on scores.entry_uid=entries.uid)
 			where category=${category}
 			and active='t'

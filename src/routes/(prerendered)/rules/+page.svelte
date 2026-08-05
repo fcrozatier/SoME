@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
 	import Time from "$lib/components/Time.svelte";
-	import { FULL_NAME } from "$lib/config";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting";
 	import { resultsAvailable, submissionsOpen, timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
 
@@ -17,7 +16,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Rules")}</title>
+	<title>{formatTitle("Rules")}</title>
 </svelte:head>
 
 <article class="layout-prose">
@@ -111,6 +110,45 @@
 				original, so go have fun!
 			</p>
 		</details>
+		<!-- AI -->
+		<details>
+			<summary id="ai"><a href="#ai" tabindex="-1">Can I use AI? </a></summary>
+			<p>
+				As a guiding principle, AI should not produce a substantial part of your exposition,
+				otherwise it's not eligible to participate in the competition.
+			</p>
+			<p>
+				Here are a few examples of what's allowed and what's not allowed to illustrate this
+				principle:
+			</p>
+
+			<p><b>Not allowed:</b></p>
+			<ul class="mt-0 mb-0">
+				<li>Generating the script, narration or storytelling</li>
+				<li>Producing the core arguments, proofs or explanations.</li>
+				<li>
+					Generating diagrams, illustrations, animations, or visual assets that form a significant
+					creative component of the exposition
+				</li>
+				<li>AI Voices</li>
+				<li>
+					Producing an exposition that is primarily AI-generated and only lightly edited by the
+					participant.
+				</li>
+			</ul>
+
+			<p><b>Allowed:</b></p>
+			<ul class="mt-0 mb-0">
+				<li>Brainstorming and research</li>
+				<li>
+					Assistance in video editing, coding (including coding animations or illustrations) or
+					debugging
+				</li>
+				<li>Improving grammar, spelling or clarity without altering the author's ideas.</li>
+			</ul>
+
+			<p>For more details please refer to our <a href="/ai-policy">AI Policy</a></p>
+		</details>
 		<!-- How many entries? -->
 		<details>
 			<summary id="how-many-entries"
@@ -191,16 +229,16 @@
 			<summary id="copyrighted-material"
 				><a href="#copyrighted-material" tabindex="-1">Can I use copyrighted material? </a></summary
 			>
-			<p>By registering as a creator you agree to the following copyright notice:</p>
-			<p class="indent-8 italic">
-				I have permission to use all material contained in my submission for the {FULL_NAME}.
+			<p>
+				To submit an entry as a creator you must have permission to use all material contained in
+				your submission. See:
 			</p>
 			<ul>
 				<li>
 					<a href="/content-policy#fair-use">Copyrighted material policy and fair use guidelines</a>
 				</li>
 				<li><a href="/content-policy#cc">Creative Commons guidelines</a></li>
-				<li><a href="/content-policy#ai">AI policy</a></li>
+				<li><a href="/ai-policy">AI policy</a></li>
 			</ul>
 		</details>
 		<!-- Ads -->
@@ -258,16 +296,13 @@
 				>.
 			</p>
 			<p>
-				Peer review basics: Judges review entries one by one, scoring each one on a continuous
-				scale from 1 to 9. The guiding question is: <em>
-					"How valuable is this entry to the space of
-					online math exposition, compared to the typical video/post you've seen?"
+				Peer review basics: Judges review entries one by one, scoring each one on a continuous scale
+				from 1 to 9. The guiding question is: <em>
+					"How valuable is this entry to the space of online math exposition, compared to the
+					typical video/post you've seen?"
 				</em>
 			</p>
-			<p>
-				Here are some broad guidelines for what we're hoping to
-				see:
-			</p>
+			<p>Here are some broad guidelines for what we're hoping to see:</p>
 			<ul>
 				<li>
 					<b>Motivation:</b> By the end of the introduction it should be clear why the topic matters and

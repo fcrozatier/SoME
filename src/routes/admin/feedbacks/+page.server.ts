@@ -1,11 +1,11 @@
-import { currentYear } from "$lib/config.js";
+import { assertIsAdmin } from "$lib/server/authorization";
+import { CURRENT_YEAR } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { type SelectEntry } from "$lib/server/db/schema";
-import { error } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 
 export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	assertIsAdmin(locals);
 
 	const feedbacks: (Pick<SelectEntry, "uid" | "title" | "url"> & {
 		feedback: string;
@@ -16,7 +16,7 @@ export const load = async ({ locals }) => {
 			on uid=entry_uid
 			where entries.active='true'
 			and deleted_at is null
-			and date_part('year', entries.created_at)=${currentYear}
+			and date_part('year', entries.created_at)=${CURRENT_YEAR}
 			and votes.reviewed='false'
 			and votes.maybe_rude='true'
 			order by uid;
@@ -27,7 +27,7 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	keep: async ({ request, locals }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		const formData = await request.formData();
 		const uids = Array.from(formData).map(([_, uid]) => (uid as string).split(","));
@@ -39,7 +39,7 @@ export const actions = {
 		return { success: true };
 	},
 	remove: async ({ locals, request }) => {
-		if (!locals.user?.isAdmin) return error(403);
+		assertIsAdmin(locals);
 
 		const formData = await request.formData();
 		const uids = Array.from(formData).map(([_, uid]) => (uid as string).split(","));

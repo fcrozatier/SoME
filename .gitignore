@@ -4,6 +4,7 @@
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+*.ipynb
 
 /.svelte-kit
 /.venv

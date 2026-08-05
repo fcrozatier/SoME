@@ -49,8 +49,7 @@ export function timeLeft() {
 	try {
 		// Compare dates using UTC projection
 		const now = Temporal.Now.zonedDateTimeISO("UTC");
-		const then = Temporal.Instant.from(PUBLIC_REGISTRATION_END)
-			.toZonedDateTimeISO("UTC");
+		const then = Temporal.Instant.from(PUBLIC_REGISTRATION_END).toZonedDateTimeISO("UTC");
 
 		const {
 			days: d,
@@ -64,9 +63,7 @@ export function timeLeft() {
 		});
 
 		const days = d > 0 ? d + ` day${d > 1 ? "s" : ""} ` : "";
-		return `${days}${hours}h ${padStartZero(minutes)}min ${
-			padStartZero(seconds)
-		}s`;
+		return `${days}${hours}h ${padStartZero(minutes)}min ${padStartZero(seconds)}s`;
 	} catch (e) {
 		if (!(e instanceof ReferenceError)) throw e;
 
@@ -91,4 +88,38 @@ export function voteTimeElapsedPercent() {
 	const now = Temporal.Now.instant();
 
 	return now.since(start).seconds / end.since(start).seconds;
+}
+
+const DIVISIONS = [
+	{ amount: 60, unit: "second" },
+	{ amount: 60, unit: "minute" },
+	{ amount: 24, unit: "hour" },
+	{ amount: 7, unit: "day" },
+	{ amount: 4.34524, unit: "week" },
+	{ amount: 12, unit: "month" },
+	{ amount: Infinity, unit: "year" },
+] as const;
+
+const rtf = new Intl.RelativeTimeFormat("en", {
+	numeric: "auto",
+});
+
+export function formatRelativeTime(date: string | Date | null): string | null {
+	if (!date) return null;
+	let duration = (new Date(date).getTime() - Date.now()) / 1000;
+
+	for (const { amount, unit } of DIVISIONS) {
+		if (Math.abs(duration) < amount) {
+			return rtf.format(Math.round(duration), unit);
+		}
+		duration /= amount;
+	}
+
+	// Unreachable because of Infinity
+	return "";
+}
+
+export function relativeTime(duration: Temporal.DurationLike) {
+	const now = Temporal.Now.plainDateTimeISO();
+	return now.add(Temporal.Duration.from(duration));
 }

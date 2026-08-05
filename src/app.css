@@ -65,6 +65,11 @@ a:not(:where(.btn)) {
 
 /* Inputs */
 
+:focus-visible {
+	outline: 1px solid currentColor;
+	outline-offset: 0px;
+}
+
 :user-invalid {
 	border-color: var(--color-error);
 	outline-color: var(--color-error);
@@ -107,6 +112,13 @@ dialog {
 			backdrop-filter 50ms ease-out,
 			background-color 50ms ease-out;
 		transition-behavior: allow-discrete;
+	}
+
+	/* non scrollable background page */
+	overscroll-behavior: contain;
+	&::backdrop {
+		overflow: hidden;
+		overscroll-behavior: contain;
 	}
 }
 

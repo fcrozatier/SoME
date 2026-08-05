@@ -1,3 +1,4 @@
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db/index.js";
 import type { SelectEntry, SelectVote } from "$lib/server/db/schema";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
@@ -8,9 +9,7 @@ import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user) {
-		return redirect(302, "/login");
-	}
+	assertIsLoggedIn(locals);
 
 	const votes: (Pick<
 		SelectEntry,
@@ -27,9 +26,7 @@ export const load = async ({ locals }) => {
 
 export const actions: Actions = {
 	update: formgate(VoteSchema, async (data, { locals }) => {
-		if (!locals.user) {
-			return redirect(302, "/login");
-		}
+		assertIsLoggedIn(locals);
 
 		if (!voteOpen()) {
 			return error(400);

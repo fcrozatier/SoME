@@ -1,7 +1,3 @@
-import { error } from "@sveltejs/kit";
+import { assertIsAdmin } from "$lib/server/authorization";
 
-export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) {
-		return error(404);
-	}
-};
+export const load = ({ locals }) => assertIsAdmin(locals);

@@ -51804,6 +51804,7 @@ desmopelmous
 desmopexia
 desmopyknosis
 desmorrhexis
+desmos
 desmoscolecidae
 desmoscolex
 desmosis
@@ -78425,6 +78426,7 @@ godmamma
 godmother
 godmotherhood
 godmothership
+godot
 godown
 godpapa
 godparent
@@ -107536,6 +107538,7 @@ llano
 llautu
 lleu
 llew
+llm
 lloyd
 lludd
 llyn
@@ -107890,6 +107893,7 @@ logium
 loglet
 loglike
 logman
+lognormal
 logo
 logocracy
 logodaedaly
@@ -110998,6 +111002,7 @@ manikinism
 manila
 manilla
 manille
+manim
 manioc
 maniple
 manipulable
@@ -131505,6 +131510,7 @@ optimistic
 optimistical
 optimistically
 optimity
+optimisation
 optimization
 optimize
 optimum
@@ -136706,6 +136712,7 @@ packer
 packery
 packet
 packhouse
+packing
 packless
 packly
 packmaker
@@ -149507,6 +149514,7 @@ polarimeter
 polarimetric
 polarimetry
 polaris
+polarisation
 polariscope
 polariscopic
 polariscopically

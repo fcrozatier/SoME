@@ -281,6 +281,41 @@
 			"when": 1781682142675,
 			"tag": "0039_fixed_havok",
 			"breakpoints": true
+		},
+		{
+			"idx": 40,
+			"version": "7",
+			"when": 1785318211576,
+			"tag": "0040_vengeful_pyro",
+			"breakpoints": true
+		},
+		{
+			"idx": 41,
+			"version": "7",
+			"when": 1785402626004,
+			"tag": "0041_amused_storm",
+			"breakpoints": true
+		},
+		{
+			"idx": 42,
+			"version": "7",
+			"when": 1785492145124,
+			"tag": "0042_modern_veda",
+			"breakpoints": true
+		},
+		{
+			"idx": 43,
+			"version": "7",
+			"when": 1785741314448,
+			"tag": "0043_even_the_leader",
+			"breakpoints": true
+		},
+		{
+			"idx": 44,
+			"version": "7",
+			"when": 1785933559142,
+			"tag": "0044_aberrant_brother_voodoo",
+			"breakpoints": true
 		}
 	]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "entries" ADD COLUMN "updated_at" timestamp;

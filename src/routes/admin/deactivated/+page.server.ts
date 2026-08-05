@@ -1,50 +1,60 @@
-import { currentYear } from "$lib/config.js";
+import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants.js";
+import { assertIsAdmin } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
-import { type SelectEntry, type SelectFlag, type User } from "$lib/server/db/schema";
-import { AdminForm, UpdateFlagReason } from "$lib/validation";
-import { error } from "@sveltejs/kit";
+import { type SelectEntry, type SelectFlag, type SelectStrike } from "$lib/server/db/schema";
+import type { Prettify } from "@fcrozatier/ts-helpers";
 import { sql } from "drizzle-orm";
-import * as fg from "formgator/sveltekit";
 
 export const load = async ({ locals }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	assertIsAdmin(locals);
 
-	// Turn the left join into an inner join to hide entries deactivated (by admins) without being flagged
-
-	const flagged: (Pick<SelectEntry, "uid" | "title" | "url"> &
-		Pick<SelectFlag, "reason"> & { user_uid: string })[] = await db.execute(sql`
-			select uid, title, url, reason, user_uid
-			from entries left join flags
-			on uid=entry_uid
-			where entries.active='false'
-			and deleted_at is null
-			and date_part('year', entries.created_at)=${currentYear}
-			order by uid;
+	const inactiveEntries: Prettify<
+		Pick<SelectEntry, "uid" | "title" | "url"> & {
+			/**
+			 * When was the entry created
+			 */
+			created_at: SelectEntry["createdAt"];
+			/**
+			 * When was the entry last updated
+			 */
+			updated_at: SelectEntry["updatedAt"];
+			/**
+			 * When was the entry deleted
+			 */
+			deleted_at: SelectEntry["deletedAt"];
+		}
+	>[] = await db.execute(sql`
+				select uid, title, url, created_at, updated_at, deleted_at
+				from entries
+				where entries.state=${ENTRY_STATE.Inactive}
+				and date_part('year', entries.created_at)=${CURRENT_YEAR};
 		`);
 
-	const entry_authors: (Pick<SelectEntry, "uid"> & Pick<User, "username">)[] = await db.execute(sql`
-		select username, entry_uid as uid
-		from users join user_to_entry
-		on users.uid=user_to_entry.user_uid
-		where entry_uid in ${flagged.map((entries) => entries.uid)}
+	const uids = inactiveEntries.map((entry) => entry.uid);
+
+	const strikes: Prettify<
+		Pick<SelectStrike, "reason" | "note" | "state"> & {
+			entry_uid: string;
+			/**
+			 * When was the strike created
+			 */
+			created_at: SelectStrike["createdAt"];
+		}
+	>[] = await db.execute(sql`
+				select entry_uid, reason, note, state, created_at
+				from strikes
+				where entry_uid in ${uids};
 		`);
 
-	return { flagged, entry_authors };
-};
-
-export const actions = {
-	reactivate: fg.formgate(AdminForm, async (data) => {
+	const flags: Prettify<Pick<SelectFlag, "reason"> & { entry_uid: string }>[] =
 		await db.execute(sql`
-			update entries set active='true' where uid in ${data.selected};
+			select entry_uid, reason
+			from flags
+			where entry_uid in ${uids};
 		`);
 
-		return { flag: true };
-	}),
-	update_reason: fg.formgate(UpdateFlagReason, async (data) => {
-		await db.execute(sql`
-			update flags set reason=${data.reason} where (user_uid, entry_uid)=(${data.user_uid}, ${data.entry_uid});
-		`);
+	const withStrikes = Object.groupBy(strikes, ({ entry_uid }) => entry_uid);
+	const withFlags = Object.groupBy(flags, ({ entry_uid }) => entry_uid);
 
-		return { flag: true };
-	}),
+	return { inactiveEntries, withFlags, withStrikes };
 };

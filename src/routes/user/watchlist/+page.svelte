@@ -4,13 +4,13 @@
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting.js";
 
 	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>{makeTitle("My Watchlist")}</title>
+	<title>{formatTitle("My Watchlist")}</title>
 </svelte:head>
 
 <article class="layout-prose">

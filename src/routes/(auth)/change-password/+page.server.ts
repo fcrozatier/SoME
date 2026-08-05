@@ -6,7 +6,7 @@ import { formfail, formgate } from "formgator/sveltekit";
 import * as auth from "$lib/server/auth";
 import type { Actions } from "./$types";
 import { dev } from "$app/environment";
-import { sendEmail } from "$lib/server/email";
+import { EMAILS, sendGenericTemplateEmail } from "$lib/server/email";
 import { fail } from "@sveltejs/kit";
 
 export const actions: Actions = {
@@ -47,7 +47,10 @@ export const actions: Actions = {
 			console.log("validate your password reset here:");
 			console.log(`localhost:5176/change-password/${emailToken}`);
 		} else {
-			await sendEmail(email, "change-password", { token: emailToken });
+			await sendGenericTemplateEmail({
+				to: email,
+				data: EMAILS.ChangePassword({ token: emailToken }),
+			});
 		}
 
 		return { success: true };

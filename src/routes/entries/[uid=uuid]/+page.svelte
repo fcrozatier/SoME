@@ -2,8 +2,8 @@
 	import Bento from "$lib/components/Bento.svelte";
 	import Display from "$lib/components/Display.svelte";
 	import Score from "$lib/components/Score.svelte";
-	import { currentYear } from "$lib/config.js";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { CURRENT_YEAR } from "$lib/constants";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { resultsAvailable, voteOpen } from "$lib/utils/time.js";
 	import { round } from "@fcrozatier/ts-helpers";
 	import * as Plot from "@observablehq/plot";
@@ -46,7 +46,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Feedback")}</title>
+	<title>{formatTitle("Feedback")}</title>
 </svelte:head>
 
 <article class="layout-prose">
@@ -62,7 +62,7 @@
 	{/if}
 
 	<!-- Only show feedback when results are available -->
-	{#if !data.isAdmin && data.entry.year === currentYear && !resultsAvailable()}
+	{#if !data.isAdmin && data.entry.year === CURRENT_YEAR && !resultsAvailable()}
 		{#if voteOpen()}
 			<p>Peer review results results are not available yet</p>
 		{/if}
@@ -80,7 +80,7 @@
 					>
 				</Bento>
 				<Bento
-					count={Number(data.entry.year) !== currentYear || resultsAvailable()
+					count={Number(data.entry.year) !== CURRENT_YEAR || resultsAvailable()
 						? data.entry.rank
 						: null}>Rank</Bento
 				>

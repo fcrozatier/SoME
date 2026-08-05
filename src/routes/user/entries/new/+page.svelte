@@ -6,7 +6,7 @@
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
 	import {
@@ -70,7 +70,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("New Entry")}</title>
+	<title>{formatTitle("New Entry")}</title>
 </svelte:head>
 
 <article class="layout-prose max-w-2xl!">
@@ -253,9 +253,8 @@
 			<label for="newtag" class="label"> Tags </label>
 
 			<p class="mt-2 mb-4">
-				Add tags to your entry for simple categorization, such as topic and level. For the topic,
-				choose a relevant theme, concept or chapter if applicable. For the level, you can pick from
-				the following list:
+				Add one or more relevant levels to your entry from the following list. You can also add tags
+				for simple categorization, such as topic, theme or concept if applicable.
 			</p>
 			<div class="flex flex-wrap gap-2 mb-6">
 				{#each levels as level}
@@ -431,7 +430,7 @@
 					<a href="/content-policy#fair-use">Copyrighted Material Policy</a>
 				</li>
 				<li><a href="/content-policy#cc">Creative Commons Guidelines</a></li>
-				<li><a href="/content-policy#ai">AI Content Policy</a></li>
+				<li><a href="/ai-policy">AI Policy</a></li>
 			</ul>
 			{#if form?.issues?.copyright}
 				<span class="error-message">{form.issues.copyright.message} </span>

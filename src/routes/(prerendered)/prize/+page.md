@@ -1,11 +1,11 @@
 <script>
-	import { FULL_NAME } from '$lib/config';
-  import { makeTitle } from "$lib/utils/makeTitle";
+	import { FULL_NAME } from '$lib/constants';
+  import { formatTitle } from "$lib/utils/formatting";
 </script>
 
 <svelte:head>
 
-  <title>{makeTitle("The prize")}</title>
+  <title>{formatTitle("The prize")}</title>
 </svelte:head>
 
 <section class="layout-prose">

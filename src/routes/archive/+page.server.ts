@@ -1,4 +1,4 @@
-import { defaultYear } from "$lib/config.js";
+import { defaultYear } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { sql } from "drizzle-orm";

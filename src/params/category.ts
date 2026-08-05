@@ -1,6 +1,6 @@
-import { categories } from "$lib/config";
+import { CATEGORIES } from "$lib/constants";
 import type { ParamMatcher } from "@sveltejs/kit";
 
 export const match = ((param) => {
-	return categories.includes(param as (typeof categories)[number]);
+	return CATEGORIES.includes(param as any);
 }) satisfies ParamMatcher;

@@ -3,10 +3,12 @@
 
 	<h3>Peer Review</h3>
 	<ul>
-		<li><a href="/admin/entries">Entries</a></li>
-		<li><a href="/admin/flagged">Flags</a></li>
+		<li><a href="/admin/entries">All Entries</a></li>
+		<li><a href="/admin/flagged">Flagged entries</a></li>
+		<li><a href="/admin/strikes">Striked entries</a></li>
+		<li><a href="/admin/deactivated">Inactive entries</a></li>
+		<li><a href="/admin/deleted">Deleted entries</a></li>
 		<li><a href="/admin/feedbacks">Feedbacks</a></li>
-		<li><a href="/admin/deactivated">Deactivated entries</a></li>
 	</ul>
 	<h3>Ranking</h3>
 	<ul>

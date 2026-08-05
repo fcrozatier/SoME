@@ -1,4 +1,4 @@
-import { conjunctionFormatter } from "$lib/config.js";
+import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { db } from "$lib/server/db/index.js";
 import { nonTags } from "$lib/server/db/schema.js";
 import { dictionary } from "$lib/utils/dictionary.server";

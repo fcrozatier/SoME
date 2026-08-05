@@ -1,0 +1,1 @@
+ALTER TABLE "strikes" ADD COLUMN "state" text DEFAULT 'open';

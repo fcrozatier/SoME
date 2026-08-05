@@ -60,7 +60,7 @@
 <style>
 	aside {
 		inset: unset;
-		bottom: 1rem;
+		top: 1rem;
 		right: 1rem;
 		opacity: 0;
 		transform: scale(0.8);

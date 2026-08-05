@@ -6,8 +6,8 @@
 	import LayoutSideBySide from "$lib/components/layouts/LayoutSideBySide.svelte";
 	import Media from "$lib/components/Media.svelte";
 	import Pagination from "$lib/components/Pagination.svelte";
-	import { defaultYear } from "$lib/config.js";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { defaultYear } from "$lib/constants";
+	import { formatTitle } from "$lib/utils/formatting";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../entries/[uid=uuid]/+page.svelte";
 
@@ -51,7 +51,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Archive")}</title>
+	<title>{formatTitle("Archive")}</title>
 </svelte:head>
 
 <section class="layout-prose">

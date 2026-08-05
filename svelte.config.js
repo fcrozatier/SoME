@@ -15,7 +15,11 @@ const mdsvexOptions = {
 const config = {
 	extensions: [".svelte", ".md"],
 	preprocess: [mdsvex(mdsvexOptions), vitePreprocess()],
-
+	compilerOptions: {
+		experimental: {
+			async: true,
+		},
+	},
 	kit: {
 		adapter: adapter(),
 		alias: {

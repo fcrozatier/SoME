@@ -1,14 +1,13 @@
-import { currentYear } from "$lib/config.js";
+import { assertIsAdmin } from "$lib/server/authorization";
+import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants.js";
 import { db } from "$lib/server/db";
-import { flags } from "$lib/server/db/schema";
-import { type SelectEntry } from "$lib/server/db/schema";
-import { AdminDeactivateForm } from "$lib/validation";
-import { error } from "@sveltejs/kit";
+import { flags, type SelectEntry } from "$lib/server/db/schema";
+import { AdminFlagForm } from "$lib/validation";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async ({ locals, url }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	assertIsAdmin(locals);
 
 	let page = url.searchParams.get("page");
 
@@ -27,7 +26,7 @@ export const load = async ({ locals, url }) => {
 				from entries
 				where entries.active='true'
 				and deleted_at is null
-				and date_part('year', entries.created_at)=${currentYear}
+				and date_part('year', entries.created_at)=${CURRENT_YEAR}
 				order by created_at
 				limit ${limit}
 				offset ${(+page - 1) * limit}
@@ -40,19 +39,17 @@ export const load = async ({ locals, url }) => {
 };
 
 export const actions = {
-	deactivate: formgate(AdminDeactivateForm, async (data, { locals }) => {
-		const { user } = locals;
-
-		if (!user?.isAdmin) return error(403);
+	flag: formgate(AdminFlagForm, async (data, { locals }) => {
+		assertIsAdmin(locals);
 
 		await db.execute(sql`
-			update entries set active='false' where uid=${data.uid};
+			update entries set state=${ENTRY_STATE.Flagged} where uid=${data.uid};
 		`);
 
 		await db.insert(flags).values({
 			entryUid: data.uid,
-			userUid: user.uid,
-			reason: "",
+			userUid: locals.user.uid,
+			reason: data.reason,
 		});
 
 		return { success: true };

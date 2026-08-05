@@ -12,7 +12,7 @@ import {
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { categories } from "../../config";
+import { CATEGORIES, ENTRY_STATE, STRIKE_STATE } from "$lib/constants";
 
 export const users = pgTable(
 	"users",
@@ -50,13 +50,15 @@ export const entries = pgTable("entries", {
 	title: varchar("title", { length: 128 }).notNull(),
 	description: text("description").notNull(),
 	description_md: text("description_md").notNull(),
-	category: text("category", { enum: categories }).notNull(),
+	category: text("category", { enum: CATEGORIES }).notNull(),
 	url: text("url").unique().notNull(),
 	thumbnail: text("thumbnail"),
 	active: boolean("active").default(true),
+	state: text("state").default(ENTRY_STATE.Active),
 	rank: integer("rank"),
 	final_score: decimal("final_score"),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+	updatedAt: timestamp("updated_at", { mode: "string" }),
 	deletedAt: timestamp("deleted_at", { mode: "string" }),
 	deletedBy: uuid("deleted_by").references(() => users.uid, {
 		onDelete: "set null",
@@ -72,7 +74,7 @@ export const entriesHistory = pgTable(
 		}),
 		title: varchar("title", { length: 128 }).notNull(),
 		description_md: text("description_md").notNull(),
-		category: text("category", { enum: categories }).notNull(),
+		category: text("category", { enum: CATEGORIES }).notNull(),
 		url: text("url").notNull(),
 		thumbnail: text("thumbnail"),
 		editedAt: timestamp("edited_at", { mode: "string" }).defaultNow(),
@@ -185,6 +187,20 @@ export const flags = pgTable(
 	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
 );
 
+export const strikes = pgTable("strikes", {
+	id: serial("id").primaryKey(),
+	userUid: uuid("user_uid")
+		.references(() => users.uid, { onDelete: "cascade" })
+		.notNull(),
+	entryUid: uuid("entry_uid")
+		.references(() => entries.uid, { onDelete: "cascade" })
+		.notNull(),
+	reason: text("reason").notNull(),
+	note: text("note").notNull(),
+	state: text("state").default(STRIKE_STATE.Open),
+	createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+});
+
 export const skips = pgTable(
 	"skips",
 	{
@@ -205,7 +221,7 @@ export const cache = pgTable(
 		userUid: uuid("user_uid")
 			.references(() => users.uid, { onDelete: "cascade" })
 			.notNull(),
-		category: text("category", { enum: categories }).notNull(),
+		category: text("category", { enum: CATEGORIES }).notNull(),
 		entryUid: uuid("entry_uid")
 			.references(() => entries.uid, { onDelete: "cascade" })
 			.notNull(),
@@ -241,4 +257,5 @@ export type SelectCache = typeof cache.$inferSelect;
 export type SelectTag = typeof tags.$inferSelect;
 export type SelectVote = typeof votes.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;
+export type SelectStrike = typeof strikes.$inferSelect;
 export type SelectSurveys = typeof surveys.$inferSelect;

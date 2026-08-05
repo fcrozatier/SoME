@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { categories } from "$lib/config";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { CATEGORIES } from "$lib/constants";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { voteOpen } from "$lib/utils/time";
 
 	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Vote")}</title>
+	<title>{formatTitle("Vote")}</title>
 </svelte:head>
 
 <article class="layout-prose">
@@ -34,31 +34,37 @@
 						</p>
 					</li>
 					<li class="mt-1!">
-						<b>Leave feedback</b> for the creator. You can use basic
+						<b>Leave feedback</b> for the creators. You can use basic
 						<a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown</a> with
 						tables, fenced code blocks and
 						<a href="https://quickref.me/latex" target="_blank">LaTeX</a>
 						in your feedback. Wrap inline LaTeX formulas with&nbsp;<code>$</code>
 						and displayed formulas with&nbsp;<code class="text-nowrap">$$</code>
+
+						<p>
+							Help the creators understand your grade by being constructive about what you liked in
+							their entry and what's to be improved.
+						</p>
 					</li>
 				</ul>
 				<p>You can also:</p>
 				<ul class="space-y-1! my-0!">
-					<li><b>Skip</b> an entry. You won't see it again in the vote.</li>
 					<li class="mt-1!">
-						<b>Add to your Watchlist</b> entries you want to save for later. This is useful for
-						example when you know reviewing an entry will take more time than you currently have,
-						want to save it for later but still keep voting. You can find these entries in
-						<a href="/user/watchlist">My Watchlist</a> page
+						<b>Update past votes</b> anytime from
+						<a href="/user/votes">My Votes</a> page, if you change your mind on an entry, or want to normalise
+						scores after a few votes.
+					</li>
+					<li><b>Skip</b> an entry. You won't see it again during the vote.</li>
+					<li class="mt-1!">
+						<b>Add to Watchlist</b> entries you want to save for later. For example, this can be
+						useful when you know reviewing an entry will take more time than you currently have,
+						want to save it for later but still want to keep voting. You can find these entries in
+						<a href="/user/watchlist">My Watchlist</a> page.
 					</li>
 					<li>
 						<b>Flag</b> entries that break the rules. You can optionally submit your vote with a flag.
 					</li>
 					<li><b>Switch categories</b> (video or non-video) anytime by returning here.</li>
-					<li class="mt-1!">
-						<b>Update past votes</b> anytime from
-						<a href="/user/votes">My Votes</a> page, if you change your mind on an entry, or want to fine tune scores after a few votes.
-					</li>
 				</ul>
 
 				{#if data.hasPreferences}
@@ -68,12 +74,17 @@
 						>
 					</p>
 				{/if}
+
+				<p>
+					The competition features {data.nbEntries} entries this year, so you can only reasonably vote
+					on a fraction of these. If you make 5 to 10 votes, that would already be a great contribution!
+				</p>
 			</section>
 		{/if}
 		{#if data.hasPreferences}
 			<p>Choose a category:</p>
 			<p class="flex gap-4">
-				{#each categories.toReversed() as category}
+				{#each CATEGORIES.toReversed() as category}
 					<a class="btn-neutral btn" href={`/user/vote/${category}`}>{category}</a>
 				{/each}
 			</p>

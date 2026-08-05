@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { formatTitle } from "$lib/utils/formatting";
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Change Password")}</title>
+	<title>{formatTitle("Change Password")}</title>
 </svelte:head>
 
 <article class="layout-prose">

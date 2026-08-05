@@ -7,8 +7,8 @@
 	import Media from "$lib/components/Media.svelte";
 	import Score from "$lib/components/Score.svelte";
 	import Slider from "$lib/components/Slider.svelte";
-	import { currentYear } from "$lib/config";
-	import { makeTitle } from "$lib/utils/makeTitle";
+	import { CURRENT_YEAR } from "$lib/constants";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { voteOpen } from "$lib/utils/time";
 	import { FeedbackSchema } from "$lib/validation.js";
 	import * as fg from "formgator";
@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("My Votes")}</title>
+	<title>{formatTitle("My Votes")}</title>
 </svelte:head>
 
 <article class="layout-prose">
@@ -91,7 +91,7 @@
 						{#snippet sidePanel()}
 							<div class="flex items-center justify-end sm:flex-col text-xs flex-wrap gap-4">
 								<Score {score}></Score>
-								{#if Number(year) === currentYear && voteOpen()}
+								{#if Number(year) === CURRENT_YEAR && voteOpen()}
 									<button
 										class="btn btn-sm"
 										onclick={() => {

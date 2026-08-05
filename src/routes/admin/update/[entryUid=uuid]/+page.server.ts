@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { conjunctionFormatter } from "$lib/config.js";
+import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
@@ -22,9 +22,10 @@ import { error, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
+import { assertIsAdmin } from "$lib/server/authorization";
 
 export const load = async ({ params, locals }) => {
-	if (!locals.user?.isAdmin) return error(404);
+	assertIsAdmin(locals);
 
 	const { entryUid } = params;
 
@@ -61,7 +62,7 @@ export const load = async ({ params, locals }) => {
 
 export const actions = {
 	default: formgate(NewEntrySchema, async (data, { params, locals }) => {
-		if (!locals.user?.isAdmin) return error(400);
+		assertIsAdmin(locals);
 
 		try {
 			const { entryUid } = params;
@@ -189,6 +190,7 @@ export const actions = {
 					title: data.title,
 					url: normalizedLink,
 					thumbnail: thumbnailKey,
+					updatedAt: new Date().toISOString(),
 				})
 				.where(eq(entries.uid, entryUid));
 

@@ -1,4 +1,4 @@
-import { conjunctionFormatter } from "$lib/config.js";
+import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import { entriesHistory } from "$lib/server/db/schema.js";
@@ -14,25 +14,21 @@ import { error, redirect } from "@sveltejs/kit";
 import { inArray } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
+import { assertIsLoggedIn } from "$lib/server/authorization";
 
 export const load = async ({ locals }) => {
-	const { user } = locals;
-	if (!user?.uid) {
-		throw redirect(302, "/login");
-	}
+	assertIsLoggedIn(locals);
 
-	if (!submissionsOpen() && !user.isAdmin) {
+	if (!submissionsOpen() && !locals.user.isAdmin) {
 		throw error(403, "Submissions are closed");
 	}
 };
 
 export const actions = {
 	default: formgate(NewEntrySchema, async (data, { locals }) => {
-		const { user } = locals;
+		assertIsLoggedIn(locals);
 
-		if (!user) {
-			throw error(401, "You must be logged in");
-		}
+		const { user } = locals;
 
 		if (!user.username) {
 			throw error(401, "Please choose a username on your Profile page before submitting");

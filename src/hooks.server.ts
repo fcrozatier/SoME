@@ -21,18 +21,18 @@ export const handle = async function ({ event, resolve }) {
 		event.locals.user = null;
 		event.locals.session = null;
 		return resolve(event);
-	} else {
-		const { session, user } = await auth.validateSessionToken(sessionToken);
-
-		if (session) {
-			auth.setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
-		} else {
-			auth.deleteSessionTokenCookie(event);
-		}
-
-		event.locals.user = user;
-		event.locals.session = session;
 	}
+
+	const { session, user } = await auth.validateSessionToken(sessionToken);
+
+	if (session) {
+		auth.setSessionTokenCookie(event.cookies, sessionToken, session.expiresAt);
+	} else {
+		auth.deleteSessionTokenCookie(event);
+	}
+
+	event.locals.user = user;
+	event.locals.session = session;
 
 	return resolve(event);
 } satisfies Handle;

@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { conjunctionFormatter } from "$lib/config.js";
+import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
@@ -15,6 +15,7 @@ import {
 } from "$lib/server/db/schema.js";
 import { saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
+import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
@@ -31,9 +32,7 @@ export const load = async ({ locals, params }) => {
 		throw error(403, "Submissions are closed");
 	}
 
-	if (!locals?.user?.uid) {
-		throw redirect(302, "/login");
-	}
+	assertIsLoggedIn(locals);
 
 	const { entryUid } = params;
 	const { user } = locals;
@@ -76,11 +75,13 @@ export const load = async ({ locals, params }) => {
 export const actions = {
 	update: formgate(NewEntrySchema, async (data, { locals, params }) => {
 		try {
+			assertIsLoggedIn(locals);
+
 			const { user } = locals;
 			const { entryUid } = params;
 
-			if (!user || !user.username) {
-				throw error(401, "You must be logged in");
+			if (!user.username) {
+				throw error(401, "Please choose a username on your Profile page before submitting");
 			}
 
 			if (!submissionsOpen() && !user.isAdmin) {
@@ -224,6 +225,7 @@ export const actions = {
 					title: data.title,
 					url: normalizedLink,
 					thumbnail: thumbnailKey,
+					updatedAt: new Date().toISOString(),
 				})
 				.where(eq(entries.uid, entryUid));
 
@@ -305,9 +307,9 @@ export const actions = {
 		}
 	}),
 	delete: async ({ locals, request }) => {
-		const user = locals.user;
-		if (!user) throw redirect(302, "/login");
+		assertIsLoggedIn(locals);
 
+		const user = locals.user;
 		const formData = await request.formData();
 		const zodResult = z.uuid().safeParse(formData.get("entryUid"));
 
@@ -316,14 +318,7 @@ export const actions = {
 		const entryUid = zodResult.data;
 
 		// Make sure user is the creator first
-		const isCreator =
-			(
-				await db.execute(
-					sql`select * from user_to_entry where user_uid=${user.uid} and entry_uid=${entryUid};`,
-				)
-			).count > 0;
-
-		if (!isCreator) return fail(422);
+		await assertIsCreator({ userUid: user.uid, entryUid });
 
 		await db.execute(
 			sql`

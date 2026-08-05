@@ -6,7 +6,7 @@
 	import { disableSubmitterAndSetValidity } from "$lib/actions.js";
 	import CircularProgress from "$lib/components/icons/CircularProgress.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
-	import { makeTitle } from "$lib/utils/makeTitle.js";
+	import { formatTitle } from "$lib/utils/formatting.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
 	import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
@@ -66,7 +66,7 @@
 </script>
 
 <svelte:head>
-	<title>{makeTitle("Update Entry")}</title>
+	<title>{formatTitle("Update Entry")}</title>
 </svelte:head>
 
 <article class="layout-prose max-w-2xl!">
@@ -393,7 +393,7 @@
 					<a href="/content-policy#fair-use">Copyrighted Material Policy</a>
 				</li>
 				<li><a href="/content-policy#cc">Creative Commons Guidelines</a></li>
-				<li><a href="/content-policy#ai">AI Content Policy</a></li>
+				<li><a href="/ai-policy">AI Policy</a></li>
 			</ul>
 			{#if form?.issues?.copyright}
 				<span class="error-message">{form.issues.copyright.message} </span>
