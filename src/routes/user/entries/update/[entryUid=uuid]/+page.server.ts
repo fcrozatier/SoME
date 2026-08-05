@@ -13,7 +13,7 @@ import {
 	userToEntry,
 	votes,
 } from "$lib/server/db/schema.js";
-import { saveThumbnail } from "$lib/server/s3";
+import { deleteThumbnail, saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
 import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
@@ -177,7 +177,7 @@ export const actions = {
 			// Retrieve the thumbnail and link of the entry
 
 			const [entry] = await db
-				.select({ oldThumbnail: entries.thumbnail, oldUrl: entries.url })
+				.select({ oldThumbnailKey: entries.thumbnail, oldUrl: entries.url })
 				.from(entries)
 				.where(eq(entries.uid, entryUid));
 
@@ -185,17 +185,17 @@ export const actions = {
 				throw new Error("Entry not found");
 			}
 
-			const { oldThumbnail, oldUrl } = entry;
+			const { oldThumbnailKey, oldUrl } = entry;
 			const { thumbnail, url } = data;
 
 			let normalizedLink = url;
-			let thumbnailKey = oldThumbnail;
+			let thumbnailKey = undefined;
 
 			if (!YOUTUBE_EMBEDDABLE.test(url)) {
-				if (!thumbnail && !oldThumbnail) {
+				if (!thumbnail && !oldThumbnailKey) {
 					return formfail({ thumbnail: `Thumbnail required` });
 				}
-				if (thumbnail && !oldThumbnail) {
+				if (thumbnail) {
 					thumbnailKey = crypto.randomUUID() + ".webp";
 				}
 			} else {
@@ -240,8 +240,13 @@ export const actions = {
 				editedBy: user.uid,
 			});
 
+			// Delete the old thumbnail if there is a new one
+			if (thumbnail && oldThumbnailKey) {
+				await deleteThumbnail(oldThumbnailKey);
+			}
+
 			// Save the thumbnail after the entry: we know it's not a duplicate
-			if (!dev && thumbnail && thumbnailKey) {
+			if (thumbnail && thumbnailKey) {
 				await saveThumbnail(thumbnail, thumbnailKey);
 			}
 

@@ -206,7 +206,7 @@ export const actions = {
 			});
 
 			// Save the thumbnail after the entry: we know it's not a duplicate
-			if (!dev && thumbnail && thumbnailKey) {
+			if (thumbnail && thumbnailKey) {
 				await saveThumbnail(thumbnail, thumbnailKey);
 			}
 
