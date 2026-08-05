@@ -8,10 +8,14 @@
 	import Pagination from "$lib/components/Pagination.svelte";
 	import type { ComponentProps } from "svelte";
 	import EntriesPage from "../../entries/[uid=uuid]/+page.svelte";
+	import { newToast } from "$lib/components/Toasts.svelte";
 
 	let { data, form = $bindable() } = $props();
 
 	let pageNumber = $state(Number(page.url.searchParams.get("page") ?? "1"));
+
+	let flagDialog: HTMLDialogElement | undefined = $state();
+	const selectedEntry = $state({ uid: "", title: "" });
 
 	let displayDialog: HTMLDialogElement | undefined = $state();
 	let entryPageData: ComponentProps<typeof EntriesPage>["data"] | undefined = $state();
@@ -66,23 +70,22 @@
 				<Media {...entry} thumbnailWidth="256px" gap={6}></Media>
 			{/snippet}
 			{#snippet sidePanel()}
-				<form
-					class="flex gap-2 flex-wrap justify-start"
-					method="POST"
-					use:enhance={disableSubmitterAndSetValidity({
-						invalidateAll: true,
-						toast: { success: { type: "info", content: "Entry deactivated" } },
-					})}
-				>
-					<input type="hidden" name="uid" value={entry.uid} />
+				<div class="flex gap-2 flex-wrap justify-start">
 					<a class="btn btn-neutral btn-sm" href={`/entries/${entry.uid}`} onclick={loadData}
 						>Display
 					</a>
 					<a class="btn btn-sm" href={`/admin/update/${entry.uid}`}>Update</a>
-					<button formaction="?/deactivate" class="btn btn-error btn-outline btn-sm"
-						>Deactivate</button
+					<button
+						command="show-modal"
+						commandfor="flag-dialog"
+						onclick={() => {
+							selectedEntry.uid = entry.uid;
+							selectedEntry.title = entry.title;
+							flagDialog?.showModal();
+						}}
+						class="btn btn-error btn-outline btn-sm">Flag</button
 					>
-				</form>
+				</div>
 			{/snippet}
 		</LayoutSideBySide>
 		<hr class="my-8!" />
@@ -105,6 +108,61 @@
 		></Pagination>
 	</div>
 </article>
+
+<dialog id="flag-dialog" class="m-auto" bind:this={flagDialog} closedby="any">
+	<form
+		method="post"
+		class="space-y-2"
+		action="?/flag"
+		use:clickOutside={() => flagDialog?.close()}
+		use:enhance={() => {
+			const buttons = document.querySelectorAll("button");
+			buttons.forEach((b) => b.setAttribute("disabled", "on"));
+
+			return async ({ result, update }) => {
+				await update({ invalidateAll: true });
+				buttons.forEach((b) => b.removeAttribute("disabled"));
+
+				if (result.type === "success") {
+					flagDialog?.close();
+					newToast({ type: "info", content: "Entry flagged" });
+				} else if (
+					result.type === "failure" &&
+					result.data?.issues !== null &&
+					typeof result.data?.issues === "object"
+				) {
+					const message = Object.values(result.data.issues)?.[0]?.message ?? "";
+					if (message) {
+						newToast({ type: "error", content: message });
+					}
+				}
+			};
+		}}
+	>
+		<h2 class="mt-0">Flag entry</h2>
+		<p class="text-gray-700 mb-0">
+			This will flag the entry <em>"{selectedEntry.title}"</em>
+		</p>
+
+		<input type="hidden" name="uid" value={selectedEntry.uid} required />
+
+		<p>
+			<label for="reason" class="label text-sm block">Reason</label>
+			<input type="text" name="reason" class="input" required />
+		</p>
+
+		<p class="mb-0 mt-8 flex items-center justify-end gap-2">
+			<button
+				type="button"
+				class="btn-outline btn"
+				commandfor="flag-dialog"
+				command="request-close"
+				onclick={() => flagDialog?.close()}>Cancel</button
+			>
+			<button type="submit" class="btn-outline btn-error btn">Flag</button>
+		</p>
+	</form>
+</dialog>
 
 <dialog
 	class="m-auto w-full"

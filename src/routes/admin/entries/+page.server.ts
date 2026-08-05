@@ -1,8 +1,8 @@
 import { assertIsAdmin } from "$lib/server/authorization";
-import { CURRENT_YEAR } from "$lib/constants.js";
+import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { flags, type SelectEntry } from "$lib/server/db/schema";
-import { AdminDeactivateForm } from "$lib/validation";
+import { AdminFlagForm } from "$lib/validation";
 import { sql } from "drizzle-orm";
 import { formgate } from "formgator/sveltekit";
 
@@ -39,17 +39,17 @@ export const load = async ({ locals, url }) => {
 };
 
 export const actions = {
-	deactivate: formgate(AdminDeactivateForm, async (data, { locals }) => {
+	flag: formgate(AdminFlagForm, async (data, { locals }) => {
 		assertIsAdmin(locals);
 
 		await db.execute(sql`
-			update entries set active='false' where uid=${data.uid};
+			update entries set state=${ENTRY_STATE.Flagged} where uid=${data.uid};
 		`);
 
 		await db.insert(flags).values({
 			entryUid: data.uid,
 			userUid: locals.user.uid,
-			reason: "",
+			reason: data.reason,
 		});
 
 		return { success: true };

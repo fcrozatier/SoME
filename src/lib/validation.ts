@@ -297,7 +297,12 @@ export const SurveyFilterSchema = {
 	]),
 };
 
-export const AdminDeactivateForm = {
+export const AdminFlagForm = {
+	uid: UidSchema,
+	reason: fg.text({ required: true }).trim(),
+};
+
+export const AdminIgnoreFlagForm = {
 	uid: UidSchema,
 };
 
