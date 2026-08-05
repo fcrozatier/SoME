@@ -53,7 +53,7 @@
 			<div class="max-w-3xl mx-auto">
 				{#each entries! as { uid, title, description, category, thumbnail, url, state, createdAt }}
 					<div>
-						<LayoutSideBySide side="right" mainPanelMinWidth="83%" sidePanelMaxWidth="64px">
+						<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
 							{#snippet mainPanel()}
 								<Media
 									{uid}
@@ -96,7 +96,7 @@
 									{:else if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.WaitingForReview}
 										<span>under review</span>
 									{:else if state === ENTRY_STATE.Inactive}
-										<span class="badge badge-sm badge-primary">inactive</span>
+										<span>inactive</span>
 									{/if}
 								</div>
 							{/snippet}
