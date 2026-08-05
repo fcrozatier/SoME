@@ -38,7 +38,7 @@
 						<td class="text-nowrap">{relativeTime(updated_at) ?? "-"}</td>
 						<td class="text-nowrap">
 							{#if deleted_at}
-								<Time datetime={deleted_at} time={false}></Time>
+								<Time datetime={deleted_at} includeTime={false}></Time>
 							{:else}
 								-
 							{/if}

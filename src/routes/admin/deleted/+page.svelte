@@ -31,21 +31,21 @@
 						</td>
 						<td class="text-nowrap">
 							{#if created_at}
-								<Time datetime={created_at} time={false}></Time>
+								<Time datetime={created_at} includeTime={false}></Time>
 							{:else}
 								-
 							{/if}
 						</td>
 						<td class="text-nowrap">
 							{#if updated_at}
-								<Time datetime={updated_at} time={false}></Time>
+								<Time datetime={updated_at} includeTime={false}></Time>
 							{:else}
 								-
 							{/if}
 						</td>
 						<td class="text-nowrap">
 							{#if deleted_at}
-								<Time datetime={deleted_at} time={false}></Time>
+								<Time datetime={deleted_at} includeTime={false}></Time>
 							{:else}
 								-
 							{/if}
