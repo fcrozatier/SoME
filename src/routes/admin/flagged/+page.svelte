@@ -18,6 +18,7 @@
 		duplicate: "multiple entries are not allowed",
 		inappropriate: "it contains inappropriate content",
 		scope: "it is out of scope (not math related)",
+		old: "it is too old (not made this summer)",
 		inaccurate: "it contains inaccurate math statements",
 		other: "(custom reason)",
 	};
@@ -29,6 +30,9 @@
 
 			case "visibility":
 				return `Your entry _"${title}"_ was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. Please update your entry so that it is publicly accessible. When you're ready to ask for a review by admins, click the "Ask for review" button.`;
+
+			case "old":
+				return `Your entry _"${title}"_ was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. Please delete this entry as it breaks the <a href="/rules#only-new-content">rules</a>.`;
 
 			default:
 				return `Your entry _"${title}"_ was flagged for the following reason: ${reasons[reason]}. It has been temporarily removed from the competition. You can update your entry, and when you're ready to ask for a review by admins, click the "Ask for review" button.`;
