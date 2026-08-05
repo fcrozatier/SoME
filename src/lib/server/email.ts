@@ -15,14 +15,14 @@ const from = "SoME <some@3blue1brown.com>";
 /**
  * The value is the template email subject
  */
-const emailTemplates = {
-	"change-password": {
+const EMAIL_TEMPLATES = {
+	ChangePassword: {
 		subject: `SoME password reset`,
 		variables: ["token"],
 	},
 } as const;
 
-type TemplateName = keyof typeof emailTemplates;
+type TemplateName = keyof typeof EMAIL_TEMPLATES;
 
 // https://documentation.mailgun.com/en/latest/api-email-validation.html
 type Validation = {
@@ -53,12 +53,12 @@ export async function addToMailingList(email: string, token: string) {
 	});
 }
 
-export async function sendEmail<T extends TemplateName>(
+export async function sendTemplateEmail<T extends TemplateName>(
 	to: string,
 	template: T,
-	variables?: Record<(typeof emailTemplates)[T]["variables"][number], string>,
+	variables?: Record<(typeof EMAIL_TEMPLATES)[T]["variables"][number], string>,
 ) {
-	const { subject } = emailTemplates[template];
+	const { subject } = EMAIL_TEMPLATES[template];
 
 	const data = {
 		from,
