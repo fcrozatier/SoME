@@ -1,28 +1,16 @@
+import { DOMAIN, MAILGUN_API_KEY } from "$env/static/private";
+import { formatDateTime } from "$lib/utils/formatting";
 import formData from "form-data";
 import Mailgun from "mailgun.js";
-import type { MailgunMessageData } from "mailgun.js/definitions";
-import { DOMAIN, MAILGUN_API_KEY } from "$env/static/private";
 
 /**
  * https://github.com/mailgun/mailgun.js
  */
 const mailgun = new Mailgun(formData);
-
 const mg = mailgun.client({ username: "api", key: MAILGUN_API_KEY });
 
-const from = "SoME <some@3blue1brown.com>";
-
-/**
- * The value is the template email subject
- */
-const EMAIL_TEMPLATES = {
-	ChangePassword: {
-		subject: `SoME password reset`,
-		variables: ["token"],
-	},
-} as const;
-
-type TemplateName = keyof typeof EMAIL_TEMPLATES;
+const FROM = "SoME <some@3blue1brown.com>";
+const GENERIC_TEMPLATE = "generic-template";
 
 // https://documentation.mailgun.com/en/latest/api-email-validation.html
 type Validation = {
@@ -53,25 +41,54 @@ export async function addToMailingList(email: string, token: string) {
 	});
 }
 
-export async function sendTemplateEmail<T extends TemplateName>(
-	to: string,
-	template: T,
-	variables?: Record<(typeof EMAIL_TEMPLATES)[T]["variables"][number], string>,
-) {
-	const { subject } = EMAIL_TEMPLATES[template];
-
-	const data = {
-		from,
+export async function sendGenericTemplateEmail({
+	to,
+	data: { subject, body },
+}: {
+	to: string;
+	data: EmailData;
+}) {
+	await mg.messages.create(DOMAIN, {
+		from: FROM,
 		to,
 		subject,
-		template,
-	} satisfies MailgunMessageData;
-
-	if (variables) {
-		for (const [key, value] of Object.entries(variables)) {
-			Object.assign(data, { [`v:${key}`]: value });
-		}
-	}
-
-	await mg.messages.create(DOMAIN, data);
+		template: GENERIC_TEMPLATE,
+		"t:variables": JSON.stringify({
+			body,
+		}),
+	});
 }
+
+export const EMAILS = {
+	ChangePassword: (token: string) => ({
+		subject: "Confirm your password reset",
+		body: `<h1>One last step</h1>
+			<p>You've updated your password. For this change to take effect, please visit the following url:<br>
+			<a href="https://some.3b1b.co/change-password/${token}">https://some.3b1b.co/change-password/${token}</a>
+			</p>
+			`,
+	}),
+	ActionRequired: (entryTitle: string, deadline: string) => ({
+		subject: "[action required] Entry flagged. Please update your entry",
+		body: `<p>Your entry <em>"${entryTitle}"</em> was flagged by admins and is temporarily inactive.</p>
+		<p>Please go to <a href="https://some.3b1b.co/user/entries">"My Entries"</a> to see why and update your entry to resolve the issue <strong>before ${formatDateTime(
+			deadline,
+			{ includeTime: false },
+		)}</strong>.</p>
+		<p>Thanks</p>
+		`,
+	}),
+	StrikeResolved: (entryTitle: string) => ({
+		subject: "[issue resolved] Entry unflagged",
+		body: `<p>The flag on your entry <em>"${entryTitle}"</em> was removed by admins. You don't have anything else to do.</p>
+			<p>Thank you</p>
+		`,
+	}),
+	EntryInactive: (entryTitle: string) => ({
+		subject: "[ongoing issue] Entry disabled",
+		body: `<p>Your entry <em>"${entryTitle}"</em> was disabled by admins and has been removed from the competition.</p>
+		`,
+	}),
+} as const satisfies Record<string, EmailData | ((...params: any[]) => EmailData)>;
+
+type EmailData = { subject: string; body: string };
