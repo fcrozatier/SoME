@@ -46,7 +46,7 @@ export async function sendGenericTemplateEmail({
 	to,
 	data: { subject, body },
 }: {
-	to: string;
+	to: string | string[];
 	data: EmailData;
 }) {
 	if (dev) {
@@ -70,7 +70,7 @@ export async function sendGenericTemplateEmail({
 }
 
 export const EMAILS = {
-	ChangePassword: (token: string) => ({
+	ChangePassword: ({ token }: { token: string }) => ({
 		subject: "Confirm your password reset",
 		body: `<h1>One last step</h1>
 			<p>You've updated your password. For this change to take effect, please visit the following url:<br>
@@ -78,7 +78,7 @@ export const EMAILS = {
 			</p>
 			`,
 	}),
-	ActionRequired: (entryTitle: string, deadline: string) => ({
+	ActionRequired: ({ entryTitle, deadline }: { entryTitle: string; deadline: string }) => ({
 		subject: "[action required] Entry flagged. Please update your entry",
 		body: `<p>Your entry <em>"${entryTitle}"</em> was flagged by admins and is temporarily inactive.</p>
 		<p>Please go to <a href="https://some.3b1b.co/user/entries">"My Entries"</a> to see why and update your entry to resolve the issue <strong>before ${formatDateTime(
@@ -88,13 +88,13 @@ export const EMAILS = {
 		<p>Thanks</p>
 		`,
 	}),
-	StrikeResolved: (entryTitle: string) => ({
+	StrikeResolved: ({ entryTitle }: { entryTitle: string }) => ({
 		subject: "[issue resolved] Entry unflagged",
 		body: `<p>The flag on your entry <em>"${entryTitle}"</em> was removed by admins. You don't have anything else to do.</p>
 			<p>Thank you</p>
 		`,
 	}),
-	EntryInactive: (entryTitle: string) => ({
+	EntryInactive: ({ entryTitle }: { entryTitle: string }) => ({
 		subject: "[ongoing issue] Entry disabled",
 		body: `<p>Your entry <em>"${entryTitle}"</em> was disabled by admins and has been removed from the competition.</p>
 		`,
