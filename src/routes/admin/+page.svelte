@@ -3,7 +3,7 @@
 
 	<h3>Peer Review</h3>
 	<ul>
-		<li><a href="/admin/entries">All Entries</a></li>
+		<li><a href="/admin/entries">All Active Entries</a></li>
 		<li><a href="/admin/flagged">Flagged entries</a></li>
 		<li><a href="/admin/strikes">Striked entries</a></li>
 		<li><a href="/admin/deactivated">Inactive entries</a></li>

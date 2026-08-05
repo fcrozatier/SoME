@@ -9,7 +9,7 @@ sort as (
   select entry_uid, median, dense_rank() over (order by median desc) as ranking
   from (scores join entries on scores.entry_uid=entries.uid)
   where category='video'
-  and active='t'
+  and entries.state='active'
   and deleted_at is null
   order by median desc
 )

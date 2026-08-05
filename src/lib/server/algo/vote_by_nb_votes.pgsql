@@ -38,7 +38,7 @@ pool as (
 
   where date_part('year', entries.created_at)='2026'
     and entries.category='video'
-    and active='true'
+    and entries.state='active'
     and deleted_at is null
     and uid not in (select entry_uid from votes where votes.user_uid='fe68e7d1-a78a-4ae1-b98f-7c5a2867aa58')
     and uid not in (select entry_uid from skips where skips.user_uid='fe68e7d1-a78a-4ae1-b98f-7c5a2867aa58')

@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { userToEntry } from "../db/schema";
-import { CURRENT_YEAR } from "$lib/constants";
+import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import { randomItem, round } from "@fcrozatier/ts-helpers";
 import { voteTimeElapsedPercent } from "$lib/utils/time";
 
@@ -44,7 +44,7 @@ export function voteWarmup(
 
 				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
-					and active='true'
+					and entries.state=${ENTRY_STATE.Active}
 					and deleted_at is null
 					and uid not in (select entry_uid from votes where votes.user_uid=${user_uid})
 					and uid not in (select entry_uid from skips where skips.user_uid=${user_uid})
@@ -214,7 +214,7 @@ export function voteMain(
 
 				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
-					and active='true'
+					and entries.state=${ENTRY_STATE.Active}
 					and deleted_at is null
 					and uid not in (select entry_uid from votes where votes.user_uid=${user_uid})
 					and uid not in (select entry_uid from skips where skips.user_uid=${user_uid})
@@ -249,7 +249,7 @@ export function voteFallback(user_uid: string, category: string) {
 
 			where date_part('year', entries.created_at)=${CURRENT_YEAR}
 			and entries.category=${category}
-			and active='true'
+			and entries.state=${ENTRY_STATE.Active}
 			and deleted_at is null
 			and uid not in (select entry_uid from votes where votes.user_uid=${user_uid})
 			and uid not in (select entry_uid from skips where skips.user_uid=${user_uid})
@@ -305,7 +305,7 @@ export function rank(category: string) {
 			select entry_uid, m0, dense_rank() over (order by ${sql.raw(tieBreaker)} desc) as ranking
 			from (scores join entries on scores.entry_uid=entries.uid)
 			where category=${category}
-			and active='t'
+			and entries.state=${ENTRY_STATE.Active}
 			and deleted_at is null
 			order by ${sql.raw(tieBreaker)} desc
 		)

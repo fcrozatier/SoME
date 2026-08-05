@@ -1,5 +1,5 @@
 import { dev } from "$app/environment";
-import { defaultYear } from "$lib/constants";
+import { defaultYear, ENTRY_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry, users } from "$lib/server/db/schema";
 import { addToMailingList } from "$lib/server/email";
@@ -15,7 +15,7 @@ export const load = async () => {
 	>[] = await db.execute(sql`
 		 select uid, title, description, category, thumbnail, url
 		 from entries
-		 where active='t'
+		 where entries.state=${ENTRY_STATE.Active}
 		 and deleted_at is null
 		 and date_part('year', created_at)=${defaultYear()}
 		 order by final_score desc nulls last
