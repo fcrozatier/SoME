@@ -1,7 +1,7 @@
 import { CURRENT_YEAR, ENTRY_STATE, STRIKE_STATE } from "$lib/constants";
 import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
-import { type SelectEntry, type SelectFlag } from "$lib/server/db/schema";
+import { type SelectEntry, type SelectFlag, type SelectStrike } from "$lib/server/db/schema";
 import { UidSchema } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions } from "@sveltejs/kit";
@@ -13,7 +13,7 @@ export const load = async ({ locals }) => {
 
 	const strikes: Prettify<
 		Pick<SelectEntry, "uid" | "title" | "url" | "state"> &
-			Pick<SelectFlag, "reason"> & {
+			Pick<SelectStrike, "reason" | "note"> & {
 				/**
 				 * When was the strike created
 				 */
@@ -22,14 +22,17 @@ export const load = async ({ locals }) => {
 				 * When was the entry last updated
 				 */
 				updated_at: SelectEntry["updatedAt"];
+				/**
+				 * When was the entry deleted
+				 */
+				deleted_at: SelectEntry["deletedAt"];
 			}
 	>[] = await db.execute(sql`
-			select distinct uid, title, url, entries.state, updated_at, reason, strikes.created_at
+			select distinct uid, title, url, entries.state, updated_at, deleted_at, reason, note, strikes.created_at
 			from entries join strikes
 			on entries.uid=strikes.entry_uid
 			where entries.state in ${[ENTRY_STATE.ActionRequired, ENTRY_STATE.WaitingForReview]}
 			and strikes.state=${STRIKE_STATE.Open}
-			and deleted_at is null
 			and date_part('year', entries.created_at)=${CURRENT_YEAR};
 	`);
 

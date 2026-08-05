@@ -198,13 +198,6 @@
 </dialog>
 
 <style>
-	tr {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1rem;
-		align-items: start;
-	}
-
 	tr:nth-child(even) {
 		background-color: rgb(242, 242, 242);
 	}
