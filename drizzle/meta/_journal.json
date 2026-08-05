@@ -316,6 +316,13 @@
 			"when": 1785933559142,
 			"tag": "0044_aberrant_brother_voodoo",
 			"breakpoints": true
+		},
+		{
+			"idx": 45,
+			"version": "7",
+			"when": 1785943240417,
+			"tag": "0045_yellow_wolfpack",
+			"breakpoints": true
 		}
 	]
 }

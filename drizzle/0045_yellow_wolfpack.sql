@@ -1,0 +1,1 @@
+CREATE INDEX "strikes_entry_uid_index" ON "strikes" USING btree ("entry_uid");
