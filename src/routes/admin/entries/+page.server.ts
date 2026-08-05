@@ -1,4 +1,4 @@
-import { assertIsAdmin } from "$lib/server/authorization";
+import { assertIsAdmin } from "$lib/server/authorization.js";
 import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import { flags, type SelectEntry } from "$lib/server/db/schema";
@@ -24,7 +24,7 @@ export const load = async ({ locals, url }) => {
 			with paginated as (
 				select uid, title, description, category, url, thumbnail, count(*) over () as total
 				from entries
-				where entries.active='true'
+				where entries.state=${ENTRY_STATE.Active}
 				and deleted_at is null
 				and date_part('year', entries.created_at)=${CURRENT_YEAR}
 				order by created_at
