@@ -260,4 +260,5 @@ export type SelectCache = typeof cache.$inferSelect;
 export type SelectTag = typeof tags.$inferSelect;
 export type SelectVote = typeof votes.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;
+export type SelectStrike = typeof strikes.$inferSelect;
 export type SelectSurveys = typeof surveys.$inferSelect;
