@@ -1,23 +1,13 @@
 <script lang="ts">
+	import { formatDateTime } from "$lib/utils/formatting";
+
 	interface Props {
 		datetime: string;
-		time?: boolean;
 		options?: Intl.DateTimeFormatOptions | undefined;
+		includeTime?: boolean;
 	}
 
-	let { datetime, time = true, options = undefined }: Props = $props();
+	let { datetime, options, includeTime }: Props = $props();
 </script>
 
-<time {datetime}>
-	{new Intl.DateTimeFormat(
-		navigator.language,
-		options ?? {
-			// weekday: 'long',
-			year: "numeric",
-			month: "long",
-			day: "numeric",
-			hour: time ? "numeric" : undefined,
-			minute: time ? "numeric" : undefined,
-		},
-	).format(Date.parse(datetime))}
-</time>
+<time {datetime}>{formatDateTime(datetime, { ...options, includeTime })}</time>
