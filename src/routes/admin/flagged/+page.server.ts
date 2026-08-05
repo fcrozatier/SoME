@@ -2,7 +2,9 @@ import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
+import { EMAILS, sendGenericTemplateEmail } from "$lib/server/email.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
+import { relativeTime } from "$lib/utils/time.js";
 import { AdminActionRequiredForm, AdminIgnoreFlagForm } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions } from "@sveltejs/kit";
@@ -47,19 +49,25 @@ export const actions: Actions = {
 		const entry_uid = data.uid;
 
 		// Retrieve entry creators
-		const creators: { user_uid: string }[] = await db.execute(sql`
-			select user_uid from user_to_entry
-			where entry_uid=${entry_uid};
-		`);
+		const creators: { user_uid: string; email: string }[] = await db.execute(
+			sql`
+				select user_uid, email
+				from users
+				join user_to_entry
+				on users.uid=user_to_entry.user_uid
+				where entry_uid=${entry_uid};
+		`,
+		);
 
 		// Update entry state
-		await db.execute(sql`
+		const [entry]: { title: string }[] = await db.execute(sql`
 			update entries
 			set state=${ENTRY_STATE.ActionRequired}
-			where uid=${entry_uid};
+			where uid=${entry_uid}
+			returning title;
 		`);
 
-		// Generate HTML
+		// Generate note HTML
 		const note = await parseAndSanitizeMarkdown(data.note);
 
 		const strikesData = creators.map((c) => ({
@@ -73,9 +81,13 @@ export const actions: Actions = {
 		await db.insert(strikes).values(strikesData);
 
 		// Notify creators
-		// TODO
-		console.log(data.uid, data.reason);
-		console.log(data.note);
+		await sendGenericTemplateEmail({
+			to: creators.map((c) => c.email),
+			data: EMAILS.ActionRequired({
+				entryTitle: entry?.title ?? "",
+				deadline: String(relativeTime({ days: 3 })),
+			}),
+		});
 
 		return { flag: true };
 	}),

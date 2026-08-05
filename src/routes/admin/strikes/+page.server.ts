@@ -2,6 +2,7 @@ import { CURRENT_YEAR, ENTRY_STATE, STRIKE_STATE } from "$lib/constants";
 import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, type SelectStrike } from "$lib/server/db/schema";
+import { EMAILS, sendGenericTemplateEmail } from "$lib/server/email";
 import { UidSchema } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions } from "@sveltejs/kit";
@@ -45,20 +46,38 @@ export const actions: Actions = {
 
 		const entry_uid = data.entry_uid;
 
-		await db.transaction(async (tx) => {
+		// Retrieve entry creators
+		const creators: { email: string }[] = await db.execute(
+			sql`
+				select email
+				from users
+				join user_to_entry
+				on users.uid=user_to_entry.user_uid
+				where entry_uid=${entry_uid};
+		`,
+		);
+
 		// Update entry state
-			await tx.execute(sql`
+		const [entry]: { title: string }[] = await db.execute(sql`
 			update entries
 			set state=${ENTRY_STATE.Active}
-			where uid=${entry_uid};
+			where uid=${entry_uid}
+			returning title;
 		`);
 
 		// Remove strike
-			await tx.execute(sql`
+		await db.execute(sql`
 			update strikes
 			set state=${STRIKE_STATE.Closed}
 			where entry_uid=${entry_uid};
 		`);
+
+		// Notify creators
+		await sendGenericTemplateEmail({
+			to: creators.map((c) => c.email),
+			data: EMAILS.StrikeResolved({
+				entryTitle: entry?.title ?? "",
+			}),
 		});
 
 		return { success: true };
@@ -68,24 +87,39 @@ export const actions: Actions = {
 
 		const entry_uid = data.entry_uid;
 
-		await db.transaction(async (tx) => {
+		// Retrieve entry creators
+		const creators: { email: string }[] = await db.execute(
+			sql`
+				select email
+				from users
+				join user_to_entry
+				on users.uid=user_to_entry.user_uid
+				where entry_uid=${entry_uid};
+		`,
+		);
+
 		// Update entry state
-			await tx.execute(sql`
+		const [entry]: { title: string }[] = await db.execute(sql`
 			update entries
 			set state=${ENTRY_STATE.Inactive}
-			where uid=${entry_uid};
+			where uid=${entry_uid}
+			returning title;
 		`);
 
-			// Remove strike
-			await tx.execute(sql`
-				update strikes
-				set state=${STRIKE_STATE.Closed}
-				where entry_uid=${entry_uid};
-			`);
-		});
+		// Remove strike
+		await db.execute(sql`
+			update strikes
+			set state=${STRIKE_STATE.Closed}
+			where entry_uid=${entry_uid};
+		`);
 
 		// Notify creators
-		// TODO
+		await sendGenericTemplateEmail({
+			to: creators.map((c) => c.email),
+			data: EMAILS.EntryInactive({
+				entryTitle: entry?.title ?? "",
+			}),
+		});
 
 		return { success: true };
 	}),
