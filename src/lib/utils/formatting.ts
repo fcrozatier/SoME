@@ -18,7 +18,7 @@ export const conjunctionFormatter = new Intl.ListFormat("en", {
 });
 
 export function formatDateTime(
-	datetime: string,
+	datetime: string | Temporal.PlainDateTime,
 	options?: (Intl.DateTimeFormatOptions & { includeTime?: boolean }) | undefined,
 ) {
 	const includeTime = options?.includeTime ?? true;
@@ -33,5 +33,5 @@ export function formatDateTime(
 			hour: includeTime ? "numeric" : undefined,
 			minute: includeTime ? "numeric" : undefined,
 		},
-	).format(Date.parse(datetime));
+	).format(Date.parse(String(datetime)));
 }
