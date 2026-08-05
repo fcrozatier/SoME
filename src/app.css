@@ -65,14 +65,14 @@ a:not(:where(.btn)) {
 
 /* Inputs */
 
-:user-invalid {
-	border-color: var(--color-error);
-	outline-color: var(--color-error);
-}
-
 :focus-visible {
 	outline: 1px solid currentColor;
 	outline-offset: 0px;
+}
+
+:user-invalid {
+	border-color: var(--color-error);
+	outline-color: var(--color-error);
 }
 
 textarea {
