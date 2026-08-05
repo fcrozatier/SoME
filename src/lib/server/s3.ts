@@ -42,7 +42,7 @@ export async function saveThumbnail(thumbnail: File, key: string) {
 		ACL: "public-read",
 	});
 
-	await client.send(command);
+	return await client.send(command);
 }
 
 /**
@@ -51,10 +51,15 @@ export async function saveThumbnail(thumbnail: File, key: string) {
  * @param key The name of the file on the bucket
  */
 export async function deleteThumbnail(key: string) {
+	if (dev) {
+		console.log("Deleting thumbnail", key);
+		return;
+	}
+
 	const command = new DeleteObjectCommand({
 		Bucket: PUBLIC_S3_BUCKET,
 		Key: key,
 	});
 
-	await client.send(command);
+	return await client.send(command);
 }
