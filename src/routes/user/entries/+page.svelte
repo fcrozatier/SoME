@@ -94,7 +94,7 @@
 											}}>Ask for review</button
 										>
 									{:else if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.WaitingForReview}
-										<span class="badge badge-sm badge-primary">under review</span>
+										<span>under review</span>
 									{:else if state === ENTRY_STATE.Inactive}
 										<span class="badge badge-sm badge-primary">inactive</span>
 									{/if}
