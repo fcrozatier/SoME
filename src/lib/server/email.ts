@@ -58,6 +58,8 @@ export async function sendGenericTemplateEmail({
 		return;
 	}
 
+	if (Array.isArray(to) && to.length === 0) return;
+
 	return await mg.messages.create(DOMAIN, {
 		from: FROM,
 		to,
