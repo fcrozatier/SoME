@@ -1,3 +1,4 @@
+import { ANONYMIZED_USER_PREFIX } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -21,9 +22,18 @@ export const POST: RequestHandler = async function ({ request }) {
 		);
 	}
 
+	const username = validation.data.username;
+
+	if (username.startsWith(ANONYMIZED_USER_PREFIX)) {
+		return json({
+			valid: false,
+			status: "error",
+		});
+	}
+
 	const [user] = await db.execute(sql`
 		select username from users
-		where username=${validation.data.username};
+		where username=${username};
 	`);
 
 	if (user) {

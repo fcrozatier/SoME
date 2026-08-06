@@ -1,4 +1,5 @@
 import { dev } from "$app/environment";
+import { ANONYMIZED_USER_PREFIX } from "$lib/constants";
 import * as auth from "$lib/server/auth.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
@@ -37,8 +38,12 @@ export const actions = {
 
 		// Unique username
 		const [other] = await db.select().from(users).where(eq(users.username, data.username));
-
 		if (other) return formfail({ username: "This username is already taken" });
+
+		// Disallowed usernames
+		if (data.username.startsWith(ANONYMIZED_USER_PREFIX)) {
+			return formfail({ username: "This username is not allowed" });
+		}
 
 		// Save data
 		try {
