@@ -5,13 +5,14 @@
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl overflow-x-auto">
-	<h2>Deactivated entries</h2>
+	<h2>Inactive Entries</h2>
 
 	<div class="overflow-x-auto">
 		<table class="w-full">
 			<thead>
 				<tr class="px-6">
 					<th>Entry</th>
+					<th>Authors</th>
 					<th>Created</th>
 					<th>Updated</th>
 					<th>Deleted</th>
@@ -29,6 +30,7 @@
 								<br /><span class="text-nowrap">{uid}</span>
 							</div>
 						</td>
+						<td>{data.authorsByEntry[uid]?.map((a) => a.username)?.join(", ")}</td>
 						<td class="text-nowrap">
 							{#if created_at}
 								<Time datetime={created_at} includeTime={false}></Time>

@@ -37,7 +37,7 @@
 <Toasts />
 
 {#snippet menu()}
-	<ul class="grid gap-4">
+	<ul class="grid gap-3">
 		<li class={data.user ? "" : "translate-x-2"}>
 			<a href="/archive" aria-current={page.url.pathname === "/archive" ? "page" : null}>Archive</a>
 		</li>

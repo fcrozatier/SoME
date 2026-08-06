@@ -27,7 +27,20 @@ export const load = async ({ locals }) => {
 
 	const flagged = Object.groupBy(flags, ({ uid }) => uid);
 
-	return { flagged };
+	const entryUids = [...new Set(flags.map((f) => f.uid))];
+
+	const authors: { username: string; entry_uid: string }[] = await db.execute(
+		sql`
+			select username, entry_uid
+			from users
+			join user_to_entry on users.uid=user_to_entry.user_uid
+			where entry_uid in ${entryUids}
+		`,
+	);
+
+	const authorsByEntry = Object.groupBy(authors, ({ entry_uid }) => entry_uid);
+
+	return { flagged, authorsByEntry };
 };
 
 export const actions: Actions = {

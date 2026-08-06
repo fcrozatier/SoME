@@ -47,81 +47,83 @@
 	}
 </script>
 
-<article class="mx-auto w-4/5 max-w-5xl overflow-x-auto">
+<article class="mx-auto w-4/5 max-w-5xl">
 	<h2>Flagged entries</h2>
 
-	<table class="w-full">
-		<thead>
-			<tr class="px-6">
-				<th class="text-left">Entry</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each Object.entries(data.flagged) as [entryUid, flags]}
-				{@const url = flags?.at(0)?.url ?? ""}
-				{@const title = flags?.at(0)?.title ?? ""}
-
-				<tr class="px-6 py-2">
-					<td>
-						<div class="flex items-center justify-between">
-							<div>
-								<a class="capitalize" href={url} target="_blank">{title}</a>
-								<br />{entryUid}
+	<div class="overflow-x-auto">
+		<table class="w-full">
+			<thead>
+				<tr class="px-6">
+					<th class="text-left">Entry</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each Object.entries(data.flagged) as [entryUid, flags]}
+					{@const url = flags?.at(0)?.url ?? ""}
+					{@const title = flags?.at(0)?.title ?? ""}
+					<tr class="px-6 py-2">
+						<td>
+							<div class="flex items-center justify-between">
+								<div>
+									<a class="capitalize" href={url} target="_blank">{title}</a>
+									<br />{entryUid}
+								</div>
+								<div>
+									{data.authorsByEntry[entryUid]?.map((a) => a.username)?.join(", ")}
+								</div>
+								<div>
+									<form
+										method="post"
+										use:enhance={disableSubmitterAndSetValidity({
+											after: async ({ result, action, update }) => {
+												await update({ invalidateAll: true });
+												if (result.type === "success") {
+													const content =
+														action.search === "?/ignore" ? "Ignored" : "Creators notified";
+													newToast({ type: "info", content });
+												}
+											},
+										})}
+									>
+										<input type="hidden" name="uid" value={entryUid} />
+										<div class="flex gap-4">
+											<button type="submit" formaction="?/ignore_flags" class="btn btn-sm"
+												>Ignore flags</button
+											>
+											<button
+												type="button"
+												class="btn btn-outline btn-error btn-sm"
+												commandfor="require-action"
+												command="show-modal"
+												onclick={() => {
+													selectedEntry.title = title;
+													selectedEntry.uid = entryUid;
+													requireActionDialog?.showModal();
+												}}>Require Action</button
+											>
+										</div>
+									</form>
+								</div>
 							</div>
 							<div>
-								<form
-									method="post"
-									use:enhance={disableSubmitterAndSetValidity({
-										after: async ({ result, action, update }) => {
-											await update({ invalidateAll: true });
-
-											if (result.type === "success") {
-												const content =
-													action.search === "?/ignore" ? "Ignored" : "Creators notified";
-												newToast({ type: "info", content });
-											}
-										},
-									})}
-								>
-									<input type="hidden" name="uid" value={entryUid} />
-
-									<div class="flex gap-4">
-										<button type="submit" formaction="?/ignore_flags" class="btn btn-sm"
-											>Ignore flags</button
-										>
-										<button
-											type="button"
-											class="btn btn-outline btn-error btn-sm"
-											commandfor="require-action"
-											command="show-modal"
-											onclick={() => {
-												selectedEntry.title = title;
-												selectedEntry.uid = entryUid;
-												requireActionDialog?.showModal();
-											}}>Require Action</button
-										>
-									</div>
-								</form>
+								<ul>
+									{#each flags as flag}
+										<li class="">{flag.reason}</li>
+									{/each}
+								</ul>
 							</div>
-						</div>
-						<div>
-							<ul>
-								{#each flags as flag}
-									<li class="">{flag.reason}</li>
-								{/each}
-							</ul>
-						</div>
-					</td>
-				</tr>
-			{:else}
-				<tr>
-					<td>
-						<p>No entries to review</p>
-					</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+						</td>
+					</tr>
+				{:else}
+					<tr>
+						<td>
+							<p>No entries to review</p>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </article>
 
 <dialog id="require-action" class="m-auto" bind:this={requireActionDialog} closedby="any">

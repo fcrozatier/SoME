@@ -32,6 +32,17 @@ export const load = async ({ locals }) => {
 
 	const uids = inactiveEntries.map((entry) => entry.uid);
 
+	const authors: { username: string; entry_uid: string }[] = await db.execute(
+		sql`
+			select username, entry_uid
+			from users
+			join user_to_entry on users.uid=user_to_entry.user_uid
+			where entry_uid in ${uids}
+		`,
+	);
+
+	const authorsByEntry = Object.groupBy(authors, ({ entry_uid }) => entry_uid);
+
 	const strikes: Prettify<
 		Pick<SelectStrike, "reason" | "note" | "state"> & {
 			entry_uid: string;
@@ -56,5 +67,5 @@ export const load = async ({ locals }) => {
 	const withStrikes = Object.groupBy(strikes, ({ entry_uid }) => entry_uid);
 	const withFlags = Object.groupBy(flags, ({ entry_uid }) => entry_uid);
 
-	return { inactiveEntries, withFlags, withStrikes };
+	return { inactiveEntries, withFlags, withStrikes, authorsByEntry };
 };
