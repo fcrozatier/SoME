@@ -12,13 +12,14 @@
 			<thead>
 				<tr class="px-6">
 					<th>Entry</th>
+					<th>Authors</th>
 					<th>Created</th>
 					<th>Updated</th>
 					<th>Deleted</th>
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.inactiveEntries as { title, url, uid, created_at, updated_at, deleted_at }}
+				{#each data.deletedEntries as { title, url, uid, created_at, updated_at, deleted_at }}
 					{@const strikes = data.withStrikes[uid]}
 					{@const flags = data.withFlags[uid]}
 
@@ -29,6 +30,7 @@
 								<br /><span class="text-nowrap">{uid}</span>
 							</div>
 						</td>
+						<td>{data.authorsByEntry[uid]?.map((a) => a.username)?.join(", ")}</td>
 						<td class="text-nowrap">
 							{#if created_at}
 								<Time datetime={created_at} includeTime={false}></Time>
