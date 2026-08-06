@@ -25,16 +25,20 @@ export const load = async ({ locals }) => {
 			order by uid;
 		`);
 
+	if (flags.length === 0) {
+		return { flagged: [], authorsByEntry: [] };
+	}
+
 	const flagged = Object.groupBy(flags, ({ uid }) => uid);
 
 	const entryUids = [...new Set(flags.map((f) => f.uid))];
 
 	const authors: { username: string; entry_uid: string }[] = await db.execute(
 		sql`
-			select username, entry_uid
-			from users
-			join user_to_entry on users.uid=user_to_entry.user_uid
-			where entry_uid in ${entryUids}
+		select username, entry_uid
+		from users
+		join user_to_entry on users.uid=user_to_entry.user_uid
+		where entry_uid in ${entryUids}
 		`,
 	);
 
@@ -61,16 +65,31 @@ export const actions: Actions = {
 
 		const entry_uid = data.uid;
 
-		// Retrieve entry creators
-		const creators: { user_uid: string; email: string }[] = await db.execute(
+		// Retrieve active entry creators
+		const activeCreators: {
+			user_uid: string;
+			email: string;
+		}[] = await db.execute(
 			sql`
 				select user_uid, email
 				from users
 				join user_to_entry
 				on users.uid=user_to_entry.user_uid
-				where entry_uid=${entry_uid};
+				where entry_uid=${entry_uid}
+				and deleted_at is null;
 		`,
 		);
+
+		// If no active creators, deactivate the entry
+		if (activeCreators.length === 0) {
+			await db.execute(sql`
+					update entries
+					set state=${ENTRY_STATE.Inactive}
+					where uid=${entry_uid};
+				`);
+
+			return { flag: true };
+		}
 
 		// Update entry state
 		const [entry]: { title: string }[] = await db.execute(sql`
@@ -83,7 +102,7 @@ export const actions: Actions = {
 		// Generate note HTML
 		const note = await parseAndSanitizeMarkdown(data.note);
 
-		const strikesData = creators.map((c) => ({
+		const strikesData = activeCreators.map((c) => ({
 			userUid: c.user_uid,
 			entryUid: entry_uid,
 			reason: data.reason,
@@ -93,9 +112,9 @@ export const actions: Actions = {
 		// Save strikes
 		await db.insert(strikes).values(strikesData);
 
-		// Notify creators
+		// Notify active creators
 		await sendGenericTemplateEmail({
-			to: creators.map((c) => c.email),
+			to: activeCreators.map((c) => c.email),
 			data: EMAILS.ActionRequired({
 				entryTitle: entry?.title ?? "",
 				deadline: String(relativeTime({ days: 3 })),
