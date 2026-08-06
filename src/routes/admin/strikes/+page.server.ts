@@ -77,13 +77,14 @@ export const actions: Actions = {
 		const entry_uid = data.entry_uid;
 
 		// Retrieve entry creators
-		const creators: { email: string }[] = await db.execute(
+		const activeCreators: { email: string }[] = await db.execute(
 			sql`
 				select email
 				from users
 				join user_to_entry
 				on users.uid=user_to_entry.user_uid
-				where entry_uid=${entry_uid};
+				where entry_uid=${entry_uid}
+				and deleted_at is null;
 		`,
 		);
 
@@ -104,7 +105,7 @@ export const actions: Actions = {
 
 		// Notify creators
 		await sendGenericTemplateEmail({
-			to: creators.map((c) => c.email),
+			to: activeCreators.map((c) => c.email),
 			data: EMAILS.StrikeResolved({
 				entryTitle: entry?.title ?? "",
 			}),
@@ -118,13 +119,14 @@ export const actions: Actions = {
 		const entry_uid = data.uid;
 
 		// Retrieve entry creators
-		const creators: { user_uid: string; email: string }[] = await db.execute(
+		const activeCreators: { user_uid: string; email: string }[] = await db.execute(
 			sql`
-					select user_uid, email
-					from users
-					join user_to_entry
-					on users.uid=user_to_entry.user_uid
-					where entry_uid=${entry_uid};
+				select user_uid, email
+				from users
+				join user_to_entry
+				on users.uid=user_to_entry.user_uid
+				where entry_uid=${entry_uid}
+				and deleted_at is null;
 			`,
 		);
 
@@ -147,7 +149,7 @@ export const actions: Actions = {
 		// Generate note HTML
 		const note = await parseAndSanitizeMarkdown(data.note);
 
-		const strikesData = creators.map((c) => ({
+		const strikesData = activeCreators.map((c) => ({
 			userUid: c.user_uid,
 			entryUid: entry_uid,
 			reason: strike?.reason ?? "",
@@ -159,7 +161,7 @@ export const actions: Actions = {
 
 		// Notify creators
 		await sendGenericTemplateEmail({
-			to: creators.map((c) => c.email),
+			to: activeCreators.map((c) => c.email),
 			data: EMAILS.FollowUpActionRequired({
 				entryTitle: entry?.title ?? "",
 				deadline: String(relativeTime({ days: 3 })),
@@ -174,13 +176,14 @@ export const actions: Actions = {
 		const entry_uid = data.entry_uid;
 
 		// Retrieve entry creators
-		const creators: { email: string }[] = await db.execute(
+		const activeCreators: { email: string }[] = await db.execute(
 			sql`
 				select email
 				from users
 				join user_to_entry
 				on users.uid=user_to_entry.user_uid
-				where entry_uid=${entry_uid};
+				where entry_uid=${entry_uid}
+				and deleted_at is null;
 		`,
 		);
 
@@ -201,7 +204,7 @@ export const actions: Actions = {
 
 		// Notify creators
 		await sendGenericTemplateEmail({
-			to: creators.map((c) => c.email),
+			to: activeCreators.map((c) => c.email),
 			data: EMAILS.EntryInactive({
 				entryTitle: entry?.title ?? "",
 			}),
