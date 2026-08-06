@@ -7,6 +7,7 @@ import { DeleteProfileSchema, UpdateProfileSchema } from "$lib/validation.js";
 import { type Actions, fail, redirect } from "@sveltejs/kit";
 import { eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
+import { ANONYMIZED_USER_PREFIX } from "$lib/constants";
 
 export const load = async ({ locals }) => {
 	assertIsLoggedIn(locals);
@@ -106,12 +107,17 @@ export const actions: Actions = {
 			await auth.invalidateSession(locals.session.id);
 			auth.deleteSessionTokenCookie(event);
 
-			const random = Math.trunc(Math.random() * 10 ** 4);
+			// Count deleted users
+			const [deletedUsers]: { count: number }[] = await db.execute(sql`
+				select count(*)::int
+				from users
+				where deleted_at is not null;
+			`);
 
 			await db.execute(sql`
 					update users
-					set username=${"deleted-user-" + random},
-							email=${"deleted-user-" + random + "@some.3b1b.co"},
+					set username=${ANONYMIZED_USER_PREFIX + deletedUsers?.count},
+							email=${ANONYMIZED_USER_PREFIX + deletedUsers?.count + "@some.3b1b.co"},
 							deleted_at=now()
 					where uid=${uid};
 				`);

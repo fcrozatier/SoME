@@ -4,6 +4,8 @@ import { resultsAvailable } from "./utils/time";
 // The competition name
 export const FULL_NAME = "Summer of Math Exposition";
 
+export const ANONYMIZED_USER_PREFIX = "deleted-user";
+
 // The different possible categories for entries
 // No space as the strings are used in vote url
 export const CATEGORIES = ["video", "non-video"] as const;

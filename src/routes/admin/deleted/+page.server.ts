@@ -30,6 +30,15 @@ export const load = async ({ locals }) => {
 				and deleted_at is not null;
 		`);
 
+	if (deletedEntries.length === 0) {
+		return {
+			deletedEntries,
+			withFlags: [],
+			withStrikes: [],
+			authorsByEntry: [],
+		};
+	}
+
 	const uids = deletedEntries.map((entry) => entry.uid);
 
 	const authors: { username: string; entry_uid: string }[] = await db.execute(

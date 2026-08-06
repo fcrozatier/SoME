@@ -30,6 +30,15 @@ export const load = async ({ locals }) => {
 				and date_part('year', entries.created_at)=${CURRENT_YEAR};
 		`);
 
+	if (inactiveEntries.length === 0) {
+		return {
+			inactiveEntries,
+			withFlags: [],
+			withStrikes: [],
+			authorsByEntry: [],
+		};
+	}
+
 	const uids = inactiveEntries.map((entry) => entry.uid);
 
 	const authors: { username: string; entry_uid: string }[] = await db.execute(

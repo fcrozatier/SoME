@@ -44,6 +44,13 @@ export const load = async ({ locals }) => {
 			and date_part('year', entries.created_at)=${CURRENT_YEAR};
 	`);
 
+	if (strikes.length === 0) {
+		return {
+			strikes,
+			authorsByEntry: [],
+		};
+	}
+
 	const entryUids = strikes.map((s) => s.uid);
 
 	const authors: { username: string; entry_uid: string }[] = await db.execute(
