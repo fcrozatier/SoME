@@ -1,4 +1,4 @@
-import { dev } from "$app/environment";
+import { STRIKE_STATE } from "$lib/constants.js";
 import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
@@ -325,6 +325,7 @@ export const actions = {
 		// Make sure user is the creator first
 		await assertIsCreator({ userUid: user.uid, entryUid });
 
+		// Soft delete entry
 		await db.execute(
 			sql`
 				update entries
@@ -332,6 +333,16 @@ export const actions = {
 				where uid=${entryUid};
 			`,
 		);
+
+		// Close issues if any on this entry
+		await db.execute(
+			sql`
+				update strikes
+				set state=${STRIKE_STATE.Closed}
+				where entry_uid=${entryUid};
+			`,
+		);
+
 		return redirect(303, "/user/entries");
 	},
 };
