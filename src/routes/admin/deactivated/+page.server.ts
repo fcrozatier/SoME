@@ -1,11 +1,7 @@
 import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants.js";
 import { assertIsAdmin } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
-import {
-	type SelectEntry,
-	type SelectFlag,
-	type SelectStrike,
-} from "$lib/server/db/schema";
+import { type SelectEntry, type SelectFlag, type SelectStrike } from "$lib/server/db/schema";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { sql } from "drizzle-orm";
 
