@@ -26,11 +26,12 @@
 <article class="mx-auto w-4/5 max-w-5xl">
 	<h2>Open Issues (strikes)</h2>
 
-	<div class="overflow-x-auto">
+	<div class="overflow-auto max-h-screen">
 		<table class="w-full">
 			<thead>
 				<tr class="px-6">
 					<th>Entry</th>
+					<th>Authors</th>
 					<th>Striked</th>
 					<th>Updated</th>
 					<th>Deleted</th>
@@ -48,6 +49,7 @@
 								<br /><span class="text-nowrap">{uid}</span>
 							</div>
 						</td>
+						<td>{data.authorsByEntry[uid]?.map((a) => a.username)?.join(", ")}</td>
 						<td class="text-nowrap">{formatRelativeTime(created_at)}</td>
 						<td class="text-nowrap">{formatRelativeTime(updated_at) ?? "-"}</td>
 						<td class="text-nowrap">
@@ -85,7 +87,7 @@
 								<input type="hidden" name="entry_uid" value={uid} />
 								<div class="flex gap-4">
 									<button type="submit" formaction="?/remove_strike" class="btn btn-outline btn-sm"
-										>Remove Strike</button
+										>Close Issue</button
 									>
 									<button
 										type="button"
@@ -194,3 +196,11 @@
 		</p>
 	</form>
 </dialog>
+
+<style>
+	th {
+		position: sticky;
+		top: 0;
+		background-color: var(--color-light-gold);
+	}
+</style>

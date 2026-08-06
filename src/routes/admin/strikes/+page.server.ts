@@ -44,7 +44,23 @@ export const load = async ({ locals }) => {
 			and date_part('year', entries.created_at)=${CURRENT_YEAR};
 	`);
 
-	return { strikes };
+	const entryUids = strikes.map((s) => s.uid);
+
+	const authors: { username: string; entry_uid: string }[] = await db.execute(
+		sql`
+			select username, entry_uid
+			from users
+			join user_to_entry on users.uid=user_to_entry.user_uid
+			where entry_uid in ${entryUids};
+		`,
+	);
+
+	const authorsByEntry = Object.groupBy(authors, ({ entry_uid }) => entry_uid);
+
+	return {
+		strikes,
+		authorsByEntry,
+	};
 };
 
 export const actions: Actions = {
