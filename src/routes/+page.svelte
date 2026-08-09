@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Media from "$lib/components/Media.svelte";
 	import Timeline from "$lib/components/Timeline.svelte";
+	import Timer from "$lib/components/Timer.svelte";
 	import { formatTitle } from "$lib/utils/formatting.js";
+	import { submissionsOpen } from "$lib/utils/time.js";
 
 	let { data } = $props();
 </script>
@@ -9,6 +11,10 @@
 <svelte:head>
 	<title>{formatTitle("Home")}</title>
 </svelte:head>
+
+{#if submissionsOpen()}
+	<Timer></Timer>
+{/if}
 
 <section class="layout-prose">
 	<!-- <p class=" mb-16 text-center text-3xl font-light">Create and discover new math content.</p> -->
