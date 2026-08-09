@@ -163,9 +163,6 @@
 
 		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
 			<!-- <Banner display={!data.surveyTaken} /> -->
-			{#if submissionsOpen()}
-				<Timer></Timer>
-			{/if}
 
 			<header>
 				<h1 class="text-center mb-2">{FULL_NAME}</h1>
