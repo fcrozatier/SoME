@@ -33,9 +33,9 @@ export const load = async ({ locals }) => {
 	if (inactiveEntries.length === 0) {
 		return {
 			inactiveEntries,
-			withFlags: [],
-			withStrikes: [],
-			authorsByEntry: [],
+			withFlags: {},
+			withStrikes: {},
+			authorsByEntry: {},
 		};
 	}
 

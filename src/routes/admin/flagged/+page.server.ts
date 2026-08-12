@@ -25,8 +25,10 @@ export const load = async ({ locals }) => {
 			order by uid;
 		`);
 
+	let authorsByEntry: Partial<Record<string, { username: string; entry_uid: string }[]>> = {};
+
 	if (flags.length === 0) {
-		return { flagged: [], authorsByEntry: [] };
+		return { flagged: [], authorsByEntry };
 	}
 
 	const flagged = Object.groupBy(flags, ({ uid }) => uid);
@@ -42,7 +44,7 @@ export const load = async ({ locals }) => {
 		`,
 	);
 
-	const authorsByEntry = Object.groupBy(authors, ({ entry_uid }) => entry_uid);
+	authorsByEntry = Object.groupBy(authors, ({ entry_uid }) => entry_uid);
 
 	return { flagged, authorsByEntry };
 };
@@ -77,7 +79,7 @@ export const actions: Actions = {
 				on users.uid=user_to_entry.user_uid
 				where entry_uid=${entry_uid}
 				and deleted_at is null;
-		`,
+			`,
 		);
 
 		// If no active creators, deactivate the entry
