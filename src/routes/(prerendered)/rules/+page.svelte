@@ -242,7 +242,9 @@
 		<!-- Ownership -->
 		<details>
 			<summary id="ownership"
-				><a href="#ownership" tabindex="-1">Do I retain the full rights and ownership? </a></summary
+				><a href="#ownership" tabindex="-1"
+					>Do I retain the full rights and ownership to my entry?
+				</a></summary
 			>
 			<p>Of course! You retain the full rights and ownership to your submissions.</p>
 			<p>SoME is just here to boost your visibility and help find a potential audience.</p>
