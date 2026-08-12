@@ -84,12 +84,17 @@ export function computeBottomPercentile() {
 
 /**
  * We enter the end game when the votes rate drops.
- * The rate is like x ** a, so we target a x ** (a - 1) = 1
+ * The rate is like x ** a, so we target `a x ** (a - 1) = 1`
+ * This is about 4 days
  */
-const END_GAME_THRESHOLD = VOTE_RATE_EXPONENT ** (1 / (1 - VOTE_RATE_EXPONENT));
+const MID_GAME_THRESHOLD = VOTE_RATE_EXPONENT ** (1 / (1 - VOTE_RATE_EXPONENT));
+
+function isEarlyGame() {
+	return voteTimeElapsedPercent() < MID_GAME_THRESHOLD;
+}
 
 function isEndGame() {
-	return voteTimeElapsedPercent() > END_GAME_THRESHOLD;
+	return voteTimeElapsedPercent() > 1 - MID_GAME_THRESHOLD;
 }
 
 /**
@@ -126,10 +131,6 @@ export function voteMain(
 	const explorationQuery: QueryFragment = {
 		order: "random()",
 	};
-	const byNbVotesQuery: QueryFragment = {
-		poolSelect: ", nb_votes.count as nb_votes_count",
-		order: "-ln(1 - random()) / (1::numeric / nb_votes_count)",
-	};
 	const byMedianQuery: QueryFragment = {
 		poolSelect: ", median",
 		poolJoin: `
@@ -137,6 +138,10 @@ export function voteMain(
 			on entries.uid=medians.entry_uid
 		`,
 		order: "-ln(1 - random()) / median",
+	};
+	const byNbVotesQuery: QueryFragment = {
+		poolSelect: ", nb_votes.count as nb_votes_count",
+		order: "-ln(1 - random()) / (1::numeric / nb_votes_count)",
 	};
 	const bySpreadQuery: QueryFragment = {
 		poolSelect: ", (std / nb_votes.count) as spread_to_votes",
@@ -160,13 +165,23 @@ export function voteMain(
 		order: "-ln(1 - random()) / nb_ties",
 	};
 
-	const endGameQueries = [byNbVotesQuery, bySpreadQuery, byNbTiesQuery];
-
-	const query: QueryFragment | undefined = randomItem([
+	const earlyGameQueries = [explorationQuery, byMedianQuery];
+	const middleGameQueries = [
 		explorationQuery,
 		byMedianQuery,
-		...(isEndGame() ? endGameQueries : []),
-	]);
+		byNbVotesQuery,
+		bySpreadQuery,
+		byNbTiesQuery,
+	];
+	const endGameQueries = [byMedianQuery, byNbVotesQuery, bySpreadQuery, byNbTiesQuery];
+
+	const activeQueries = isEarlyGame()
+		? earlyGameQueries
+		: !isEndGame()
+			? middleGameQueries
+			: endGameQueries;
+
+	const query: QueryFragment | undefined = randomItem(activeQueries);
 
 	if (!query) throw new Error("[voteMain]: empty QueryFragment");
 
@@ -200,7 +215,8 @@ export function voteMain(
 			),
 
 			pool as (
-				select distinct uid, ${sql.raw(entry_columns)} ${sql.raw(query.poolSelect ?? "")}
+				select distinct uid, ${sql.raw(entry_columns)}
+				${sql.raw(query.poolSelect ?? "")}
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid
