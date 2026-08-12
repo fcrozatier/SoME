@@ -47,7 +47,7 @@ export const load = async ({ locals }) => {
 	if (strikes.length === 0) {
 		return {
 			strikes,
-			authorsByEntry: [],
+			authorsByEntry: {},
 		};
 	}
 
