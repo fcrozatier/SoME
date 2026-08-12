@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_REGISTRATION_END } from "$env/static/public";
-	import Time from "$lib/components/Time.svelte";
-	import { formatTitle } from "$lib/utils/formatting";
+	import { formatDateTime, formatTitle } from "$lib/utils/formatting";
 	import { resultsAvailable, submissionsOpen, timeLeft } from "$lib/utils/time";
 	import { onMount } from "svelte";
 
@@ -46,10 +45,9 @@
 				<p>The competition is closed. Stay tuned for the next edition!</p>
 			{:else}
 				<p>
-					In your specific timezone (yes just yours) creators or group of Creators can submit an
-					entry until <span class="font-mono font-semibold badge badge-outline p-4">
-						<Time datetime={PUBLIC_REGISTRATION_END} />
-					</span>.
+					In your timezone, creators can submit an entry until: <b>
+						{formatDateTime(PUBLIC_REGISTRATION_END)}
+					</b>.
 				</p>
 				{#if submissionsOpen()}
 					<p>
@@ -241,6 +239,14 @@
 				<li><a href="/ai-policy">AI policy</a></li>
 			</ul>
 		</details>
+		<!-- Ownership -->
+		<details>
+			<summary id="ownership"
+				><a href="#ownership" tabindex="-1">Do I retain the full rights and ownership? </a></summary
+			>
+			<p>Of course! You retain the full rights and ownership to your submissions.</p>
+			<p>SoME is just here to boost your visibility and help find a potential audience.</p>
+		</details>
 		<!-- Ads -->
 		<details>
 			<summary id="ads"><a href="#ads" tabindex="-1">Can my content include ads?</a></summary>
@@ -282,6 +288,21 @@
 			<p>
 				Reviewers may skip over entries that are gated, difficult to access, or require special
 				software.
+			</p>
+		</details>
+		<!-- Participation -->
+		<details>
+			<summary id="participation"
+				><a href="#participation" tabindex="-1">How many votes should I make?</a></summary
+			>
+			<p>
+				The peer review phase is a vote where all Math and Science enthusiasts can participate, not
+				just people who submitted an entry.
+			</p>
+			<p>
+				The only constraint concerns creators: since the competition is a community effort, we ask
+				creators to contribute by reviewing other entries as well. This just means contributing at
+				least 5 votes during the peer review.
 			</p>
 		</details>
 		<!-- Winners -->
