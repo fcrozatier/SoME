@@ -379,4 +379,9 @@
 			opacity: 0.6;
 		}
 	}
+
+	summary:target a {
+		background-color: var(--color-warning);
+	}
+
 </style>
