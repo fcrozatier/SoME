@@ -67,7 +67,7 @@
 	{#each data.entries as entry (entry.uid)}
 		<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
 			{#snippet mainPanel()}
-				<Media {...entry} thumbnailWidth="256px" gap={6}></Media>
+				<Media {...entry} thumbnailWidth="270px" gap={6}></Media>
 			{/snippet}
 			{#snippet sidePanel()}
 				<div class="flex gap-2 flex-wrap justify-start">

@@ -2,9 +2,9 @@ import * as auth from "$lib/server/auth.js";
 import { client } from "$lib/server/db";
 import { type Handle } from "@sveltejs/kit";
 
-process.on("sveltekit:shutdown", (reason) => {
+process.on("sveltekit:shutdown", async (reason) => {
 	console.log("\nclosing db connections, reason", reason);
-	client.end();
+	await client.end();
 });
 
 // I'm a teapot
