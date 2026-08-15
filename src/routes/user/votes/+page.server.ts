@@ -12,16 +12,12 @@ import { formgate } from "formgator/sveltekit";
 export const load = async ({ locals }) => {
 	assertIsLoggedIn(locals);
 
-	const votes: (
-		& Pick<
-			SelectEntry,
-			"uid" | "title" | "description" | "category" | "url" | "thumbnail"
-		>
-		& Pick<
-			SelectVote,
-			"score" | "feedback_unsafe_md" | "feedback" | "created_at"
-		>
-	)[] = await db.execute(sql`
+	const votes: (Pick<
+		SelectEntry,
+		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
+	> &
+		Pick<SelectVote, "score" | "feedback_unsafe_md" | "feedback" | "created_at">)[] =
+		await db.execute(sql`
       select score, feedback, feedback_unsafe_md, votes.created_at, uid, title, description, category, url, thumbnail
       from votes join entries on entry_uid=uid
       where user_uid=${locals.user.uid};`);
