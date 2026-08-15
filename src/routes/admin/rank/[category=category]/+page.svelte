@@ -52,7 +52,7 @@
 	{#each data.entries as { ranking, overall_median, teacher_median, ...entry }}
 		<LayoutSideBySide side="right" mainPanelMinWidth="75%" sidePanelMaxWidth="100px">
 			{#snippet mainPanel()}
-				<Media {...entry} thumbnailWidth="256px" gap={6}></Media>
+				<Media {...entry} thumbnailWidth="270px" gap={6}></Media>
 			{/snippet}
 			{#snippet sidePanel()}
 				<div class="grid grid-cols-2 gap-y-2 items-center">

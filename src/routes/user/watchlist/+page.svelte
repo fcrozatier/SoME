@@ -24,7 +24,7 @@
 			{#each data.watchlist as entry, i}
 				<LayoutSideBySide side="right" mainPanelMinWidth="85%" sidePanelMaxWidth="64px">
 					{#snippet mainPanel()}
-						<Media {...entry} redirect="/vote" thumbnailWidth="256px" gap={6}></Media>
+						<Media {...entry} redirect="/vote" thumbnailWidth="270px" gap={6}></Media>
 					{/snippet}
 					{#snippet sidePanel()}
 						<form

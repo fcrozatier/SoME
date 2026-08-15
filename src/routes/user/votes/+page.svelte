@@ -75,7 +75,7 @@
 			{#each votesByYear[year]?.sort((v1, v2) => Number(v2.score) - Number(v1.score)) as vote}
 				{@const score = +vote.score}
 				<div>
-					<Media {...vote} thumbnailWidth="256px" gap={6}></Media>
+					<Media {...vote} thumbnailWidth="270px" gap={6}></Media>
 					<LayoutSideBySide
 						class="mt-8 flex-wrap-reverse! sm:flex-wrap!"
 						side="right"

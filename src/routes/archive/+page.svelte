@@ -125,7 +125,7 @@
 							{description}
 							{url}
 							{thumbnail}
-							thumbnailWidth="256px"
+							thumbnailWidth="270px"
 							gap={6}
 						></Media>
 					{/snippet}
