@@ -1,13 +1,11 @@
 import { dev } from "$app/environment";
-import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { type Category, CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
 import {
-	computeBottomPercentile,
-	SKIPS_TO_VOTES_THRESHOLD,
 	voteFallback,
 	voteMain,
-	voteWarmup,
+	voteWarmup
 } from "$lib/server/algo/queries.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import {
 	cache,
@@ -45,7 +43,7 @@ async function getEntryTags(entryUid: string): Promise<string[]> {
 export const load = async ({ locals, params }) => {
 	assertIsLoggedIn(locals);
 
-	if (!voteOpen()) {
+	if (!voteOpen() && !locals.user.isAdmin) {
 		return redirect(302, "/user/vote/");
 	}
 

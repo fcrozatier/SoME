@@ -6,10 +6,9 @@
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Time from "$lib/components/Time.svelte";
-	import Timer from "$lib/components/Timer.svelte";
 	import Toasts from "$lib/components/Toasts.svelte";
 	import { FULL_NAME } from "$lib/constants";
-	import { submissionsOpen, voteOpen } from "$lib/utils/time";
+	import { voteOpen } from "$lib/utils/time";
 	import { apply, isSupported } from "@oddbird/popover-polyfill/fn";
 	import { onMount } from "svelte";
 	import "../app.css";
