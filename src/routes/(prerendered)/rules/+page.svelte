@@ -383,5 +383,4 @@
 	summary:target a {
 		background-color: var(--color-warning);
 	}
-
 </style>
