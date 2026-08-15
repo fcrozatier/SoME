@@ -258,13 +258,16 @@
 		<p>When scoring an entry you might consider the following principles:</p>
 
 		<h3>Motivation</h3>
-		<p>It should be clear early on in the explainer why the topic matters why one should care for the topic?</p>
+		<p>
+			It should be clear early on in the explainer why the topic matters why one should care for the
+			topic?
+		</p>
 
 		<h3>Clarity</h3>
 		<p>
 			Would the explanations make sense for the target audience? Jargon should be explained, the
-			goals of the lesson should be understandable for someone in the targeted audience, and the submission
-			should generally display empathy for people unfamiliar with the topic.
+			goals of the lesson should be understandable for someone in the targeted audience, and the
+			submission should generally display empathy for people unfamiliar with the topic.
 		</p>
 
 		<h3>Novelty</h3>

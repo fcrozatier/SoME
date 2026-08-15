@@ -328,10 +328,12 @@
 			<p>Here are some broad guidelines for what we're hoping to see:</p>
 			<ul>
 				<li>
-					<b>Motivation:</b> It should be clear early on in the explainer why the topic matters and why someone should be excited to learn about it.
+					<b>Motivation:</b> It should be clear early on in the explainer why the topic matters and why
+					someone should be excited to learn about it.
 				</li>
 				<li>
-					<b> Clarity: </b> Jargon should be explained, the goals of the lesson should be easy to understand for someone in the targeted audience, and the presentation should show care for people who might
+					<b> Clarity: </b> Jargon should be explained, the goals of the lesson should be easy to understand
+					for someone in the targeted audience, and the presentation should show care for people who might
 					be new to the topic.
 				</li>
 				<li>
