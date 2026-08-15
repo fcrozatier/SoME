@@ -25,7 +25,7 @@
 	<div>
 		<div
 			id="description-{id}"
-			class="description prose space-y-4! *:mt-0! wrap-anywhere"
+			class="description prose space-y-4! *:mt-0! [&_p:has(+ul)]:mb-0! wrap-anywhere"
 			data-open={open}
 			bind:this={description}
 		>
