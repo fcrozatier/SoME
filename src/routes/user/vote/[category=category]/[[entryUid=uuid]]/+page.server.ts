@@ -1,10 +1,6 @@
 import { dev } from "$app/environment";
 import { type Category, CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
-import {
-	voteFallback,
-	voteMain,
-	voteWarmup
-} from "$lib/server/algo/queries.js";
+import { voteFallback, voteMain, voteWarmup } from "$lib/server/algo/queries.js";
 import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import {
