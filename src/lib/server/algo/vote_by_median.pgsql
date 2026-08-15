@@ -13,7 +13,7 @@ nb_skips as (
 ),
 
 medians as (
-  select entry_uid, percentile_disc(0.5) within group (order by score) as median, stddev_samp(score) as std
+  select entry_uid, percentile_disc(0.5) within group (order by score) as median, coalesce(stddev_samp(score), 0) as std
   from votes
   where date_part('year', created_at)='2026'
   group by entry_uid
@@ -54,5 +54,4 @@ pool as (
 select *
 from pool
 order by -ln(1 - random()) / median
-limit 10
-;
+limit 1;

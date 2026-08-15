@@ -1,13 +1,7 @@
 import { dev } from "$app/environment";
-import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { type Category, CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
-import {
-	computeBottomPercentile,
-	SKIPS_TO_VOTES_THRESHOLD,
-	voteFallback,
-	voteMain,
-	voteWarmup,
-} from "$lib/server/algo/queries.js";
+import { voteFallback, voteMain, voteWarmup } from "$lib/server/algo/queries.js";
+import { assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import {
 	cache,
@@ -45,7 +39,7 @@ async function getEntryTags(entryUid: string): Promise<string[]> {
 export const load = async ({ locals, params }) => {
 	assertIsLoggedIn(locals);
 
-	if (!voteOpen()) {
+	if (!voteOpen() && !locals.user.isAdmin) {
 		return redirect(302, "/user/vote/");
 	}
 
@@ -114,18 +108,10 @@ export const load = async ({ locals, params }) => {
 
 	let entry: EntryDisplayFields | undefined;
 
-	const [entryWarmUp]: EntryDisplayFields[] = await db.execute(
-		voteWarmup(userUid, category, { nb_votes_max: "4", nb_skips_max: "10" }),
-	);
+	const [entryWarmUp]: EntryDisplayFields[] = await db.execute(voteWarmup(userUid, category));
 	entry = entryWarmUp;
 
-	if (entry) {
-		console.log("[vote]: warm up");
-	}
-
 	if (!entry) {
-		console.log("[vote]: main phase");
-
 		if (Math.random() < 0.01) {
 			const [entryFallback]: EntryDisplayFields[] = await db.execute(
 				voteFallback(userUid, category),
@@ -134,12 +120,7 @@ export const load = async ({ locals, params }) => {
 			entry = entryFallback;
 		} else {
 			try {
-				const [entryMain]: EntryDisplayFields[] = await db.execute(
-					voteMain(userUid, category, {
-						skips_to_votes_ratio: SKIPS_TO_VOTES_THRESHOLD,
-						percentile: computeBottomPercentile(),
-					}),
-				);
+				const [entryMain]: EntryDisplayFields[] = await db.execute(voteMain(userUid, category));
 				entry = entryMain;
 			} catch (error) {
 				console.error("[vote]: sql error in main phase", error);

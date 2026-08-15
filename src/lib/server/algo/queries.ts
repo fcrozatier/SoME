@@ -11,21 +11,19 @@ const entry_columns = "title, description, entries.category, url, thumbnail";
  *
  * Pick an entry at random from all entries with less than 4 votes and 12 skips
  */
-export function voteWarmup(
-	user_uid: string,
-	category: string,
-	options = { nb_votes_max: "4", nb_skips_max: "12" },
-) {
+export function voteWarmup(user_uid: string, category: string) {
+	console.log("[vote]: warm up");
+
 	return sql`
 			with nb_votes as (
-				select entry_uid, count(*) as count
+				select entry_uid, count(*)
 				from votes
 				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
 			nb_skips as (
-				select entry_uid, count(*) as count
+				select entry_uid, count(*)
 				from skips
 				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
@@ -33,7 +31,7 @@ export function voteWarmup(
 
 			pool as (
 				select distinct uid, ${sql.raw(entry_columns)}, coalesce(nb_skips.count, 0) as nb_skips_count,
-					(${sql.raw(options.nb_votes_max)} - coalesce(nb_votes.count, 0)) as weight
+					(4 - coalesce(nb_votes.count, 0)) as weight
 				from entries
 				left join nb_votes
 				on entries.uid=nb_votes.entry_uid
@@ -44,14 +42,14 @@ export function voteWarmup(
 
 				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
-					and entries.state=${ENTRY_STATE.Active}
+					and entries.state in ${[ENTRY_STATE.Active, ENTRY_STATE.Flagged]}
 					and deleted_at is null
 					and uid not in (select entry_uid from votes where votes.user_uid=${user_uid})
 					and uid not in (select entry_uid from skips where skips.user_uid=${user_uid})
 					and uid not in (select entry_uid from flags where flags.user_uid=${user_uid})
 					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${user_uid})
 					and entry_to_tag.tag_id in (select tag_id from user_to_tag where user_uid=${user_uid})
-					and coalesce(nb_skips.count, 0) <= ${options.nb_skips_max}
+					and coalesce(nb_skips.count, 0) <= 12
 			)
 
 			select * from pool
@@ -123,11 +121,9 @@ export const SKIPS_TO_VOTES_THRESHOLD = 4.1;
  * Weighted Random Sampling is done using A-Res with `order by -ln(1 - random()) / weight`
  * https://utopia.duth.gr/~pefraimi/research/data/2007EncOfAlg.pdf
  */
-export function voteMain(
-	user_uid: string,
-	category: string,
-	options = { skips_to_votes_ratio: SKIPS_TO_VOTES_THRESHOLD, percentile: 0 },
-) {
+export function voteMain(user_uid: string, category: string) {
+	console.log("[vote]: main phase");
+
 	const explorationQuery: QueryFragment = {
 		order: "random()",
 	};
@@ -230,15 +226,15 @@ export function voteMain(
 
 				where date_part('year', entries.created_at)=${CURRENT_YEAR}
 					and entries.category=${category}
-					and entries.state=${ENTRY_STATE.Active}
+					and entries.state in ${[ENTRY_STATE.Active, ENTRY_STATE.Flagged]}
 					and deleted_at is null
 					and uid not in (select entry_uid from votes where votes.user_uid=${user_uid})
 					and uid not in (select entry_uid from skips where skips.user_uid=${user_uid})
 					and uid not in (select entry_uid from flags where flags.user_uid=${user_uid})
 					and uid not in (select entry_uid from ${userToEntry} where ${userToEntry.userUid}=${user_uid})
 					and entry_to_tag.tag_id in (select tag_id from user_to_tag where user_uid=${user_uid})
-					and ranks.percent >= ${options.percentile}
-					and (coalesce(nb_skips.count, 0)::numeric / nb_votes.count) <= ${options.skips_to_votes_ratio}
+					and ranks.percent >= ${computeBottomPercentile()}
+					and (coalesce(nb_skips.count, 0)::numeric / nb_votes.count) <= ${SKIPS_TO_VOTES_THRESHOLD}
 			)
 
 			select *
@@ -265,7 +261,7 @@ export function voteFallback(user_uid: string, category: string) {
 
 			where date_part('year', entries.created_at)=${CURRENT_YEAR}
 			and entries.category=${category}
-			and entries.state=${ENTRY_STATE.Active}
+			and entries.state in ${[ENTRY_STATE.Active, ENTRY_STATE.Flagged]}
 			and deleted_at is null
 			and uid not in (select entry_uid from votes where votes.user_uid=${user_uid})
 			and uid not in (select entry_uid from skips where skips.user_uid=${user_uid})
