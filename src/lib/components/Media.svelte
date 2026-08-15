@@ -58,7 +58,7 @@
 			<h3 class="mt-0 text-trim text-balance line-clamp-2 leading-snug mb-3">{title}</h3>
 		</a>
 		{#if description}
-			<div class="prose line-clamp-3 wrap-anywhere">{@html description}</div>
+			<div class="prose line-clamp-3 wrap-anywhere max-h-[4lh]">{@html description}</div>
 		{/if}
 	{/snippet}
 </LayoutSideBySide>
