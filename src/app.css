@@ -148,7 +148,7 @@ dialog[open] {
 /* Details */
 
 details {
-	padding-block: --spacing(8);
+	padding-block: --spacing(6);
 	border-block: 1px solid var(--color-gray-200);
 
 	& p {
@@ -169,7 +169,7 @@ details {
 details[open] {
 	& > summary::after {
 		transform: rotate(-135deg);
-		top: 10px;
+		top: 12px;
 	}
 
 	&::details-content {
@@ -184,7 +184,6 @@ details + details {
 /* Summary */
 
 summary {
-	--outline-width: 0;
 	padding-right: 30px;
 	position: relative;
 	cursor: pointer;
@@ -195,6 +194,10 @@ summary {
 	text-box-trim: trim-start;
 	text-box-edge: cap;
 	outline: none;
+
+	&:focus-visible {
+		outline: none;
+	}
 
 	& > a {
 		text-decoration: none;
@@ -217,7 +220,7 @@ summary::after {
 	content: "";
 }
 summary::before {
-	top: -2px;
+	top: 0px;
 	right: 0;
 	border-radius: 50%;
 	background-color: var(--color-gray-100);
@@ -227,7 +230,7 @@ summary::before {
 }
 summary::after {
 	--arrow-size: 8px;
-	top: 7px;
+	top: 9px;
 	right: calc((var(--bg-size) - var(--arrow-size)) / 2);
 	transition: transform 200ms ease-out;
 	transform: rotate(45deg);
