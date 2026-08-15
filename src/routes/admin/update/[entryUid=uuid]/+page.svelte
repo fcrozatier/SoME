@@ -376,7 +376,9 @@
 		<div class="form-control">
 			<label for="participation" class="label gap-4">
 				<input id="participation" type="checkbox" name="participation" class="checkbox" required />
-				<span class="label-text"> I will contribute at least 5 peer reviews </span>
+				<span class="label-text">
+					I will contribute at least <a href="/rules#participation">5 peer reviews</a>
+				</span>
 			</label>
 			{#if form?.issues?.participation}
 				<span class="error-message">{form.issues.participation.message}</span>
