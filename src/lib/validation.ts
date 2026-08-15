@@ -87,16 +87,20 @@ export const DeleteProfileSchema = {
 
 // Entries
 
+const titleRegex = /^(?!.*#some\s*\d+)(?!.*\(some\s*\d+\)).*$/iv;
+
 const TitleSchema = fg
 	.text(
-		{ required: true, minlength: 1, maxlength: 128 },
+		{ required: true, minlength: 1, maxlength: 128, pattern: titleRegex },
 		{
 			required: "Title required",
 			minlength: "Title too short",
 			maxlength: "Title too long",
+			pattern: "Please remove 'SoME' from the title",
 		},
 	)
-	.trim();
+	.trim()
+	.enrich({ title: "Please remove 'SoME' from the title" });
 
 const DescriptionSchema = fg
 	.textarea(

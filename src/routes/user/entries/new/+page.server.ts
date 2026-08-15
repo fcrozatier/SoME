@@ -209,7 +209,7 @@ export const actions = {
 				cause.code === postgresErrorCode.unique_violation
 			) {
 				if (cause.constraint_name === "entries_url_unique") {
-					return formfail({ link: `Entry already exists` });
+					return formfail({ url: `An entry with this URL already exists` });
 				}
 			}
 
