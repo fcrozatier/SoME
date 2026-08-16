@@ -26,10 +26,7 @@ export const load = async ({ locals }) => {
 	const user = locals.user;
 
 	let selection: Prettify<
-		Pick<
-			SelectEntry,
-			"uid" | "title" | "description" | "category" | "thumbnail" | "url"
-		>
+		Pick<SelectEntry, "uid" | "title" | "description" | "category" | "thumbnail" | "url">
 	>[] = [];
 
 	if (user) {
