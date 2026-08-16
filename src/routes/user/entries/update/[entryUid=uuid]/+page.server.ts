@@ -1,8 +1,5 @@
 import { ENTRY_STATE, STRIKE_STATE } from "$lib/constants.js";
-import {
-	assertIsCreator,
-	assertIsLoggedIn,
-} from "$lib/server/authorization.js";
+import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
@@ -85,16 +82,12 @@ export const actions = {
 			const { entryUid } = params;
 
 			if (!user.username) {
-				throw error(
-					401,
-					"Please choose a username on your Profile page before submitting",
-				);
+				throw error(401, "Please choose a username on your Profile page before submitting");
 			}
 
 			if (!submissionsOpen() && !user.isAdmin) {
 				// Check entry state: we can update an entry anytime if it as an open issue
-				const [entry]: Prettify<Pick<SelectEntry, "state">>[] = await db
-					.execute(sql`
+				const [entry]: Prettify<Pick<SelectEntry, "state">>[] = await db.execute(sql`
 						select state from entries
 						where uid=${entryUid};
 					`);
@@ -128,9 +121,7 @@ export const actions = {
 				.from(users)
 				.where(inArray(users.username, usernames));
 
-			const formerCoauthors = prevCoauthors.filter((a) =>
-				!usernames.includes(a.username!)
-			);
+			const formerCoauthors = prevCoauthors.filter((a) => !usernames.includes(a.username!));
 
 			// Validate team members
 			if (team.length !== usernames.length) {
@@ -161,9 +152,7 @@ export const actions = {
 			const failedTags: { tag: string; unknownWords: string[] }[] = [];
 
 			for (const tag of entryTags) {
-				const unknownWords = tag.split("-").filter((part) =>
-					!dictionary.has(part)
-				);
+				const unknownWords = tag.split("-").filter((part) => !dictionary.has(part));
 
 				if (unknownWords.length > 0) {
 					failedTags.push({ tag, unknownWords });
@@ -179,11 +168,9 @@ export const actions = {
 					.onConflictDoNothing();
 
 				return formfail({
-					tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${
-						conjunctionFormatter.format(
-							failedTags.flatMap(({ unknownWords }) => unknownWords),
-						)
-					}`,
+					tag: `Unknown word${failedTags.length === 1 ? "" : "s"}: ${conjunctionFormatter.format(
+						failedTags.flatMap(({ unknownWords }) => unknownWords),
+					)}`,
 				});
 			}
 
@@ -292,9 +279,7 @@ export const actions = {
 					eq(entryToTag.entryUid, entryUid),
 					inArray(
 						entryToTag.tagId,
-						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) =>
-							t.id
-						),
+						oldEntryTags.filter((t) => !entryTags.includes(t.name)).map((t) => t.id),
 					),
 				),
 			);
