@@ -64,7 +64,7 @@
 	<!-- Only show feedback when results are available -->
 	{#if !data.isAdmin && data.entry.year === CURRENT_YEAR && !resultsAvailable()}
 		{#if voteOpen()}
-			<p>Peer review results results are not available yet</p>
+			<p>Peer review results are not available yet</p>
 		{/if}
 	{:else if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>
