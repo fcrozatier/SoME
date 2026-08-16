@@ -13,11 +13,22 @@ Unicode range 1D49C to 1D4B5.
 */
 
 @font-face {
+	font-family: "Temml";
+	src: url("/fonts/Temml.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
 	font-family: Latin Modern Math;
-	src: url("/fonts/Temml.woff2");
+	src: url("/fonts/Latin-Modern-Math.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal;
 }
 
 math {
+	font-family: "Latin Modern Math", "Temml", math;
+
 	font-style: normal;
 	font-weight: normal;
 	line-height: normal;
@@ -28,6 +39,7 @@ math {
 	word-wrap: normal;
 	white-space: pre;
 	direction: ltr;
+
 	/* Prevent Firefox from omitting the dot on i or j. */
 	font-feature-settings: "dtls" off;
 }
@@ -36,23 +48,19 @@ math * {
 	border-color: currentColor;
 }
 
-math {
-	font-family: "Latin Modern Math", math;
-}
-
 /* Next line is active in Firefox and Safari.
  * Not in Chromium, which recognizes display: "block math" written inline. */
 math.tml-display {
 	display: block;
 }
 
-*.mathscr {
-	font-family: "Temml";
+.mathscr {
+	font-family: "Latin Modern Math", "Temml";
 }
 
 /* Chromium prime alignment */
 mo.tml-prime {
-	font-family: Temml;
+	font-family: "Latin Modern Math", "Temml";
 }
 
 mrow.tml-cancel {
