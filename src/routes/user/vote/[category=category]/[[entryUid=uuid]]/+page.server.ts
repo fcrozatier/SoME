@@ -144,7 +144,10 @@ export const load = async ({ locals, params }) => {
 		entry = entryFallback;
 	}
 
-	if (!entry) return { stopVote: true };
+	if (!entry) {
+		console.log("[vote]: stop");
+		return { stopVote: true };
+	}
 
 	await db.insert(cache).values({
 		userUid: userUid,
