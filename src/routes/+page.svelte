@@ -79,7 +79,7 @@
 {/if}
 
 <!-- Last year -->
-{#if voteOpen()}
+{#if !voteOpen()}
 	<section>
 		<header class="max-w-prose mx-auto">
 			<h2 class="mb-10 text-4xl font-black text-center text-balance">

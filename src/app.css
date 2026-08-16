@@ -336,7 +336,6 @@ option {
 
 .text-trim {
 	text-box-trim: trim-start;
-	text-box-edge: cap alphabetic;
 }
 
 .error-message {
