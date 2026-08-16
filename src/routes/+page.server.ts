@@ -1,14 +1,15 @@
 import { dev } from "$app/environment";
-import { defaultYear, ENTRY_STATE } from "$lib/constants";
+import { CURRENT_YEAR, defaultYear, ENTRY_STATE } from "$lib/constants";
 import { db } from "$lib/server/db";
 import { type SelectEntry, users } from "$lib/server/db/schema";
 import { addToMailingList } from "$lib/server/email";
 import { EmailSchema } from "$lib/validation";
+import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions } from "@sveltejs/kit";
 import { eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 
-export const load = async () => {
+export const load = async ({ locals }) => {
 	const top: Pick<
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "thumbnail" | "url"
@@ -22,7 +23,27 @@ export const load = async () => {
 	   limit 5;
 		`);
 
-	return { top };
+	const user = locals.user;
+
+	let selection: Prettify<
+		Pick<
+			SelectEntry,
+			"uid" | "title" | "description" | "category" | "thumbnail" | "url"
+		>
+	>[] = [];
+
+	if (user) {
+		selection = await db.execute(sql`
+			select uid, title, description, entries.category, thumbnail, url
+		 	from cache
+			join entries
+			on cache.entry_uid=entries.uid
+			where user_uid=${user.uid}
+			and date_part('year', cache.created_at)=${CURRENT_YEAR};
+		`);
+	}
+
+	return { top, selection };
 };
 
 export const actions: Actions = {

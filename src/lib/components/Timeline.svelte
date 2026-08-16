@@ -80,8 +80,6 @@
 									Submit an entry <span class="ml-2 inline-block">&rarr;</span>
 								</a>
 							{/if}
-						{:else if i === 1}
-							<a class="btn-neutral btn" href="/user/vote">Vote</a>
 						{:else if i === 2}
 							<a class="btn-neutral btn mr-4" href="/archive">Results</a>
 						{/if}
