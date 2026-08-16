@@ -24,7 +24,7 @@
 </script>
 
 <article class="mx-auto w-4/5 max-w-5xl">
-	<h2>Open Issues (strikes)</h2>
+	<h2>Open Issues</h2>
 
 	<div class="overflow-auto max-h-screen">
 		<table class="w-full">

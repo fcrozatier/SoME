@@ -5,7 +5,7 @@
 	<ul>
 		<li><a href="/admin/entries">All Active Entries</a></li>
 		<li><a href="/admin/flagged">Flagged entries</a></li>
-		<li><a href="/admin/strikes">Striked entries</a></li>
+		<li><a href="/admin/strikes">Open Issues</a></li>
 		<li><a href="/admin/deactivated">Inactive entries</a></li>
 		<li><a href="/admin/deleted">Deleted entries</a></li>
 		<li><a href="/admin/feedbacks">Feedbacks</a></li>
