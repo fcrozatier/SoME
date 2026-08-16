@@ -13,7 +13,7 @@ export const maybeRude = async (input: string) => {
 			input,
 		});
 
-		return moderation.results[0]?.flagged ?? true;
+		return moderation.results.some((r) => r.flagged);
 	} catch (error) {
 		console.log("[moderation error]:", error);
 		return true;
