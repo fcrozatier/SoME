@@ -1,5 +1,4 @@
-import { dev } from "$app/environment";
-import { conjunctionFormatter } from "$lib/utils/formatting.js";
+import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
@@ -12,8 +11,9 @@ import {
 	users,
 	userToEntry,
 } from "$lib/server/db/schema.js";
-import { saveThumbnail } from "$lib/server/s3";
+import { deleteThumbnail, saveThumbnail } from "$lib/server/s3";
 import { dictionary } from "$lib/utils/dictionary.server.js";
+import { conjunctionFormatter } from "$lib/utils/formatting.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown";
 import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
@@ -22,7 +22,6 @@ import { error, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 import postgres from "postgres";
-import { assertIsAdmin } from "$lib/server/authorization";
 
 export const load = async ({ params, locals }) => {
 	assertIsAdmin(locals);
@@ -170,7 +169,7 @@ export const actions = {
 				if (!thumbnail && !oldThumbnail) {
 					return formfail({ thumbnail: `Thumbnail required` });
 				}
-				if (thumbnail && !oldThumbnail) {
+				if (thumbnail) {
 					thumbnailKey = crypto.randomUUID() + ".webp";
 				}
 			} else {
@@ -204,6 +203,11 @@ export const actions = {
 				thumbnail: thumbnailKey,
 				editedBy: locals.user.uid,
 			});
+
+			// Delete the old thumbnail if there is a new one
+			if (thumbnail && oldThumbnail) {
+				await deleteThumbnail(oldThumbnail);
+			}
 
 			// Save the thumbnail after the entry: we know it's not a duplicate
 			if (thumbnail && thumbnailKey) {

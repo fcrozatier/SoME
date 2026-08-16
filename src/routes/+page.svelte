@@ -3,7 +3,7 @@
 	import Timeline from "$lib/components/Timeline.svelte";
 	import Timer from "$lib/components/Timer.svelte";
 	import { formatTitle } from "$lib/utils/formatting.js";
-	import { submissionsOpen } from "$lib/utils/time.js";
+	import { submissionsOpen, voteOpen } from "$lib/utils/time.js";
 
 	let { data } = $props();
 </script>
@@ -26,26 +26,78 @@
 	</p>
 </section>
 
-<Timeline></Timeline>
+{#if voteOpen()}
+	<section>
+		<div class="layout-prose">
+			<header class="mx-auto">
+				<h2 class="mb-10 text-4xl font-black text-center text-balance">For You</h2>
+			</header>
 
-<!-- Last year -->
-<section>
-	<header class="max-w-prose mx-auto">
-		<h2 class="mb-10 text-4xl font-black text-center text-balance">
-			Top 5 Entries from the SoME4 Peer Review
-		</h2>
-	</header>
+			{#if data.selection.length === 0}
+				<p class="text-pretty text-center space-y-4">
+					The peer review is open. <br />
+					Start casting your first Vote. <br />
+				</p>
+				<p class="text-center">
+					<a class="btn-neutral btn" href="/user/vote">Vote</a>
+				</p>
+			{:else if !data.selection.find((s) => s.category === "video")}
+				<p class="text-pretty text-center space-y-4">
+					Try the video category <br />
+				</p>
+				<p class="text-center">
+					<a class="btn-neutral btn" href="/user/vote/video">Discover</a>
+				</p>
+			{:else if !data.selection.find((s) => s.category === "non-video")}
+				<p class="text-pretty text-center space-y-4">
+					Try the non-video category <br />
+				</p>
+				<p class="text-center">
+					<a class="btn-neutral btn" href="/user/vote/non-video">Discover</a>
+				</p>
+			{/if}
+		</div>
 
-	<div
-		class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
-	>
-		{#each data.top.slice(0, 5) as top}
-			<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
-				<Media {...top} thumbnailWidth="360px" gap={8}></Media>
+		{#each data.selection as selection}
+			<div class="mx-auto max-w-xl py-8">
+				<span class="block text-left font-semibold">Next {selection.category}</span>
+				<a
+					href={`/user/vote/${selection.category}/${selection.uid}`}
+					class="decoration-0 no-underline"
+				>
+					<div class="pointer-events-none">
+						<Media {...selection} thumbnailWidth="270px" gap={6}></Media>
+					</div>
+				</a>
 			</div>
 		{/each}
-	</div>
-</section>
+	</section>
+{/if}
+
+{#if submissionsOpen() || voteOpen()}
+	<Timeline></Timeline>
+{/if}
+
+<!-- Last year -->
+{#if voteOpen()}
+	<section>
+		<header class="max-w-prose mx-auto">
+			<h2 class="mb-10 text-4xl font-black text-center text-balance">
+				Top 5 Entries from the SoME4 Peer Review
+			</h2>
+		</header>
+
+		<div
+			class="grid max-w-5/6 sm:max-w-3/5 lg:max-w-4/5 mx-auto items-start content-center justify-center gap-x-4 lg:gap-x-8 gap-y-4 lg:gap-y-8"
+		>
+			{#each data.top.slice(0, 5) as top}
+				<div class="max-w-3xl hover:bg-base-200 transition-colors duration-150 rounded-3xl p-6">
+					<Media {...top} thumbnailWidth="360px" gap={8}></Media>
+				</div>
+			{/each}
+		</div>
+	</section>
+{/if}
 
 <!-- Prize -->
 <!-- <section>

@@ -69,7 +69,17 @@ export const load = async ({ locals, params }) => {
 			`)
 			).count > 0;
 
-		if (isInWatchlist) {
+		const isInCache =
+			(
+				await db.execute(sql`
+			select * from cache
+			where user_uid=${userUid}
+			and entry_uid=${entryUid}
+			and date_part('year', created_at)=${CURRENT_YEAR}
+			`)
+			).count > 0;
+
+		if (isInWatchlist || isInCache) {
 			const [entry]: EntryDisplayFields[] = await db.execute(sql`
 					select uid, title, description, category, url, thumbnail
 					from entries

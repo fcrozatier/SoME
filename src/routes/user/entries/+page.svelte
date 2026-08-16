@@ -23,8 +23,19 @@
 	<h2>My entries</h2>
 
 	{#if data.strike?.state === ENTRY_STATE.ActionRequired}
-		<div class="alert alert-warning [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
+		<div class="alert alert-warning text-pretty [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
 			{@html data.strike.note}
+
+			<button
+				type="button"
+				class="btn btn-sm font-medium text-nowrap"
+				commandfor="ask-review-dialog"
+				command="show-modal"
+				onclick={() => {
+					askReviewUid = data.strike?.entry_uid;
+					askReviewDialog?.showModal();
+				}}>Ask for review</button
+			>
 		</div>
 	{/if}
 
@@ -79,21 +90,10 @@
 										/>
 									</span>
 									<a class="btn btn-sm ml-auto sm:ml-0" href={`/entries/${uid}`}> details </a>
-									{#if new Date(createdAt) > new Date(PUBLIC_REGISTRATION_START) && new Date(createdAt) < new Date(PUBLIC_REGISTRATION_END)}
+									{#if (new Date(createdAt) > new Date(PUBLIC_REGISTRATION_START) && new Date(createdAt) < new Date(PUBLIC_REGISTRATION_END)) || (data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.ActionRequired)}
 										<a class="btn btn-sm" href={`/user/entries/update/${uid}`}> update </a>
 									{/if}
-									{#if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.ActionRequired}
-										<button
-											type="button"
-											class="btn btn-sm font-medium text-nowrap"
-											commandfor="ask-review-dialog"
-											command="show-modal"
-											onclick={() => {
-												askReviewUid = uid;
-												askReviewDialog?.showModal();
-											}}>Ask for review</button
-										>
-									{:else if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.WaitingForReview}
+									{#if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.WaitingForReview}
 										<span>under review</span>
 									{:else if state === ENTRY_STATE.Inactive}
 										<span>inactive</span>
@@ -148,8 +148,8 @@
 	>
 		<h2 class="mt-0">Are you sure?</h2>
 		<p class="text-gray-700 mb-0">
-			You're about to ask admins to review your entry. Make sure you made all the mandatory updates
-			before
+			You're about to ask admins to review your entry. <br />
+			<b>Make sure you made all the mandatory updates before</b>
 		</p>
 
 		<input type="hidden" name="uid" value={askReviewUid} />
