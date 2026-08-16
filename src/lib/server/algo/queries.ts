@@ -60,6 +60,7 @@ export function voteWarmup(user_uid: string, category: string) {
 }
 
 type QueryFragment = {
+	strategy: string;
 	cte?: string;
 	poolSelect?: string;
 	poolJoin?: string;
@@ -122,12 +123,12 @@ export const SKIPS_TO_VOTES_THRESHOLD = 4.1;
  * https://utopia.duth.gr/~pefraimi/research/data/2007EncOfAlg.pdf
  */
 export function voteMain(user_uid: string, category: string) {
-	console.log("[vote]: main phase");
-
 	const explorationQuery: QueryFragment = {
+		strategy: "Exploration",
 		order: "random()",
 	};
 	const byMedianQuery: QueryFragment = {
+		strategy: "Quality",
 		poolSelect: ", median",
 		poolJoin: `
 			left join medians
@@ -136,10 +137,12 @@ export function voteMain(user_uid: string, category: string) {
 		order: "-ln(1 - random()) / median",
 	};
 	const byNbVotesQuery: QueryFragment = {
+		strategy: "Visibility",
 		poolSelect: ", nb_votes.count as nb_votes_count",
 		order: "-ln(1 - random()) / (1::numeric / nb_votes_count)",
 	};
 	const bySpreadQuery: QueryFragment = {
+		strategy: "Consensus",
 		poolSelect: ", (std / nb_votes.count) as spread_to_votes",
 		poolJoin: `
 			left join medians
@@ -148,6 +151,7 @@ export function voteMain(user_uid: string, category: string) {
 		order: "-ln(1 - random()) / (0.01 + spread_to_votes)",
 	};
 	const byNbTiesQuery: QueryFragment = {
+		strategy: "Tie-breaking",
 		cte: `
 			ties as (
 				select entry_uid, count(*) over (partition by median) as tie_group_size
@@ -180,6 +184,7 @@ export function voteMain(user_uid: string, category: string) {
 	const query: QueryFragment | undefined = randomItem(activeQueries);
 
 	if (!query) throw new Error("[voteMain]: empty QueryFragment");
+	console.log("[vote]: main phase. strategy:", query.strategy);
 
 	return sql`
 			with nb_votes as (
