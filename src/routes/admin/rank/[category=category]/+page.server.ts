@@ -45,7 +45,7 @@ export const load = async ({ params, locals, url }) => {
 			),
 
 			paginated as (
-				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, median, count(*) over () as total_items
+				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, median, nb_votes, count(*) over () as total_items
 				from entries
 				right join rank on entries.uid=rank.uid
 				order by (ranking, created_at) asc

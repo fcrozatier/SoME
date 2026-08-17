@@ -1,11 +1,11 @@
-import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
+import { CURRENT_YEAR, ENTRY_STATE, STRIKE_STATE } from "$lib/constants";
 import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { type SelectEntry, type SelectFlag, strikes } from "$lib/server/db/schema";
 import { EMAILS, sendGenericTemplateEmail } from "$lib/server/email.js";
 import { parseAndSanitizeMarkdown } from "$lib/utils/markdown.js";
 import { relativeTime } from "$lib/utils/time.js";
-import { AdminActionRequiredForm, AdminIgnoreFlagForm } from "$lib/validation";
+import { AdminActionRequiredForm, AdminIgnoreFlagForm, UidSchema } from "$lib/validation";
 import type { Prettify } from "@fcrozatier/ts-helpers";
 import { type Actions } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
@@ -124,5 +124,47 @@ export const actions: Actions = {
 		});
 
 		return { flag: true };
+	}),
+	deactivate_entry: formgate({ entry_uid: UidSchema }, async (data, { locals }) => {
+		assertIsAdmin(locals);
+
+		const entry_uid = data.entry_uid;
+
+		// Retrieve entry creators
+		const activeCreators: { email: string }[] = await db.execute(
+			sql`
+					select email
+					from users
+					join user_to_entry
+					on users.uid=user_to_entry.user_uid
+					where entry_uid=${entry_uid}
+					and deleted_at is null;
+			`,
+		);
+
+		// Update entry state
+		const [entry]: { title: string }[] = await db.execute(sql`
+				update entries
+				set state=${ENTRY_STATE.Inactive}
+				where uid=${entry_uid}
+				returning title;
+			`);
+
+		// Remove strike
+		await db.execute(sql`
+				update strikes
+				set state=${STRIKE_STATE.Closed}
+				where entry_uid=${entry_uid};
+			`);
+
+		// Notify creators
+		await sendGenericTemplateEmail({
+			to: activeCreators.map((c) => c.email),
+			data: EMAILS.EntryInactive({
+				entryTitle: entry?.title ?? "",
+			}),
+		});
+
+		return { success: true };
 	}),
 };
