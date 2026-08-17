@@ -324,3 +324,10 @@ export const AdminFollowUpActionRequiredForm = {
 export const AdminForm = {
 	selected: fg.multi().pipe(z.array(z.uuid())),
 };
+
+export const AdminNewBanSchema = {
+	username: UsernameSchema,
+	expiresAt: fg.date({ required: false }),
+	reason: fg.textarea({ required: true }).trim(),
+	message: fg.textarea({ required: true }).trim(),
+};

@@ -1,3 +1,4 @@
+import { CATEGORIES, ENTRY_STATE, SKIP_STATE, STRIKE_STATE, VOTE_STATE } from "$lib/constants";
 import {
 	boolean,
 	decimal,
@@ -12,7 +13,6 @@ import {
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { CATEGORIES, ENTRY_STATE, STRIKE_STATE } from "$lib/constants";
 
 export const users = pgTable(
 	"users",
@@ -159,6 +159,7 @@ export const votes = pgTable(
 		maybe_rude: boolean("maybe_rude").default(false),
 		reviewed: boolean("reviewed").default(false),
 		created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
+		state: text("state").default(VOTE_STATE.Active),
 		userUid: uuid("user_uid")
 			.references(() => users.uid, { onDelete: "cascade" })
 			.notNull(),
@@ -170,6 +171,21 @@ export const votes = pgTable(
 		primaryKey({ columns: [userUid, entryUid] }),
 		index("entry_idx").on(entryUid),
 	],
+);
+
+export const bans = pgTable(
+	"bans",
+	{
+		id: serial("id").primaryKey(),
+		userUid: uuid("user_uid")
+			.notNull()
+			.references(() => users.uid, { onDelete: "cascade" }),
+		reason: text("reason").notNull(),
+		message: text("message").notNull(),
+		expiresAt: timestamp("expires_at", { mode: "string" }).notNull(),
+		createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
+	},
+	({ userUid }) => [index().on(userUid)],
 );
 
 export const flags = pgTable(
@@ -214,6 +230,7 @@ export const skips = pgTable(
 		entryUid: uuid("entry_uid")
 			.references(() => entries.uid, { onDelete: "cascade" })
 			.notNull(),
+		state: text("state").default(SKIP_STATE.Active),
 		createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
 	},
 	({ userUid, entryUid }) => [primaryKey({ columns: [userUid, entryUid] }), index().on(entryUid)],
@@ -261,5 +278,6 @@ export type SelectCache = typeof cache.$inferSelect;
 export type SelectTag = typeof tags.$inferSelect;
 export type SelectVote = typeof votes.$inferSelect;
 export type SelectFlag = typeof flags.$inferSelect;
+export type SelectBan = typeof bans.$inferSelect;
 export type SelectStrike = typeof strikes.$inferSelect;
 export type SelectSurveys = typeof surveys.$inferSelect;

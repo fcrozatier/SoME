@@ -181,7 +181,7 @@ export const actions = {
 
 			let maybe_rude = false;
 
-			if (!dev && data.feedback && Math.random() > 0.5) {
+			if (!dev && data.feedback && Math.random() < 1) {
 				maybe_rude = await maybeRude(data.feedback);
 			}
 

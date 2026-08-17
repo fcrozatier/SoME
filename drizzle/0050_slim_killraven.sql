@@ -1,0 +1,1 @@
+CREATE INDEX "bans_user_uid_index" ON "bans" USING btree ("user_uid");

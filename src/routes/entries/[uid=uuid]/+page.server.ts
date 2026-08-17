@@ -1,4 +1,4 @@
-import { CURRENT_YEAR } from "$lib/constants.js";
+import { CURRENT_YEAR, VOTE_STATE } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import type { SelectTag, User } from "$lib/server/db/schema.js";
 import { type SelectEntry, type SelectVote } from "$lib/server/db/schema.js";
@@ -35,6 +35,7 @@ export const load = async (event) => {
       from votes
 			join users on votes.user_uid=users.uid
       where entry_uid=${uid}
+			and state=${VOTE_STATE.Active}
     `);
 
 	return {

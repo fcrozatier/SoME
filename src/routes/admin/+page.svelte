@@ -1,14 +1,22 @@
 <article class="layout-prose">
 	<h2>Admin area</h2>
 
-	<h3>Peer Review</h3>
+	<h3>Entries</h3>
 	<ul>
-		<li><a href="/admin/entries">All Active Entries</a></li>
-		<li><a href="/admin/flagged">Flagged entries</a></li>
+		<li><a href="/admin/entries">Active Entries</a></li>
+		<li><a href="/admin/flagged">Flagged Entries</a></li>
 		<li><a href="/admin/strikes">Open Issues</a></li>
-		<li><a href="/admin/deactivated">Inactive entries</a></li>
-		<li><a href="/admin/deleted">Deleted entries</a></li>
-		<li><a href="/admin/feedbacks">Feedbacks</a></li>
+		<li><a href="/admin/deactivated">Inactive Entries</a></li>
+		<li><a href="/admin/deleted">Deleted Entries</a></li>
+	</ul>
+	<h3>Feedbacks</h3>
+	<ul>
+		<li><a href="/admin/feedbacks">Flagged Comments</a></li>
+	</ul>
+	<h3>Users</h3>
+	<ul>
+		<li><a href="/admin/ban">Ban User</a></li>
+		<li><a href="/admin/banned">Banned Users</a></li>
 	</ul>
 	<h3>Ranking</h3>
 	<ul>

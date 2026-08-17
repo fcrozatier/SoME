@@ -22,6 +22,20 @@ export const ENTRY_STATE = {
 
 export type EntryState = (typeof ENTRY_STATE)[keyof typeof ENTRY_STATE];
 
+export const VOTE_STATE = {
+	Active: "active",
+	Inactive: "inactive",
+} as const;
+
+export type VoteState = (typeof VOTE_STATE)[keyof typeof VOTE_STATE];
+
+export const SKIP_STATE = {
+	Active: "active",
+	Inactive: "inactive",
+} as const;
+
+export type SkipState = (typeof SKIP_STATE)[keyof typeof SKIP_STATE];
+
 export const STRIKE_STATE = {
 	Open: "open",
 	Closed: "closed",
