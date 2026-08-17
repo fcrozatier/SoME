@@ -116,7 +116,7 @@ export const EMAILS = {
 		`,
 	}),
 	EntryInactive: ({ entryTitle }: { entryTitle: string }) => ({
-		subject: "[ongoing issue] Entry disabled",
+		subject: "Entry disabled",
 		body: `<p>Your entry <em>"${entryTitle}"</em> was disabled by admins and has been removed from the competition.</p>
 		`,
 	}),

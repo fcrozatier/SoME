@@ -101,6 +101,13 @@
 													requireActionDialog?.showModal();
 												}}>Require Action</button
 											>
+											<button
+												type="submit"
+												formaction="?/deactivate_entry"
+												name="entry_uid"
+												value={entryUid}
+												class="btn btn-outline btn-error btn-sm">Deactivate Entry</button
+											>
 										</div>
 									</form>
 								</div>
