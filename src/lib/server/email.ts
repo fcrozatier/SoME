@@ -29,6 +29,7 @@ export const validateEmail = async (email: string) => {
 	try {
 		return (await mg.validate.get(email)) as Validation; // improves default types
 	} catch (error) {
+		console.log("[email validation error]:", error);
 		return null;
 	}
 };
