@@ -69,7 +69,9 @@
 	{:else if data.feedbacks.length !== 0}
 		<h3>Analytics</h3>
 		<!-- Only filter comments maybe_rude here -->
-		{@const comments = data.feedbacks.filter((f) => f.feedback !== "" && !f.maybe_rude)}
+		{@const comments = data.feedbacks.filter((f) =>
+			data.isAdmin ? true : f.feedback !== "" && !f.maybe_rude,
+		)}
 		<div class="flex justify-center">
 			<div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 mb-10">
 				<Bento count={median} color={true}>
