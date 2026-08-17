@@ -202,7 +202,7 @@ export function voteMain(user_uid: string, category: string) {
 			),
 
 			medians as (
-				select entry_uid, percentile_disc(0.5) within group (order by score) as median, coalesce(stddev_samp(score), 0) as std
+				select entry_uid, percentile_cont(0.5) within group (order by score) as median, coalesce(stddev_samp(score), 0) as std
 				from votes
 				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
@@ -284,7 +284,7 @@ export function voteFallback(user_uid: string, category: string) {
 export function rank(category: string) {
 	/**
 	 * Approximate the canonical majority judgment tie-breaking rule by sorting lexicographically according to:
-	 * (percentile_disc(0.5), percentile_disc(0.5 - δ), percentile_disc(0.5 + δ), percentile_disc(0.5 - 2δ), percentile_disc(0.5 + 2δ), ...)
+	 * (percentile_cont(0.5), percentile_disc(0.5 - δ), percentile_disc(0.5 + δ), percentile_disc(0.5 - 2δ), percentile_disc(0.5 + 2δ), ...)
 	 */
 
 	/**
@@ -292,7 +292,7 @@ export function rank(category: string) {
 	 */
 	const delta = 0.01;
 	const depth = 10;
-	const percentiles = ["percentile_disc(0.5) within group (order by score) as m0"];
+	const percentiles = ["percentile_cont(0.5) within group (order by score) as m0"];
 
 	for (let i = 1; i <= depth; i++) {
 		percentiles.push(

@@ -49,7 +49,7 @@
 		></Pagination>
 	</div>
 
-	{#each data.entries as { ranking, overall_median, teacher_median, ...entry }}
+	{#each data.entries as { ranking, median, nb_votes, ...entry }}
 		<LayoutSideBySide side="right" mainPanelMinWidth="75%" sidePanelMaxWidth="100px">
 			{#snippet mainPanel()}
 				<Media {...entry} thumbnailWidth="270px" gap={6}></Media>
@@ -57,10 +57,9 @@
 			{#snippet sidePanel()}
 				<div class="grid grid-cols-2 gap-y-2 items-center">
 					<b>Rank</b> <span class="w-16 text-center text-sm">{ranking}</span>
-					<b>Overall</b>
-					<Score score={overall_median}></Score>
-					<b>Teachers</b>
-					<Score score={teacher_median}></Score>
+					<b>Score</b>
+					<Score score={median}></Score>
+					<b>Votes</b> <span class="w-16 text-center text-sm">{nb_votes}</span>
 				</div>
 			{/snippet}
 		</LayoutSideBySide>

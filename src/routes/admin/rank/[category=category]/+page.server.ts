@@ -23,40 +23,31 @@ export const load = async ({ params, locals, url }) => {
 		SelectEntry,
 		"uid" | "title" | "description" | "category" | "url" | "thumbnail"
 	> & {
-		overall_median: number | null;
-		teacher_median: number | null;
+		median: number | null;
+		nb_votes: number;
 		ranking: string;
 		pages: number;
 	})[] = await db.execute(sql`
 		with
-			overall_score as (
-				select entry_uid, percentile_disc(0.5) within group (order by score) as median
+			data as (
+				select entry_uid, percentile_cont(0.5) within group (order by score) as median, count(*)::int as nb_votes
 				from votes
 				where date_part('year', created_at)=${CURRENT_YEAR}
 				group by entry_uid
 			),
 
-			teacher_score as (
-				select entry_uid, percentile_disc(0.5) within group (order by score) as median
-				from votes join users on votes.user_uid=users.uid
-				where date_part('year', votes.created_at)=${CURRENT_YEAR}
-				and is_teacher='t'
-				group by entry_uid
-			),
-
 			rank as (
-				select uid, overall_score.median as overall_median, dense_rank() over (order by overall_score.median desc) as ranking
+				select uid, median, nb_votes, dense_rank() over (order by median desc) as ranking
 				from entries
-				right join overall_score on overall_score.entry_uid=entries.uid
+				right join data on entry_uid=entries.uid
 				where category=${category}
-				order by overall_median desc
+				order by median desc
 			),
 
 			paginated as (
-				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, overall_median, teacher_score.median as teacher_median, count(*) over () as total_items
+				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, median, count(*) over () as total_items
 				from entries
 				right join rank on entries.uid=rank.uid
-				left join teacher_score on entries.uid=teacher_score.entry_uid
 				order by (ranking, created_at) asc
 				limit ${limit}
 				offset ${(+page - 1) * limit}
