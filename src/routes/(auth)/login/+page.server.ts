@@ -3,7 +3,7 @@ import { db } from "$lib/server/db";
 import { users } from "$lib/server/db/schema.js";
 import { LoginSchema } from "$lib/validation";
 import { fail, redirect } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
 
 export const load = ({ locals }) => {
@@ -24,6 +24,23 @@ export const actions = {
 
 		if (!user) {
 			return formfail({ email: "Invalid email or password" });
+		}
+
+		const [isBanned]: { expires_at: string }[] = await db.execute(sql`
+				select expires_at from bans
+				where user_uid=${user.uid}
+				and now() < expires_at
+				order by expires_at desc
+				limit 1;
+			`);
+
+		if (isBanned) {
+			const isTemporary = isBanned.expires_at !== "infinity";
+			return fail(403, {
+				feedback: `Account suspended${
+					isTemporary ? " until " + isBanned.expires_at.slice(0, 10) : "."
+				}`,
+			});
 		}
 
 		if (!user.passwordHash) {

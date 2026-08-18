@@ -323,6 +323,41 @@
 			"when": 1785943240417,
 			"tag": "0045_yellow_wolfpack",
 			"breakpoints": true
+		},
+		{
+			"idx": 46,
+			"version": "7",
+			"when": 1786970289797,
+			"tag": "0046_glorious_guardian",
+			"breakpoints": true
+		},
+		{
+			"idx": 47,
+			"version": "7",
+			"when": 1786971204422,
+			"tag": "0047_moaning_bill_hollister",
+			"breakpoints": true
+		},
+		{
+			"idx": 48,
+			"version": "7",
+			"when": 1786971820926,
+			"tag": "0048_special_energizer",
+			"breakpoints": true
+		},
+		{
+			"idx": 49,
+			"version": "7",
+			"when": 1786973079609,
+			"tag": "0049_puzzling_ultimates",
+			"breakpoints": true
+		},
+		{
+			"idx": 50,
+			"version": "7",
+			"when": 1786974623042,
+			"tag": "0050_slim_killraven",
+			"breakpoints": true
 		}
 	]
 }

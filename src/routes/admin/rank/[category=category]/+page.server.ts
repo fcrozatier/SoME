@@ -1,5 +1,5 @@
 import { assertIsAdmin } from "$lib/server/authorization";
-import { CURRENT_YEAR } from "$lib/constants.js";
+import { CURRENT_YEAR, VOTE_STATE } from "$lib/constants.js";
 import { rank } from "$lib/server/algo/queries.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
@@ -33,6 +33,7 @@ export const load = async ({ params, locals, url }) => {
 				select entry_uid, percentile_cont(0.5) within group (order by score) as median, count(*)::int as nb_votes
 				from votes
 				where date_part('year', created_at)=${CURRENT_YEAR}
+				and state=${VOTE_STATE.Active}
 				group by entry_uid
 			),
 

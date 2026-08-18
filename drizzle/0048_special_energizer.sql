@@ -1,0 +1,1 @@
+ALTER TABLE "bans" ADD COLUMN "message" text NOT NULL;

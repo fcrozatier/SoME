@@ -1,0 +1,1 @@
+ALTER TABLE "bans" ALTER COLUMN "expires_at" SET NOT NULL;

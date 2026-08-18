@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { userToEntry } from "../db/schema";
-import { CURRENT_YEAR, ENTRY_STATE } from "$lib/constants";
+import { CURRENT_YEAR, ENTRY_STATE, SKIP_STATE, VOTE_STATE } from "$lib/constants";
 import { randomItem, round } from "@fcrozatier/ts-helpers";
 import { voteTimeElapsedPercent } from "$lib/utils/time";
 
@@ -19,6 +19,7 @@ export function voteWarmup(user_uid: string, category: string) {
 				select entry_uid, count(*)
 				from votes
 				where date_part('year', created_at)=${CURRENT_YEAR}
+				and state=${VOTE_STATE.Active}
 				group by entry_uid
 			),
 
@@ -26,6 +27,7 @@ export function voteWarmup(user_uid: string, category: string) {
 				select entry_uid, count(*)
 				from skips
 				where date_part('year', created_at)=${CURRENT_YEAR}
+				and state=${SKIP_STATE.Active}
 				group by entry_uid
 			),
 
@@ -191,6 +193,7 @@ export function voteMain(user_uid: string, category: string) {
 				select entry_uid, count(*)
 				from votes
 				where date_part('year', created_at)=${CURRENT_YEAR}
+				and state=${VOTE_STATE.Active}
 				group by entry_uid
 			),
 
@@ -198,6 +201,7 @@ export function voteMain(user_uid: string, category: string) {
 				select entry_uid, count(*)
 				from skips
 				where date_part('year', created_at)=${CURRENT_YEAR}
+				and state=${SKIP_STATE.Active}
 				group by entry_uid
 			),
 
@@ -205,6 +209,7 @@ export function voteMain(user_uid: string, category: string) {
 				select entry_uid, percentile_cont(0.5) within group (order by score) as median, coalesce(stddev_samp(score), 0) as std
 				from votes
 				where date_part('year', created_at)=${CURRENT_YEAR}
+				and state=${VOTE_STATE.Active}
 				group by entry_uid
 			),
 
@@ -315,6 +320,7 @@ export function rank(category: string) {
 			select entry_uid, ${sql.raw(percentiles.join(","))}
 			from votes
 			where date_part('year', created_at)=${CURRENT_YEAR}
+			and state=${VOTE_STATE.Active}
 			group by entry_uid
 		),
 

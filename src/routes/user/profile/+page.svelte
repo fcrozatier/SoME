@@ -237,6 +237,8 @@
 		<h2 class="mt-0">You're about to delete your SoME account</h2>
 		<p class="text-gray-700">
 			This action is irreversible and will permanently erase all your data. <br />
+			Note that
+			<strong>you won't be able to create an account with this email in the future</strong>
 			Please enter your password to confirm.
 		</p>
 
