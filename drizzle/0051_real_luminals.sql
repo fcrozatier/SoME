@@ -1,0 +1,1 @@
+ALTER TABLE "skips" ADD COLUMN "state" text DEFAULT 'active';
