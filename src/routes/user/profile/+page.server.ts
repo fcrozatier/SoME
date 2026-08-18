@@ -107,18 +107,9 @@ export const actions: Actions = {
 			await auth.invalidateSession(locals.session.id);
 			auth.deleteSessionTokenCookie(event);
 
-			// Count deleted users
-			const [deletedUsers]: { count: number }[] = await db.execute(sql`
-				select count(*)::int
-				from users
-				where deleted_at is not null;
-			`);
-
 			await db.execute(sql`
 					update users
-					set username=${ANONYMIZED_USER_PREFIX + deletedUsers?.count},
-							email=${ANONYMIZED_USER_PREFIX + deletedUsers?.count + "@some.3b1b.co"},
-							deleted_at=now()
+					set deleted_at=now()
 					where uid=${uid};
 				`);
 

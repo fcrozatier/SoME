@@ -15,8 +15,9 @@
 	</ul>
 	<h3>Users</h3>
 	<ul>
-		<li><a href="/admin/ban">Ban User</a></li>
-		<li><a href="/admin/banned">Banned Users</a></li>
+		<li><a href="/admin/users/ban">Ban User</a></li>
+		<li><a href="/admin/users/banned">Banned Users</a></li>
+		<li><a href="/admin/users/deleted">Deleted Users</a></li>
 	</ul>
 	<h3>Ranking</h3>
 	<ul>
