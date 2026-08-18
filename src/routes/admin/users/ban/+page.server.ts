@@ -39,8 +39,8 @@ export const actions = {
 			await db.execute(sql`
         update entries set state=${ENTRY_STATE.Inactive}
         where uid in (
-          select entry_uid from user_to_entry
-          where user_uid=${userUid};
+          select entry_uid as uid from user_to_entry
+          where user_uid=${userUid}
         );
       `);
 
