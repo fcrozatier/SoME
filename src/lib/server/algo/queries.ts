@@ -12,8 +12,6 @@ const entry_columns = "title, description, entries.category, url, thumbnail";
  * Pick an entry at random from all entries with less than 4 votes and 12 skips
  */
 export function voteWarmup(user_uid: string, category: string) {
-	console.log("[vote]: warm up");
-
 	return sql`
 			with nb_votes as (
 				select entry_uid, count(*)
@@ -260,8 +258,6 @@ export function voteMain(user_uid: string, category: string) {
  * Pick an entry at random from all entries
  */
 export function voteFallback(user_uid: string, category: string) {
-	console.log("[vote]: fallback strategy");
-
 	return sql`
 		with pool as (
 			select distinct uid, ${sql.raw(entry_columns)}

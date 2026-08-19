@@ -1,7 +1,7 @@
 import { CURRENT_YEAR } from "$lib/constants.js";
 import { assertIsLoggedIn } from "$lib/server/authorization";
-import { db } from "$lib/server/db";
-import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
+import { db, DB_CONTRAINTS, isPostgresError } from "$lib/server/db";
+import { POSTGRES_ERROR_CODE } from "$lib/server/db/postgres_errors.js";
 import {
 	entries,
 	entriesHistory,
@@ -22,7 +22,6 @@ import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
-import postgres from "postgres";
 
 export const load = async ({ locals }) => {
 	assertIsLoggedIn(locals);
@@ -202,15 +201,16 @@ export const actions = {
 			return redirect(303, "/user/entries");
 		} catch (error) {
 			console.log("[new entry]:", error);
-			const cause = error instanceof Error && error.cause;
 
 			if (
-				cause instanceof postgres.PostgresError &&
-				cause.code === postgresErrorCode.unique_violation
+				error instanceof Error &&
+				isPostgresError(
+					error.cause,
+					POSTGRES_ERROR_CODE.UniqueViolation,
+					DB_CONTRAINTS.EntriesURLUnique,
+				)
 			) {
-				if (cause.constraint_name === "entries_url_unique") {
-					return formfail({ url: `An entry with this URL already exists` });
-				}
+				return formfail({ url: `An entry with this URL already exists` });
 			}
 
 			throw error;

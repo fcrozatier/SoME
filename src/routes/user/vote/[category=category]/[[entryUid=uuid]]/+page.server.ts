@@ -120,6 +120,7 @@ export const load = async ({ locals, params }) => {
 
 	const [entryWarmUp]: EntryDisplayFields[] = await db.execute(voteWarmup(userUid, category));
 	entry = entryWarmUp;
+	entry && console.log("[vote]: warm up");
 
 	if (!entry) {
 		if (Math.random() < 0.01) {
@@ -128,6 +129,7 @@ export const load = async ({ locals, params }) => {
 			);
 
 			entry = entryFallback;
+			entry && console.log("[vote]: fallback strategy");
 		} else {
 			try {
 				const [entryMain]: EntryDisplayFields[] = await db.execute(voteMain(userUid, category));
@@ -142,6 +144,7 @@ export const load = async ({ locals, params }) => {
 		const [entryFallback]: EntryDisplayFields[] = await db.execute(voteFallback(userUid, category));
 
 		entry = entryFallback;
+		entry && console.log("[vote]: fallback strategy");
 	}
 
 	if (!entry) {

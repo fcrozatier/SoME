@@ -1,5 +1,5 @@
 import { assertIsAdmin } from "$lib/server/authorization";
-import { CURRENT_YEAR, VOTE_STATE } from "$lib/constants.js";
+import { CURRENT_YEAR, ENTRY_STATE, VOTE_STATE } from "$lib/constants.js";
 import { rank } from "$lib/server/algo/queries.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
@@ -25,6 +25,7 @@ export const load = async ({ params, locals, url }) => {
 	> & {
 		median: number | null;
 		nb_votes: number;
+		nb_skips: number;
 		ranking: string;
 		pages: number;
 	})[] = await db.execute(sql`
@@ -37,10 +38,19 @@ export const load = async ({ params, locals, url }) => {
 				group by entry_uid
 			),
 
+			skips_cte as (
+				select count(*)::int
+				from skips
+				where date_part('year', created_at)=${CURRENT_YEAR}
+				and state=${VOTE_STATE.Active}
+				group by entry_uid
+			),
+
 			rank as (
-				select uid, median, nb_votes, dense_rank() over (order by median desc) as ranking
+				select uid, median, nb_votes, skips_cte.count as nb_skips, dense_rank() over (order by median desc) as ranking
 				from entries
-				right join data on entry_uid=entries.uid
+				join data on entry_uid=entries.uid
+				join skips_cte on entry_uid=entries.uid
 				where category=${category}
 				order by median desc
 			),
@@ -49,6 +59,7 @@ export const load = async ({ params, locals, url }) => {
 				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, median, nb_votes, count(*) over () as total_items
 				from entries
 				right join rank on entries.uid=rank.uid
+				where entries.state=${ENTRY_STATE.Active}
 				order by (ranking, created_at) asc
 				limit ${limit}
 				offset ${(+page - 1) * limit}

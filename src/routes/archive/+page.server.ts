@@ -1,4 +1,4 @@
-import { defaultYear } from "$lib/constants.js";
+import { defaultYear, ENTRY_STATE } from "$lib/constants.js";
 import { db } from "$lib/server/db";
 import type { SelectEntry } from "$lib/server/db/schema.js";
 import { sql } from "drizzle-orm";
@@ -27,6 +27,7 @@ export const load = loadgate(
 				from entries
 				where date_part('year', entries.created_at)=${year}
 				and category=${category}
+				and entries.state=${ENTRY_STATE.Active}
 				order by (rank, created_at) asc nulls last
 				limit ${limit}
 				offset ${(page - 1) * limit}

@@ -1,8 +1,10 @@
 import { dev } from "$app/environment";
 import { ANONYMIZED_USER_PREFIX } from "$lib/constants";
 import * as auth from "$lib/server/auth.js";
+import { isPostgresError } from "$lib/server/db";
+import { DB_CONTRAINTS } from "$lib/server/db";
 import { db } from "$lib/server/db";
-import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
+import { POSTGRES_ERROR_CODE } from "$lib/server/db/postgres_errors.js";
 import { type InsertUser, users } from "$lib/server/db/schema.js";
 import { addToMailingList, validateEmail } from "$lib/server/email";
 import { NewUserSchema } from "$lib/validation.js";
@@ -56,30 +58,33 @@ export const actions = {
 			return redirect(302, "/login");
 		} catch (error) {
 			console.log("[signup]:", error);
-			const cause = error instanceof Error && error.cause;
 
 			if (
-				cause instanceof postgres.PostgresError &&
-				cause.code === postgresErrorCode.unique_violation
+				error instanceof Error &&
+				isPostgresError(
+					error.cause,
+					POSTGRES_ERROR_CODE.UniqueViolation,
+					DB_CONTRAINTS.UsersEmailUnique,
+				)
 			) {
-				if (cause.constraint_name === "users_email_unique") {
-					const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
+				const [targetUser] = await db.select().from(users).where(eq(users.email, user.email));
 
-					// Check whether it's a legacy profile (no pwd) and update
-					if (targetUser && !targetUser.passwordHash) {
-						await db
-							.update(users)
-							.set({
-								username: user.username,
-								passwordHash: user.passwordHash,
-							})
-							.where(eq(users.email, user.email));
+				// Check whether it's a legacy profile (no pwd) and update
+				if (targetUser && !targetUser.passwordHash) {
+					console.log("[signup]: legacy profile");
 
-						return redirect(303, "/login");
-					}
+					await db
+						.update(users)
+						.set({
+							username: user.username,
+							passwordHash: user.passwordHash,
+						})
+						.where(eq(users.email, user.email));
 
-					return formfail({ email: "Profile already exists" });
+					return redirect(303, "/login");
 				}
+
+				return formfail({ email: "Profile already exists" });
 			}
 
 			throw error;
