@@ -1,7 +1,7 @@
 import { ENTRY_STATE, STRIKE_STATE } from "$lib/constants.js";
 import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
-import { db } from "$lib/server/db";
-import { postgresErrorCode } from "$lib/server/db/postgres_errors.js";
+import { db, DB_CONTRAINTS, isPostgresError } from "$lib/server/db";
+import { POSTGRES_ERROR_CODE } from "$lib/server/db/postgres_errors.js";
 import type { SelectEntry, SelectTag, User } from "$lib/server/db/schema.js";
 import {
 	entries,
@@ -25,7 +25,6 @@ import type { Prettify } from "@fcrozatier/ts-helpers";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
-import postgres from "postgres";
 import z from "zod";
 
 export const load = async ({ locals, params }) => {
@@ -306,15 +305,16 @@ export const actions = {
 			return redirect(303, "/user/entries");
 		} catch (error) {
 			console.log("[entry update]:", error);
-			const cause = error instanceof Error && error.cause;
 
 			if (
-				cause instanceof postgres.PostgresError &&
-				cause.code === postgresErrorCode.unique_violation
+				error instanceof Error &&
+				isPostgresError(
+					error.cause,
+					POSTGRES_ERROR_CODE.UniqueViolation,
+					DB_CONTRAINTS.EntriesURLUnique,
+				)
 			) {
-				if (cause.constraint_name === "entries_url_unique") {
-					return formfail({ url: `An entry with this URL already exists` });
-				}
+				return formfail({ url: `An entry with this URL already exists` });
 			}
 
 			throw error;
