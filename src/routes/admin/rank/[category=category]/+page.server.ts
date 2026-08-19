@@ -47,7 +47,7 @@ export const load = async ({ params, locals, url }) => {
 			),
 
 			rank as (
-				select uid, median, nb_votes, skips_cte.count as nb_skips, dense_rank() over (order by median desc) as ranking
+				select distinct uid, median, nb_votes, skips_cte.count as nb_skips, dense_rank() over (order by median desc) as ranking
 				from entries
 				join data on entry_uid=entries.uid
 				join skips_cte on entry_uid=entries.uid
@@ -56,7 +56,7 @@ export const load = async ({ params, locals, url }) => {
 			),
 
 			paginated as (
-				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, median, nb_votes, count(*) over () as total_items
+				select entries.uid, title, description, category, created_at, url, thumbnail, ranking, median, nb_votes, nb_skips, count(*) over () as total_items
 				from entries
 				right join rank on entries.uid=rank.uid
 				where entries.state=${ENTRY_STATE.Active}
