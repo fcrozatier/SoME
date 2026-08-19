@@ -7,6 +7,7 @@
 	import Pagination from "$lib/components/Pagination.svelte";
 	import Score from "$lib/components/Score.svelte";
 	import { newToast } from "$lib/components/Toasts.svelte";
+	import { round } from "@fcrozatier/ts-helpers";
 
 	let { data } = $props();
 
@@ -61,7 +62,7 @@
 					<Score score={median}></Score>
 					<b>Votes</b> <span class="w-16 text-center text-sm">{nb_votes}</span>
 					<b>Skips Ratio</b>
-					<span class="w-16 text-center text-sm">{nb_skips / (nb_votes || 1)}</span>
+					<span class="w-16 text-center text-sm">{round(nb_skips / (nb_votes || 1), 2)}</span>
 				</div>
 			{/snippet}
 		</LayoutSideBySide>

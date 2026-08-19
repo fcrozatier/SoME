@@ -97,9 +97,9 @@ function isEndGame() {
 }
 
 /**
- * This value filters out 15% of entries, in the tail of the skips to votes distribution
+ * The value 4.1 filters out 15% of entries, in the tail of the skips to votes distribution
  */
-export const SKIPS_TO_VOTES_THRESHOLD = 4.1;
+export const SKIPS_TO_VOTES_THRESHOLD = 8;
 
 /**
  * Main voting phase
