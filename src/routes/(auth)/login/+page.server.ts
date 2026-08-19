@@ -13,7 +13,7 @@ export const load = ({ locals }) => {
 };
 
 export const actions = {
-	default: formgate(LoginSchema, async (data, { cookies }) => {
+	default: formgate(LoginSchema, async (data, { cookies, setHeaders }) => {
 		const [user] = await db
 			.select({
 				uid: users.uid,
@@ -36,6 +36,9 @@ export const actions = {
 
 		if (isBanned) {
 			const isTemporary = isBanned.expires_at !== "infinity";
+
+			setHeaders({ "Clear-Site-Data": "*" });
+
 			return fail(403, {
 				feedback: `Account suspended${
 					isTemporary ? " until " + isBanned.expires_at.slice(0, 10) : "."
