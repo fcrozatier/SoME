@@ -51,6 +51,7 @@ export const load = async ({ params, locals, url }) => {
 				from entries
 				join data on entry_uid=entries.uid
 				where category=${category}
+				and state in ${[ENTRY_STATE.Active, ENTRY_STATE.Flagged]}
 				order by median desc
 			),
 
@@ -59,7 +60,6 @@ export const load = async ({ params, locals, url }) => {
 				from entries
 				join rank on entries.uid=rank.uid
 				join skips_cte on entry_uid=entries.uid
-				where entries.state=${ENTRY_STATE.Active}
 				order by (ranking, created_at) asc
 				limit ${limit}
 				offset ${(+page - 1) * limit}
