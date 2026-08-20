@@ -95,7 +95,7 @@
 									{/if}
 									{#if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.WaitingForReview}
 										<span>under review</span>
-									{:else if state === ENTRY_STATE.Inactive}
+									{:else if state === ENTRY_STATE.Inactive && data.strike !== undefined}
 										<span>inactive</span>
 									{/if}
 								</div>
