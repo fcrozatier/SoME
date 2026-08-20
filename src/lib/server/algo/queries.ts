@@ -71,7 +71,7 @@ type QueryFragment = {
  * The relative cumulated sum of votes almost follow a square root function (x ** 0.55)
  * The evolution of the percentile of the dynamic pool should match this rate
  */
-const VOTE_RATE_EXPONENT = 0.70;
+const VOTE_RATE_EXPONENT = 0.7;
 
 /**
  * The bottom percentile of the dynamic pool of entries as a function of time.

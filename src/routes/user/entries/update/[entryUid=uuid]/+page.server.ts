@@ -28,10 +28,6 @@ import { formfail, formgate } from "formgator/sveltekit";
 import z from "zod";
 
 export const load = async ({ locals, params }) => {
-	if (!submissionsOpen()) {
-		throw error(403, "Submissions are closed");
-	}
-
 	assertIsLoggedIn(locals);
 
 	const { entryUid } = params;
@@ -39,17 +35,22 @@ export const load = async ({ locals, params }) => {
 
 	const [entry]: Pick<
 		SelectEntry,
-		"uid" | "title" | "description_md" | "category" | "url" | "thumbnail"
+		"uid" | "title" | "description_md" | "category" | "url" | "thumbnail" | "state"
 	>[] = await db.execute(sql`
-    select uid, title, description_md, category, url, thumbnail from entries
-    inner join user_to_entry on user_to_entry.entry_uid=entries.uid
-    inner join entry_to_tag on entry_to_tag.entry_uid=entries.uid
-    where entries.uid=${entryUid}
-    and user_uid=${user.uid};
-  `);
+		select uid, title, description_md, category, url, thumbnail, state
+		from entries
+		inner join user_to_entry on user_to_entry.entry_uid=entries.uid
+		inner join entry_to_tag on entry_to_tag.entry_uid=entries.uid
+		where entries.uid=${entryUid}
+		and user_uid=${user.uid};
+	`);
 
 	if (!entry) {
 		return error(404, "Entry not found");
+	}
+
+	if (!submissionsOpen() && entry.state !== ENTRY_STATE.ActionRequired) {
+		throw error(403, "Submissions are closed");
 	}
 
 	const coauthors: Pick<User, "username">[] = await db.execute(sql`
@@ -84,7 +85,21 @@ export const actions = {
 				throw error(401, "Please choose a username on your Profile page before submitting");
 			}
 
-			if (!submissionsOpen() && !user.isAdmin) {
+			// Retrieve the thumbnail and link of the entry
+			const [entry] = await db
+				.select({
+					oldThumbnailKey: entries.thumbnail,
+					oldUrl: entries.url,
+					state: entries.state,
+				})
+				.from(entries)
+				.where(eq(entries.uid, entryUid));
+
+			if (!entry) {
+				throw new Error("Entry not found");
+			}
+
+			if (!submissionsOpen() && !user.isAdmin && entry.state !== ENTRY_STATE.ActionRequired) {
 				// Check entry state: we can update an entry anytime if it as an open issue
 				const [entry]: Prettify<Pick<SelectEntry, "state">>[] = await db.execute(sql`
 						select state from entries
@@ -180,17 +195,6 @@ export const actions = {
           where entry_uid=${entryUid}
           and user_uid in ${formerCoauthors.map((a) => a.uid)};
         `);
-			}
-
-			// Retrieve the thumbnail and link of the entry
-
-			const [entry] = await db
-				.select({ oldThumbnailKey: entries.thumbnail, oldUrl: entries.url })
-				.from(entries)
-				.where(eq(entries.uid, entryUid));
-
-			if (!entry) {
-				throw new Error("Entry not found");
 			}
 
 			const { oldThumbnailKey, oldUrl } = entry;
