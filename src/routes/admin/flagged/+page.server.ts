@@ -114,6 +114,12 @@ export const actions: Actions = {
 		// Save strikes
 		await db.insert(strikes).values(strikesData);
 
+		// Empty the cache
+		await db.execute(sql`
+				delete from cache
+				where entry_uid=${entry_uid}
+			`);
+
 		// Notify active creators
 		await sendGenericTemplateEmail({
 			to: activeCreators.map((c) => c.email),
@@ -155,6 +161,12 @@ export const actions: Actions = {
 				update strikes
 				set state=${STRIKE_STATE.Closed}
 				where entry_uid=${entry_uid};
+			`);
+
+		// Empty the cache
+		await db.execute(sql`
+				delete from cache
+				where entry_uid=${entry_uid}
 			`);
 
 		// Notify creators
