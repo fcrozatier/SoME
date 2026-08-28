@@ -1,11 +1,14 @@
 import { db } from "$lib/server/db";
 import { surveys } from "$lib/server/db/schema";
+import { resultsAvailable } from "$lib/utils/time";
 import { SurveySchema } from "$lib/validation";
 import { type Actions, redirect } from "@sveltejs/kit";
 import { formgate } from "formgator/sveltekit";
 
 export const load = async () => {
-	return redirect(302, "/");
+	if (!resultsAvailable()) {
+		return redirect(302, "/");
+	}
 };
 
 export const actions: Actions = {
@@ -14,8 +17,8 @@ export const actions: Actions = {
 
 		await db.insert(surveys).values({
 			userUid: uid,
-			some: data.some.toString(),
-			site: data.site.toString(),
+			some: "9",
+			site: "9",
 			feedback: data.feedback,
 			json: JSON.stringify(data),
 		});

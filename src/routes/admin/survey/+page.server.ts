@@ -1,5 +1,5 @@
-import { assertIsAdmin } from "$lib/server/authorization";
 import { CURRENT_YEAR } from "$lib/constants.js";
+import { assertIsAdmin } from "$lib/server/authorization";
 import { db } from "$lib/server/db";
 import { type SelectSurveys } from "$lib/server/db/schema";
 import { sql } from "drizzle-orm";
@@ -7,12 +7,13 @@ import { sql } from "drizzle-orm";
 export const load = async ({ locals }) => {
 	assertIsAdmin(locals);
 
-	const surveys: Pick<SelectSurveys, "some" | "site" | "feedback" | "json">[] =
-		await db.execute(sql`
-			select "some", site, feedback, json
+	const surveys: Pick<SelectSurveys, "feedback" | "json">[] = await db.execute(
+		sql`
+			select feedback, json
 			from surveys
 			where date_part('year', created_at)=${CURRENT_YEAR};
-		`);
+		`,
+	);
 
 	return { surveys };
 };

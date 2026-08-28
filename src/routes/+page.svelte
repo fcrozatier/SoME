@@ -3,7 +3,7 @@
 	import Timeline from "$lib/components/Timeline.svelte";
 	import Timer from "$lib/components/Timer.svelte";
 	import { formatTitle } from "$lib/utils/formatting.js";
-	import { submissionsOpen, voteOpen } from "$lib/utils/time.js";
+	import { resultsAvailable, submissionsOpen, voteOpen } from "$lib/utils/time.js";
 
 	let { data } = $props();
 </script>
@@ -74,16 +74,16 @@
 	</section>
 {/if}
 
-{#if submissionsOpen() || voteOpen()}
+{#if !resultsAvailable()}
 	<Timeline></Timeline>
 {/if}
 
-<!-- Last year -->
+<!-- Top 5 -->
 {#if !voteOpen()}
 	<section>
 		<header class="max-w-prose mx-auto">
 			<h2 class="mb-10 text-4xl font-black text-center text-balance">
-				Top 5 Entries from the SoME4 Peer Review
+				Top 5 Entries from the SoME5 Peer Review
 			</h2>
 		</header>
 
