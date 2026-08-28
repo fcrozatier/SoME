@@ -182,9 +182,8 @@ export function voteMain(user_uid: string, category: string) {
 			: endGameQueries;
 
 	const query: QueryFragment | undefined = randomItem(activeQueries);
-
 	if (!query) throw new Error("[voteMain]: empty QueryFragment");
-	console.log("[vote]: main phase. strategy:", query.strategy);
+	console.log(`[vote]: ${category}. main phase. strategy:`, query.strategy);
 
 	return sql`
 			with nb_votes as (

@@ -278,17 +278,11 @@ export const FlagSchema = {
 // Admin
 
 export const SurveySchema = {
-	some: fg.number({ required: true, min: 1, max: 9, step: 0.01 }),
-	site: fg.number({ required: true, min: 1, max: 9, step: 0.01 }),
 	feedback: FeedbackSchema,
-	peer_review: fg.radio(["yes", "no"]),
-	peer_review_feedback: FeedbackSchema,
-	ai: fg.radio(["yes", "no"]),
-	ai_feedback: FeedbackSchema,
-	creator_live_feedback: fg.radio(["live", "after"]),
-	creator_sharable_vote_link: FeedbackSchema,
-	a11y: fg.radio(["yes", "no"]),
-	a11y_feedback: FeedbackSchema,
+	community_prizes_interest: fg.radio(["yes", "no"]),
+	community_prizes_amount: fg.number({ min: 0, step: 1 }),
+	community_prizes_feedback: FeedbackSchema,
+	topical_feedback: FeedbackSchema,
 };
 
 export const SurveyFilterSchema = {

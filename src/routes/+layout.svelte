@@ -3,6 +3,7 @@
 	import { page } from "$app/state";
 	import { PUBLIC_VOTE_START } from "$env/static/public";
 	import { clickOutside } from "$lib/actions";
+	import Banner from "$lib/components/Banner.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Time from "$lib/components/Time.svelte";
@@ -161,8 +162,9 @@
 		</nav>
 
 		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
-			<!-- <Banner display={!data.surveyTaken} /> -->
-
+			<!-- {#if !data.surveyTaken}
+				<Banner />
+			{/if} -->
 			<header>
 				<h1 class="text-center mb-2">{FULL_NAME}</h1>
 				<p class="mt-0 mb-16 text-center text-lg font-light italic">
