@@ -32,7 +32,7 @@
 	let { data } = $props();
 
 	const computeMedianScore = () => {
-		if (data.entry.final_score) return round(+data.entry.final_score, 1);
+		if (data.entry.final_score) return round(+data.entry.final_score, 2);
 		if (data.feedbacks.length === 0) return null;
 
 		const sortedScores = data.feedbacks.map((f) => Number(f.score)).toSorted();
