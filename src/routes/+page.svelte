@@ -79,11 +79,11 @@
 {/if}
 
 <!-- Top 5 -->
-<!-- {#if !voteOpen()}
+{#if !voteOpen()}
 	<section>
 		<header class="max-w-prose mx-auto">
 			<h2 class="mb-10 text-4xl font-black text-center text-balance">
-				Top 5 Entries from the SoME5 Peer Review
+				Top 5 from the SoME5 Peer Review
 			</h2>
 		</header>
 
@@ -97,7 +97,7 @@
 			{/each}
 		</div>
 	</section>
-{/if} -->
+{/if}
 
 <!-- Prize -->
 <!-- <section>
