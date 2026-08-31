@@ -162,9 +162,9 @@
 		</nav>
 
 		<main class="lg:col-start-2 prose lg:pt-10 max-w-full mb-40">
-			<!-- {#if !data.surveyTaken}
+			{#if !data.surveyTaken}
 				<Banner />
-			{/if} -->
+			{/if}
 			<header>
 				<h1 class="text-center mb-2">{FULL_NAME}</h1>
 				<p class="mt-0 mb-16 text-center text-lg font-light italic">
