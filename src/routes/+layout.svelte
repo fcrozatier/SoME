@@ -3,7 +3,6 @@
 	import { page } from "$app/state";
 	import { PUBLIC_VOTE_START } from "$env/static/public";
 	import { clickOutside } from "$lib/actions";
-	import Banner from "$lib/components/Banner.svelte";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import Icons from "$lib/components/icons/Icons.svelte";
 	import Time from "$lib/components/Time.svelte";
