@@ -25,11 +25,8 @@
 	</form> -->
 
 	<ul class="list-none">
-		{#each data.surveys as { feedback, json }}
+		{#each data.surveys as { json }}
 			<li>
-				{#if feedback}
-					<p class="mt-0 mb-0"><b>General feedback</b>: {feedback}</p>
-				{/if}
 				{#each Object.entries(JSON.parse(json as string)) as [k, v]}
 					{#if v !== "" && v !== null}
 						<p class="mt-0 mb-0"><b>{k}</b>: {v}</p>

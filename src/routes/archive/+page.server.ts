@@ -28,7 +28,8 @@ export const load = loadgate(
 				where date_part('year', entries.created_at)=${year}
 				and category=${category}
 				and entries.state=${ENTRY_STATE.Active}
-				order by (rank, created_at) asc nulls last
+				and rank is not null
+				order by (rank, created_at)
 				limit ${limit}
 				offset ${(page - 1) * limit}
 			)
