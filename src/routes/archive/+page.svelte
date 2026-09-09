@@ -95,18 +95,7 @@
 	</form>
 	<div class="mt-10 mx-auto flex justify-center">
 		{#key pages}
-			<Pagination
-				{pages}
-				bind:pageNumber
-				onchange={() => {
-					page.url.searchParams.set("page", `${pageNumber}`);
-					goto(`?${page.url.searchParams.toString()}`, {
-						invalidateAll: true,
-						keepFocus: true,
-						noScroll: true,
-					});
-				}}
-			></Pagination>
+			<Pagination {pages} bind:pageNumber></Pagination>
 		{/key}
 	</div>
 </section>
@@ -163,16 +152,7 @@
 
 <div class="mt-10 mx-auto flex justify-center">
 	{#key pages}
-		<Pagination
-			{pages}
-			bind:pageNumber
-			onchange={() => {
-				page.url.searchParams.set("page", `${pageNumber}`);
-				goto(`?${page.url.searchParams.toString()}`, {
-					invalidateAll: true,
-				});
-			}}
-		></Pagination>
+		<Pagination {pages} bind:pageNumber></Pagination>
 	{/key}
 </div>
 

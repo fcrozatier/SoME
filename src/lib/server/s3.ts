@@ -4,13 +4,13 @@ import { PUBLIC_S3_BUCKET, PUBLIC_S3_ENDPOINT } from "$env/static/public";
 import sharp from "sharp";
 import { dev } from "$app/environment";
 
-const client = new S3Client({
+const s3Client = new S3Client({
+	endpoint: PUBLIC_S3_ENDPOINT,
 	region: S3_REGION,
 	credentials: {
 		accessKeyId: S3_KEY,
 		secretAccessKey: S3_SECRET,
 	},
-	endpoint: PUBLIC_S3_ENDPOINT,
 });
 
 /**
@@ -42,7 +42,7 @@ export async function saveThumbnail(thumbnail: File, key: string) {
 		ACL: "public-read",
 	});
 
-	return await client.send(command);
+	return await s3Client.send(command);
 }
 
 /**
@@ -61,5 +61,5 @@ export async function deleteThumbnail(key: string) {
 		Key: key,
 	});
 
-	return await client.send(command);
+	return await s3Client.send(command);
 }

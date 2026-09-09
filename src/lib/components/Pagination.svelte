@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
+	import { page } from "$app/state";
 
 	interface Props {
 		pages: number;
 		pageNumber?: number;
-		onchange?: any;
 	}
 
-	let { pages, pageNumber = $bindable(1), onchange = () => {} }: Props = $props();
+	let { pages, pageNumber = $bindable(1) }: Props = $props();
 
 	const makeArray = (current: number) => {
 		const array: number[] = [];
@@ -32,22 +32,22 @@
 
 <div class="mt-10 mx-auto flex justify-center">
 	{#if pages > 1}
-		<form class="join" {onchange}>
+		<nav class="join" aria-label="Pagination" focusgroup="toolbar">
 			{#each array as n}
+				{@const params = new Map(page.url.searchParams).set("page", String(n))}
 				{#if Number.isNaN(n)}
-					<button class="join-item btn btn-square pointer-events-none"> ... </button>
+					<button class="join-item btn btn-square pointer-events-none" aria-hidden="true">
+						...
+					</button>
 				{:else}
-					<input
-						id={`radio${n}`}
+					<a
+						href={"?" + new URLSearchParams([...params]).toString()}
 						class={["join-item btn btn-square", n === +pageNumber && "btn-neutral"]}
-						type="radio"
-						name="pagination"
-						aria-label={`${n}`}
-						value={n}
-						bind:group={pageNumber}
-					/>
+						aria-current={n === +pageNumber ? "page" : undefined}
+						aria-label={`Page ${n}`}>{n}</a
+					>
 				{/if}
 			{/each}
-		</form>
+		</nav>
 	{/if}
 </div>
