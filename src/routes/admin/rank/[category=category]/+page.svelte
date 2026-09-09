@@ -36,18 +36,7 @@
 	</form>
 
 	<div class="mb-10 mx-auto flex justify-center">
-		<Pagination
-			pages={data.pages}
-			bind:pageNumber
-			onchange={() => {
-				page.url.searchParams.set("page", `${pageNumber}`);
-				goto(`?${page.url.searchParams.toString()}`, {
-					invalidateAll: true,
-					keepFocus: true,
-					noScroll: true,
-				});
-			}}
-		></Pagination>
+		<Pagination pages={data.pages} bind:pageNumber></Pagination>
 	</div>
 
 	{#each data.entries as { ranking, median, nb_votes, nb_skips, ...entry }}
