@@ -49,10 +49,6 @@ export const load = async ({ locals, params }) => {
 		return error(404, "Entry not found");
 	}
 
-	if (!submissionsOpen() && entry.state !== ENTRY_STATE.ActionRequired) {
-		throw error(403, "Submissions are closed");
-	}
-
 	const coauthors: Pick<User, "username">[] = await db.execute(sql`
     select username from users
     join user_to_entry on user_uid=users.uid
@@ -97,18 +93,6 @@ export const actions = {
 
 			if (!entry) {
 				throw new Error("Entry not found");
-			}
-
-			if (!submissionsOpen() && !user.isAdmin && entry.state !== ENTRY_STATE.ActionRequired) {
-				// Check entry state: we can update an entry anytime if it as an open issue
-				const [entry]: Prettify<Pick<SelectEntry, "state">>[] = await db.execute(sql`
-						select state from entries
-						where uid=${entryUid};
-					`);
-
-				if (entry?.state !== ENTRY_STATE.ActionRequired) {
-					throw error(403, "Submissions are closed");
-				}
 			}
 
 			// Validate youtube entries creation date and channel identity
@@ -217,9 +201,7 @@ export const actions = {
 
 			if (oldUrl !== normalizedLink) {
 				if (!submissionsOpen()) {
-					return fail(422, {
-						message: "You can't update the link once the vote is open",
-					});
+					return formfail({ url: "You can't update the entry url" });
 				}
 				// Remove all votes in case the link was changed
 				await db.delete(votes).where(eq(votes.entryUid, entryUid));

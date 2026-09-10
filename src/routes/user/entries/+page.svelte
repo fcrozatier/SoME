@@ -90,9 +90,7 @@
 										/>
 									</span>
 									<a class="btn btn-sm ml-auto sm:ml-0" href={`/entries/${uid}`}> details </a>
-									{#if (new Date(createdAt) > new Date(PUBLIC_REGISTRATION_START) && new Date(createdAt) < new Date(PUBLIC_REGISTRATION_END)) || (data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.ActionRequired)}
-										<a class="btn btn-sm" href={`/user/entries/update/${uid}`}> update </a>
-									{/if}
+									<a class="btn btn-sm" href={`/user/entries/update/${uid}`}> update </a>
 									{#if data.strike?.entry_uid === uid && data.strike?.state === ENTRY_STATE.WaitingForReview}
 										<span>under review</span>
 									{:else if state === ENTRY_STATE.Inactive && data.strike?.entry_uid === uid}
