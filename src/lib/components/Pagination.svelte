@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
 	import { page } from "$app/state";
 
 	interface Props {
@@ -24,27 +23,29 @@
 		return array;
 	};
 
-	let width = $state(browser ? window.innerWidth : Infinity);
 	let array = $derived(makeArray(+pageNumber));
 </script>
-
-<svelte:window bind:innerWidth={width} />
 
 <div class="mt-10 mx-auto flex justify-center">
 	{#if pages > 1}
 		<nav class="join" aria-label="Pagination" focusgroup="toolbar">
 			{#each array as n}
-				{@const params = new Map(page.url.searchParams).set("page", String(n))}
 				{#if Number.isNaN(n)}
-					<button class="join-item btn btn-square pointer-events-none" aria-hidden="true">
+					<span
+						class="join-item btn btn-square max-sm:btn-sm pointer-events-none"
+						aria-hidden="true"
+					>
 						...
-					</button>
+					</span>
 				{:else}
+					{@const params = new Map(page.url.searchParams).set("page", String(n))}
 					<a
 						href={"?" + new URLSearchParams([...params]).toString()}
-						class={["join-item btn btn-square", n === +pageNumber && "btn-neutral"]}
+						class={["join-item btn btn-square max-sm:btn-sm", n === +pageNumber && "btn-neutral"]}
 						aria-current={n === +pageNumber ? "page" : undefined}
-						aria-label={`Page ${n}`}>{n}</a
+						aria-label={`Page ${n}`}
+						data-sveltekit-keepfocus
+						data-sveltekit-noscroll>{n}</a
 					>
 				{/if}
 			{/each}
