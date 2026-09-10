@@ -1,4 +1,4 @@
-import { ENTRY_STATE, STRIKE_STATE } from "$lib/constants.js";
+import { STRIKE_STATE } from "$lib/constants.js";
 import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db, DB_CONTRAINTS, isPostgresError } from "$lib/server/db";
 import { POSTGRES_ERROR_CODE } from "$lib/server/db/postgres_errors.js";
@@ -21,7 +21,6 @@ import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
 import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
-import type { Prettify } from "@fcrozatier/ts-helpers";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
