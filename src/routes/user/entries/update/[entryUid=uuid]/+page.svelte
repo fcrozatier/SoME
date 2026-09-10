@@ -8,6 +8,7 @@
 	import { formatTitle } from "$lib/utils/formatting.js";
 	import { YOUTUBE_EMBEDDABLE } from "$lib/utils/regex.js";
 	import { slugify } from "$lib/utils/slugify.js";
+	import { submissionsOpen } from "$lib/utils/time.js";
 	import {
 		invalidTagsMessage,
 		levels,
@@ -344,10 +345,15 @@
 				type="url"
 				name="url"
 				placeholder="https://"
-				class="input-bordered input w-full"
+				class={[
+					"input-bordered input w-full",
+					!submissionsOpen() &&
+						"cursor-not-allowed text-base-content/40 bg-base-200 border-base-200 pointer-events-none",
+				]}
 				aria-errormessage="url-error"
 				aria-invalid={!!form?.issues?.url}
 				bind:value={url}
+				readonly={!submissionsOpen()}
 				{...fg.splat(NewEntrySchema["url"].attributes)}
 			/>
 			{#if form?.issues?.url}
@@ -404,17 +410,25 @@
 			{/if}
 		</div>
 
-		<div class="form-control">
-			<label for="participation" class="label gap-4">
-				<input id="participation" type="checkbox" name="participation" class="checkbox" required />
-				<span class="label-text">
-					I will contribute at least <a href="/rules#participation">5 peer reviews</a>
-				</span>
-			</label>
-			{#if form?.issues?.participation}
-				<span class="error-message">{form.issues.participation.message}</span>
-			{/if}
-		</div>
+		{#if submissionsOpen()}
+			<div class="form-control">
+				<label for="participation" class="label gap-4">
+					<input
+						id="participation"
+						type="checkbox"
+						name="participation"
+						class="checkbox"
+						required={submissionsOpen()}
+					/>
+					<span class="label-text">
+						I will contribute at least <a href="/rules#participation">5 peer reviews</a>
+					</span>
+				</label>
+				{#if form?.issues?.participation}
+					<span class="error-message">{form.issues.participation.message}</span>
+				{/if}
+			</div>
+		{/if}
 
 		<div class="form-control">
 			<label class="label gap-4">

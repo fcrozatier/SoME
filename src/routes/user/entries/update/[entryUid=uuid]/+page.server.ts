@@ -1,4 +1,4 @@
-import { ENTRY_STATE, STRIKE_STATE } from "$lib/constants.js";
+import { STRIKE_STATE } from "$lib/constants.js";
 import { assertIsCreator, assertIsLoggedIn } from "$lib/server/authorization.js";
 import { db, DB_CONTRAINTS, isPostgresError } from "$lib/server/db";
 import { POSTGRES_ERROR_CODE } from "$lib/server/db/postgres_errors.js";
@@ -21,7 +21,6 @@ import { normalizeYoutubeLink, YOUTUBE_EMBEDDABLE } from "$lib/utils/regex";
 import { slugify } from "$lib/utils/slugify.js";
 import { submissionsOpen } from "$lib/utils/time.js";
 import { invalidTagsMessage, levels, NewEntrySchema } from "$lib/validation";
-import type { Prettify } from "@fcrozatier/ts-helpers";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { formfail, formgate } from "formgator/sveltekit";
@@ -47,10 +46,6 @@ export const load = async ({ locals, params }) => {
 
 	if (!entry) {
 		return error(404, "Entry not found");
-	}
-
-	if (!submissionsOpen() && entry.state !== ENTRY_STATE.ActionRequired) {
-		throw error(403, "Submissions are closed");
 	}
 
 	const coauthors: Pick<User, "username">[] = await db.execute(sql`
@@ -97,18 +92,6 @@ export const actions = {
 
 			if (!entry) {
 				throw new Error("Entry not found");
-			}
-
-			if (!submissionsOpen() && !user.isAdmin && entry.state !== ENTRY_STATE.ActionRequired) {
-				// Check entry state: we can update an entry anytime if it as an open issue
-				const [entry]: Prettify<Pick<SelectEntry, "state">>[] = await db.execute(sql`
-						select state from entries
-						where uid=${entryUid};
-					`);
-
-				if (entry?.state !== ENTRY_STATE.ActionRequired) {
-					throw error(403, "Submissions are closed");
-				}
 			}
 
 			// Validate youtube entries creation date and channel identity
@@ -217,9 +200,7 @@ export const actions = {
 
 			if (oldUrl !== normalizedLink) {
 				if (!submissionsOpen()) {
-					return fail(422, {
-						message: "You can't update the link once the vote is open",
-					});
+					return formfail({ url: "You can't update the entry url" });
 				}
 				// Remove all votes in case the link was changed
 				await db.delete(votes).where(eq(votes.entryUid, entryUid));

@@ -2,6 +2,7 @@ import { PUBLIC_REGISTRATION_START } from "$env/static/public";
 import * as fg from "formgator";
 import { formfail } from "formgator/sveltekit";
 import { z } from "zod";
+import { submissionsOpen } from "./utils/time";
 
 const uuid4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -151,7 +152,7 @@ export const NewEntrySchema = {
 	url: UrlSchema,
 	thumbnail: ThumbnailSchema,
 	rules: fg.checkbox({ required: true }),
-	participation: fg.checkbox({ required: true }),
+	participation: fg.checkbox({ required: submissionsOpen() }),
 	copyright: fg.checkbox({ required: true }),
 };
 
