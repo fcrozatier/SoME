@@ -39,26 +39,34 @@
 	};
 </script>
 
-<LayoutSideBySide side="left" sidePanelMaxWidth={thumbnailWidth} mainPanelMinWidth="40%" {gap}>
-	{#snippet sidePanel()}
-		{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
-			{#key url}
-				<Youtube src={url} {title}></Youtube>
-			{/key}
-		{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
-			<a href={url} target="_blank">
-				<Thumbnail uid={thumbnail} width={thumbnailWidth.replace("px", "")}></Thumbnail>
-			</a>
-		{:else}
-			<a href={url} class="line-clamp-1 text-trim wrap-anywhere" target="_blank">{url}</a>
-		{/if}
-	{/snippet}
-	{#snippet mainPanel()}
-		<a class="no-underline hover:underline" href={href()}>
-			<h3 class="mt-0 text-trim text-balance line-clamp-2 leading-snug mb-3">{title}</h3>
-		</a>
-		{#if description}
-			<div class="prose line-clamp-3 wrap-anywhere max-h-[4lh]">{@html description}</div>
-		{/if}
-	{/snippet}
-</LayoutSideBySide>
+{#snippet main()}
+	<a class="no-underline hover:underline" href={href()}>
+		<h3 class="mt-0 text-trim text-balance line-clamp-2 leading-snug mb-3">{title}</h3>
+	</a>
+	{#if description}
+		<div class="prose line-clamp-3 wrap-anywhere max-h-[4lh]">{@html description}</div>
+	{/if}
+{/snippet}
+
+{#if (category === "non-video" || !YOUTUBE_EMBED.test(url)) && !thumbnail}
+	{@render main()}
+{:else}
+	<LayoutSideBySide side="left" sidePanelMaxWidth={thumbnailWidth} mainPanelMinWidth="40%" {gap}>
+		{#snippet sidePanel()}
+			{#if category === "video" && url && YOUTUBE_EMBED.test(url)}
+				{#key url}
+					<Youtube src={url} {title}></Youtube>
+				{/key}
+			{:else if thumbnail && url && !YOUTUBE_EMBED.test(url)}
+				<a href={url} target="_blank">
+					<Thumbnail uid={thumbnail} width={thumbnailWidth.replace("px", "")}></Thumbnail>
+				</a>
+			{:else}
+				<a href={url} class="line-clamp-1 text-trim wrap-anywhere" target="_blank">{url}</a>
+			{/if}
+		{/snippet}
+		{#snippet mainPanel()}
+			{@render main()}
+		{/snippet}
+	</LayoutSideBySide>
+{/if}
