@@ -15,7 +15,7 @@ const s3Client = new S3Client({
 
 /**
  * Saves an image File object to s3 bucket.
- * Processes the image beforehand: resizes to 16:9 (640x360px) and formats to webp
+ * Processes the image beforehand: resizes to 16:9 (640x360px) and convert it to avif
  *
  * @param thumbnail File object to save
  * @param key The name of the file on the bucket
@@ -32,7 +32,7 @@ export async function saveThumbnail(thumbnail: File, key: string) {
 			width: 640,
 			height: 360,
 		})
-		.toFormat("webp")
+		.toFormat("avif")
 		.toBuffer();
 
 	const command = new PutObjectCommand({

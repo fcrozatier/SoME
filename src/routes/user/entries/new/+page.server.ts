@@ -145,7 +145,7 @@ export const actions = {
 					return formfail({ thumbnail: `Thumbnail required` });
 				}
 
-				thumbnailKey = crypto.randomUUID() + ".webp";
+				thumbnailKey = crypto.randomUUID() + ".avif";
 			} else {
 				// Normalize youtube links
 				normalizedURL = normalizeYoutubeLink(url);

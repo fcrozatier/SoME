@@ -169,7 +169,7 @@ export const actions = {
 					return formfail({ thumbnail: `Thumbnail required` });
 				}
 				if (thumbnail) {
-					thumbnailKey = crypto.randomUUID() + ".webp";
+					thumbnailKey = crypto.randomUUID() + ".avif";
 				}
 			} else {
 				// Normalize youtube links

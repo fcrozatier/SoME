@@ -131,7 +131,7 @@ const UrlSchema = fg
 	)
 	.refine((str) => !str.includes("playlist"), "Playlists are not allowed");
 
-const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const SHARP_IMAGE_INPUT_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 export const MAX_IMG_SIZE = 10 ** 6; // 1MB
 
 const ThumbnailSchema = fg
