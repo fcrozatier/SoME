@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { beforeNavigate } from "$app/navigation";
 	import { page } from "$app/state";
-	import { PUBLIC_VOTE_START } from "$env/static/public";
+	import { PUBLIC_VOTE_END, PUBLIC_VOTE_START } from "$env/static/public";
 	import { clickOutside } from "$lib/actions";
 	import Icon from "$lib/components/icons/Icon.svelte";
 	import Icons from "$lib/components/icons/Icons.svelte";
@@ -75,19 +75,21 @@
 			<li>
 				<a href="/rules" aria-current={page.url.pathname === "/rules" ? "page" : null}>Rules</a>
 			</li>
-			<li class="mt-2 ml-1">
-				<a
-					href="/user/vote"
-					class={`btn btn-neutral ${voteOpen() ? "" : "btn-disabled"}`}
-					aria-current={page.url.pathname === "/user/vote" ? "page" : null}>Vote</a
-				>
-				<span class="text-xs block text-nowrap relative text-gray-700 -left-3 mt-1"
-					>Starts <Time
-						datetime={PUBLIC_VOTE_START}
-						options={{ day: "2-digit", month: "2-digit", year: "2-digit" }}
-					></Time>
-				</span>
-			</li>
+			{#if new Date() < new Date(PUBLIC_VOTE_END)}
+				<li class="mt-2 ml-1">
+					<a
+						href="/user/vote"
+						class={["btn btn-neutral", !voteOpen() && "btn-disabled"]}
+						aria-current={page.url.pathname === "/user/vote" ? "page" : null}>Vote</a
+					>
+					<span class="text-xs block text-nowrap relative text-gray-700 -left-3 mt-1"
+						>Starts <Time
+							datetime={PUBLIC_VOTE_START}
+							options={{ day: "2-digit", month: "2-digit", year: "2-digit" }}
+						></Time>
+					</span>
+				</li>
+			{/if}
 		{:else}
 			<li class="relative -translate-x-2">
 				<a href="/signup" class="btn btn-neutral text-nowrap w-[10ch]">Sign up</a>
