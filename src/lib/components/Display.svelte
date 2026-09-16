@@ -54,6 +54,6 @@
 			<Thumbnail uid={data.thumbnail} width={560}></Thumbnail>
 		</a>
 	{:else}
-		<a href={data.url} target="_blank">{data.url} </a>
+		<a href={data.url} class="line-clamp-1 wrap-anywhere" target="_blank">{data.url}</a>
 	{/if}
 </div>
